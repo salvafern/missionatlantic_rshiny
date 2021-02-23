@@ -3,7 +3,7 @@ library(StrathE2E2)
 library(shinythemes)
 library(shinycssloaders)
 library(dplyr)
-library(zip)
+library(shinyjs)
 
 # Define UI for miles per gallon app ----
 ui <- fluidPage(
@@ -15,6 +15,9 @@ ui <- fluidPage(
     id = "inTabset",
     tabPanel(title = "Overview", fluidRow(h4(
       "Overview of StrathE2E model to go here"
+    ))),
+    tabPanel(title = "Model Setup", fluidRow(h4(
+      "Png's to be supplied by Jack here"
     ))),
     tabPanel(title = "Location",   sidebarLayout(
       sidebarPanel(
@@ -46,16 +49,9 @@ ui <- fluidPage(
       ),
       #Main Panel: plot map here in the future
       mainPanel (
-           h3("Baseline"),
-           # plotOutput("baselinePlot")
-        # h3("Baseline output"),
-        # downloadButton(
-        #   "downloadData_baseline1",
-        #   "Download flow_matrix_all_fluxes_base"
-        # )
       )
     )),
-    tabPanel(title = "Parameter setup",   sidebarLayout(
+    tabPanel(title = "Scenario parameter setup",   sidebarLayout(
       sidebarPanel(
         selectInput(
           "selectedParameter",
@@ -70,15 +66,15 @@ ui <- fluidPage(
           ),
           selected = "Fishing Activity"
         ),
+        actionButton("runScenario", "Run Model"),
         width = 3
       ),
-      #Main Panel: plot map here in the future
       mainPanel (uiOutput("ui"))
     )),
     tabPanel(
-      title = "Run Scenario and plot",
-      h3("Run model to compare baseline and scenario"),
-      actionButton("runScenario", "Run Model"),
+      title = "Plots",
+      h3("Compare baseline and scenario"),
+      # actionButton("runScenario", "Run Model"),
       fluidRow(column(
         6,
         h3("Baseline"),
@@ -93,68 +89,29 @@ ui <- fluidPage(
         column(
           6,
           h3("Baseline output"),
-          downloadButton(
-            "downloadData_baseline1",
-            "Download flow_matrix_all_fluxes_base"
+          useShinyjs(),
+          div(id="dwnbutton_b", 
+              downloadButton("downloadData_baseline1", "Download Baseline output", disabled = "disabled")
           )
         ),
         column(
           6,
           h3("Scenario output"),
-          downloadButton(
-            "downloadData_scenario1",
-            "Download flow_matrix_all_fluxes_base"
+          useShinyjs(),
+          div(id="dwnbutton_s", 
+              downloadButton("downloadData_scenario1", "Download Scenario output", disabled = "disabled")
           )
         )
       )
-    )
+    ),
+    tabPanel(title = "Yield curves", fluidRow(h4(
+      "Add info here about yield curves - maybe this will become sub menu under plots tab using navbar"
+    )))
   )
 )
 
 server <- function(input, output) {
-  # Defaults if parameters not changed
-  # input$temperature_so <- 0
-  # input$temperature_d <- 0
-  # input$temperature_si <- 0
-  # input$si_othernitrate <- 0
-  # input$si_otherammonia <- 0
-  # input$pelTrawlAct<- 1.0
-  # input$sanSpratTrawlAct <- 1.0
-  # input$llMackerel <- 1.0
-  # input$beamTrawl <- 1.0
-  # input$demersalSeine <- 1.0
-  # input$demersalOtterTrawl <- 1.0
-  # input$gillLongDemersal <- 1.0
-  # input$beamTrawlShrimp <- 1.0
-  # input$nephropsTrawl <- 1.0
-  # input$creels <- 1.0
-  # input$molluscDredge <- 1.0
-  # input$whaler <- 1.0
-  # 
-  # input$pelTrawlPlough <- 0
-  # input$sanSpratTrawlPlough <- 1.0
-  # input$llMackerelPlough <- 1.0
-  # input$beamTrawlPlough <- 1.0
-  # input$demersalSeinePlough <- 1.0
-  # input$demersalOtterTrawlPlough <- 1.0
-  # input$gillLongDemersalPlough <- 1.0
-  # input$beamTrawlShrimpPlough <- 1.0
-  # input$nephropsTrawlPlough <- 1.0
-  # input$creelsPlough <- 1.0
-  # input$molluscDredgePlough <- 1.0
-  # input$whalerPlough <- 1.0
-  # 
-  # input$pelagic <- 1.0
-  # input$demersal <- 1.0
-  # input$migratory <- 1.0
-  # input$filtben <- 1.0
-  # input$carnben <- 1.0
-  # input$carnzoo <- 1.0
-  # input$bird <- 1.0
-  # input$seal <- 1.0
-  # input$ceta <- 1.0
-  # input$kelp <- 1.0
-  
+
   output$ui <- renderUI({
     switch(
       input$selectedParameter,
@@ -657,11 +614,11 @@ server <- function(input, output) {
   })
   
   observeEvent(input$runBaseline, {
-    showModal(modalDialog("Please wait whilst model runs baseline ....", footer = NULL))
+    showModal(modalDialog("Please wait whilst model runs baseline. See baseline plot in plots tab once run completed", footer = NULL))
     # Run baseline
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <<- e2e_read(input$selectedlocation, input$selectedVariant)
     View(model)
-    print("Number of years is: ",input$year)
+
     results_baseline <-
       e2e_run(model, nyears = input$year, csv.output = TRUE)
     output$baselinePlot <-
@@ -670,159 +627,138 @@ server <- function(input, output) {
       })
     removeModal()
     resultDirBaseline <- toString(model$setup$resultsdir)
-    flow_matrix_all_fluxes_base <-
-      read.csv(paste(
-        resultDirBaseline,
-        "flow_matrix_all_fluxes-base.csv",
-        sep = '/'
-      ))
+    # flow_matrix_all_fluxes_base <-
+    #   read.csv(paste(
+    #     resultDirBaseline,
+    #     "flow_matrix_all_fluxes-base.csv",
+    #     sep = '/'
+    #   ))
     output$downloadData_baseline1 <- downloadHandler(
-      filename = function() {
-        paste("flow_matrix_all_fluxes-base_baseline.csv")
-      },
-      content <- function(file) {
-        write.csv(flow_matrix_all_fluxes_base, file)
+      filename = function() {  'baseline.tar' },
+      content = function(file) {
+        tar(file,resultDirBaseline)
       }
     )
+    if(!is.null(model)){
+      enable("downloadData_baseline1")
+      runjs("$('#dwnbutton_b').removeAttr('title');")
+    }else{
+      disable("downloadData_baseline1")
+      runjs("$('#dwnbutton_b').attr('title', 'Data not available');")
+    }
   })
+
   observeEvent(input$runScenario, {
-    showModal(modalDialog("Please wait whilst model runs scenario ....", footer = NULL))
+    showModal(modalDialog("Please wait whilst model runs scenario .... once completed plots available on plots tab", footer = NULL))
     # Run scenario
     model <- e2e_read(input$selectedlocation, input$selectedVariant)
     scenario_model <- model
     # Temperature
-    print("Got this far 1")
-    scenario_model$data$physics.drivers$so_temp[1] <- scenario_model$data$physics.drivers$so_temp[1] + input$temperature_so
-    scenario_model$data$physics.drivers$so_temp[2] <- scenario_model$data$physics.drivers$so_temp[2] + input$temperature_so
-    scenario_model$data$physics.drivers$so_temp[3] <- scenario_model$data$physics.drivers$so_temp[3] + input$temperature_so
-    scenario_model$data$physics.drivers$so_temp[4] <- scenario_model$data$physics.drivers$so_temp[4] + input$temperature_so
-    scenario_model$data$physics.drivers$so_temp[5] <- scenario_model$data$physics.drivers$so_temp[5] + input$temperature_so
-    scenario_model$data$physics.drivers$so_temp[6] <- scenario_model$data$physics.drivers$so_temp[6] + input$temperature_so
-    scenario_model$data$physics.drivers$so_temp[7] <- scenario_model$data$physics.drivers$so_temp[7] + input$temperature_so
-    scenario_model$data$physics.drivers$so_temp[8] <- scenario_model$data$physics.drivers$so_temp[8] + input$temperature_so
-    scenario_model$data$physics.drivers$so_temp[9] <- scenario_model$data$physics.drivers$so_temp[9] + input$temperature_so
-    scenario_model$data$physics.drivers$so_temp[10] <- scenario_model$data$physics.drivers$so_temp[10] + input$temperature_so
-    scenario_model$data$physics.drivers$so_temp[11] <- scenario_model$data$physics.drivers$so_temp[11] + input$temperature_so
-    scenario_model$data$physics.drivers$so_temp[12] <- scenario_model$data$physics.drivers$so_temp[12] + input$temperature_so
-    print("Got this far 2")
-    scenario_model$data$physics.drivers$d_temp[1] <- scenario_model$data$physics.drivers$d_temp[1] + input$temperature_d
-    scenario_model$data$physics.drivers$d_temp[2] <- scenario_model$data$physics.drivers$d_temp[2] + input$temperature_d
-    scenario_model$data$physics.drivers$d_temp[3] <- scenario_model$data$physics.drivers$d_temp[3] + input$temperature_d
-    scenario_model$data$physics.drivers$d_temp[4] <- scenario_model$data$physics.drivers$d_temp[4] + input$temperature_d
-    scenario_model$data$physics.drivers$d_temp[5] <- scenario_model$data$physics.drivers$d_temp[5] + input$temperature_d
-    scenario_model$data$physics.drivers$d_temp[6] <- scenario_model$data$physics.drivers$d_temp[6] + input$temperature_d
-    scenario_model$data$physics.drivers$d_temp[7] <- scenario_model$data$physics.drivers$d_temp[7] + input$temperature_d
-    scenario_model$data$physics.drivers$d_temp[8] <- scenario_model$data$physics.drivers$d_temp[8] + input$temperature_d
-    scenario_model$data$physics.drivers$d_temp[9] <- scenario_model$data$physics.drivers$d_temp[9] + input$temperature_d
-    scenario_model$data$physics.drivers$d_temp[10] <- scenario_model$data$physics.drivers$d_temp[10] + input$temperature_d
-    scenario_model$data$physics.drivers$d_temp[11] <- scenario_model$data$physics.drivers$d_temp[11] + input$temperature_d
-    scenario_model$data$physics.drivers$d_temp[12] <- scenario_model$data$physics.drivers$d_temp[12] + input$temperature_d
-    print("Got this far 2")
-    scenario_model$data$physics.drivers$si_temp[1] <- scenario_model$data$physics.drivers$si_temp[1] + input$temperature_si
-    scenario_model$data$physics.drivers$si_temp[2] <- scenario_model$data$physics.drivers$si_temp[2] + input$temperature_si
-    scenario_model$data$physics.drivers$si_temp[3] <- scenario_model$data$physics.drivers$si_temp[3] + input$temperature_si
-    scenario_model$data$physics.drivers$si_temp[4] <- scenario_model$data$physics.drivers$si_temp[4] + input$temperature_si
-    scenario_model$data$physics.drivers$si_temp[5] <- scenario_model$data$physics.drivers$si_temp[5] + input$temperature_si
-    scenario_model$data$physics.drivers$si_temp[6] <- scenario_model$data$physics.drivers$si_temp[6] + input$temperature_si
-    scenario_model$data$physics.drivers$si_temp[7] <- scenario_model$data$physics.drivers$si_temp[7] + input$temperature_si
-    scenario_model$data$physics.drivers$si_temp[8] <- scenario_model$data$physics.drivers$si_temp[8] + input$temperature_si
-    scenario_model$data$physics.drivers$si_temp[9] <- scenario_model$data$physics.drivers$si_temp[9] + input$temperature_si
-    scenario_model$data$physics.drivers$si_temp[10] <- scenario_model$data$physics.drivers$si_temp[10] + input$temperature_si
-    scenario_model$data$physics.drivers$si_temp[11] <- scenario_model$data$physics.drivers$si_temp[11] + input$temperature_si
-    scenario_model$data$physics.drivers$si_temp[12] <- scenario_model$data$physics.drivers$si_temp[12] + input$temperature_si    
-    print("Got this far 4")
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[1] <- scenario_model$data$physics.drivers$so_temp[1] + input$temperature_so
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[2] <- scenario_model$data$physics.drivers$so_temp[2] + input$temperature_so
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[3] <- scenario_model$data$physics.drivers$so_temp[3] + input$temperature_so
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[4] <- scenario_model$data$physics.drivers$so_temp[4] + input$temperature_so
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[5] <- scenario_model$data$physics.drivers$so_temp[5] + input$temperature_so
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[6] <- scenario_model$data$physics.drivers$so_temp[6] + input$temperature_so
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[7] <- scenario_model$data$physics.drivers$so_temp[7] + input$temperature_so
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[8] <- scenario_model$data$physics.drivers$so_temp[8] + input$temperature_so
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[9] <- scenario_model$data$physics.drivers$so_temp[9] + input$temperature_so
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[10] <- scenario_model$data$physics.drivers$so_temp[10] + input$temperature_so
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[11] <- scenario_model$data$physics.drivers$so_temp[11] + input$temperature_so
+    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[12] <- scenario_model$data$physics.drivers$so_temp[12] + input$temperature_so
+
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[1] <- scenario_model$data$physics.drivers$d_temp[1] + input$temperature_d
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[2] <- scenario_model$data$physics.drivers$d_temp[2] + input$temperature_d
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[3] <- scenario_model$data$physics.drivers$d_temp[3] + input$temperature_d
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[4] <- scenario_model$data$physics.drivers$d_temp[4] + input$temperature_d
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[5] <- scenario_model$data$physics.drivers$d_temp[5] + input$temperature_d
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[6] <- scenario_model$data$physics.drivers$d_temp[6] + input$temperature_d
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[7] <- scenario_model$data$physics.drivers$d_temp[7] + input$temperature_d
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[8] <- scenario_model$data$physics.drivers$d_temp[8] + input$temperature_d
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[9] <- scenario_model$data$physics.drivers$d_temp[9] + input$temperature_d
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[10] <- scenario_model$data$physics.drivers$d_temp[10] + input$temperature_d
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[11] <- scenario_model$data$physics.drivers$d_temp[11] + input$temperature_d
+    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[12] <- scenario_model$data$physics.drivers$d_temp[12] + input$temperature_d
+
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[1] <- scenario_model$data$physics.drivers$si_temp[1] + input$temperature_si
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[2] <- scenario_model$data$physics.drivers$si_temp[2] + input$temperature_si
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[3] <- scenario_model$data$physics.drivers$si_temp[3] + input$temperature_si
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[4] <- scenario_model$data$physics.drivers$si_temp[4] + input$temperature_si
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[5] <- scenario_model$data$physics.drivers$si_temp[5] + input$temperature_si
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[6] <- scenario_model$data$physics.drivers$si_temp[6] + input$temperature_si
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[7] <- scenario_model$data$physics.drivers$si_temp[7] + input$temperature_si
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[8] <- scenario_model$data$physics.drivers$si_temp[8] + input$temperature_si
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[9] <- scenario_model$data$physics.drivers$si_temp[9] + input$temperature_si
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[10] <- scenario_model$data$physics.drivers$si_temp[10] + input$temperature_si
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[11] <- scenario_model$data$physics.drivers$si_temp[11] + input$temperature_si
+    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[12] <- scenario_model$data$physics.drivers$si_temp[12] + input$temperature_si    
+
     # Nutrients 
-    scenario_model$data$chemistry.drivers$si_othernitrate[1] <- scenario_model$data$chemistry.drivers$si_othernitrate[1] + input$si_othernitrate
-    scenario_model$data$chemistry.drivers$si_othernitrate[2] <- scenario_model$data$chemistry.drivers$si_othernitrate[2] + input$si_othernitrate
-    scenario_model$data$chemistry.drivers$si_othernitrate[3] <- scenario_model$data$chemistry.drivers$si_othernitrate[3] + input$si_othernitrate
-    scenario_model$data$chemistry.drivers$si_othernitrate[4] <- scenario_model$data$chemistry.drivers$si_othernitrate[4] + input$si_othernitrate
-    scenario_model$data$chemistry.drivers$si_othernitrate[5] <- scenario_model$data$chemistry.drivers$si_othernitrate[5] + input$si_othernitrate
-    scenario_model$data$chemistry.drivers$si_othernitrate[6] <- scenario_model$data$chemistry.drivers$si_othernitrate[6] + input$si_othernitrate
-    scenario_model$data$chemistry.drivers$si_othernitrate[7] <- scenario_model$data$chemistry.drivers$si_othernitrate[7] + input$si_othernitrate
-    scenario_model$data$chemistry.drivers$si_othernitrate[8] <- scenario_model$data$chemistry.drivers$si_othernitrate[8] + input$si_othernitrate
-    scenario_model$data$chemistry.drivers$si_othernitrate[9] <- scenario_model$data$chemistry.drivers$si_othernitrate[9] + input$si_othernitrate
-    scenario_model$data$chemistry.drivers$si_othernitrate[10] <- scenario_model$data$chemistry.drivers$si_othernitrate[10] + input$si_othernitrate
-    scenario_model$data$chemistry.drivers$si_othernitrate[11] <- scenario_model$data$chemistry.drivers$si_othernitrate[11] + input$si_othernitrate
-    scenario_model$data$chemistry.drivers$si_othernitrate[12] <- scenario_model$data$chemistry.drivers$si_othernitrate[12] + input$si_othernitrate
-    print("Got this far 5")
-    scenario_model$data$chemistry.drivers$si_otherammonia[1] <- scenario_model$data$chemistry.drivers$si_otherammonia[1] + input$si_otherammonia
-    scenario_model$data$chemistry.drivers$si_otherammonia[2] <- scenario_model$data$chemistry.drivers$si_otherammonia[2] + input$si_otherammonia
-    scenario_model$data$chemistry.drivers$si_otherammonia[3] <- scenario_model$data$chemistry.drivers$si_otherammonia[3] + input$si_otherammonia
-    scenario_model$data$chemistry.drivers$si_otherammonia[4] <- scenario_model$data$chemistry.drivers$si_otherammonia[4] + input$si_otherammonia
-    scenario_model$data$chemistry.drivers$si_otherammonia[5] <- scenario_model$data$chemistry.drivers$si_otherammonia[5] + input$si_otherammonia
-    scenario_model$data$chemistry.drivers$si_otherammonia[6] <- scenario_model$data$chemistry.drivers$si_otherammonia[6] + input$si_otherammonia
-    scenario_model$data$chemistry.drivers$si_otherammonia[7] <- scenario_model$data$chemistry.drivers$si_otherammonia[7] + input$si_otherammonia
-    scenario_model$data$chemistry.drivers$si_otherammonia[8] <- scenario_model$data$chemistry.drivers$si_otherammonia[8] + input$si_otherammonia
-    scenario_model$data$chemistry.drivers$si_otherammonia[9] <- scenario_model$data$chemistry.drivers$si_otherammonia[9] + input$si_otherammonia
-    scenario_model$data$chemistry.drivers$si_otherammonia[10] <- scenario_model$data$chemistry.drivers$si_otherammonia[10] + input$si_otherammonia
-    scenario_model$data$chemistry.drivers$si_otherammonia[11] <- scenario_model$data$chemistry.drivers$si_otherammonia[11] + input$si_otherammonia
-    scenario_model$data$chemistry.drivers$si_otherammonia[12] <- scenario_model$data$chemistry.drivers$si_otherammonia[12] + input$si_otherammonia
-    print("Got this far 6")
-    # Gear Mult
-    scenario_model$data$fleet.model$gear_mult[1] <-
-      input$pelTrawlAct
-    scenario_model$data$fleet.model$gear_mult[2] <-
-      input$sanSpratTrawlAct
-    scenario_model$data$fleet.model$gear_mult[3] <- input$llMackerel
-    scenario_model$data$fleet.model$gear_mult[4] <- input$beamTrawl
-    scenario_model$data$fleet.model$gear_mult[5] <-
-      input$demersalSeine
-    scenario_model$data$fleet.model$gear_mult[6] <-
-      input$demersalOtterTrawl
-    scenario_model$data$fleet.model$gear_mult[7] <-
-      input$gillLongDemersal
-    scenario_model$data$fleet.model$gear_mult[8] <-
-      input$beamTrawlShrimp
-    scenario_model$data$fleet.model$gear_mult[9] <-
-      input$nephropsTrawl
-    scenario_model$data$fleet.model$gear_mult[10] <- input$creels
-    scenario_model$data$fleet.model$gear_mult[11] <-
-      input$molluscDredge
-    scenario_model$data$fleet.model$gear_mult[12] <- input$whaler
-    print("Got this far 7")
-    # Seabed abrasian
-    scenario_model$data$fleet.model$gear_ploughing_rate[1] <-
-      input$pelTrawlPlough
-    scenario_model$data$fleet.model$gear_ploughing_rate[2] <-
-      input$sanSpratTrawlPlough
-    scenario_model$data$fleet.model$gear_ploughing_rate[3] <- input$llMackerelPlough
-    scenario_model$data$fleet.model$gear_ploughing_rate[4] <- input$beamTrawlPlough
-    scenario_model$data$fleet.model$gear_ploughing_rate[5] <-
-      input$demersalSeinePlough
-    scenario_model$data$fleet.model$gear_ploughing_rate[6] <-
-      input$demersalOtterTrawlPlough
-    scenario_model$data$fleet.model$gear_ploughing_rate[7] <-
-      input$gillLongDemersalPlough
-    scenario_model$data$fleet.model$gear_ploughing_rate[8] <-
-      input$beamTrawlShrimpPlough
-    scenario_model$data$fleet.model$gear_ploughing_rate[9] <-
-      input$nephropsTrawlPlough
-    scenario_model$data$fleet.model$gear_ploughing_rate[10] <- input$creelsPlough
-    scenario_model$data$fleet.model$gear_ploughing_rate[11] <-
-      input$molluscDredgePlough
-    scenario_model$data$fleet.model$gear_ploughing_rate[12] <- input$whalerPlough
-    print("Got this far 8")
-    # Discard per gear
-    scenario_model$data$fleet.model$gear_group_discard[1] <-
-      input$pelagic
-    scenario_model$data$fleet.model$gear_group_discard[2] <-
-      input$demersal
-    scenario_model$data$fleet.model$gear_group_discard[3] <-
-      input$migratory
-    scenario_model$data$fleet.model$gear_group_discard[4] <-
-      input$filtben
-    scenario_model$data$fleet.model$gear_group_discard[5] <-
-      input$carnben
-    scenario_model$data$fleet.model$gear_group_discard[6] <-
-      input$carnzoo
-    scenario_model$data$fleet.model$gear_group_discard[7] <-
-      input$bird
-    scenario_model$data$fleet.model$gear_group_discard[8] <-
-      input$seal
-    scenario_model$data$fleet.model$gear_group_discard[9] <-
-      input$ceta
-    scenario_model$data$fleet.model$gear_group_discard[10] <-
-      input$kelp
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[1] <- scenario_model$data$chemistry.drivers$si_othernitrate[1] + input$si_othernitrate
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[2] <- scenario_model$data$chemistry.drivers$si_othernitrate[2] + input$si_othernitrate
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[3] <- scenario_model$data$chemistry.drivers$si_othernitrate[3] + input$si_othernitrate
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[4] <- scenario_model$data$chemistry.drivers$si_othernitrate[4] + input$si_othernitrate
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[5] <- scenario_model$data$chemistry.drivers$si_othernitrate[5] + input$si_othernitrate
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[6] <- scenario_model$data$chemistry.drivers$si_othernitrate[6] + input$si_othernitrate
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[7] <- scenario_model$data$chemistry.drivers$si_othernitrate[7] + input$si_othernitrate
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[8] <- scenario_model$data$chemistry.drivers$si_othernitrate[8] + input$si_othernitrate
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[9] <- scenario_model$data$chemistry.drivers$si_othernitrate[9] + input$si_othernitrate
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[10] <- scenario_model$data$chemistry.drivers$si_othernitrate[10] + input$si_othernitrate
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[11] <- scenario_model$data$chemistry.drivers$si_othernitrate[11] + input$si_othernitrate
+    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[12] <- scenario_model$data$chemistry.drivers$si_othernitrate[12] + input$si_othernitrate
+
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[1] <- scenario_model$data$chemistry.drivers$si_otherammonia[1] + input$si_otherammonia
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[2] <- scenario_model$data$chemistry.drivers$si_otherammonia[2] + input$si_otherammonia
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[3] <- scenario_model$data$chemistry.drivers$si_otherammonia[3] + input$si_otherammonia
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[4] <- scenario_model$data$chemistry.drivers$si_otherammonia[4] + input$si_otherammonia
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[5] <- scenario_model$data$chemistry.drivers$si_otherammonia[5] + input$si_otherammonia
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[6] <- scenario_model$data$chemistry.drivers$si_otherammonia[6] + input$si_otherammonia
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[7] <- scenario_model$data$chemistry.drivers$si_otherammonia[7] + input$si_otherammonia
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[8] <- scenario_model$data$chemistry.drivers$si_otherammonia[8] + input$si_otherammonia
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[9] <- scenario_model$data$chemistry.drivers$si_otherammonia[9] + input$si_otherammonia
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[10] <- scenario_model$data$chemistry.drivers$si_otherammonia[10] + input$si_otherammonia
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[11] <- scenario_model$data$chemistry.drivers$si_otherammonia[11] + input$si_otherammonia
+    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[12] <- scenario_model$data$chemistry.drivers$si_otherammonia[12] + input$si_otherammonia
+
+        # Gear Mult
+    if (!is.null(input$pelTrawlAct)) scenario_model$data$fleet.model$gear_mult[1] <- input$pelTrawlAct
+    if (!is.null(input$sanSpratTrawlAct)) scenario_model$data$fleet.model$gear_mult[2] <- input$sanSpratTrawlAct
+    if (!is.null(input$llMackerel)) scenario_model$data$fleet.model$gear_mult[3] <- input$llMackerel
+    if (!is.null(input$beamTrawl)) scenario_model$data$fleet.model$gear_mult[4] <- input$beamTrawl
+    if (!is.null(input$demersalSeine)) scenario_model$data$fleet.model$gear_mult[5] <- input$demersalSeine
+    if (!is.null(input$demersalOtterTrawl)) scenario_model$data$fleet.model$gear_mult[6] <- input$demersalOtterTrawl
+    if (!is.null(input$gillLongDemersal)) scenario_model$data$fleet.model$gear_mult[7] <- input$gillLongDemersal
+    if (!is.null(input$beamTrawlShrimp)) scenario_model$data$fleet.model$gear_mult[8] <- input$beamTrawlShrimp
+    if (!is.null(input$nephropsTrawl)) scenario_model$data$fleet.model$gear_mult[9] <- input$nephropsTrawl
+    if (!is.null(input$creels)) scenario_model$data$fleet.model$gear_mult[10] <- input$creels
+    if (!is.null(input$molluscDredge)) scenario_model$data$fleet.model$gear_mult[11] <- input$molluscDredge
+    if (!is.null(input$whaler)) scenario_model$data$fleet.model$gear_mult[12] <- input$whaler
+
+        # Seabed abrasian
+    if (!is.null(input$pelTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[1] <- input$pelTrawlPlough
+    if (!is.null(input$sanSpratTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[2] <- input$sanSpratTrawlPlough
+    if (!is.null(input$llMackerelPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[3] <- input$llMackerelPlough
+    if (!is.null(input$beamTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[4] <- input$beamTrawlPlough
+    if (!is.null(input$demersalSeinePlough)) scenario_model$data$fleet.model$gear_ploughing_rate[5] <- input$demersalSeinePlough
+    if (!is.null(input$demersalOtterTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[6] <- input$demersalOtterTrawlPlough
+    if (!is.null(input$gillLongDemersalPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[7] <- input$gillLongDemersalPlough
+    if (!is.null(input$beamTrawlShrimpPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[8] <- input$beamTrawlShrimpPlough
+    if (!is.null(input$nephropsTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[9] <- input$nephropsTrawlPlough
+    if (!is.null(input$creelsPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[10] <- input$creelsPlough
+    if (!is.null(input$molluscDredgePlough)) scenario_model$data$fleet.model$gear_ploughing_rate[11] <- input$molluscDredgePlough
+    if (!is.null(input$whalerPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[12] <- input$whalerPlough
+
+        # Discard per gear
+    if (!is.null(input$pelagic)) scenario_model$data$fleet.model$gear_group_discard[1] <- input$pelagic
+    if (!is.null(input$demersal)) scenario_model$data$fleet.model$gear_group_discard[2] <- input$demersal
+    if (!is.null(input$migratory)) scenario_model$data$fleet.model$gear_group_discard[3] <- input$migratory
+    if (!is.null(input$filtben)) scenario_model$data$fleet.model$gear_group_discard[4] <- input$filtben
+    if (!is.null(input$carnben)) scenario_model$data$fleet.model$gear_group_discard[5] <- input$carnben
+    if (!is.null(input$carnzoo)) scenario_model$data$fleet.model$gear_group_discard[6] <- input$carnzoo
+    if (!is.null(input$bird)) scenario_model$data$fleet.model$gear_group_discard[7] <- input$bird
+    if (!is.null(input$seal)) scenario_model$data$fleet.model$gear_group_discard[8] <- input$seal
+    if (!is.null(input$ceta)) scenario_model$data$fleet.model$gear_group_discard[9] <- input$ceta
+    if (!is.null(input$kelp)) scenario_model$data$fleet.model$gear_group_discard[10] <- input$kelp
     
     results_scenario <-
       e2e_run(scenario_model,
@@ -834,20 +770,19 @@ server <- function(input, output) {
       })
     removeModal()
     resultDirScenario <- toString(scenario_model$setup$resultsdir)
-    flow_matrix_all_fluxes_scenario <-
-      read.csv(paste(
-        resultDirScenario,
-        "flow_matrix_all_fluxes-base.csv",
-        sep = '/'
-      ))
     output$downloadData_scenario1 <- downloadHandler(
-      filename = function() {
-        paste("flow_matrix_all_fluxes-base_scenario.csv")
-      },
-      content <- function(file) {
-        write.csv(flow_matrix_all_fluxes_scenario, file)
+      filename = function() {  'scenario.tar' },
+      content = function(file) {
+        tar(file,resultDirScenario)
       }
     )
+    if(!is.null(model)){
+      enable("downloadData_scenario1")
+      runjs("$('#dwnbutton_s').removeAttr('title');")
+    }else{
+      disable("downloadData_scenario1")
+      runjs("$('#dwnbutton_s').attr('title', 'Data not available');")
+    }
   })
 }
 
