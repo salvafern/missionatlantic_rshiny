@@ -120,36 +120,14 @@ server <- function(input, output) {
         offset = 2,
         wellPanel(
           sliderInput(
-            "temperature_so",
-            "Temperature SO:",
+            "temperature",
+            "Temperature to add:",
             min = -3,
             max = 3,
             value = 0.5,
             width = "100%"
           ),
-          helpText("Additional SO temperature")
-        ),
-        wellPanel(
-          sliderInput(
-            "temperature_d",
-            "Temperature D:",
-            min = -3,
-            max = 3,
-            value = 0.5,
-            width = "100%"
-          ),
-          helpText("Additional D temperature")
-        ),
-        wellPanel(
-          sliderInput(
-            "temperature_si",
-            "Temperature SI:",
-            min = -3,
-            max = 3,
-            value = 0.5,
-            width = "100%"
-          ),
-          helpText("Additional SI temperature")
+          helpText("Additional temperature")
         ),
       )),
       "Nutrients" = fluidRow(column(
@@ -530,14 +508,6 @@ server <- function(input, output) {
         column(
           width = 5,
           wellPanel(
-          radioButtons("guild", "Guild type:",
-                       c("Normal" = "norm",
-                         "Uniform" = "unif",
-                         "Log-normal" = "lnorm",
-                         "Exponential" = "exp")),
-          helpText("Choose guild type to apply discard rates to")
-        ),
-          wellPanel(
             sliderInput(
               "pelTrawlDiscard",
               "Pelagic Trawl Discard:",
@@ -730,44 +700,44 @@ server <- function(input, output) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant)
     scenario_model <- model
     # Temperature
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[1] <- scenario_model$data$physics.drivers$so_temp[1] + input$temperature_so
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[2] <- scenario_model$data$physics.drivers$so_temp[2] + input$temperature_so
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[3] <- scenario_model$data$physics.drivers$so_temp[3] + input$temperature_so
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[4] <- scenario_model$data$physics.drivers$so_temp[4] + input$temperature_so
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[5] <- scenario_model$data$physics.drivers$so_temp[5] + input$temperature_so
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[6] <- scenario_model$data$physics.drivers$so_temp[6] + input$temperature_so
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[7] <- scenario_model$data$physics.drivers$so_temp[7] + input$temperature_so
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[8] <- scenario_model$data$physics.drivers$so_temp[8] + input$temperature_so
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[9] <- scenario_model$data$physics.drivers$so_temp[9] + input$temperature_so
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[10] <- scenario_model$data$physics.drivers$so_temp[10] + input$temperature_so
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[11] <- scenario_model$data$physics.drivers$so_temp[11] + input$temperature_so
-    if (!is.null(input$temperature_so)) scenario_model$data$physics.drivers$so_temp[12] <- scenario_model$data$physics.drivers$so_temp[12] + input$temperature_so
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[1] <- scenario_model$data$physics.drivers$so_temp[1] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[2] <- scenario_model$data$physics.drivers$so_temp[2] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[3] <- scenario_model$data$physics.drivers$so_temp[3] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[4] <- scenario_model$data$physics.drivers$so_temp[4] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[5] <- scenario_model$data$physics.drivers$so_temp[5] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[6] <- scenario_model$data$physics.drivers$so_temp[6] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[7] <- scenario_model$data$physics.drivers$so_temp[7] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[8] <- scenario_model$data$physics.drivers$so_temp[8] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[9] <- scenario_model$data$physics.drivers$so_temp[9] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[10] <- scenario_model$data$physics.drivers$so_temp[10] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[11] <- scenario_model$data$physics.drivers$so_temp[11] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[12] <- scenario_model$data$physics.drivers$so_temp[12] + input$temperature
 
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[1] <- scenario_model$data$physics.drivers$d_temp[1] + input$temperature_d
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[2] <- scenario_model$data$physics.drivers$d_temp[2] + input$temperature_d
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[3] <- scenario_model$data$physics.drivers$d_temp[3] + input$temperature_d
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[4] <- scenario_model$data$physics.drivers$d_temp[4] + input$temperature_d
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[5] <- scenario_model$data$physics.drivers$d_temp[5] + input$temperature_d
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[6] <- scenario_model$data$physics.drivers$d_temp[6] + input$temperature_d
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[7] <- scenario_model$data$physics.drivers$d_temp[7] + input$temperature_d
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[8] <- scenario_model$data$physics.drivers$d_temp[8] + input$temperature_d
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[9] <- scenario_model$data$physics.drivers$d_temp[9] + input$temperature_d
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[10] <- scenario_model$data$physics.drivers$d_temp[10] + input$temperature_d
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[11] <- scenario_model$data$physics.drivers$d_temp[11] + input$temperature_d
-    if (!is.null(input$temperature_d)) scenario_model$data$physics.drivers$d_temp[12] <- scenario_model$data$physics.drivers$d_temp[12] + input$temperature_d
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[1] <- scenario_model$data$physics.drivers$d_temp[1] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[2] <- scenario_model$data$physics.drivers$d_temp[2] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[3] <- scenario_model$data$physics.drivers$d_temp[3] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[4] <- scenario_model$data$physics.drivers$d_temp[4] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[5] <- scenario_model$data$physics.drivers$d_temp[5] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[6] <- scenario_model$data$physics.drivers$d_temp[6] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[7] <- scenario_model$data$physics.drivers$d_temp[7] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[8] <- scenario_model$data$physics.drivers$d_temp[8] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[9] <- scenario_model$data$physics.drivers$d_temp[9] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[10] <- scenario_model$data$physics.drivers$d_temp[10] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[11] <- scenario_model$data$physics.drivers$d_temp[11] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[12] <- scenario_model$data$physics.drivers$d_temp[12] + input$temperature
 
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[1] <- scenario_model$data$physics.drivers$si_temp[1] + input$temperature_si
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[2] <- scenario_model$data$physics.drivers$si_temp[2] + input$temperature_si
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[3] <- scenario_model$data$physics.drivers$si_temp[3] + input$temperature_si
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[4] <- scenario_model$data$physics.drivers$si_temp[4] + input$temperature_si
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[5] <- scenario_model$data$physics.drivers$si_temp[5] + input$temperature_si
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[6] <- scenario_model$data$physics.drivers$si_temp[6] + input$temperature_si
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[7] <- scenario_model$data$physics.drivers$si_temp[7] + input$temperature_si
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[8] <- scenario_model$data$physics.drivers$si_temp[8] + input$temperature_si
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[9] <- scenario_model$data$physics.drivers$si_temp[9] + input$temperature_si
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[10] <- scenario_model$data$physics.drivers$si_temp[10] + input$temperature_si
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[11] <- scenario_model$data$physics.drivers$si_temp[11] + input$temperature_si
-    if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[12] <- scenario_model$data$physics.drivers$si_temp[12] + input$temperature_si    
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[1] <- scenario_model$data$physics.drivers$si_temp[1] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[2] <- scenario_model$data$physics.drivers$si_temp[2] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[3] <- scenario_model$data$physics.drivers$si_temp[3] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[4] <- scenario_model$data$physics.drivers$si_temp[4] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[5] <- scenario_model$data$physics.drivers$si_temp[5] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[6] <- scenario_model$data$physics.drivers$si_temp[6] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[7] <- scenario_model$data$physics.drivers$si_temp[7] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[8] <- scenario_model$data$physics.drivers$si_temp[8] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[9] <- scenario_model$data$physics.drivers$si_temp[9] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[10] <- scenario_model$data$physics.drivers$si_temp[10] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[11] <- scenario_model$data$physics.drivers$si_temp[11] + input$temperature
+    if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[12] <- scenario_model$data$physics.drivers$si_temp[12] + input$temperature    
 
     # Nutrients 
     if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[1] <- scenario_model$data$chemistry.drivers$si_atmnitrate[1]*input$si_atmnitrate
