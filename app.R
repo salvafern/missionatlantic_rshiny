@@ -122,9 +122,9 @@ server <- function(input, output) {
           sliderInput(
             "temperature_so",
             "Temperature SO:",
-            min = 0,
-            max = 10,
-            value = 0,
+            min = -3,
+            max = 3,
+            value = 0.5,
             width = "100%"
           ),
           helpText("Additional SO temperature")
@@ -133,9 +133,9 @@ server <- function(input, output) {
           sliderInput(
             "temperature_d",
             "Temperature D:",
-            min = 0,
-            max = 10,
-            value = 0,
+            min = -3,
+            max = 3,
+            value = 0.5,
             width = "100%"
           ),
           helpText("Additional D temperature")
@@ -144,9 +144,9 @@ server <- function(input, output) {
           sliderInput(
             "temperature_si",
             "Temperature SI:",
-            min = 0,
-            max = 10,
-            value = 0,
+            min = -3,
+            max = 3,
+            value = 0.5,
             width = "100%"
           ),
           helpText("Additional SI temperature")
@@ -157,25 +157,69 @@ server <- function(input, output) {
         offset = 2,
         wellPanel(
           sliderInput(
-            "si_othernitrate",
-            "SI Other Nitrate:",
+            "si_atmnitrate",
+            "SI ATM Nitrate:",
             min = 0,
             max = 50,
             value = 0,
             width = "100%"
           ),
-          helpText("Additional SI Other Nitrate")
+          helpText("SI ATM Nitrate")
         ),
         wellPanel(
           sliderInput(
-            "si_otherammonia",
-            "SI Other Ammonia:",
+            "si_atmammonia",
+            "SI Atm Ammonia:",
             min = 0,
             max = 50,
             value = 0,
             width = "100%"
           ),
-          helpText("Additional SI Other Ammonia")
+          helpText("Additional SI Atm Ammonia")
+        ),
+        wellPanel(
+          sliderInput(
+            "so_atmnitrate",
+            "SO ATM Nitrate:",
+            min = 0,
+            max = 50,
+            value = 0,
+            width = "100%"
+          ),
+          helpText("Additional SO ATM Nitrate")
+        ),
+        wellPanel(
+          sliderInput(
+            "so_atmammonia",
+            "SO Atm Ammonia:",
+            min = 0,
+            max = 50,
+            value = 0,
+            width = "100%"
+          ),
+          helpText("Additional SO Atm Ammonia")
+        ),
+        wellPanel(
+          sliderInput(
+            "rivnitrate",
+            "River Nitrate:",
+            min = 0,
+            max = 50,
+            value = 0,
+            width = "100%"
+          ),
+          helpText("Additional River Nitrate")
+        ),
+        wellPanel(
+          sliderInput(
+            "rivammonia",
+            "River Ammonia:",
+            min = 0,
+            max = 50,
+            value = 0,
+            width = "100%"
+          ),
+          helpText("Additional River Ammonia")
         ),
       )),
       "Fishing Activity" = fluidRow(
@@ -486,9 +530,17 @@ server <- function(input, output) {
         column(
           width = 5,
           wellPanel(
+          radioButtons("guild", "Guild type:",
+                       c("Normal" = "norm",
+                         "Uniform" = "unif",
+                         "Log-normal" = "lnorm",
+                         "Exponential" = "exp")),
+          helpText("Choose guild type to apply discard rates to")
+        ),
+          wellPanel(
             sliderInput(
-              "pelagic",
-              "Pelagic:",
+              "pelTrawlDiscard",
+              "Pelagic Trawl Discard:",
               min = 0,
               max = 2.0,
               value = 1.0,
@@ -499,114 +551,138 @@ server <- function(input, output) {
           ),
           wellPanel(
             sliderInput(
-              "demersal",
-              "Demersal:",
+              "sanSpratTrawlDiscard",
+              "San spart trawl discard:",
               min = 0,
               max = 2.0,
               value = 1.0,
               step = 0.2,
               width = "100%"
             ),
-            helpText("Demersal discard notes here")
+            helpText("San spart trawl discard notes here")
           ),
           wellPanel(
             sliderInput(
-              "migratory",
-              "Migratory:",
+              "llMackerelDiscard",
+              "llMackerel Discard:",
               min = 0,
               max = 2.0,
               value = 1.0,
               step = 0.2,
               width = "100%"
             ),
-            helpText("Migratory discard notes here")
+            helpText("llMackeral discard notes here")
           ),
           wellPanel(
             sliderInput(
-              "filtben",
-              "Filtben:",
+              "beamTrawlDiscard",
+              "Beam Trawl Discard:",
               min = 0,
               max = 2.0,
               value = 1.0,
               step = 0.2,
               width = "100%"
             ),
-            helpText("Filtben discard notes here")
+            helpText("Beam Trawl discard notes here")
           ),
           wellPanel(
             sliderInput(
-              "carnben",
-              "Carnben:",
+              "demersalSeineDiscard",
+              "Demersal Seine Discard:",
               min = 0,
               max = 2.0,
               value = 1.0,
               step = 0.2,
               width = "100%"
             ),
-            helpText("Carnben discard notes here")
+            helpText("Demersal Seine discard notes here")
           )
         ),
         column(
           width = 5,
           wellPanel(
             sliderInput(
-              "carnzoo",
-              "Carnzoo:",
+              "demersalOtterTrawlDiscar",
+              "Demersal OtterTrawl Discard:",
               min = 0,
               max = 2.0,
               value = 1.0,
               step = 0.2,
               width = "100%"
             ),
-            helpText("Carnzoo discard notes here")
+            helpText("Demersal OtterTrawl discard notes here")
           ),
           wellPanel(
             sliderInput(
-              "bird",
-              "Bird:",
+              "gillLongDemersalDiscard",
+              "Gill Long Demersal Discard:",
               min = 0,
               max = 2.0,
               value = 1.0,
               step = 0.2,
               width = "100%"
             ),
-            helpText("Bird discard notes here")
+            helpText("Gill Long Demersal discard notes here")
           ),
           wellPanel(
             sliderInput(
-              "seal",
-              "Seal:",
+              "beamTrawlShrimpDiscard",
+              "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 2.0,
               value = 1.0,
               step = 0.2,
               width = "100%"
             ),
-            helpText("Seal discard notes here")
+            helpText("Beam Trawl Shrimp discard notes here")
           ),
           wellPanel(
             sliderInput(
-              "ceta",
-              "Ceta:",
+              "nephropsTrawlDiscard",
+              "Nephrops Trawl Discard:",
               min = 0,
               max = 2.0,
               value = 1.0,
               step = 0.2,
               width = "100%"
             ),
-            helpText("Ceta discard notes here")
+            helpText("Nephrops Trawl discard notes here")
           ),
           wellPanel(
             sliderInput(
-              "kelp",
-              "Kelp:",
+              "creelsDiscard",
+              "Creels Discard:",
               min = 0,
               max = 2.0,
               value = 1.0,
               step = 0.2,
               width = "100%"
             ),
-            helpText("Kelp discard notes here")
+            helpText("Creels discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "molluscDredgeDiscard",
+              "Mollusc Dredge Discard Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Mollusc Dredge discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "whalerDiscard",
+              "Whaler Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Whaler discard notes here")
           )
         )
       )
@@ -694,32 +770,84 @@ server <- function(input, output) {
     if (!is.null(input$temperature_si)) scenario_model$data$physics.drivers$si_temp[12] <- scenario_model$data$physics.drivers$si_temp[12] + input$temperature_si    
 
     # Nutrients 
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[1] <- scenario_model$data$chemistry.drivers$si_othernitrate[1] + input$si_othernitrate
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[2] <- scenario_model$data$chemistry.drivers$si_othernitrate[2] + input$si_othernitrate
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[3] <- scenario_model$data$chemistry.drivers$si_othernitrate[3] + input$si_othernitrate
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[4] <- scenario_model$data$chemistry.drivers$si_othernitrate[4] + input$si_othernitrate
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[5] <- scenario_model$data$chemistry.drivers$si_othernitrate[5] + input$si_othernitrate
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[6] <- scenario_model$data$chemistry.drivers$si_othernitrate[6] + input$si_othernitrate
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[7] <- scenario_model$data$chemistry.drivers$si_othernitrate[7] + input$si_othernitrate
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[8] <- scenario_model$data$chemistry.drivers$si_othernitrate[8] + input$si_othernitrate
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[9] <- scenario_model$data$chemistry.drivers$si_othernitrate[9] + input$si_othernitrate
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[10] <- scenario_model$data$chemistry.drivers$si_othernitrate[10] + input$si_othernitrate
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[11] <- scenario_model$data$chemistry.drivers$si_othernitrate[11] + input$si_othernitrate
-    if (!is.null(input$si_othernitrate)) scenario_model$data$chemistry.drivers$si_othernitrate[12] <- scenario_model$data$chemistry.drivers$si_othernitrate[12] + input$si_othernitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[1] <- scenario_model$data$chemistry.drivers$si_atmnitrate[1]*input$si_atmnitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[2] <- scenario_model$data$chemistry.drivers$si_atmnitrate[2]*input$si_atmnitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[3] <- scenario_model$data$chemistry.drivers$si_atmnitrate[3]*input$si_atmnitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[4] <- scenario_model$data$chemistry.drivers$si_atmnitrate[4]*input$si_atmnitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[5] <- scenario_model$data$chemistry.drivers$si_atmnitrate[5]*input$si_atmnitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[6] <- scenario_model$data$chemistry.drivers$si_atmnitrate[6]*input$si_atmnitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[7] <- scenario_model$data$chemistry.drivers$si_atmnitrate[7]*input$si_atmnitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[8] <- scenario_model$data$chemistry.drivers$si_atmnitrate[8]*input$si_atmnitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[9] <- scenario_model$data$chemistry.drivers$si_atmnitrate[9]*input$si_atmnitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[10] <- scenario_model$data$chemistry.drivers$si_atmnitrate[10]*input$si_atmnitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[11] <- scenario_model$data$chemistry.drivers$si_atmnitrate[11]*input$si_atmnitrate
+    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[12] <- scenario_model$data$chemistry.drivers$si_atmnitrate[12]*input$si_atmnitrate
 
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[1] <- scenario_model$data$chemistry.drivers$si_otherammonia[1] + input$si_otherammonia
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[2] <- scenario_model$data$chemistry.drivers$si_otherammonia[2] + input$si_otherammonia
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[3] <- scenario_model$data$chemistry.drivers$si_otherammonia[3] + input$si_otherammonia
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[4] <- scenario_model$data$chemistry.drivers$si_otherammonia[4] + input$si_otherammonia
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[5] <- scenario_model$data$chemistry.drivers$si_otherammonia[5] + input$si_otherammonia
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[6] <- scenario_model$data$chemistry.drivers$si_otherammonia[6] + input$si_otherammonia
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[7] <- scenario_model$data$chemistry.drivers$si_otherammonia[7] + input$si_otherammonia
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[8] <- scenario_model$data$chemistry.drivers$si_otherammonia[8] + input$si_otherammonia
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[9] <- scenario_model$data$chemistry.drivers$si_otherammonia[9] + input$si_otherammonia
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[10] <- scenario_model$data$chemistry.drivers$si_otherammonia[10] + input$si_otherammonia
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[11] <- scenario_model$data$chemistry.drivers$si_otherammonia[11] + input$si_otherammonia
-    if (!is.null(input$si_otherammonia)) scenario_model$data$chemistry.drivers$si_otherammonia[12] <- scenario_model$data$chemistry.drivers$si_otherammonia[12] + input$si_otherammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[1] <- scenario_model$data$chemistry.drivers$si_atmammonia[1]*input$si_atmammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[2] <- scenario_model$data$chemistry.drivers$si_atmammonia[2]*input$si_atmammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[3] <- scenario_model$data$chemistry.drivers$si_atmammonia[3]*input$si_atmammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[4] <- scenario_model$data$chemistry.drivers$si_atmammonia[4]*input$si_atmammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[5] <- scenario_model$data$chemistry.drivers$si_atmammonia[5]*input$si_atmammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[6] <- scenario_model$data$chemistry.drivers$si_atmammonia[6]*input$si_atmammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[7] <- scenario_model$data$chemistry.drivers$si_atmammonia[7]*input$si_atmammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[8] <- scenario_model$data$chemistry.drivers$si_atmammonia[8]*input$si_atmammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[9] <- scenario_model$data$chemistry.drivers$si_atmammonia[9]*input$si_atmammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[10] <- scenario_model$data$chemistry.drivers$si_atmammonia[10]*input$si_atmammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[11] <- scenario_model$data$chemistry.drivers$si_atmammonia[11]*input$si_atmammonia
+    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[12] <- scenario_model$data$chemistry.drivers$si_atmammonia[12]*input$si_atmammonia
 
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[1] <- scenario_model$data$chemistry.drivers$so_atmnitrate[1]*input$so_atmnitrate
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[2] <- scenario_model$data$chemistry.drivers$so_atmnitrate[2]*input$so_atmnitrate
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[3] <- scenario_model$data$chemistry.drivers$so_atmnitrate[3]*input$so_atmnitrate
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[4] <- scenario_model$data$chemistry.drivers$so_atmnitrate[4]*input$so_atmnitrate
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[5] <- scenario_model$data$chemistry.drivers$so_atmnitrate[5]*input$so_atmnitrate
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[6] <- scenario_model$data$chemistry.drivers$so_atmnitrate[6]*input$so_atmnitrate
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[7] <- scenario_model$data$chemistry.drivers$so_atmnitrate[7]*input$so_atmnitrate
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[8] <- scenario_model$data$chemistry.drivers$so_atmnitrate[8]*input$so_atmnitrate
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[9] <- scenario_model$data$chemistry.drivers$so_atmnitrate[9]*input$so_atmnitrate
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[10] <- scenario_model$data$chemistry.drivers$so_atmnitrate[10]*input$so_atmnitrate
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[11] <- scenario_model$data$chemistry.drivers$so_atmnitrate[11]*input$so_atmnitrate
+    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[12] <- scenario_model$data$chemistry.drivers$so_atmnitrate[12]*input$so_atmnitrate
+    
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[1] <- scenario_model$data$chemistry.drivers$so_atmammonia[1]*input$so_atmammonia
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[2] <- scenario_model$data$chemistry.drivers$so_atmammonia[2]*input$so_atmammonia
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[3] <- scenario_model$data$chemistry.drivers$so_atmammonia[3]*input$so_atmammonia
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[4] <- scenario_model$data$chemistry.drivers$so_atmammonia[4]*input$so_atmammonia
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[5] <- scenario_model$data$chemistry.drivers$so_atmammonia[5]*input$so_atmammonia
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[6] <- scenario_model$data$chemistry.drivers$so_atmammonia[6]*input$so_atmammonia
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[7] <- scenario_model$data$chemistry.drivers$so_atmammonia[7]*input$so_atmammonia
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[8] <- scenario_model$data$chemistry.drivers$so_atmammonia[8]*input$so_atmammonia
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[9] <- scenario_model$data$chemistry.drivers$so_atmammonia[9]*input$so_atmammonia
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[10] <- scenario_model$data$chemistry.drivers$so_atmammonia[10]*input$so_atmammonia
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[11] <- scenario_model$data$chemistry.drivers$so_atmammonia[11]*input$so_atmammonia
+    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[12] <- scenario_model$data$chemistry.drivers$so_atmammonia[12]*input$so_atmammonia
+    
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[1] <- scenario_model$data$chemistry.drivers$rivnitrate[1]*input$rivnitrate
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[2] <- scenario_model$data$chemistry.drivers$rivnitrate[2]*input$rivnitrate
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[3] <- scenario_model$data$chemistry.drivers$rivnitrate[3]*input$rivnitrate
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[4] <- scenario_model$data$chemistry.drivers$rivnitrate[4]*input$rivnitrate
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[5] <- scenario_model$data$chemistry.drivers$rivnitrate[5]*input$rivnitrate
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[6] <- scenario_model$data$chemistry.drivers$rivnitrate[6]*input$rivnitrate
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[7] <- scenario_model$data$chemistry.drivers$rivnitrate[7]*input$rivnitrate
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[8] <- scenario_model$data$chemistry.drivers$rivnitrate[8]*input$rivnitrate
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[9] <- scenario_model$data$chemistry.drivers$rivnitrate[9]*input$rivnitrate
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[10] <- scenario_model$data$chemistry.drivers$rivnitrate[10]*input$rivnitrate
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[11] <- scenario_model$data$chemistry.drivers$rivnitrate[11]*input$rivnitrate
+    if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[12] <- scenario_model$data$chemistry.drivers$rivnitrate[12]*input$rivnitrate
+    
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[1] <- scenario_model$data$chemistry.drivers$rivammonia[1]*input$rivammonia
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[2] <- scenario_model$data$chemistry.drivers$rivammonia[2]*input$rivammonia
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[3] <- scenario_model$data$chemistry.drivers$rivammonia[3]*input$rivammonia
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[4] <- scenario_model$data$chemistry.drivers$rivammonia[4]*input$rivammonia
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[5] <- scenario_model$data$chemistry.drivers$rivammonia[5]*input$rivammonia
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[6] <- scenario_model$data$chemistry.drivers$rivammonia[6]*input$rivammonia
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[7] <- scenario_model$data$chemistry.drivers$rivammonia[7]*input$rivammonia
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[8] <- scenario_model$data$chemistry.drivers$rivammonia[8]*input$rivammonia
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[9] <- scenario_model$data$chemistry.drivers$rivammonia[9]*input$rivammonia
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[10] <- scenario_model$data$chemistry.drivers$rivammonia[10]*input$rivammonia
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[11] <- scenario_model$data$chemistry.drivers$rivammonia[11]*input$rivammonia
+    if (!is.null(input$rivammonia)) scenario_model$data$chemistry.drivers$rivammonia[12] <- scenario_model$data$chemistry.drivers$rivammonia[12]*input$rivammonia
+    
         # Gear Mult
     if (!is.null(input$pelTrawlAct)) scenario_model$data$fleet.model$gear_mult[1] <- input$pelTrawlAct
     if (!is.null(input$sanSpratTrawlAct)) scenario_model$data$fleet.model$gear_mult[2] <- input$sanSpratTrawlAct
@@ -749,16 +877,18 @@ server <- function(input, output) {
     if (!is.null(input$whalerPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[12] <- input$whalerPlough
 
         # Discard per gear
-    if (!is.null(input$pelagic)) scenario_model$data$fleet.model$gear_group_discard[1] <- input$pelagic
-    if (!is.null(input$demersal)) scenario_model$data$fleet.model$gear_group_discard[2] <- input$demersal
-    if (!is.null(input$migratory)) scenario_model$data$fleet.model$gear_group_discard[3] <- input$migratory
-    if (!is.null(input$filtben)) scenario_model$data$fleet.model$gear_group_discard[4] <- input$filtben
-    if (!is.null(input$carnben)) scenario_model$data$fleet.model$gear_group_discard[5] <- input$carnben
-    if (!is.null(input$carnzoo)) scenario_model$data$fleet.model$gear_group_discard[6] <- input$carnzoo
-    if (!is.null(input$bird)) scenario_model$data$fleet.model$gear_group_discard[7] <- input$bird
-    if (!is.null(input$seal)) scenario_model$data$fleet.model$gear_group_discard[8] <- input$seal
-    if (!is.null(input$ceta)) scenario_model$data$fleet.model$gear_group_discard[9] <- input$ceta
-    if (!is.null(input$kelp)) scenario_model$data$fleet.model$gear_group_discard[10] <- input$kelp
+    if (!is.null(input$pelagicTrawlDiscard)) scenario_model$data$fleet.model$gear_group_discard[1] <- input$pelagicTrawlDiscard
+    if (!is.null(input$sanSpratTrawlDiscard)) scenario_model$data$fleet.model$gear_group_discard[2] <- input$sanSpratTrawlDiscard
+    if (!is.null(input$llMackerelDiscard)) scenario_model$data$fleet.model$gear_group_discard[3] <- input$llMackerelDiscard
+    if (!is.null(input$beamTrawlDiscard)) scenario_model$data$fleet.model$gear_group_discard[4] <- input$beamTrawlDiscard
+    if (!is.null(input$demersalSeineDiscard)) scenario_model$data$fleet.model$gear_group_discard[5] <- input$demersalSeineDiscard
+    if (!is.null(input$demersalOtterTrawlDiscard)) scenario_model$data$fleet.model$gear_group_discard[6] <- input$demersalOtterTrawlDiscard
+    if (!is.null(input$gillLongDemersalDiscard)) scenario_model$data$fleet.model$gear_group_discard[7] <- input$gillLongDemersalDiscard
+    if (!is.null(input$beamTrawlShrimpDiscard)) scenario_model$data$fleet.model$gear_group_discard[8] <- input$beamTrawlShrimpDiscard
+    if (!is.null(input$nephropsTrawlDiscard)) scenario_model$data$fleet.model$gear_group_discard[9] <- input$nephropsTrawlDiscard
+    if (!is.null(input$creelsDiscard)) scenario_model$data$fleet.model$gear_group_discard[10] <- input$creelsDiscard
+    if (!is.null(input$molluscDredgeDiscard)) scenario_model$data$fleet.model$gear_group_discard[11] <- input$molluscDredgeDiscard
+    if (!is.null(input$whalerDiscard)) scenario_model$data$fleet.model$gear_group_discard[12] <- input$whalerDiscard
     
     results_scenario <-
       e2e_run(scenario_model,
