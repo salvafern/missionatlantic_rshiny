@@ -6,12 +6,10 @@ library(dplyr)
 library(shinyjs)
 
 # Define UI for miles per gallon app ----
-ui <- fluidPage(
+ui <- navbarPage("StrathE2E App",
   theme = shinytheme("cerulean"),
   
-  # App title ----
-  h4("Strath E2E RShiny App"),
-  tabsetPanel(
+  #tabsetPanel(
     id = "inTabset",
     tabPanel(title = "Overview", fluidRow(h4(
       "Overview of StrathE2E model to go here"
@@ -51,26 +49,448 @@ ui <- fluidPage(
       mainPanel (
       )
     )),
-    tabPanel(title = "Scenario parameter setup",   sidebarLayout(
-      sidebarPanel(
-        selectInput(
-          "selectedParameter",
-          h4("Parameter"),
-          choices
-          = list(
-            "Fishing Activity",
-            "Gear Group Discard",
-            "Temperature",
-            "Nutrients",
-            "Seabed Abrasion"
-          ),
-          selected = "Fishing Activity"
-        ),
-        actionButton("runScenario", "Run Model"),
-        width = 3
-      ),
-      mainPanel (uiOutput("ui"))
-    )),
+    navbarMenu("Parameters",
+            tabPanel(title = "Temperature",
+              fluidRow(column(
+                 width = 5,
+                 offset = 2,
+                 wellPanel(
+                   sliderInput(
+                     "temperature",
+                     "Temperature to add:",
+                     min = -3,
+                     max = 3,
+                     value = 0.5,
+                     width = "100%"
+                   ),
+                   helpText("Additional temperature")
+                 ),
+               ))),
+            tabPanel(title = "Nutrients",
+                     fluidRow(column(
+                       width = 5,
+                       offset = 2,
+                       wellPanel(
+                         sliderInput(
+                           "si_atmnitrate",
+                           "SI ATM Nitrate:",
+                           min = 0,
+                           max = 50,
+                           value = 0,
+                           width = "100%"
+                         ),
+                         helpText("SI ATM Nitrate")
+                       ),
+                       wellPanel(
+                         sliderInput(
+                           "si_atmammonia",
+                           "SI Atm Ammonia:",
+                           min = 0,
+                           max = 50,
+                           value = 0,
+                           width = "100%"
+                         ),
+                         helpText("Additional SI Atm Ammonia")
+                       ),
+                       wellPanel(
+                         sliderInput(
+                           "so_atmnitrate",
+                           "SO ATM Nitrate:",
+                           min = 0,
+                           max = 50,
+                           value = 0,
+                           width = "100%"
+                         ),
+                         helpText("Additional SO ATM Nitrate")
+                       ),
+                       wellPanel(
+                         sliderInput(
+                           "so_atmammonia",
+                           "SO Atm Ammonia:",
+                           min = 0,
+                           max = 50,
+                           value = 0,
+                           width = "100%"
+                         ),
+                         helpText("Additional SO Atm Ammonia")
+                       ),
+                       wellPanel(
+                         sliderInput(
+                           "rivnitrate",
+                           "River Nitrate:",
+                           min = 0,
+                           max = 50,
+                           value = 0,
+                           width = "100%"
+                         ),
+                         helpText("Additional River Nitrate")
+                       ),
+                       wellPanel(
+                         sliderInput(
+                           "rivammonia",
+                           "River Ammonia:",
+                           min = 0,
+                           max = 50,
+                           value = 0,
+                           width = "100%"
+                         ),
+                         helpText("Additional River Ammonia")
+                       ),
+                     ))),
+                  tabPanel(title = "Fishing Activity",
+                     fluidRow(
+                       column(
+                         width = 5,
+                         wellPanel(
+                           sliderInput(
+                             "pelTrawlAct",
+                             "Pelagic Trawl+Seine activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Pelagic Trawl+Seine activity help notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "sanSpratTrawlAct",
+                             "Sandeel sprat trawl activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Sandeel sprat trawl activity help notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "llMackerel",
+                             "Longline mackerel activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Longline mackerel activity help notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "beamTrawl",
+                             "Beam Trawl BT1+BT2 activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Beam Trawl BT1+BT2 activity help notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "demersalSeine",
+                             "Demersal Seine activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Demersal Seine activity help notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "demersalOtterTrawl",
+                             "Demersal Otter Trawl TR1 activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Demersal Otter Trawl TR1 help notes here")
+                         )
+                       ),
+                       column(
+                         width = 5,
+                         wellPanel(
+                           sliderInput(
+                             "gillLongDemersal",
+                             "Gill Nets+Longline demersal activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Gill Nets+Longline demersal activity notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "beamTrawlShrimp",
+                             "Beam Trawl shrimp activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Beam Trawl shrimp activity notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "nephropsTrawl",
+                             "Nephrops Trawl TR2 activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Nephrops Trawl TR2 activity notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "creels",
+                             "Creels activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Creels activity notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "molluscDredge",
+                             "Mollusc Dredge activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Mollusc Dredge activity notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "whaler",
+                             "Whaler activity:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Whaler activity notes here")
+                         )
+                       )
+                     )),
+            tabPanel(title = "Seabed Abrasion",
+                     fluidRow(
+                       column(
+                         width = 5,
+                         wellPanel(
+                           sliderInput(
+                             "pelTrawlPlough",
+                             "Pelagic Trawl+Seine seabed abrasion:",
+                             min = 0,
+                             max = 0.0,
+                             value = 0.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Pelagic Trawl+Seine seabed abrasion help notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "sanSpratTrawlPlough",
+                             "Sandeel sprat trawl seabed abrasion:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Sandeel sprat trawl seabed abrasion help notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "llMackerelPlough",
+                             "Longline mackerel seabed abrasion:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Longline mackerel seabed abrasion help notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "beamTrawlPlough",
+                             "Beam Trawl BT1+BT2 seabed abrasion:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Beam Trawl BT1+BT2 seabed abrasion help notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "demersalSeinePlough",
+                             "Demersal Seine seabed abrasion:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Demersal Seine seabed abrasion help notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "demersalOtterTrawlPlough",
+                             "Demersal Otter Trawl TR1 seabed abrasion:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Demersal Otter Trawl TR1 seabed abrasion help notes here")
+                         )
+                       ),
+                       column(
+                         width = 5,
+                         wellPanel(
+                           sliderInput(
+                             "gillLongDemersalPlough",
+                             "Gill Nets+Longline demersal seabed abrasion:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Gill Nets+Longline demersal seabed abrasion notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "beamTrawlShrimpPlough",
+                             "Beam Trawl shrimp seabed abrasion:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Beam Trawl shrimp seabed abrasion notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "nephropsTrawlPlough",
+                             "Nephrops Trawl TR2 seabed abrasion:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Nephrops Trawl TR2 seabed abrasion notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "creelsPlough",
+                             "Creels seabed abrasion:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Creels seabed abrasion notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "molluscDredgePlough",
+                             "Mollusc Dredge seabed abrasion:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Mollusc Dredge seabed abrasion notes here")
+                         ),
+                         wellPanel(
+                           sliderInput(
+                             "whalerPlough",
+                             "Whaler seabed abrasion:",
+                             min = 0,
+                             max = 2.0,
+                             value = 1.0,
+                             step = 0.2,
+                             width = "100%"
+                           ),
+                           helpText("Whaler seabed abrasion notes here")
+                         )
+                       )
+                     )),
+            tabPanel(title = "Guild Discard Per Gear",   sidebarLayout(
+              sidebarPanel(
+                selectInput(
+                  "selectedParameter",
+                  h4("Guilds"),
+                  choices
+                  = list(
+                    "Pelagic",
+                    "Demersal",
+                    "Migratory",
+                    "Filtben",
+                    "Carnben",
+                    "Carnzoo",
+                    "Bird",
+                    "Seal",
+                    "Ceta",
+                    "Kelp"
+                  ),
+                  selected = "Pelagic"
+                ),
+                actionButton("runScenario", "Run Model"),
+                width = 3
+              ),
+              mainPanel (uiOutput("ui"))
+            ))
+                     
+                     
+            ),
+    # tabPanel(title = "Scenario parameter setup",   sidebarLayout(
+    #   sidebarPanel(
+    #     selectInput(
+    #       "selectedParameter",
+    #       h4("Parameter"),
+    #       choices
+    #       = list(
+    #         "Fishing Activity",
+    #         "Gear Group Discard",
+    #         "Temperature",
+    #         "Nutrients",
+    #         "Seabed Abrasion"
+    #       ),
+    #       selected = "Fishing Activity"
+    #     ),
+    #     actionButton("runScenario", "Run Model"),
+    #     width = 3
+    #   ),
+    #   mainPanel (uiOutput("ui"))
+    # )),
     tabPanel(
       title = "Plots",
       h3("Compare baseline and scenario"),
@@ -107,7 +527,7 @@ ui <- fluidPage(
     tabPanel(title = "Yield curves", fluidRow(h4(
       "Add info here about yield curves - maybe this will become sub menu under plots tab using navbar"
     )))
-  )
+  #)
 )
 
 server <- function(input, output) {
@@ -115,401 +535,12 @@ server <- function(input, output) {
   output$ui <- renderUI({
     switch(
       input$selectedParameter,
-      "Temperature" = fluidRow(column(
-        width = 5,
-        offset = 2,
-        wellPanel(
-          sliderInput(
-            "temperature",
-            "Temperature to add:",
-            min = -3,
-            max = 3,
-            value = 0.5,
-            width = "100%"
-          ),
-          helpText("Additional temperature")
-        ),
-      )),
-      "Nutrients" = fluidRow(column(
-        width = 5,
-        offset = 2,
-        wellPanel(
-          sliderInput(
-            "si_atmnitrate",
-            "SI ATM Nitrate:",
-            min = 0,
-            max = 50,
-            value = 0,
-            width = "100%"
-          ),
-          helpText("SI ATM Nitrate")
-        ),
-        wellPanel(
-          sliderInput(
-            "si_atmammonia",
-            "SI Atm Ammonia:",
-            min = 0,
-            max = 50,
-            value = 0,
-            width = "100%"
-          ),
-          helpText("Additional SI Atm Ammonia")
-        ),
-        wellPanel(
-          sliderInput(
-            "so_atmnitrate",
-            "SO ATM Nitrate:",
-            min = 0,
-            max = 50,
-            value = 0,
-            width = "100%"
-          ),
-          helpText("Additional SO ATM Nitrate")
-        ),
-        wellPanel(
-          sliderInput(
-            "so_atmammonia",
-            "SO Atm Ammonia:",
-            min = 0,
-            max = 50,
-            value = 0,
-            width = "100%"
-          ),
-          helpText("Additional SO Atm Ammonia")
-        ),
-        wellPanel(
-          sliderInput(
-            "rivnitrate",
-            "River Nitrate:",
-            min = 0,
-            max = 50,
-            value = 0,
-            width = "100%"
-          ),
-          helpText("Additional River Nitrate")
-        ),
-        wellPanel(
-          sliderInput(
-            "rivammonia",
-            "River Ammonia:",
-            min = 0,
-            max = 50,
-            value = 0,
-            width = "100%"
-          ),
-          helpText("Additional River Ammonia")
-        ),
-      )),
-      "Fishing Activity" = fluidRow(
+      "Pelagic" = fluidRow(
         column(
           width = 5,
           wellPanel(
             sliderInput(
-              "pelTrawlAct",
-              "Pelagic Trawl+Seine activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Pelagic Trawl+Seine activity help notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "sanSpratTrawlAct",
-              "Sandeel sprat trawl activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Sandeel sprat trawl activity help notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "llMackerel",
-              "Longline mackerel activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Longline mackerel activity help notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "beamTrawl",
-              "Beam Trawl BT1+BT2 activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Beam Trawl BT1+BT2 activity help notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "demersalSeine",
-              "Demersal Seine activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Demersal Seine activity help notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "demersalOtterTrawl",
-              "Demersal Otter Trawl TR1 activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Demersal Otter Trawl TR1 help notes here")
-          )
-        ),
-        column(
-          width = 5,
-          wellPanel(
-            sliderInput(
-              "gillLongDemersal",
-              "Gill Nets+Longline demersal activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Gill Nets+Longline demersal activity notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "beamTrawlShrimp",
-              "Beam Trawl shrimp activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Beam Trawl shrimp activity notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "nephropsTrawl",
-              "Nephrops Trawl TR2 activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Nephrops Trawl TR2 activity notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "creels",
-              "Creels activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Creels activity notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "molluscDredge",
-              "Mollusc Dredge activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Mollusc Dredge activity notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "whaler",
-              "Whaler activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Whaler activity notes here")
-          )
-        )
-      ),
-      "Seabed Abrasion" = fluidRow(
-        column(
-          width = 5,
-          wellPanel(
-            sliderInput(
-              "pelTrawlPlough",
-              "Pelagic Trawl+Seine seabed abrasion:",
-              min = 0,
-              max = 0.0,
-              value = 0.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Pelagic Trawl+Seine seabed abrasion help notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "sanSpratTrawlPlough",
-              "Sandeel sprat trawl seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Sandeel sprat trawl seabed abrasion help notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "llMackerelPlough",
-              "Longline mackerel seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Longline mackerel seabed abrasion help notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "beamTrawlPlough",
-              "Beam Trawl BT1+BT2 seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Beam Trawl BT1+BT2 seabed abrasion help notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "demersalSeinePlough",
-              "Demersal Seine seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Demersal Seine seabed abrasion help notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "demersalOtterTrawlPlough",
-              "Demersal Otter Trawl TR1 seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Demersal Otter Trawl TR1 seabed abrasion help notes here")
-          )
-        ),
-        column(
-          width = 5,
-          wellPanel(
-            sliderInput(
-              "gillLongDemersalPlough",
-              "Gill Nets+Longline demersal seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Gill Nets+Longline demersal seabed abrasion notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "beamTrawlShrimpPlough",
-              "Beam Trawl shrimp seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Beam Trawl shrimp seabed abrasion notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "nephropsTrawlPlough",
-              "Nephrops Trawl TR2 seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Nephrops Trawl TR2 seabed abrasion notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "creelsPlough",
-              "Creels seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Creels seabed abrasion notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "molluscDredgePlough",
-              "Mollusc Dredge seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Mollusc Dredge seabed abrasion notes here")
-          ),
-          wellPanel(
-            sliderInput(
-              "whalerPlough",
-              "Whaler seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            ),
-            helpText("Whaler seabed abrasion notes here")
-          )
-        )
-      ),
-      "Gear Group Discard" = fluidRow(
-        column(
-          width = 5,
-          wellPanel(
-            sliderInput(
-              "pelTrawlDiscard",
+              "pelTrawlDiscard_pel",
               "Pelagic Trawl Discard:",
               min = 0,
               max = 2.0,
@@ -521,7 +552,7 @@ server <- function(input, output) {
           ),
           wellPanel(
             sliderInput(
-              "sanSpratTrawlDiscard",
+              "sanSpratTrawlDiscard_pel",
               "San spart trawl discard:",
               min = 0,
               max = 2.0,
@@ -533,7 +564,7 @@ server <- function(input, output) {
           ),
           wellPanel(
             sliderInput(
-              "llMackerelDiscard",
+              "llMackerelDiscard_pel",
               "llMackerel Discard:",
               min = 0,
               max = 2.0,
@@ -545,7 +576,7 @@ server <- function(input, output) {
           ),
           wellPanel(
             sliderInput(
-              "beamTrawlDiscard",
+              "beamTrawlDiscard_pel",
               "Beam Trawl Discard:",
               min = 0,
               max = 2.0,
@@ -557,7 +588,7 @@ server <- function(input, output) {
           ),
           wellPanel(
             sliderInput(
-              "demersalSeineDiscard",
+              "demersalSeineDiscard_pel",
               "Demersal Seine Discard:",
               min = 0,
               max = 2.0,
@@ -572,7 +603,7 @@ server <- function(input, output) {
           width = 5,
           wellPanel(
             sliderInput(
-              "demersalOtterTrawlDiscar",
+              "demersalOtterTrawlDiscard_pel",
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 2.0,
@@ -584,7 +615,7 @@ server <- function(input, output) {
           ),
           wellPanel(
             sliderInput(
-              "gillLongDemersalDiscard",
+              "gillLongDemersalDiscard_pel",
               "Gill Long Demersal Discard:",
               min = 0,
               max = 2.0,
@@ -596,7 +627,7 @@ server <- function(input, output) {
           ),
           wellPanel(
             sliderInput(
-              "beamTrawlShrimpDiscard",
+              "beamTrawlShrimpDiscard_pel",
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 2.0,
@@ -608,7 +639,7 @@ server <- function(input, output) {
           ),
           wellPanel(
             sliderInput(
-              "nephropsTrawlDiscard",
+              "nephropsTrawlDiscard_pel",
               "Nephrops Trawl Discard:",
               min = 0,
               max = 2.0,
@@ -620,7 +651,7 @@ server <- function(input, output) {
           ),
           wellPanel(
             sliderInput(
-              "creelsDiscard",
+              "creelsDiscard_pel",
               "Creels Discard:",
               min = 0,
               max = 2.0,
@@ -632,7 +663,7 @@ server <- function(input, output) {
           ),
           wellPanel(
             sliderInput(
-              "molluscDredgeDiscard",
+              "molluscDredgeDiscard_pel",
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 2.0,
@@ -644,7 +675,1375 @@ server <- function(input, output) {
           ),
           wellPanel(
             sliderInput(
-              "whalerDiscard",
+              "whalerDiscard_pel",
+              "Whaler Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Whaler discard notes here")
+          )
+        )
+      ),
+      "Demersal" = fluidRow(
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "pelTrawlDiscard_dem",
+              "Pelagic Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Pelgic discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "sanSpratTrawlDiscard_dem",
+              "San spart trawl discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("San spart trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "llMackerelDiscard_dem",
+              "llMackerel Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("llMackeral discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlDiscard_dem",
+              "Beam Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "demersalSeineDiscard_dem",
+              "Demersal Seine Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal Seine discard notes here")
+          )
+        ),
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "demersalOtterTrawlDiscard_dem",
+              "Demersal OtterTrawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal OtterTrawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "gillLongDemersalDiscard_dem",
+              "Gill Long Demersal Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Gill Long Demersal discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlShrimpDiscard_dem",
+              "Beam Trawl Shrimp Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl Shrimp discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "nephropsTrawlDiscard_dem",
+              "Nephrops Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Nephrops Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "creelsDiscard_dem",
+              "Creels Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Creels discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "molluscDredgeDiscard_dem",
+              "Mollusc Dredge Discard Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Mollusc Dredge discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "whalerDiscard_dem",
+              "Whaler Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Whaler discard notes here")
+          )
+        )
+      ),
+      "Migratory" = fluidRow(
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "pelTrawlDiscard_mig",
+              "Pelagic Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Pelgic discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "sanSpratTrawlDiscard_mig",
+              "San spart trawl discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("San spart trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "llMackerelDiscard_mig",
+              "llMackerel Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("llMackeral discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlDiscard_mig",
+              "Beam Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "demersalSeineDiscard_mig",
+              "Demersal Seine Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal Seine discard notes here")
+          )
+        ),
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "demersalOtterTrawlDiscard_mig",
+              "Demersal OtterTrawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal OtterTrawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "gillLongDemersalDiscard_mig",
+              "Gill Long Demersal Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Gill Long Demersal discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlShrimpDiscard_mig",
+              "Beam Trawl Shrimp Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl Shrimp discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "nephropsTrawlDiscard_mig",
+              "Nephrops Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Nephrops Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "creelsDiscard_mig",
+              "Creels Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Creels discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "molluscDredgeDiscard_mig",
+              "Mollusc Dredge Discard Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Mollusc Dredge discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "whalerDiscard_mig",
+              "Whaler Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Whaler discard notes here")
+          )
+        )
+      ),
+      "Filtben" = fluidRow(
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "pelTrawlDiscard_fb",
+              "Pelagic Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Pelgic discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "sanSpratTrawlDiscard_fb",
+              "San spart trawl discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("San spart trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "llMackerelDiscard_fb",
+              "llMackerel Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("llMackeral discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlDiscard_fb",
+              "Beam Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "demersalSeineDiscard_fb",
+              "Demersal Seine Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal Seine discard notes here")
+          )
+        ),
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "demersalOtterTrawlDiscard_fb",
+              "Demersal OtterTrawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal OtterTrawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "gillLongDemersalDiscard_fb",
+              "Gill Long Demersal Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Gill Long Demersal discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlShrimpDiscard_fb",
+              "Beam Trawl Shrimp Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl Shrimp discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "nephropsTrawlDiscard_fb",
+              "Nephrops Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Nephrops Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "creelsDiscard_fb",
+              "Creels Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Creels discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "molluscDredgeDiscard_fb",
+              "Mollusc Dredge Discard Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Mollusc Dredge discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "whalerDiscard_fb",
+              "Whaler Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Whaler discard notes here")
+          )
+        )
+      ),
+      "Carnben" = fluidRow(
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "pelTrawlDiscard_cb",
+              "Pelagic Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Pelgic discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "sanSpratTrawlDiscard_cb",
+              "San spart trawl discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("San spart trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "llMackerelDiscard_cb",
+              "llMackerel Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("llMackeral discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlDiscard_cb",
+              "Beam Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "demersalSeineDiscard_cb",
+              "Demersal Seine Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal Seine discard notes here")
+          )
+        ),
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "demersalOtterTrawlDiscard_cb",
+              "Demersal OtterTrawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal OtterTrawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "gillLongDemersalDiscard_cb",
+              "Gill Long Demersal Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Gill Long Demersal discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlShrimpDiscard_cb",
+              "Beam Trawl Shrimp Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl Shrimp discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "nephropsTrawlDiscard_cb",
+              "Nephrops Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Nephrops Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "creelsDiscard_cb",
+              "Creels Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Creels discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "molluscDredgeDiscard_cb",
+              "Mollusc Dredge Discard Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Mollusc Dredge discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "whalerDiscard_cb",
+              "Whaler Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Whaler discard notes here")
+          )
+        )
+      ),
+      "Carnzoo" = fluidRow(
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "pelTrawlDiscard_cz",
+              "Pelagic Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Pelgic discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "sanSpratTrawlDiscard_cz",
+              "San spart trawl discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("San spart trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "llMackerelDiscard_cz",
+              "llMackerel Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("llMackeral discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlDiscard_cz",
+              "Beam Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "demersalSeineDiscard_cz",
+              "Demersal Seine Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal Seine discard notes here")
+          )
+        ),
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "demersalOtterTrawlDiscard_cz",
+              "Demersal OtterTrawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal OtterTrawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "gillLongDemersalDiscard_cz",
+              "Gill Long Demersal Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Gill Long Demersal discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlShrimpDiscard_cz",
+              "Beam Trawl Shrimp Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl Shrimp discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "nephropsTrawlDiscard_cz",
+              "Nephrops Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Nephrops Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "creelsDiscard_cz",
+              "Creels Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Creels discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "molluscDredgeDiscard_cz",
+              "Mollusc Dredge Discard Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Mollusc Dredge discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "whalerDiscard_cz",
+              "Whaler Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Whaler discard notes here")
+          )
+        )
+      ),
+      "Bird" = fluidRow(
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "pelTrawlDiscard_b",
+              "Pelagic Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Pelgic discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "sanSpratTrawlDiscard_b",
+              "San spart trawl discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("San spart trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "llMackerelDiscard_b",
+              "llMackerel Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("llMackeral discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlDiscard_b",
+              "Beam Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "demersalSeineDiscard_b",
+              "Demersal Seine Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal Seine discard notes here")
+          )
+        ),
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "demersalOtterTrawlDiscard_b",
+              "Demersal OtterTrawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal OtterTrawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "gillLongDemersalDiscard_b",
+              "Gill Long Demersal Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Gill Long Demersal discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlShrimpDiscard_b",
+              "Beam Trawl Shrimp Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl Shrimp discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "nephropsTrawlDiscard_b",
+              "Nephrops Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Nephrops Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "creelsDiscard_b",
+              "Creels Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Creels discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "molluscDredgeDiscard_b",
+              "Mollusc Dredge Discard Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Mollusc Dredge discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "whalerDiscard_b",
+              "Whaler Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Whaler discard notes here")
+          )
+        )
+      ),
+      "Seal" = fluidRow(
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "pelTrawlDiscard_s",
+              "Pelagic Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Pelgic discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "sanSpratTrawlDiscard_s",
+              "San spart trawl discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("San spart trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "llMackerelDiscard_s",
+              "llMackerel Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("llMackeral discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlDiscard_s",
+              "Beam Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "demersalSeineDiscard_s",
+              "Demersal Seine Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal Seine discard notes here")
+          )
+        ),
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "demersalOtterTrawlDiscard_s",
+              "Demersal OtterTrawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal OtterTrawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "gillLongDemersalDiscard_s",
+              "Gill Long Demersal Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Gill Long Demersal discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlShrimpDiscard_s",
+              "Beam Trawl Shrimp Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl Shrimp discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "nephropsTrawlDiscard_s",
+              "Nephrops Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Nephrops Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "creelsDiscard_s",
+              "Creels Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Creels discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "molluscDredgeDiscard_s",
+              "Mollusc Dredge Discard Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Mollusc Dredge discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "whalerDiscard_s",
+              "Whaler Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Whaler discard notes here")
+          )
+        )
+      ),
+      "Ceta" = fluidRow(
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "pelTrawlDiscard_ceta",
+              "Pelagic Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Pelgic discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "sanSpratTrawlDiscard_ceta",
+              "San spart trawl discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("San spart trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "llMackerelDiscard_ceta",
+              "llMackerel Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("llMackeral discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlDiscard_ceta",
+              "Beam Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "demersalSeineDiscard_ceta",
+              "Demersal Seine Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal Seine discard notes here")
+          )
+        ),
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "demersalOtterTrawlDiscard_ceta",
+              "Demersal OtterTrawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal OtterTrawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "gillLongDemersalDiscard_ceta",
+              "Gill Long Demersal Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Gill Long Demersal discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlShrimpDiscard_ceta",
+              "Beam Trawl Shrimp Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl Shrimp discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "nephropsTrawlDiscard_ceta",
+              "Nephrops Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Nephrops Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "creelsDiscard_ceta",
+              "Creels Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Creels discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "molluscDredgeDiscard_ceta",
+              "Mollusc Dredge Discard Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Mollusc Dredge discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "whalerDiscard_ceta",
+              "Whaler Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Whaler discard notes here")
+          )
+        )
+      ),
+      "Kelp" = fluidRow(
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "pelTrawlDiscard_kelp",
+              "Pelagic Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Pelgic discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "sanSpratTrawlDiscard_kelp",
+              "San spart trawl discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("San spart trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "llMackerelDiscard_kelp",
+              "llMackerel Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("llMackeral discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlDiscard_kelp",
+              "Beam Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "demersalSeineDiscard_kelp",
+              "Demersal Seine Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal Seine discard notes here")
+          )
+        ),
+        column(
+          width = 5,
+          wellPanel(
+            sliderInput(
+              "demersalOtterTrawlDiscard_kelp",
+              "Demersal OtterTrawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Demersal OtterTrawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "gillLongDemersalDiscard_kelp",
+              "Gill Long Demersal Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Gill Long Demersal discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "beamTrawlShrimpDiscard_kelp",
+              "Beam Trawl Shrimp Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Beam Trawl Shrimp discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "nephropsTrawlDiscard_kelp",
+              "Nephrops Trawl Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Nephrops Trawl discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "creelsDiscard_kelp",
+              "Creels Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Creels discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "molluscDredgeDiscard_kelp",
+              "Mollusc Dredge Discard Discard:",
+              min = 0,
+              max = 2.0,
+              value = 1.0,
+              step = 0.2,
+              width = "100%"
+            ),
+            helpText("Mollusc Dredge discard notes here")
+          ),
+          wellPanel(
+            sliderInput(
+              "whalerDiscard_kelp",
               "Whaler Discard:",
               min = 0,
               max = 2.0,
