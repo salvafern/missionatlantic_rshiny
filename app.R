@@ -2338,18 +2338,18 @@ server <- function(input, output) {
     if (!is.null(input$molluscDredgeDiscard_ceta)) scenario_model$data$fleet.model$gear_group_discard[9,11] <- scenario_model$data$fleet.model$gear_group_discard[9,11]*input$molluscDredgeDiscard_ceta
     if (!is.null(input$whalerDiscard_ceta)) scenario_model$data$fleet.model$gear_group_discard[9,12] <- scenario_model$data$fleet.model$gear_group_discard[9,12]*input$whalerDiscard_ceta
     
-    if (!is.null(input$pelagicTrawlDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,1] <-  scenario_model$data$fleet.model$gear_group_discard[10,1]*input$pelagicTrawlDiscard_kelp
-    if (!is.null(input$sanSpratTrawlDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,2] <- scenario_model$data$fleet.model$gear_group_discard[10,2]*input$sanSpratTrawlDiscard_kelp
-    if (!is.null(input$llMackerelDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,3] <- scenario_model$data$fleet.model$gear_group_discard[10,3]*input$llMackerelDiscard_kelp
-    if (!is.null(input$beamTrawlDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,4] <- scenario_model$data$fleet.model$gear_group_discard[10,4]*input$beamTrawlDiscard_kelp
-    if (!is.null(input$demersalSeineDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,5] <- scenario_model$data$fleet.model$gear_group_discard[10,5]*input$demersalSeineDiscard_kelp
-    if (!is.null(input$demersalOtterTrawlDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,6] <- scenario_model$data$fleet.model$gear_group_discard[10,6]*input$demersalOtterTrawlDiscard_kelp
-    if (!is.null(input$gillLongDemersalDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,7] <- scenario_model$data$fleet.model$gear_group_discard[10,7]*input$gillLongDemersalDiscard_kelp
-    if (!is.null(input$beamTrawlShrimpDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,8] <- scenario_model$data$fleet.model$gear_group_discard[10,8]*input$beamTrawlShrimpDiscard_kelp
-    if (!is.null(input$nephropsTrawlDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,9] <- scenario_model$data$fleet.model$gear_group_discard[10,9]*input$nephropsTrawlDiscard_kelp
-    if (!is.null(input$creelsDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,10] <- scenario_model$data$fleet.model$gear_group_discard[10,10]*input$creelsDiscard_kelp
-    if (!is.null(input$molluscDredgeDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,11] <- scenario_model$data$fleet.model$gear_group_discard[10,11]*input$molluscDredgeDiscard_kelp
-    if (!is.null(input$whalerDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[9,12] <- scenario_model$data$fleet.model$gear_group_discard[10,12]*input$whalerDiscard_kelp
+    if (!is.null(input$pelagicTrawlDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,1] <-  scenario_model$data$fleet.model$gear_group_discard[10,1]*input$pelagicTrawlDiscard_kelp
+    if (!is.null(input$sanSpratTrawlDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,2] <- scenario_model$data$fleet.model$gear_group_discard[10,2]*input$sanSpratTrawlDiscard_kelp
+    if (!is.null(input$llMackerelDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,3] <- scenario_model$data$fleet.model$gear_group_discard[10,3]*input$llMackerelDiscard_kelp
+    if (!is.null(input$beamTrawlDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,4] <- scenario_model$data$fleet.model$gear_group_discard[10,4]*input$beamTrawlDiscard_kelp
+    if (!is.null(input$demersalSeineDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,5] <- scenario_model$data$fleet.model$gear_group_discard[10,5]*input$demersalSeineDiscard_kelp
+    if (!is.null(input$demersalOtterTrawlDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,6] <- scenario_model$data$fleet.model$gear_group_discard[10,6]*input$demersalOtterTrawlDiscard_kelp
+    if (!is.null(input$gillLongDemersalDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,7] <- scenario_model$data$fleet.model$gear_group_discard[10,7]*input$gillLongDemersalDiscard_kelp
+    if (!is.null(input$beamTrawlShrimpDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,8] <- scenario_model$data$fleet.model$gear_group_discard[10,8]*input$beamTrawlShrimpDiscard_kelp
+    if (!is.null(input$nephropsTrawlDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,9] <- scenario_model$data$fleet.model$gear_group_discard[10,9]*input$nephropsTrawlDiscard_kelp
+    if (!is.null(input$creelsDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,10] <- scenario_model$data$fleet.model$gear_group_discard[10,10]*input$creelsDiscard_kelp
+    if (!is.null(input$molluscDredgeDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,11] <- scenario_model$data$fleet.model$gear_group_discard[10,11]*input$molluscDredgeDiscard_kelp
+    if (!is.null(input$whalerDiscard_kelp)) scenario_model$data$fleet.model$gear_group_discard[10,12] <- scenario_model$data$fleet.model$gear_group_discard[10,12]*input$whalerDiscard_kelp
     
     results_scenario <-
       e2e_run(scenario_model,
