@@ -2207,18 +2207,18 @@ server <- function(input, output) {
     if (!is.null(input$whaler)) scenario_model$data$fleet.model$gear_mult[12] <- input$whaler
 
         # Seabed abrasian
-    if (!is.null(input$pelTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[1] <- input$pelTrawlPlough # TODO Should this be a multiplier on baseline?
-    if (!is.null(input$sanSpratTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[2] <- input$sanSpratTrawlPlough
-    if (!is.null(input$llMackerelPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[3] <- input$llMackerelPlough
-    if (!is.null(input$beamTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[4] <- input$beamTrawlPlough
-    if (!is.null(input$demersalSeinePlough)) scenario_model$data$fleet.model$gear_ploughing_rate[5] <- input$demersalSeinePlough
-    if (!is.null(input$demersalOtterTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[6] <- input$demersalOtterTrawlPlough
-    if (!is.null(input$gillLongDemersalPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[7] <- input$gillLongDemersalPlough
-    if (!is.null(input$beamTrawlShrimpPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[8] <- input$beamTrawlShrimpPlough
-    if (!is.null(input$nephropsTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[9] <- input$nephropsTrawlPlough
-    if (!is.null(input$creelsPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[10] <- input$creelsPlough
-    if (!is.null(input$molluscDredgePlough)) scenario_model$data$fleet.model$gear_ploughing_rate[11] <- input$molluscDredgePlough
-    if (!is.null(input$whalerPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[12] <- input$whalerPlough
+    if (!is.null(input$pelTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[1] <- scenario_model$data$fleet.model$gear_ploughing_rate[1]*input$pelTrawlPlough # TODO Should this be a multiplier on baseline?
+    if (!is.null(input$sanSpratTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[2] <- scenario_model$data$fleet.model$gear_ploughing_rate[2]*input$sanSpratTrawlPlough
+    if (!is.null(input$llMackerelPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[3] <- scenario_model$data$fleet.model$gear_ploughing_rate[3]*input$llMackerelPlough
+    if (!is.null(input$beamTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[4] <- scenario_model$data$fleet.model$gear_ploughing_rate[4]*input$beamTrawlPlough
+    if (!is.null(input$demersalSeinePlough)) scenario_model$data$fleet.model$gear_ploughing_rate[5] <- scenario_model$data$fleet.model$gear_ploughing_rate[5]*input$demersalSeinePlough
+    if (!is.null(input$demersalOtterTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[6] <- scenario_model$data$fleet.model$gear_ploughing_rate[6]*input$demersalOtterTrawlPlough
+    if (!is.null(input$gillLongDemersalPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[7] <- scenario_model$data$fleet.model$gear_ploughing_rate[7]*input$gillLongDemersalPlough
+    if (!is.null(input$beamTrawlShrimpPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[8] <- scenario_model$data$fleet.model$gear_ploughing_rate[8]*input$beamTrawlShrimpPlough
+    if (!is.null(input$nephropsTrawlPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[9] <- scenario_model$data$fleet.model$gear_ploughing_rate[9]*input$nephropsTrawlPlough
+    if (!is.null(input$creelsPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[10] <- scenario_model$data$fleet.model$gear_ploughing_rate[10]*input$creelsPlough
+    if (!is.null(input$molluscDredgePlough)) scenario_model$data$fleet.model$gear_ploughing_rate[11] <- scenario_model$data$fleet.model$gear_ploughing_rate[11]*input$molluscDredgePlough
+    if (!is.null(input$whalerPlough)) scenario_model$data$fleet.model$gear_ploughing_rate[12] <- scenario_model$data$fleet.model$gear_ploughing_rate[12]*input$whalerPlough
 
         # Discard per gear
     if (!is.null(input$pelagicTrawlDiscard_pel)) scenario_model$data$fleet.model$gear_group_discard[1][1] <-  scenario_model$data$fleet.model$gear_group_discard[1][1]*input$pelagicTrawlDiscard_pel
