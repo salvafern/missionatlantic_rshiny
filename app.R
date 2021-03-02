@@ -7,512 +7,521 @@ library(shinyjs)
 
 # Define UI for miles per gallon app ----
 ui <- navbarPage("StrathE2E App",
-  theme = shinytheme("cerulean"),
-  
-  #tabsetPanel(
-  # id = "inTabset",
-  navbarMenu("Overview",
-             
-    tabPanel(title = "Model Overview", fluidRow(h4(
-      "Overview of StrathE2E model to go here"
-    ))),
-    tabPanel(title = "Model Setup", fluidRow(h4(
-      "Png's to be supplied by Jack here"
-    )))),
-    tabPanel(title = "Location",   sidebarLayout(
-      sidebarPanel(
-        selectInput(
-          "selectedlocation",
-          h4("Location"),
-          choices
-          = list("North_Sea"),
-          selected = "North_Sea"
-        ),
-        selectInput(
-          "selectedVariant",
-          h4("Model Variant"),
-          choices
-          = list("1970-1999"),
-          selected = "1970-1999"
-        ),
-        sliderInput(
-          "year",
-          "Year:",
-          min = 1,
-          max = 50,
-          value = 5,
-          width = "100%"
-        ),
-        
-        actionButton("runBaseline", "Run Baseline Model"),
-        width = 3
-      ),
-      #Main Panel: plot map here in the future
-      mainPanel (
-      )
-    )),
-    navbarMenu("Parameters",
-            tabPanel(title = "Temperature",
-              fluidRow(column(
-                 width = 5,
-                 offset = 2,
-                 wellPanel(
-                   sliderInput(
-                     "temperature",
-                     "Temperature to add:",
-                     min = -3,
-                     max = 3,
-                     value = 0.5,
-                     width = "100%"
-                   ),
-                   helpText("Additional temperature")
-                 ),
-               ))),
-            tabPanel(title = "Nutrients",
-                     fluidRow(column(
-                       width = 5,
-                       offset = 2,
-                       wellPanel(
-                         sliderInput(
-                           "si_atmnitrate",
-                           "SI ATM Nitrate:",
-                           min = 0,
-                           max = 50,
-                           value = 0,
-                           width = "100%"
-                         ),
-                         helpText("SI ATM Nitrate")
-                       ),
-                       wellPanel(
-                         sliderInput(
-                           "si_atmammonia",
-                           "SI Atm Ammonia:",
-                           min = 0,
-                           max = 50,
-                           value = 0,
-                           width = "100%"
-                         ),
-                         helpText("Additional SI Atm Ammonia")
-                       ),
-                       wellPanel(
-                         sliderInput(
-                           "so_atmnitrate",
-                           "SO ATM Nitrate:",
-                           min = 0,
-                           max = 50,
-                           value = 0,
-                           width = "100%"
-                         ),
-                         helpText("Additional SO ATM Nitrate")
-                       ),
-                       wellPanel(
-                         sliderInput(
-                           "so_atmammonia",
-                           "SO Atm Ammonia:",
-                           min = 0,
-                           max = 50,
-                           value = 0,
-                           width = "100%"
-                         ),
-                         helpText("Additional SO Atm Ammonia")
-                       ),
-                       wellPanel(
-                         sliderInput(
-                           "rivnitrate",
-                           "River Nitrate:",
-                           min = 0,
-                           max = 50,
-                           value = 0,
-                           width = "100%"
-                         ),
-                         helpText("Additional River Nitrate")
-                       ),
-                       wellPanel(
-                         sliderInput(
-                           "rivammonia",
-                           "River Ammonia:",
-                           min = 0,
-                           max = 50,
-                           value = 0,
-                           width = "100%"
-                         ),
-                         helpText("Additional River Ammonia")
-                       ),
-                     ))),
-                  tabPanel(title = "Fishing Activity",
-                     fluidRow(
-                       column(
-                         width = 5,
-                         wellPanel(
-                           sliderInput(
-                             "pelTrawlAct",
-                             "Pelagic Trawl+Seine activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Pelagic Trawl+Seine activity help notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "sanSpratTrawlAct",
-                             "Sandeel sprat trawl activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Sandeel sprat trawl activity help notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "llMackerel",
-                             "Longline mackerel activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Longline mackerel activity help notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "beamTrawl",
-                             "Beam Trawl BT1+BT2 activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Beam Trawl BT1+BT2 activity help notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "demersalSeine",
-                             "Demersal Seine activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Demersal Seine activity help notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "demersalOtterTrawl",
-                             "Demersal Otter Trawl TR1 activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Demersal Otter Trawl TR1 help notes here")
-                         )
-                       ),
-                       column(
-                         width = 5,
-                         wellPanel(
-                           sliderInput(
-                             "gillLongDemersal",
-                             "Gill Nets+Longline demersal activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Gill Nets+Longline demersal activity notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "beamTrawlShrimp",
-                             "Beam Trawl shrimp activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Beam Trawl shrimp activity notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "nephropsTrawl",
-                             "Nephrops Trawl TR2 activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Nephrops Trawl TR2 activity notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "creels",
-                             "Creels activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Creels activity notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "molluscDredge",
-                             "Mollusc Dredge activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Mollusc Dredge activity notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "whaler",
-                             "Whaler activity:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Whaler activity notes here")
-                         )
-                       )
-                     )),
-            tabPanel(title = "Seabed Abrasion",
-                     fluidRow(
-                       column(
-                         width = 5,
-                         wellPanel(
-                           sliderInput(
-                             "pelTrawlPlough",
-                             "Pelagic Trawl+Seine seabed abrasion:",
-                             min = 0,
-                             max = 0.0,
-                             value = 0.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Pelagic Trawl+Seine seabed abrasion help notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "sanSpratTrawlPlough",
-                             "Sandeel sprat trawl seabed abrasion:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Sandeel sprat trawl seabed abrasion help notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "llMackerelPlough",
-                             "Longline mackerel seabed abrasion:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Longline mackerel seabed abrasion help notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "beamTrawlPlough",
-                             "Beam Trawl BT1+BT2 seabed abrasion:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Beam Trawl BT1+BT2 seabed abrasion help notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "demersalSeinePlough",
-                             "Demersal Seine seabed abrasion:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Demersal Seine seabed abrasion help notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "demersalOtterTrawlPlough",
-                             "Demersal Otter Trawl TR1 seabed abrasion:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Demersal Otter Trawl TR1 seabed abrasion help notes here")
-                         )
-                       ),
-                       column(
-                         width = 5,
-                         wellPanel(
-                           sliderInput(
-                             "gillLongDemersalPlough",
-                             "Gill Nets+Longline demersal seabed abrasion:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Gill Nets+Longline demersal seabed abrasion notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "beamTrawlShrimpPlough",
-                             "Beam Trawl shrimp seabed abrasion:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Beam Trawl shrimp seabed abrasion notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "nephropsTrawlPlough",
-                             "Nephrops Trawl TR2 seabed abrasion:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Nephrops Trawl TR2 seabed abrasion notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "creelsPlough",
-                             "Creels seabed abrasion:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Creels seabed abrasion notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "molluscDredgePlough",
-                             "Mollusc Dredge seabed abrasion:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Mollusc Dredge seabed abrasion notes here")
-                         ),
-                         wellPanel(
-                           sliderInput(
-                             "whalerPlough",
-                             "Whaler seabed abrasion:",
-                             min = 0,
-                             max = 2.0,
-                             value = 1.0,
-                             step = 0.2,
-                             width = "100%"
-                           ),
-                           helpText("Whaler seabed abrasion notes here")
-                         )
-                       )
-                     )),
-            tabPanel(title = "Guild Discard Per Gear",   sidebarLayout(
-              sidebarPanel(
-                selectInput(
-                  "selectedParameter",
-                  h4("Guilds"),
-                  choices
-                  = list(
-                    "Pelagic",
-                    "Demersal",
-                    "Migratory",
-                    "Filtben",
-                    "Carnben",
-                    "Carnzoo",
-                    "Bird",
-                    "Seal",
-                    "Ceta",
-                    "Kelp"
-                  ),
-                  selected = "Pelagic"
-                ),
-                width = 3
-              ),
-              mainPanel (uiOutput("ui"))
-            )),
-            tabPanel(title = "Run Scenario",
-                     actionButton("runScenario", "Run Scenario")
-            )),
-  navbarMenu("Plots",
-    tabPanel(
-      title = "Baseline versus Scenario plots",
-      h3("Compare baseline and scenario"),
-      # actionButton("runScenario", "Run Model"),
-      fluidRow(column(
-        6,
-        h3("Baseline"),
-        plotOutput("baselinePlot")
-      ),
-      column(
-        6,
-        h3("Scenario"),
-        plotOutput("scenarioPlot")
-      )),
-      fluidRow(
-        column(
-          6,
-          h3("Baseline output"),
-          useShinyjs(),
-          div(id="dwnbutton_b", 
-              downloadButton("downloadData_baseline1", "Download Baseline output", disabled = "disabled")
-          )
-        ),
-        column(
-          6,
-          h3("Scenario output"),
-          useShinyjs(),
-          div(id="dwnbutton_s", 
-              downloadButton("downloadData_scenario1", "Download Scenario output", disabled = "disabled")
-          )
-        )
-      )
-    ),
-    tabPanel(title = "Yield curves", fluidRow(h4(
-      "Add info here about yield curves - maybe this will become sub menu under plots tab using navbar"
-    ))))
+                 theme = shinytheme("cerulean"),
+                 
+                 #tabsetPanel(
+                 # id = "inTabset",
+                 navbarMenu("Overview",
+                            
+                            tabPanel(title = "Model Overview", fluidRow(h4(
+                              "Overview of StrathE2E model to go here"
+                            ))),
+                            tabPanel(title = "Model Setup", fluidRow(h4(
+                              "Png's to be supplied by Jack here"
+                            )))),
+                 tabPanel(title = "Location",   
+                          h4("Some text about locations to go here"),
+                          sidebarLayout(
+                            sidebarPanel(
+                              selectInput(
+                                "selectedlocation",
+                                h4("Location"),
+                                choices
+                                = list("North_Sea"),
+                                selected = "North_Sea"
+                              ),
+                              selectInput(
+                                "selectedVariant",
+                                h4("Model Variant"),
+                                choices
+                                = list("1970-1999"),
+                                selected = "1970-1999"
+                              ),
+                              sliderInput(
+                                "year",
+                                "Year:",
+                                min = 1,
+                                max = 50,
+                                value = 5,
+                                width = "100%"
+                              ),
+                              
+                              actionButton("runBaseline", "Run Baseline Model"),
+                              width = 3
+                            ),
+                            #Main Panel: plot map here in the future
+                            mainPanel (
+                            )
+                          )),
+                 navbarMenu("Parameters",
+                            tabPanel(title = "Temperature",
+                                     h4("Some text about Temperature to go here"),
+                                     fluidRow(column(
+                                       width = 5,
+                                       offset = 2,
+                                       wellPanel(
+                                         sliderInput(
+                                           "temperature",
+                                           "Temperature to add:",
+                                           min = -3,
+                                           max = 3,
+                                           value = 0.5,
+                                           width = "100%"
+                                         ),
+                                         helpText("Additional temperature")
+                                       ),
+                                     ))),
+                            tabPanel(title = "Nutrients",
+                                     h4("Some text about Nutrients to go here"),
+                                     fluidRow(column(
+                                       width = 5,
+                                       offset = 2,
+                                       wellPanel(
+                                         sliderInput(
+                                           "atmnitrate",
+                                           "Atmospheric Nitrate:",
+                                           min = 0,
+                                           max = 50,
+                                           value = 0,
+                                           width = "100%"
+                                         ),
+                                         helpText("Atmospheric Nitrate")
+                                       ),
+                                       wellPanel(
+                                         sliderInput(
+                                           "atmammonia",
+                                           "Atmospheric Ammonia:",
+                                           min = 0,
+                                           max = 50,
+                                           value = 0,
+                                           width = "100%"
+                                         ),
+                                         helpText("Atmospheric Ammonia")
+                                       ),
+                                       # wellPanel(
+                                       #   sliderInput(
+                                       #     "so_atmnitrate",
+                                       #     "SO ATM Nitrate:",
+                                       #     min = 0,
+                                       #     max = 50,
+                                       #     value = 0,
+                                       #     width = "100%"
+                                       #   ),
+                                       #   helpText("Additional SO ATM Nitrate")
+                                       # ),
+                                       # wellPanel(
+                                       #   sliderInput(
+                                       #     "so_atmammonia",
+                                       #     "SO Atm Ammonia:",
+                                       #     min = 0,
+                                       #     max = 50,
+                                       #     value = 0,
+                                       #     width = "100%"
+                                       #   ),
+                                       #   helpText("Additional SO Atm Ammonia")
+                                       # ),
+                                       wellPanel(
+                                         sliderInput(
+                                           "rivnitrate",
+                                           "River Nitrate:",
+                                           min = 0,
+                                           max = 50,
+                                           value = 0,
+                                           width = "100%"
+                                         ),
+                                         helpText("Additional River Nitrate")
+                                       ),
+                                       wellPanel(
+                                         sliderInput(
+                                           "rivammonia",
+                                           "River Ammonia:",
+                                           min = 0,
+                                           max = 50,
+                                           value = 0,
+                                           width = "100%"
+                                         ),
+                                         helpText("Additional River Ammonia")
+                                       ),
+                                     ))),
+                            tabPanel(title = "Fishing Activity",
+                                     h4("Some text about fishing activity to go here"),
+                                     fluidRow(
+                                       column(
+                                         width = 5,
+                                         wellPanel(
+                                           sliderInput(
+                                             "pelTrawlAct",
+                                             "Pelagic Trawl+Seine activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Pelagic Trawl+Seine activity help notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "sanSpratTrawlAct",
+                                             "Sandeel sprat trawl activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Sandeel sprat trawl activity help notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "llMackerel",
+                                             "Longline mackerel activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Longline mackerel activity help notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "beamTrawl",
+                                             "Beam Trawl BT1+BT2 activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Beam Trawl BT1+BT2 activity help notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "demersalSeine",
+                                             "Demersal Seine activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Demersal Seine activity help notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "demersalOtterTrawl",
+                                             "Demersal Otter Trawl TR1 activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Demersal Otter Trawl TR1 help notes here")
+                                         )
+                                       ),
+                                       column(
+                                         width = 5,
+                                         wellPanel(
+                                           sliderInput(
+                                             "gillLongDemersal",
+                                             "Gill Nets+Longline demersal activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Gill Nets+Longline demersal activity notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "beamTrawlShrimp",
+                                             "Beam Trawl shrimp activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Beam Trawl shrimp activity notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "nephropsTrawl",
+                                             "Nephrops Trawl TR2 activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Nephrops Trawl TR2 activity notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "creels",
+                                             "Creels activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Creels activity notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "molluscDredge",
+                                             "Mollusc Dredge activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Mollusc Dredge activity notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "whaler",
+                                             "Whaler activity:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Whaler activity notes here")
+                                         )
+                                       )
+                                     )),
+                            tabPanel(title = "Seabed Abrasion",
+                                     h4("Some text about seabed abrasion to go here"),
+                                     fluidRow(
+                                       column(
+                                         width = 5,
+                                         wellPanel(
+                                           sliderInput(
+                                             "pelTrawlPlough",
+                                             "Pelagic Trawl+Seine seabed abrasion:",
+                                             min = 0,
+                                             max = 0.0,
+                                             value = 0.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Pelagic Trawl+Seine seabed abrasion help notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "sanSpratTrawlPlough",
+                                             "Sandeel sprat trawl seabed abrasion:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Sandeel sprat trawl seabed abrasion help notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "llMackerelPlough",
+                                             "Longline mackerel seabed abrasion:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Longline mackerel seabed abrasion help notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "beamTrawlPlough",
+                                             "Beam Trawl BT1+BT2 seabed abrasion:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Beam Trawl BT1+BT2 seabed abrasion help notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "demersalSeinePlough",
+                                             "Demersal Seine seabed abrasion:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Demersal Seine seabed abrasion help notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "demersalOtterTrawlPlough",
+                                             "Demersal Otter Trawl TR1 seabed abrasion:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Demersal Otter Trawl TR1 seabed abrasion help notes here")
+                                         )
+                                       ),
+                                       column(
+                                         width = 5,
+                                         wellPanel(
+                                           sliderInput(
+                                             "gillLongDemersalPlough",
+                                             "Gill Nets+Longline demersal seabed abrasion:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Gill Nets+Longline demersal seabed abrasion notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "beamTrawlShrimpPlough",
+                                             "Beam Trawl shrimp seabed abrasion:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Beam Trawl shrimp seabed abrasion notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "nephropsTrawlPlough",
+                                             "Nephrops Trawl TR2 seabed abrasion:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Nephrops Trawl TR2 seabed abrasion notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "creelsPlough",
+                                             "Creels seabed abrasion:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Creels seabed abrasion notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "molluscDredgePlough",
+                                             "Mollusc Dredge seabed abrasion:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Mollusc Dredge seabed abrasion notes here")
+                                         ),
+                                         wellPanel(
+                                           sliderInput(
+                                             "whalerPlough",
+                                             "Whaler seabed abrasion:",
+                                             min = 0,
+                                             max = 2.0,
+                                             value = 1.0,
+                                             step = 0.2,
+                                             width = "100%"
+                                           ),
+                                           helpText("Whaler seabed abrasion notes here")
+                                         )
+                                       )
+                                     )),
+                            tabPanel(title = "Guild Discard Per Gear",  
+                                     h4("Some text about discards per gear to go here"),
+                                     sidebarLayout(
+                                       sidebarPanel(
+                                         selectInput(
+                                           "selectedParameter",
+                                           h4("Guilds"),
+                                           choices
+                                           = list(
+                                             "Pelagic",
+                                             "Demersal",
+                                             "Migratory",
+                                             "Filtben",
+                                             "Carnben",
+                                             "Carnzoo",
+                                             "Bird",
+                                             "Seal",
+                                             "Ceta",
+                                             "Kelp"
+                                           ),
+                                           selected = "Pelagic"
+                                         ),
+                                         width = 3
+                                       ),
+                                       mainPanel (uiOutput("ui"))
+                                     )),
+                            tabPanel(title = "Run Scenario",
+                                     h4("Some text about running scenario to go here"),
+                                     actionButton("runScenario", "Run Scenario")
+                            )),
+                 navbarMenu("Plots",
+                            tabPanel(
+                              title = "Baseline versus Scenario plots",
+                              h3("Compare baseline and scenario"),
+                              # actionButton("runScenario", "Run Model"),
+                              fluidRow(column(
+                                6,
+                                h3("Baseline"),
+                                plotOutput("baselinePlot")
+                              ),
+                              column(
+                                6,
+                                h3("Scenario"),
+                                plotOutput("scenarioPlot")
+                              )),
+                              fluidRow(
+                                column(
+                                  6,
+                                  h3("Baseline output"),
+                                  useShinyjs(),
+                                  div(id="dwnbutton_b", 
+                                      downloadButton("downloadData_baseline1", "Download Baseline output", disabled = "disabled")
+                                  )
+                                ),
+                                column(
+                                  6,
+                                  h3("Scenario output"),
+                                  useShinyjs(),
+                                  div(id="dwnbutton_s", 
+                                      downloadButton("downloadData_scenario1", "Download Scenario output", disabled = "disabled")
+                                  )
+                                )
+                              )
+                            ),
+                            tabPanel(title = "Yield curves", fluidRow(h4(
+                              "Add info here about yield curves - maybe this will become sub menu under plots tab using navbar"
+                            ))))
 )
 
 server <- function(input, output) {
-
+  
   output$ui <- renderUI({
     switch(
       input$selectedParameter,
@@ -2044,7 +2053,7 @@ server <- function(input, output) {
     # Run baseline
     model <<- e2e_read(input$selectedlocation, input$selectedVariant)
     #View(model)
-
+    
     results_baseline <-
       e2e_run(model, nyears = input$year, csv.output = TRUE)
     output$baselinePlot <-
@@ -2067,7 +2076,7 @@ server <- function(input, output) {
       runjs("$('#dwnbutton_b').attr('title', 'Data not available');")
     }
   })
-
+  
   observeEvent(input$runScenario, {
     showModal(modalDialog("Please wait whilst model runs scenario .... once completed plots available on plots tab", footer = NULL))
     # Run scenario
@@ -2087,7 +2096,7 @@ server <- function(input, output) {
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[10] <- scenario_model$data$physics.drivers$so_temp[10] + input$temperature
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[11] <- scenario_model$data$physics.drivers$so_temp[11] + input$temperature
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$so_temp[12] <- scenario_model$data$physics.drivers$so_temp[12] + input$temperature
-
+    
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[1] <- scenario_model$data$physics.drivers$d_temp[1] + input$temperature
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[2] <- scenario_model$data$physics.drivers$d_temp[2] + input$temperature
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[3] <- scenario_model$data$physics.drivers$d_temp[3] + input$temperature
@@ -2100,7 +2109,7 @@ server <- function(input, output) {
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[10] <- scenario_model$data$physics.drivers$d_temp[10] + input$temperature
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[11] <- scenario_model$data$physics.drivers$d_temp[11] + input$temperature
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$d_temp[12] <- scenario_model$data$physics.drivers$d_temp[12] + input$temperature
-
+    
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[1] <- scenario_model$data$physics.drivers$si_temp[1] + input$temperature
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[2] <- scenario_model$data$physics.drivers$si_temp[2] + input$temperature
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[3] <- scenario_model$data$physics.drivers$si_temp[3] + input$temperature
@@ -2115,57 +2124,57 @@ server <- function(input, output) {
     if (!is.null(input$temperature)) scenario_model$data$physics.drivers$si_temp[12] <- scenario_model$data$physics.drivers$si_temp[12] + input$temperature    
     #print("Got this far 2")
     # Nutrients 
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[1] <- scenario_model$data$chemistry.drivers$si_atmnitrate[1]*input$si_atmnitrate
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[2] <- scenario_model$data$chemistry.drivers$si_atmnitrate[2]*input$si_atmnitrate
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[3] <- scenario_model$data$chemistry.drivers$si_atmnitrate[3]*input$si_atmnitrate
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[4] <- scenario_model$data$chemistry.drivers$si_atmnitrate[4]*input$si_atmnitrate
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[5] <- scenario_model$data$chemistry.drivers$si_atmnitrate[5]*input$si_atmnitrate
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[6] <- scenario_model$data$chemistry.drivers$si_atmnitrate[6]*input$si_atmnitrate
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[7] <- scenario_model$data$chemistry.drivers$si_atmnitrate[7]*input$si_atmnitrate
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[8] <- scenario_model$data$chemistry.drivers$si_atmnitrate[8]*input$si_atmnitrate
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[9] <- scenario_model$data$chemistry.drivers$si_atmnitrate[9]*input$si_atmnitrate
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[10] <- scenario_model$data$chemistry.drivers$si_atmnitrate[10]*input$si_atmnitrate
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[11] <- scenario_model$data$chemistry.drivers$si_atmnitrate[11]*input$si_atmnitrate
-    if (!is.null(input$si_atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[12] <- scenario_model$data$chemistry.drivers$si_atmnitrate[12]*input$si_atmnitrate
-
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[1] <- scenario_model$data$chemistry.drivers$si_atmammonia[1]*input$si_atmammonia
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[2] <- scenario_model$data$chemistry.drivers$si_atmammonia[2]*input$si_atmammonia
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[3] <- scenario_model$data$chemistry.drivers$si_atmammonia[3]*input$si_atmammonia
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[4] <- scenario_model$data$chemistry.drivers$si_atmammonia[4]*input$si_atmammonia
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[5] <- scenario_model$data$chemistry.drivers$si_atmammonia[5]*input$si_atmammonia
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[6] <- scenario_model$data$chemistry.drivers$si_atmammonia[6]*input$si_atmammonia
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[7] <- scenario_model$data$chemistry.drivers$si_atmammonia[7]*input$si_atmammonia
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[8] <- scenario_model$data$chemistry.drivers$si_atmammonia[8]*input$si_atmammonia
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[9] <- scenario_model$data$chemistry.drivers$si_atmammonia[9]*input$si_atmammonia
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[10] <- scenario_model$data$chemistry.drivers$si_atmammonia[10]*input$si_atmammonia
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[11] <- scenario_model$data$chemistry.drivers$si_atmammonia[11]*input$si_atmammonia
-    if (!is.null(input$si_atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[12] <- scenario_model$data$chemistry.drivers$si_atmammonia[12]*input$si_atmammonia
-
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[1] <- scenario_model$data$chemistry.drivers$so_atmnitrate[1]*input$so_atmnitrate
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[2] <- scenario_model$data$chemistry.drivers$so_atmnitrate[2]*input$so_atmnitrate
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[3] <- scenario_model$data$chemistry.drivers$so_atmnitrate[3]*input$so_atmnitrate
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[4] <- scenario_model$data$chemistry.drivers$so_atmnitrate[4]*input$so_atmnitrate
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[5] <- scenario_model$data$chemistry.drivers$so_atmnitrate[5]*input$so_atmnitrate
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[6] <- scenario_model$data$chemistry.drivers$so_atmnitrate[6]*input$so_atmnitrate
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[7] <- scenario_model$data$chemistry.drivers$so_atmnitrate[7]*input$so_atmnitrate
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[8] <- scenario_model$data$chemistry.drivers$so_atmnitrate[8]*input$so_atmnitrate
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[9] <- scenario_model$data$chemistry.drivers$so_atmnitrate[9]*input$so_atmnitrate
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[10] <- scenario_model$data$chemistry.drivers$so_atmnitrate[10]*input$so_atmnitrate
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[11] <- scenario_model$data$chemistry.drivers$so_atmnitrate[11]*input$so_atmnitrate
-    if (!is.null(input$so_atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[12] <- scenario_model$data$chemistry.drivers$so_atmnitrate[12]*input$so_atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[1] <- scenario_model$data$chemistry.drivers$si_atmnitrate[1]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[2] <- scenario_model$data$chemistry.drivers$si_atmnitrate[2]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[3] <- scenario_model$data$chemistry.drivers$si_atmnitrate[3]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[4] <- scenario_model$data$chemistry.drivers$si_atmnitrate[4]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[5] <- scenario_model$data$chemistry.drivers$si_atmnitrate[5]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[6] <- scenario_model$data$chemistry.drivers$si_atmnitrate[6]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[7] <- scenario_model$data$chemistry.drivers$si_atmnitrate[7]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[8] <- scenario_model$data$chemistry.drivers$si_atmnitrate[8]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[9] <- scenario_model$data$chemistry.drivers$si_atmnitrate[9]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[10] <- scenario_model$data$chemistry.drivers$si_atmnitrate[10]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[11] <- scenario_model$data$chemistry.drivers$si_atmnitrate[11]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$si_atmnitrate[12] <- scenario_model$data$chemistry.drivers$si_atmnitrate[12]*input$atmnitrate
     
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[1] <- scenario_model$data$chemistry.drivers$so_atmammonia[1]*input$so_atmammonia
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[2] <- scenario_model$data$chemistry.drivers$so_atmammonia[2]*input$so_atmammonia
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[3] <- scenario_model$data$chemistry.drivers$so_atmammonia[3]*input$so_atmammonia
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[4] <- scenario_model$data$chemistry.drivers$so_atmammonia[4]*input$so_atmammonia
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[5] <- scenario_model$data$chemistry.drivers$so_atmammonia[5]*input$so_atmammonia
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[6] <- scenario_model$data$chemistry.drivers$so_atmammonia[6]*input$so_atmammonia
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[7] <- scenario_model$data$chemistry.drivers$so_atmammonia[7]*input$so_atmammonia
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[8] <- scenario_model$data$chemistry.drivers$so_atmammonia[8]*input$so_atmammonia
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[9] <- scenario_model$data$chemistry.drivers$so_atmammonia[9]*input$so_atmammonia
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[10] <- scenario_model$data$chemistry.drivers$so_atmammonia[10]*input$so_atmammonia
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[11] <- scenario_model$data$chemistry.drivers$so_atmammonia[11]*input$so_atmammonia
-    if (!is.null(input$so_atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[12] <- scenario_model$data$chemistry.drivers$so_atmammonia[12]*input$so_atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[1] <- scenario_model$data$chemistry.drivers$si_atmammonia[1]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[2] <- scenario_model$data$chemistry.drivers$si_atmammonia[2]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[3] <- scenario_model$data$chemistry.drivers$si_atmammonia[3]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[4] <- scenario_model$data$chemistry.drivers$si_atmammonia[4]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[5] <- scenario_model$data$chemistry.drivers$si_atmammonia[5]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[6] <- scenario_model$data$chemistry.drivers$si_atmammonia[6]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[7] <- scenario_model$data$chemistry.drivers$si_atmammonia[7]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[8] <- scenario_model$data$chemistry.drivers$si_atmammonia[8]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[9] <- scenario_model$data$chemistry.drivers$si_atmammonia[9]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[10] <- scenario_model$data$chemistry.drivers$si_atmammonia[10]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[11] <- scenario_model$data$chemistry.drivers$si_atmammonia[11]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$si_atmammonia[12] <- scenario_model$data$chemistry.drivers$si_atmammonia[12]*input$atmammonia
+    
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[1] <- scenario_model$data$chemistry.drivers$so_atmnitrate[1]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[2] <- scenario_model$data$chemistry.drivers$so_atmnitrate[2]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[3] <- scenario_model$data$chemistry.drivers$so_atmnitrate[3]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[4] <- scenario_model$data$chemistry.drivers$so_atmnitrate[4]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[5] <- scenario_model$data$chemistry.drivers$so_atmnitrate[5]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[6] <- scenario_model$data$chemistry.drivers$so_atmnitrate[6]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[7] <- scenario_model$data$chemistry.drivers$so_atmnitrate[7]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[8] <- scenario_model$data$chemistry.drivers$so_atmnitrate[8]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[9] <- scenario_model$data$chemistry.drivers$so_atmnitrate[9]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[10] <- scenario_model$data$chemistry.drivers$so_atmnitrate[10]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[11] <- scenario_model$data$chemistry.drivers$so_atmnitrate[11]*input$atmnitrate
+    if (!is.null(input$atmnitrate)) scenario_model$data$chemistry.drivers$so_atmnitrate[12] <- scenario_model$data$chemistry.drivers$so_atmnitrate[12]*input$atmnitrate
+    
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[1] <- scenario_model$data$chemistry.drivers$so_atmammonia[1]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[2] <- scenario_model$data$chemistry.drivers$so_atmammonia[2]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[3] <- scenario_model$data$chemistry.drivers$so_atmammonia[3]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[4] <- scenario_model$data$chemistry.drivers$so_atmammonia[4]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[5] <- scenario_model$data$chemistry.drivers$so_atmammonia[5]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[6] <- scenario_model$data$chemistry.drivers$so_atmammonia[6]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[7] <- scenario_model$data$chemistry.drivers$so_atmammonia[7]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[8] <- scenario_model$data$chemistry.drivers$so_atmammonia[8]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[9] <- scenario_model$data$chemistry.drivers$so_atmammonia[9]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[10] <- scenario_model$data$chemistry.drivers$so_atmammonia[10]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[11] <- scenario_model$data$chemistry.drivers$so_atmammonia[11]*input$atmammonia
+    if (!is.null(input$atmammonia)) scenario_model$data$chemistry.drivers$so_atmammonia[12] <- scenario_model$data$chemistry.drivers$so_atmammonia[12]*input$atmammonia
     
     if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[1] <- scenario_model$data$chemistry.drivers$rivnitrate[1]*input$rivnitrate
     if (!is.null(input$rivnitrate)) scenario_model$data$chemistry.drivers$rivnitrate[2] <- scenario_model$data$chemistry.drivers$rivnitrate[2]*input$rivnitrate
@@ -2234,7 +2243,7 @@ server <- function(input, output) {
     if (!is.null(input$creelsDiscard_pel)) scenario_model$data$fleet.model$gear_group_discard$pelagic[10] <- scenario_model$data$fleet.model$gear_group_discard$pelagic[10]*input$creelsDiscard_pel
     if (!is.null(input$molluscDredgeDiscard_pel)) scenario_model$data$fleet.model$gear_group_discard$pelagic[11] <- scenario_model$data$fleet.model$gear_group_discard$pelagic[11]*input$molluscDredgeDiscard_pel
     if (!is.null(input$whalerDiscard_pel)) scenario_model$data$fleet.model$gear_group_discard$pelagic[12] <- scenario_model$data$fleet.model$gear_group_discard$pelagic[12]*input$whalerDiscard_pel
-
+    
     if (!is.null(input$pelagicTrawlDiscard_dem)) scenario_model$data$fleet.model$gear_group_discard$demersal[1] <-  scenario_model$data$fleet.model$gear_group_discard$demersal[1]*input$pelagicTrawlDiscard_dem
     if (!is.null(input$sanSpratTrawlDiscard_dem)) scenario_model$data$fleet.model$gear_group_discard$demersal[2] <- scenario_model$data$fleet.model$gear_group_discard$demersal[2]*input$sanSpratTrawlDiscard_dem
     if (!is.null(input$llMackerelDiscard_dem)) scenario_model$data$fleet.model$gear_group_discard$demersal[3] <- scenario_model$data$fleet.model$gear_group_discard$demersal[3]*input$llMackerelDiscard_dem
