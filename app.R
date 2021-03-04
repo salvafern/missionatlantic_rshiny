@@ -532,159 +532,208 @@ ui <- navbarPage(
 
 server <- function(input, output) {
   output$ui <- renderUI({
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    #if(model$data$fleet.model$gear_group_discard$pelagic[3] == 0.0) shinyjs::hide("llMackerelDiscard_pel")
     switch(
       input$selectedParameter,
       "Pelagic" = fluidRow(
-        column(
-          width = 5,
+        # column(
+        #   width = 5,
+          conditionalPanel(
+            condition = "input.pelagicTrawlDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_pel",
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
-              step = 0.2,
+              value = model$data$fleet.model$gear_group_discard$pelagic[1],
+              step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
           ),
+          ),
+          conditionalPanel(
+            condition = "input.sanSpratTrawlDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_pel",
               "San spart trawl discard:",
               min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
+              max = 1.0,
+             # value = 0.000117639,
+              value =model$data$fleet.model$gear_group_discard$pelagic[2],
+              step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
           ),
+          ),
+          conditionalPanel(
+          condition = "input.llMackerelDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_pel",
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+             # value = 0.0,
+              value =model$data$fleet.model$gear_group_discard$pelagic[3],
+              step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
           ),
+          ),
+          conditionalPanel(
+            condition = "input.beamTrawlDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_pel",
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              #value = 0.0,
+              value =model$data$fleet.model$gear_group_discard$pelagic[4],
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
           ),
+          ),
+          conditionalPanel(
+            condition = "input.demersalSeineDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_pel",
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              #value = 0.0,
+              value =model$data$fleet.model$gear_group_discard$pelagic[5],
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
-          )
         ),
-        column(
-          width = 5,
+        ),
+      #  ),
+        # column(
+        #   width = 5,
+          conditionalPanel(
+            condition = "input.demersalOtterTrawlDiscard_pel > 0",  
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_pel",
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              #value = 0.125586035,
+              value =model$data$fleet.model$gear_group_discard$pelagic[6],
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.gillLongDemersalDiscard_pel > 0",  
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_pel",
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              #value = 0.000013000,
+              value =model$data$fleet.model$gear_group_discard$pelagic[7],
+              step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.beamTrawlShrimpDiscard_pel > 0",  
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_pel",
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              #value = 0.422012971,
+              value =model$data$fleet.model$gear_group_discard$pelagic[8],
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.nephropsTrawlDiscard_pel > 0", 
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_pel",
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              #value = 0.379740296,
+              value =model$data$fleet.model$gear_group_discard$pelagic[9],
+              step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.creelsDiscard_pel > 0", 
           wellPanel(
             sliderInput(
               "creelsDiscard_pel",
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              #value = 0.056057846,
+              value =model$data$fleet.model$gear_group_discard$pelagic[10],
+              step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
           ),
+          ),
+        conditionalPanel(
+          condition = "input.molluscDredgeDiscard_pel > 0", 
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_pel",
               "Mollusc Dredge Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              #value = 0.0,
+              value =model$data$fleet.model$gear_group_discard$pelagic[11],
+              step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.whalerDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_pel",
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              #value = 0.0,
+              value =model$data$fleet.model$gear_group_discard$pelagic[12],
+              step = 0.001,
               width = "100%"
             ),
             helpText("Whaler discard notes here")
           )
         )
+        #)
       ),
       "Demersal" = fluidRow(
         column(
@@ -695,8 +744,8 @@ server <- function(input, output) {
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.111955218,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
@@ -707,8 +756,8 @@ server <- function(input, output) {
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.537722720,
+              step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
@@ -719,8 +768,8 @@ server <- function(input, output) {
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.004905382,
+              step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
@@ -731,8 +780,8 @@ server <- function(input, output) {
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.544527877,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
@@ -743,8 +792,8 @@ server <- function(input, output) {
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
@@ -758,8 +807,8 @@ server <- function(input, output) {
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.473864510,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
@@ -770,8 +819,8 @@ server <- function(input, output) {
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.027499596,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
@@ -782,8 +831,8 @@ server <- function(input, output) {
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.970253908,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
@@ -794,8 +843,8 @@ server <- function(input, output) {
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.684241519,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
@@ -806,8 +855,8 @@ server <- function(input, output) {
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.008395374,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
@@ -818,8 +867,8 @@ server <- function(input, output) {
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.476891130,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
@@ -830,8 +879,8 @@ server <- function(input, output) {
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Whaler discard notes here")
@@ -847,8 +896,8 @@ server <- function(input, output) {
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.052261365,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
@@ -859,8 +908,8 @@ server <- function(input, output) {
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.008721464,
+              step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
@@ -871,8 +920,8 @@ server <- function(input, output) {
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
@@ -883,8 +932,8 @@ server <- function(input, output) {
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.670642427,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
@@ -895,8 +944,8 @@ server <- function(input, output) {
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
@@ -910,8 +959,8 @@ server <- function(input, output) {
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.769790851,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
@@ -922,8 +971,8 @@ server <- function(input, output) {
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.231375133,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
@@ -934,8 +983,8 @@ server <- function(input, output) {
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.365643786,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
@@ -946,8 +995,8 @@ server <- function(input, output) {
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.439291664,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
@@ -958,8 +1007,8 @@ server <- function(input, output) {
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.000584674,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
@@ -970,8 +1019,8 @@ server <- function(input, output) {
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
@@ -982,8 +1031,8 @@ server <- function(input, output) {
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Whaler discard notes here")
@@ -999,8 +1048,8 @@ server <- function(input, output) {
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
@@ -1011,8 +1060,8 @@ server <- function(input, output) {
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.000409807,
+              step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
@@ -1023,8 +1072,8 @@ server <- function(input, output) {
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
@@ -1035,8 +1084,8 @@ server <- function(input, output) {
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.013789586,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
@@ -1047,8 +1096,8 @@ server <- function(input, output) {
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
@@ -1062,8 +1111,8 @@ server <- function(input, output) {
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.021689801,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
@@ -1074,8 +1123,8 @@ server <- function(input, output) {
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.000488107,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
@@ -1086,8 +1135,8 @@ server <- function(input, output) {
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
@@ -1098,8 +1147,8 @@ server <- function(input, output) {
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
@@ -1110,8 +1159,8 @@ server <- function(input, output) {
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
@@ -1122,8 +1171,8 @@ server <- function(input, output) {
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.005634317,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
@@ -1134,8 +1183,8 @@ server <- function(input, output) {
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Whaler discard notes here")
@@ -1151,8 +1200,8 @@ server <- function(input, output) {
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
@@ -1163,8 +1212,8 @@ server <- function(input, output) {
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.17253984,
+              step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
@@ -1175,8 +1224,8 @@ server <- function(input, output) {
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.00002210,
+              step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
@@ -1187,8 +1236,8 @@ server <- function(input, output) {
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.14986397,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
@@ -1199,8 +1248,8 @@ server <- function(input, output) {
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.00000000,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
@@ -1214,8 +1263,8 @@ server <- function(input, output) {
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.31255895,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
@@ -1226,8 +1275,8 @@ server <- function(input, output) {
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.49755816,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
@@ -1238,8 +1287,8 @@ server <- function(input, output) {
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.57604018,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
@@ -1250,8 +1299,8 @@ server <- function(input, output) {
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.06020828,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
@@ -1262,8 +1311,8 @@ server <- function(input, output) {
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.00000177,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
@@ -1274,8 +1323,8 @@ server <- function(input, output) {
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
@@ -1286,8 +1335,8 @@ server <- function(input, output) {
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Whaler discard notes here")
@@ -1303,8 +1352,8 @@ server <- function(input, output) {
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
@@ -1315,8 +1364,8 @@ server <- function(input, output) {
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
@@ -1327,7 +1376,7 @@ server <- function(input, output) {
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
+              value = 0.0,
               step = 0.1,
               width = "100%"
             ),
@@ -1339,8 +1388,8 @@ server <- function(input, output) {
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
@@ -1351,8 +1400,8 @@ server <- function(input, output) {
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
@@ -1366,8 +1415,8 @@ server <- function(input, output) {
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
@@ -1378,8 +1427,8 @@ server <- function(input, output) {
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
@@ -1390,8 +1439,8 @@ server <- function(input, output) {
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
@@ -1402,8 +1451,8 @@ server <- function(input, output) {
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
@@ -1414,8 +1463,8 @@ server <- function(input, output) {
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
@@ -1426,8 +1475,8 @@ server <- function(input, output) {
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
@@ -1438,8 +1487,8 @@ server <- function(input, output) {
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Whaler discard notes here")
@@ -1455,8 +1504,8 @@ server <- function(input, output) {
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
@@ -1467,8 +1516,8 @@ server <- function(input, output) {
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
@@ -1479,8 +1528,8 @@ server <- function(input, output) {
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
@@ -1491,8 +1540,8 @@ server <- function(input, output) {
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
@@ -1503,8 +1552,8 @@ server <- function(input, output) {
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
@@ -1518,8 +1567,8 @@ server <- function(input, output) {
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
@@ -1530,8 +1579,8 @@ server <- function(input, output) {
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
@@ -1542,8 +1591,8 @@ server <- function(input, output) {
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
@@ -1554,8 +1603,8 @@ server <- function(input, output) {
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
@@ -1566,8 +1615,8 @@ server <- function(input, output) {
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
@@ -1578,8 +1627,8 @@ server <- function(input, output) {
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
@@ -1590,8 +1639,8 @@ server <- function(input, output) {
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Whaler discard notes here")
@@ -1607,8 +1656,8 @@ server <- function(input, output) {
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
@@ -1619,8 +1668,8 @@ server <- function(input, output) {
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
@@ -1631,8 +1680,8 @@ server <- function(input, output) {
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
@@ -1643,8 +1692,8 @@ server <- function(input, output) {
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
@@ -1655,8 +1704,8 @@ server <- function(input, output) {
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
@@ -1670,8 +1719,8 @@ server <- function(input, output) {
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
@@ -1682,8 +1731,8 @@ server <- function(input, output) {
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
@@ -1694,8 +1743,8 @@ server <- function(input, output) {
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
@@ -1706,8 +1755,8 @@ server <- function(input, output) {
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
@@ -1718,8 +1767,8 @@ server <- function(input, output) {
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
@@ -1730,8 +1779,8 @@ server <- function(input, output) {
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
@@ -1742,8 +1791,8 @@ server <- function(input, output) {
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Whaler discard notes here")
@@ -1759,8 +1808,8 @@ server <- function(input, output) {
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
@@ -1771,8 +1820,8 @@ server <- function(input, output) {
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
@@ -1783,8 +1832,8 @@ server <- function(input, output) {
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
@@ -1795,8 +1844,8 @@ server <- function(input, output) {
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
@@ -1807,8 +1856,8 @@ server <- function(input, output) {
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
@@ -1822,8 +1871,8 @@ server <- function(input, output) {
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
@@ -1834,8 +1883,8 @@ server <- function(input, output) {
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
@@ -1846,8 +1895,8 @@ server <- function(input, output) {
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
@@ -1858,8 +1907,8 @@ server <- function(input, output) {
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
@@ -1870,8 +1919,8 @@ server <- function(input, output) {
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
@@ -1882,8 +1931,8 @@ server <- function(input, output) {
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 1.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
@@ -1894,8 +1943,8 @@ server <- function(input, output) {
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Whaler discard notes here")
@@ -1911,8 +1960,8 @@ server <- function(input, output) {
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
@@ -1923,8 +1972,8 @@ server <- function(input, output) {
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
@@ -1935,8 +1984,8 @@ server <- function(input, output) {
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
@@ -1947,8 +1996,8 @@ server <- function(input, output) {
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
@@ -1959,8 +2008,8 @@ server <- function(input, output) {
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
@@ -1974,8 +2023,8 @@ server <- function(input, output) {
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
@@ -1986,8 +2035,8 @@ server <- function(input, output) {
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
@@ -1998,8 +2047,8 @@ server <- function(input, output) {
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
@@ -2010,8 +2059,8 @@ server <- function(input, output) {
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
@@ -2022,8 +2071,8 @@ server <- function(input, output) {
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
@@ -2034,8 +2083,8 @@ server <- function(input, output) {
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
@@ -2046,8 +2095,8 @@ server <- function(input, output) {
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.5,
-              step = 0.1,
+              value = 0.0,
+              step = 0.001,
               width = "100%"
             ),
             helpText("Whaler discard notes here")
@@ -2060,7 +2109,7 @@ server <- function(input, output) {
   observeEvent(input$runBaseline, {
     showModal(
       modalDialog(
-        "Please wait whilst model runs baseline. See baseline plot in plots tab once run completed",
+        "Please wait whilst model runs baseline. See baseline plot in results tab once run completed",
         footer = NULL
       )
     )
@@ -2097,7 +2146,7 @@ server <- function(input, output) {
   observeEvent(input$runScenario, {
     showModal(
       modalDialog(
-        "Please wait whilst model runs scenario .... once completed plots available on plots tab",
+        "Please wait whilst model runs scenario .... once completed plots available on results tab",
         footer = NULL
       )
     )
