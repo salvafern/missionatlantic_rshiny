@@ -285,7 +285,7 @@ ui <- navbarPage(
               "pelTrawlPlough",
               "Pelagic Trawl+Seine seabed abrasion:",
               min = 0,
-              max = 0.0,
+              max = 2.0,
               value = 0.0,
               step = 0.2,
               width = "100%"
@@ -460,8 +460,8 @@ ui <- navbarPage(
   navbarMenu(
     "Run",
     tabPanel(
-      title = "Run Baseline",
-      h4("Some text about running baseline to go here"),
+      title = "Run",
+      h4("Some text about running baseline and scenario to go here"),
       sliderInput(
         "year",
         "Year:",
@@ -470,12 +470,16 @@ ui <- navbarPage(
         value = 5,
         width = "100%"
       ),
-      actionButton("runBaseline", "Run Baseline Model")
-    ),
-    tabPanel(
-      title = "Run Scenario",
-      h4("Some text about running scenario to go here"),
-      actionButton("runScenario", "Run Scenario")
+      fluidRow(column(
+        6,
+        h3("Run Baseline"),
+        actionButton("runBaseline", "Run Baseline Model")
+      ),
+      column(
+        6,
+        h3("Run Scenario"),
+        actionButton("runScenario", "Run Scenario Model")
+      ))
     )
   ),
   navbarMenu(
