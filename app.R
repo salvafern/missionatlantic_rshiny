@@ -533,12 +533,9 @@ ui <- navbarPage(
 server <- function(input, output) {
   output$ui <- renderUI({
     model <- e2e_read(input$selectedlocation, input$selectedVariant)
-    #if(model$data$fleet.model$gear_group_discard$pelagic[3] == 0.0) shinyjs::hide("llMackerelDiscard_pel")
     switch(
       input$selectedParameter,
       "Pelagic" = fluidRow(
-        # column(
-        #   width = 5,
           conditionalPanel(
             condition = "input.pelagicTrawlDiscard_pel > 0",
           wellPanel(
@@ -562,7 +559,6 @@ server <- function(input, output) {
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-             # value = 0.000117639,
               value =model$data$fleet.model$gear_group_discard$pelagic[2],
               step = 0.001,
               width = "100%"
@@ -578,7 +574,6 @@ server <- function(input, output) {
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-             # value = 0.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[3],
               step = 0.001,
               width = "100%"
@@ -594,7 +589,6 @@ server <- function(input, output) {
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              #value = 0.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[4],
               step = 0.001,
               width = "100%"
@@ -610,7 +604,6 @@ server <- function(input, output) {
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              #value = 0.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[5],
               step = 0.001,
               width = "100%"
@@ -618,9 +611,6 @@ server <- function(input, output) {
             helpText("Demersal Seine discard notes here")
         ),
         ),
-      #  ),
-        # column(
-        #   width = 5,
           conditionalPanel(
             condition = "input.demersalOtterTrawlDiscard_pel > 0",  
           wellPanel(
@@ -629,7 +619,6 @@ server <- function(input, output) {
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              #value = 0.125586035,
               value =model$data$fleet.model$gear_group_discard$pelagic[6],
               step = 0.001,
               width = "100%"
@@ -645,7 +634,6 @@ server <- function(input, output) {
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              #value = 0.000013000,
               value =model$data$fleet.model$gear_group_discard$pelagic[7],
               step = 0.001,
               width = "100%"
@@ -661,7 +649,6 @@ server <- function(input, output) {
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              #value = 0.422012971,
               value =model$data$fleet.model$gear_group_discard$pelagic[8],
               step = 0.001,
               width = "100%"
@@ -677,7 +664,6 @@ server <- function(input, output) {
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              #value = 0.379740296,
               value =model$data$fleet.model$gear_group_discard$pelagic[9],
               step = 0.001,
               width = "100%"
@@ -693,7 +679,6 @@ server <- function(input, output) {
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              #value = 0.056057846,
               value =model$data$fleet.model$gear_group_discard$pelagic[10],
               step = 0.001,
               width = "100%"
@@ -709,7 +694,6 @@ server <- function(input, output) {
               "Mollusc Dredge Discard:",
               min = 0,
               max = 1.0,
-              #value = 0.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[11],
               step = 0.001,
               width = "100%"
@@ -725,7 +709,6 @@ server <- function(input, output) {
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              #value = 0.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[12],
               step = 0.001,
               width = "100%"
@@ -733,59 +716,70 @@ server <- function(input, output) {
             helpText("Whaler discard notes here")
           )
         )
-        #)
       ),
       "Demersal" = fluidRow(
-        column(
-          width = 5,
+        conditionalPanel(
+          condition = "input.pelagicTrawlDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_dem",
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.111955218,
+              value = model$data$fleet.model$gear_group_discard$demersal[1],
               step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.sanSpratTrawlDiscard_dem> 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_dem",
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.537722720,
+              value = model$data$fleet.model$gear_group_discard$demersal[2],
               step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.llMackerelDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_dem",
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.004905382,
+              value = model$data$fleet.model$gear_group_discard$demersal[3],
               step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.beamTrawlDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_dem",
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.544527877,
+              value = model$data$fleet.model$gear_group_discard$demersal[4],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.demersalSeineDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_dem",
@@ -793,93 +787,113 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = 0.0,
-              step = 0.001,
+              step = model$data$fleet.model$gear_group_discard$demersal[5],
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
-          )
+          ),
         ),
-        column(
-          width = 5,
+        conditionalPanel(
+          condition = "input.demersalOtterTrawlDiscard_dem > 0",
+        #column(
+        #  width = 5,
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_dem",
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.473864510,
+              value = model$data$fleet.model$gear_group_discard$demersal[6],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.gillLongDemersalDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_dem",
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.027499596,
+              value = model$data$fleet.model$gear_group_discard$demersal[7],
               step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.beamTrawlShrimpDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_dem",
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.970253908,
+              value = model$data$fleet.model$gear_group_discard$demersal[8],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.nephropsTrawlDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_dem",
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.684241519,
+              value = model$data$fleet.model$gear_group_discard$demersal[9],
               step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.creelsDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_dem",
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.008395374,
+              value = model$data$fleet.model$gear_group_discard$demersal[10],
               step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.molluscDredgeDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_dem",
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.476891130,
+              value = model$data$fleet.model$gear_group_discard$demersal[11],
               step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.whalerDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_dem",
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$demersal[12],
               step = 0.001,
               width = "100%"
             ),
@@ -888,150 +902,183 @@ server <- function(input, output) {
         )
       ),
       "Migratory" = fluidRow(
-        column(
-          width = 5,
+        #column(
+        #  width = 5,
+        conditionalPanel(
+          condition = "input.pelagicTrawlDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_mig",
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.052261365,
+              value = model$data$fleet.model$gear_group_discard$migratory[1],
               step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.sanSpratTrawlDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_mig",
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.008721464,
+              value = model$data$fleet.model$gear_group_discard$migratory[2],
               step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.llMackerelDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_mig",
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$migratory[3],
               step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.beamTrawlDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_mig",
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.670642427,
+              value = model$data$fleet.model$gear_group_discard$migratory[4],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
           ),
+        ),
+        conditionalPanel(
+          condition = "input.demersalSeineDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_mig",
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$migratory[5],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
-          )
+          ),
         ),
-        column(
-          width = 5,
+#        column(
+#          width = 5,
+        conditionalPanel(
+          condition = "input.demersalOtterTrawlDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_mig",
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.769790851,
+              value = model$data$fleet.model$gear_group_discard$migratory[6],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
+            ),
           ),
+           conditionalPanel(
+           condition = "input.gillLongDemersalDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_mig",
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.231375133,
+              value = model$data$fleet.model$gear_group_discard$migratory[7],
               step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
+           ),
+          conditionalPanel(
+          condition = "input.beamTrawlShrimpDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_mig",
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.365643786,
+              value = model$data$fleet.model$gear_group_discard$migratory[8],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
+          ),          
+           conditionalPanel(
+          condition = "input.nephropsTrawlDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_mig",
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.439291664,
+              value = model$data$fleet.model$gear_group_discard$migratory[9],
               step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
+           ),
+           conditionalPanel(
+           condition = "input.creelsDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_mig",
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.000584674,
+              value = model$data$fleet.model$gear_group_discard$migratory[10],
               step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
           ),
+           ),
+           conditionalPanel(
+           condition = "input.molluscDredgeDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_mig",
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$migratory[11],
               step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
+           ),
+          conditionalPanel(condition = "input.whalerDiscard_mig > 0", 
           wellPanel(
             sliderInput(
               "whalerDiscard_mig",
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$migratory[12],
               step = 0.001,
               width = "100%"
             ),
@@ -1040,150 +1087,172 @@ server <- function(input, output) {
         )
       ),
       "Filtben" = fluidRow(
-        column(
-          width = 5,
+ #       column(
+ #         width = 5,
+        conditionalPanel(condition = "input.pelagicTrawlDiscard_fb > 0", 
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_fb",
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$filtben[1],
               step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.sanSpratTrawlDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_fb",
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.000409807,
+              value = model$data$fleet.model$gear_group_discard$filtben[2],
               step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.llMackerelDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_fb",
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$filtben[3],
               step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.beamTrawlDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_fb",
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.013789586,
+              value = model$data$fleet.model$gear_group_discard$filtben[4],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.demersalSeineDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_fb",
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$filtben[5],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
-          )
+          ),
         ),
-        column(
-          width = 5,
+#        column(
+#          width = 5,
+          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_fb",
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.021689801,
+              value = model$data$fleet.model$gear_group_discard$filtben[6],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.gillLongDemersalDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_fb",
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.000488107,
+              value = model$data$fleet.model$gear_group_discard$filtben[7],
               step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_fb",
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$filtben[8],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.nephropsTrawlDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_fb",
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$filtben[9],
               step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.creelsDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_fb",
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$filtben[10],
               step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.molluscDredgeDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_fb",
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.005634317,
+              value = model$data$fleet.model$gear_group_discard$filtben[11],
               step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.whalerDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_fb",
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$filtben[12],
               step = 0.001,
               width = "100%"
             ),
@@ -1192,150 +1261,172 @@ server <- function(input, output) {
         )
       ),
       "Carnben" = fluidRow(
-        column(
-          width = 5,
+ #       column(
+ #         width = 5,
+        conditionalPanel(condition = "input.pelagicTrawlDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_cb",
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnben[1],
               step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.sanSpratTrawlDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_cb",
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.17253984,
+              value = model$data$fleet.model$gear_group_discard$carnben[2],
               step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.llMackerelDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_cb",
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.00002210,
+              value = model$data$fleet.model$gear_group_discard$carnben[3],
               step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.beamTrawlDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_cb",
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.14986397,
+              value = model$data$fleet.model$gear_group_discard$carnben[4],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.demersalSeineDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_cb",
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.00000000,
+              value = model$data$fleet.model$gear_group_discard$carnben[5],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
-          )
+          ),
         ),
-        column(
-          width = 5,
+#        column(
+#          width = 5,
+          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_cb",
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.31255895,
+              value = model$data$fleet.model$gear_group_discard$carnben[6],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.gillLongDemersalDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_cb",
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.49755816,
+              value = model$data$fleet.model$gear_group_discard$carnben[7],
               step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_cb",
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.57604018,
+              value = model$data$fleet.model$gear_group_discard$carnben[8],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.nephropsTrawlDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_cb",
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.06020828,
+              value = model$data$fleet.model$gear_group_discard$carnben[9],
               step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.creelsDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_cb",
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.00000177,
+              value = model$data$fleet.model$gear_group_discard$carnben[10],
               step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.molluscDredgeDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_cb",
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnben[11],
               step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.whalerDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_cb",
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnben[12],
               step = 0.001,
               width = "100%"
             ),
@@ -1344,150 +1435,173 @@ server <- function(input, output) {
         )
       ),
       "Carnzoo" = fluidRow(
-        column(
-          width = 5,
+ #       column(
+ #         width = 5,
+        conditionalPanel(condition = "input.pelagicTrawlDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_cz",
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[1],
               step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.sanSpratTrawlDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_cz",
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[1],
               step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.llMackerelDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_cz",
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[2],
               step = 0.1,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.beamTrawlDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_cz",
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[3],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.demersalSeineDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_cz",
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[4],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
-          )
+          #)
         ),
-        column(
-          width = 5,
+      ),
+        conditionalPanel(condition = "input.demersalOtterTrawlDiscard_cz > 0",
+#        column(
+#          width = 5,
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_cz",
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[5],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.gillLongDemersalDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_cz",
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[6],
               step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_cz",
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[7],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.nephropsTrawlDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_cz",
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[8],
               step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.creelsDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_cz",
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[9],
               step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.molluscDredgeDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_cz",
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[10],
               step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.whalerDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_cz",
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$carnzoo[11],
               step = 0.001,
               width = "100%"
             ),
@@ -1496,150 +1610,172 @@ server <- function(input, output) {
         )
       ),
       "Bird" = fluidRow(
-        column(
-          width = 5,
+ #       column(
+ #         width = 5,
+        conditionalPanel(condition = "input.pelagicTrawlDiscard_b > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_b",
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$bird[1],
               step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.sanSpratTrawlDiscard_b > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_b",
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$bird[2],
               step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.llMackerelDiscard_b > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_b",
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$bird[3],
               step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.beamTrawlDiscard_b > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_b",
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$bird[4],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.demersalSeineDiscard_b > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_b",
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$bird[5],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
-          )
+          ),
         ),
-        column(
-          width = 5,
+#        column(
+#          width = 5,
+          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_b > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_b",
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$bird[6],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.gillLongDemersalDiscard_b > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_b",
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$bird[7],
               step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_b > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_b",
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$bird[8],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.nephropsTrawlDiscard_b > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_b",
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$bird[9],
               step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.creelsDiscard_b > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_b",
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$bird[10],
               step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.molluscDredgeDiscard_b > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_b",
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$bird[11],
               step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.whalerDiscard_b > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_b",
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$bird[12],
               step = 0.001,
               width = "100%"
             ),
@@ -1648,150 +1784,172 @@ server <- function(input, output) {
         )
       ),
       "Seal" = fluidRow(
-        column(
-          width = 5,
+#        column(
+#          width = 5
+        conditionalPanel(condition = "input.pelagicTrawlDiscard_s > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_s",
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$seal[1],
               step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.sanSpratTrawlDiscard_s > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_s",
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$seal[2],
               step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.llMackerelDiscard_s > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_s",
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$seal[3],
               step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.beamTrawlDiscard_s > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_s",
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$seal[4],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.demersalSeineDiscard_s > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_s",
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$seal[5],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
-          )
+          ),
         ),
-        column(
-          width = 5,
+#        column(
+#          width = 5,
+          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_s > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_s",
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$seal[6],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.gillLongDemersalDiscard_s > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_s",
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$seal[7],
               step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_s > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_s",
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$seal[8],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.nephropsTrawlDiscard_s > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_s",
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$seal[9],
               step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.creelsDiscard_s > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_s",
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$seal[10],
               step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.molluscDredgeDiscard_s > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_s",
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$seal[11],
               step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.whalerDiscard_s > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_s",
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$seal[12],
               step = 0.001,
               width = "100%"
             ),
@@ -1800,150 +1958,172 @@ server <- function(input, output) {
         )
       ),
       "Ceta" = fluidRow(
-        column(
-          width = 5,
+#        column(
+#          width = 5,
+          conditionalPanel(condition = "input.pelagicTrawlDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_ceta",
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[1],
               step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.sanSpratTrawlDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_ceta",
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[2],
               step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.llMackerelDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_ceta",
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[3],
               step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.beamTrawlDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_ceta",
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[4],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.demersalSeineDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_ceta",
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[5],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
-          )
+          ),
         ),
-        column(
-          width = 5,
+#        column(
+#          width = 5,
+          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_ceta",
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[6],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.gillLongDemersalDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_ceta",
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[7],
               step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_ceta",
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[8],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.nephropsTrawlDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_ceta",
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[9],
               step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.creelsDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_ceta",
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[10],
               step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.molluscDredgeDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_ceta",
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 1.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[11],
               step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.whalerDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_ceta",
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$ceta[12],
               step = 0.001,
               width = "100%"
             ),
@@ -1952,150 +2132,172 @@ server <- function(input, output) {
         )
       ),
       "Kelp" = fluidRow(
-        column(
-          width = 5,
+#        column(
+#          width = 5,
+        conditionalPanel(condition = "input.pelagicTrawlDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_kelp",
               "Pelagic Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[1],
               step = 0.001,
               width = "100%"
             ),
             helpText("Pelgic discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.sanSpratTrawlDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_kelp",
               "San spart trawl discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[2],
               step = 0.001,
               width = "100%"
             ),
             helpText("San spart trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.llMackerelDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_kelp",
               "llMackerel Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[3],
               step = 0.001,
               width = "100%"
             ),
             helpText("llMackeral discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.beamTrawlDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_kelp",
               "Beam Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[4],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl discard notes here")
           ),
+        ),
+        conditionalPanel(condition = "input.demersalSeineDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_kelp",
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[5],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal Seine discard notes here")
-          )
+          ),
         ),
-        column(
-          width = 5,
+#        column(
+ #         width = 5,
+          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_kelp",
               "Demersal OtterTrawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[6],
               step = 0.001,
               width = "100%"
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.gillLongDemersalDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_kelp",
               "Gill Long Demersal Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[7],
               step = 0.001,
               width = "100%"
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_kelp",
               "Beam Trawl Shrimp Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[8],
               step = 0.001,
               width = "100%"
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.nephropsTrawlDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_kelp",
               "Nephrops Trawl Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[9],
               step = 0.001,
               width = "100%"
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.creelsDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_kelp",
               "Creels Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[10],
               step = 0.001,
               width = "100%"
             ),
             helpText("Creels discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.molluscDredgeDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_kelp",
               "Mollusc Dredge Discard Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[11],
               step = 0.001,
               width = "100%"
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
+          ),
+          conditionalPanel(condition = "input.whalerDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_kelp",
               "Whaler Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
+              value = model$data$fleet.model$gear_group_discard$kelp[12],
               step = 0.001,
               width = "100%"
             ),
