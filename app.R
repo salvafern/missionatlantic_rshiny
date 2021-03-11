@@ -280,6 +280,8 @@ ui <- navbarPage(
       fluidRow(
         column(
           width = 5,
+          conditionalPanel(
+            condition = "input.pelTrawlPlough > 0",
           wellPanel(
             sliderInput(
               "pelTrawlPlough",
@@ -291,6 +293,7 @@ ui <- navbarPage(
               width = "100%"
             ),
             helpText("Pelagic Trawl+Seine seabed abrasion help notes here")
+          ),
           ),
           wellPanel(
             sliderInput(
@@ -540,8 +543,6 @@ server <- function(input, output) {
     switch(
       input$selectedParameter,
       "Pelagic" = fluidRow(
-          conditionalPanel(
-            condition = "input.pelagicTrawlDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_pel",
@@ -554,9 +555,6 @@ server <- function(input, output) {
             ),
             helpText("Pelgic discard notes here")
           ),
-          ),
-          conditionalPanel(
-            condition = "input.sanSpratTrawlDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_pel",
@@ -569,9 +567,6 @@ server <- function(input, output) {
             ),
             helpText("San spart trawl discard notes here")
           ),
-          ),
-          conditionalPanel(
-          condition = "input.llMackerelDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_pel",
@@ -584,9 +579,6 @@ server <- function(input, output) {
             ),
             helpText("llMackeral discard notes here")
           ),
-          ),
-          conditionalPanel(
-            condition = "input.beamTrawlDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_pel",
@@ -599,9 +591,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl discard notes here")
           ),
-          ),
-          conditionalPanel(
-            condition = "input.demersalSeineDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_pel",
@@ -614,9 +603,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal Seine discard notes here")
         ),
-        ),
-          conditionalPanel(
-            condition = "input.demersalOtterTrawlDiscard_pel > 0",  
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_pel",
@@ -629,9 +615,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.gillLongDemersalDiscard_pel > 0",  
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_pel",
@@ -644,9 +627,6 @@ server <- function(input, output) {
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.beamTrawlShrimpDiscard_pel > 0",  
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_pel",
@@ -659,9 +639,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.nephropsTrawlDiscard_pel > 0", 
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_pel",
@@ -674,9 +651,6 @@ server <- function(input, output) {
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.creelsDiscard_pel > 0", 
           wellPanel(
             sliderInput(
               "creelsDiscard_pel",
@@ -689,9 +663,6 @@ server <- function(input, output) {
             ),
             helpText("Creels discard notes here")
           ),
-          ),
-        conditionalPanel(
-          condition = "input.molluscDredgeDiscard_pel > 0", 
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_pel",
@@ -704,9 +675,6 @@ server <- function(input, output) {
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.whalerDiscard_pel > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_pel",
@@ -722,8 +690,6 @@ server <- function(input, output) {
         )
       ),
       "Demersal" = fluidRow(
-        conditionalPanel(
-          condition = "input.pelagicTrawlDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_dem",
@@ -736,9 +702,6 @@ server <- function(input, output) {
             ),
             helpText("Pelgic discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.sanSpratTrawlDiscard_dem> 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_dem",
@@ -751,9 +714,6 @@ server <- function(input, output) {
             ),
             helpText("San spart trawl discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.llMackerelDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_dem",
@@ -766,9 +726,6 @@ server <- function(input, output) {
             ),
             helpText("llMackeral discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.beamTrawlDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_dem",
@@ -781,9 +738,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.demersalSeineDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_dem",
@@ -796,9 +750,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal Seine discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.demersalOtterTrawlDiscard_dem > 0",
         #column(
         #  width = 5,
           wellPanel(
@@ -813,9 +764,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.gillLongDemersalDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_dem",
@@ -828,9 +776,6 @@ server <- function(input, output) {
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.beamTrawlShrimpDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_dem",
@@ -843,9 +788,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.nephropsTrawlDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_dem",
@@ -858,9 +800,6 @@ server <- function(input, output) {
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.creelsDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_dem",
@@ -873,9 +812,6 @@ server <- function(input, output) {
             ),
             helpText("Creels discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.molluscDredgeDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_dem",
@@ -888,9 +824,6 @@ server <- function(input, output) {
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.whalerDiscard_dem > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_dem",
@@ -903,13 +836,10 @@ server <- function(input, output) {
             ),
             helpText("Whaler discard notes here")
           )
-        )
       ),
       "Migratory" = fluidRow(
         #column(
         #  width = 5,
-        conditionalPanel(
-          condition = "input.pelagicTrawlDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_mig",
@@ -922,9 +852,6 @@ server <- function(input, output) {
             ),
             helpText("Pelgic discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.sanSpratTrawlDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_mig",
@@ -937,9 +864,6 @@ server <- function(input, output) {
             ),
             helpText("San spart trawl discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.llMackerelDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_mig",
@@ -952,9 +876,6 @@ server <- function(input, output) {
             ),
             helpText("llMackeral discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.beamTrawlDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_mig",
@@ -967,9 +888,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl discard notes here")
           ),
-        ),
-        conditionalPanel(
-          condition = "input.demersalSeineDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_mig",
@@ -985,8 +903,6 @@ server <- function(input, output) {
         ),
 #        column(
 #          width = 5,
-        conditionalPanel(
-          condition = "input.demersalOtterTrawlDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_mig",
@@ -999,9 +915,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal OtterTrawl discard notes here")
             ),
-          ),
-           conditionalPanel(
-           condition = "input.gillLongDemersalDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_mig",
@@ -1014,9 +927,6 @@ server <- function(input, output) {
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
-           ),
-          conditionalPanel(
-          condition = "input.beamTrawlShrimpDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_mig",
@@ -1029,9 +939,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
-          ),          
-           conditionalPanel(
-          condition = "input.nephropsTrawlDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_mig",
@@ -1044,9 +951,6 @@ server <- function(input, output) {
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
-           ),
-           conditionalPanel(
-           condition = "input.creelsDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_mig",
@@ -1059,9 +963,6 @@ server <- function(input, output) {
             ),
             helpText("Creels discard notes here")
           ),
-           ),
-           conditionalPanel(
-           condition = "input.molluscDredgeDiscard_mig > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_mig",
@@ -1074,8 +975,6 @@ server <- function(input, output) {
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
-           ),
-          conditionalPanel(condition = "input.whalerDiscard_mig > 0", 
           wellPanel(
             sliderInput(
               "whalerDiscard_mig",
@@ -1093,7 +992,6 @@ server <- function(input, output) {
       "Filtben" = fluidRow(
  #       column(
  #         width = 5,
-        conditionalPanel(condition = "input.pelagicTrawlDiscard_fb > 0", 
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_fb",
@@ -1106,8 +1004,6 @@ server <- function(input, output) {
             ),
             helpText("Pelgic discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.sanSpratTrawlDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_fb",
@@ -1120,8 +1016,6 @@ server <- function(input, output) {
             ),
             helpText("San spart trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.llMackerelDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_fb",
@@ -1134,8 +1028,6 @@ server <- function(input, output) {
             ),
             helpText("llMackeral discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.beamTrawlDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_fb",
@@ -1148,8 +1040,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.demersalSeineDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_fb",
@@ -1162,10 +1052,8 @@ server <- function(input, output) {
             ),
             helpText("Demersal Seine discard notes here")
           ),
-        ),
 #        column(
 #          width = 5,
-          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_fb",
@@ -1178,8 +1066,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.gillLongDemersalDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_fb",
@@ -1192,8 +1078,6 @@ server <- function(input, output) {
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_fb",
@@ -1206,8 +1090,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.nephropsTrawlDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_fb",
@@ -1220,8 +1102,6 @@ server <- function(input, output) {
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.creelsDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_fb",
@@ -1234,8 +1114,6 @@ server <- function(input, output) {
             ),
             helpText("Creels discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.molluscDredgeDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_fb",
@@ -1248,8 +1126,6 @@ server <- function(input, output) {
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.whalerDiscard_fb > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_fb",
@@ -1262,12 +1138,10 @@ server <- function(input, output) {
             ),
             helpText("Whaler discard notes here")
           )
-        )
       ),
       "Carnben" = fluidRow(
  #       column(
  #         width = 5,
-        conditionalPanel(condition = "input.pelagicTrawlDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_cb",
@@ -1280,8 +1154,6 @@ server <- function(input, output) {
             ),
             helpText("Pelgic discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.sanSpratTrawlDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_cb",
@@ -1294,8 +1166,6 @@ server <- function(input, output) {
             ),
             helpText("San spart trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.llMackerelDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_cb",
@@ -1308,8 +1178,6 @@ server <- function(input, output) {
             ),
             helpText("llMackeral discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.beamTrawlDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_cb",
@@ -1322,8 +1190,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.demersalSeineDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_cb",
@@ -1336,10 +1202,8 @@ server <- function(input, output) {
             ),
             helpText("Demersal Seine discard notes here")
           ),
-        ),
 #        column(
 #          width = 5,
-          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_cb",
@@ -1352,8 +1216,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.gillLongDemersalDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_cb",
@@ -1366,8 +1228,6 @@ server <- function(input, output) {
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_cb",
@@ -1380,8 +1240,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.nephropsTrawlDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_cb",
@@ -1394,8 +1252,6 @@ server <- function(input, output) {
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.creelsDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_cb",
@@ -1408,8 +1264,6 @@ server <- function(input, output) {
             ),
             helpText("Creels discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.molluscDredgeDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_cb",
@@ -1422,8 +1276,6 @@ server <- function(input, output) {
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.whalerDiscard_cb > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_cb",
@@ -1436,12 +1288,10 @@ server <- function(input, output) {
             ),
             helpText("Whaler discard notes here")
           )
-        )
       ),
       "Carnzoo" = fluidRow(
  #       column(
  #         width = 5,
-        conditionalPanel(condition = "input.pelagicTrawlDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_cz",
@@ -1454,8 +1304,6 @@ server <- function(input, output) {
             ),
             helpText("Pelgic discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.sanSpratTrawlDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_cz",
@@ -1468,8 +1316,6 @@ server <- function(input, output) {
             ),
             helpText("San spart trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.llMackerelDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_cz",
@@ -1482,8 +1328,6 @@ server <- function(input, output) {
             ),
             helpText("llMackeral discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.beamTrawlDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_cz",
@@ -1496,8 +1340,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.demersalSeineDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_cz",
@@ -1511,8 +1353,6 @@ server <- function(input, output) {
             helpText("Demersal Seine discard notes here")
           #)
         ),
-      ),
-        conditionalPanel(condition = "input.demersalOtterTrawlDiscard_cz > 0",
 #        column(
 #          width = 5,
           wellPanel(
@@ -1527,8 +1367,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.gillLongDemersalDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_cz",
@@ -1541,8 +1379,6 @@ server <- function(input, output) {
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_cz",
@@ -1555,8 +1391,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.nephropsTrawlDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_cz",
@@ -1569,8 +1403,6 @@ server <- function(input, output) {
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.creelsDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_cz",
@@ -1583,8 +1415,6 @@ server <- function(input, output) {
             ),
             helpText("Creels discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.molluscDredgeDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_cz",
@@ -1597,8 +1427,6 @@ server <- function(input, output) {
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.whalerDiscard_cz > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_cz",
@@ -1611,12 +1439,10 @@ server <- function(input, output) {
             ),
             helpText("Whaler discard notes here")
           )
-        )
       ),
       "Bird" = fluidRow(
  #       column(
  #         width = 5,
-        conditionalPanel(condition = "input.pelagicTrawlDiscard_b > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_b",
@@ -1629,8 +1455,6 @@ server <- function(input, output) {
             ),
             helpText("Pelgic discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.sanSpratTrawlDiscard_b > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_b",
@@ -1643,8 +1467,6 @@ server <- function(input, output) {
             ),
             helpText("San spart trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.llMackerelDiscard_b > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_b",
@@ -1657,8 +1479,6 @@ server <- function(input, output) {
             ),
             helpText("llMackeral discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.beamTrawlDiscard_b > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_b",
@@ -1671,8 +1491,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.demersalSeineDiscard_b > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_b",
@@ -1688,7 +1506,6 @@ server <- function(input, output) {
         ),
 #        column(
 #          width = 5,
-          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_b > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_b",
@@ -1701,8 +1518,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.gillLongDemersalDiscard_b > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_b",
@@ -1715,8 +1530,6 @@ server <- function(input, output) {
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_b > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_b",
@@ -1729,8 +1542,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.nephropsTrawlDiscard_b > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_b",
@@ -1743,8 +1554,6 @@ server <- function(input, output) {
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.creelsDiscard_b > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_b",
@@ -1757,8 +1566,6 @@ server <- function(input, output) {
             ),
             helpText("Creels discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.molluscDredgeDiscard_b > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_b",
@@ -1771,8 +1578,6 @@ server <- function(input, output) {
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.whalerDiscard_b > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_b",
@@ -1785,12 +1590,10 @@ server <- function(input, output) {
             ),
             helpText("Whaler discard notes here")
           )
-        )
       ),
       "Seal" = fluidRow(
 #        column(
 #          width = 5
-        conditionalPanel(condition = "input.pelagicTrawlDiscard_s > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_s",
@@ -1803,8 +1606,6 @@ server <- function(input, output) {
             ),
             helpText("Pelgic discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.sanSpratTrawlDiscard_s > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_s",
@@ -1817,8 +1618,6 @@ server <- function(input, output) {
             ),
             helpText("San spart trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.llMackerelDiscard_s > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_s",
@@ -1831,8 +1630,6 @@ server <- function(input, output) {
             ),
             helpText("llMackeral discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.beamTrawlDiscard_s > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_s",
@@ -1845,8 +1642,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.demersalSeineDiscard_s > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_s",
@@ -1862,7 +1657,6 @@ server <- function(input, output) {
         ),
 #        column(
 #          width = 5,
-          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_s > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_s",
@@ -1875,8 +1669,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.gillLongDemersalDiscard_s > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_s",
@@ -1889,8 +1681,6 @@ server <- function(input, output) {
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_s > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_s",
@@ -1903,8 +1693,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.nephropsTrawlDiscard_s > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_s",
@@ -1917,8 +1705,6 @@ server <- function(input, output) {
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.creelsDiscard_s > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_s",
@@ -1931,8 +1717,6 @@ server <- function(input, output) {
             ),
             helpText("Creels discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.molluscDredgeDiscard_s > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_s",
@@ -1945,8 +1729,6 @@ server <- function(input, output) {
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.whalerDiscard_s > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_s",
@@ -1959,12 +1741,10 @@ server <- function(input, output) {
             ),
             helpText("Whaler discard notes here")
           )
-        )
       ),
       "Ceta" = fluidRow(
 #        column(
 #          width = 5,
-          conditionalPanel(condition = "input.pelagicTrawlDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_ceta",
@@ -1977,8 +1757,6 @@ server <- function(input, output) {
             ),
             helpText("Pelgic discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.sanSpratTrawlDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_ceta",
@@ -1991,8 +1769,6 @@ server <- function(input, output) {
             ),
             helpText("San spart trawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.llMackerelDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_ceta",
@@ -2005,8 +1781,6 @@ server <- function(input, output) {
             ),
             helpText("llMackeral discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.beamTrawlDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_ceta",
@@ -2019,8 +1793,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.demersalSeineDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_ceta",
@@ -2036,7 +1808,6 @@ server <- function(input, output) {
         ),
 #        column(
 #          width = 5,
-          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_ceta",
@@ -2049,8 +1820,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.gillLongDemersalDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_ceta",
@@ -2063,8 +1832,6 @@ server <- function(input, output) {
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_ceta",
@@ -2077,8 +1844,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.nephropsTrawlDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_ceta",
@@ -2091,8 +1856,6 @@ server <- function(input, output) {
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.creelsDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_ceta",
@@ -2105,8 +1868,6 @@ server <- function(input, output) {
             ),
             helpText("Creels discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.molluscDredgeDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_ceta",
@@ -2119,8 +1880,6 @@ server <- function(input, output) {
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.whalerDiscard_ceta > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_ceta",
@@ -2133,12 +1892,10 @@ server <- function(input, output) {
             ),
             helpText("Whaler discard notes here")
           )
-        )
       ),
       "Kelp" = fluidRow(
 #        column(
 #          width = 5,
-        conditionalPanel(condition = "input.pelagicTrawlDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "pelagicTrawlDiscard_kelp",
@@ -2151,8 +1908,6 @@ server <- function(input, output) {
             ),
             helpText("Pelgic discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.sanSpratTrawlDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "sanSpratTrawlDiscard_kelp",
@@ -2165,8 +1920,6 @@ server <- function(input, output) {
             ),
             helpText("San spart trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.llMackerelDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "llMackerelDiscard_kelp",
@@ -2179,8 +1932,6 @@ server <- function(input, output) {
             ),
             helpText("llMackeral discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.beamTrawlDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "beamTrawlDiscard_kelp",
@@ -2193,8 +1944,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl discard notes here")
           ),
-        ),
-        conditionalPanel(condition = "input.demersalSeineDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "demersalSeineDiscard_kelp",
@@ -2210,7 +1959,6 @@ server <- function(input, output) {
         ),
 #        column(
  #         width = 5,
-          conditionalPanel(condition = "input.demersalOtterTrawlDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "demersalOtterTrawlDiscard_kelp",
@@ -2223,8 +1971,6 @@ server <- function(input, output) {
             ),
             helpText("Demersal OtterTrawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.gillLongDemersalDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "gillLongDemersalDiscard_kelp",
@@ -2237,8 +1983,6 @@ server <- function(input, output) {
             ),
             helpText("Gill Long Demersal discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.beamTrawlShrimpDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "beamTrawlShrimpDiscard_kelp",
@@ -2251,8 +1995,6 @@ server <- function(input, output) {
             ),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.nephropsTrawlDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "nephropsTrawlDiscard_kelp",
@@ -2265,8 +2007,6 @@ server <- function(input, output) {
             ),
             helpText("Nephrops Trawl discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.creelsDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "creelsDiscard_kelp",
@@ -2279,8 +2019,6 @@ server <- function(input, output) {
             ),
             helpText("Creels discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.molluscDredgeDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "molluscDredgeDiscard_kelp",
@@ -2293,8 +2031,6 @@ server <- function(input, output) {
             ),
             helpText("Mollusc Dredge discard notes here")
           ),
-          ),
-          conditionalPanel(condition = "input.whalerDiscard_kelp > 0",
           wellPanel(
             sliderInput(
               "whalerDiscard_kelp",
@@ -2307,7 +2043,7 @@ server <- function(input, output) {
             ),
             helpText("Whaler discard notes here")
           )
-        )
+      )
       )
     )
   })
