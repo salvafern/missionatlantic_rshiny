@@ -537,7 +537,7 @@ ui <- navbarPage(
   )
 )
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   output$ui <- renderUI({
     model <- e2e_read(input$selectedlocation, input$selectedVariant)
     switch(
@@ -550,9 +550,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$pelagic[1],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("pelagicTrawlDiscard_pel_reset", "Reset"),
             helpText("Pelgic discard notes here")
           ),
           wellPanel(
@@ -562,9 +563,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[2],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("sanSpratTrawlDiscard_pel_reset", "Reset"),
             helpText("San spart trawl discard notes here")
           ),
           wellPanel(
@@ -574,9 +576,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[3],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("llMackerelDiscard_pel_reset", "Reset"),
             helpText("llMackeral discard notes here")
           ),
           wellPanel(
@@ -586,9 +589,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[4],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlDiscard_pel_reset", "Reset"),
             helpText("Beam Trawl discard notes here")
           ),
           wellPanel(
@@ -598,9 +602,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[5],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalSeineDiscard_pel_reset", "Reset"),
             helpText("Demersal Seine discard notes here")
         ),
           wellPanel(
@@ -610,9 +615,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[6],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalOtterTrawlDiscard_pel_reset", "Reset"),
             helpText("Demersal OtterTrawl discard notes here")
           ),
           wellPanel(
@@ -622,9 +628,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[7],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("gillLongDemersalDiscard_pel_reset", "Reset"),
             helpText("Gill Long Demersal discard notes here")
           ),
           wellPanel(
@@ -634,9 +641,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[8],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlShrimpDiscard_pel_reset", "Reset"),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
           wellPanel(
@@ -646,9 +654,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[9],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("nephropsTrawlDiscard_pel_reset", "Reset"),
             helpText("Nephrops Trawl discard notes here")
           ),
           wellPanel(
@@ -658,9 +667,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[10],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("creelsDiscard_pel_reset", "Reset"),
             helpText("Creels discard notes here")
           ),
           wellPanel(
@@ -670,9 +680,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[11],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("molluscDredgeDiscard_pel_reset", "Reset"),
             helpText("Mollusc Dredge discard notes here")
           ),
           wellPanel(
@@ -682,12 +693,12 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value =model$data$fleet.model$gear_group_discard$pelagic[12],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("whalerDiscard_pel_reset", "Reset"),
             helpText("Whaler discard notes here")
           )
-        )
       ),
       "Demersal" = fluidRow(
           wellPanel(
@@ -697,9 +708,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$demersal[1],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("pelagicTrawlDiscard_dem_reset", "Reset"),
             helpText("Pelgic discard notes here")
           ),
           wellPanel(
@@ -709,9 +721,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$demersal[2],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("sanSpratTrawlDiscard_dem_reset", "Reset"),
             helpText("San spart trawl discard notes here")
           ),
           wellPanel(
@@ -721,9 +734,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$demersal[3],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("llMackerelDiscard_dem_reset", "Reset"),
             helpText("llMackeral discard notes here")
           ),
           wellPanel(
@@ -733,9 +747,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$demersal[4],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlDiscard_dem_reset", "Reset"),
             helpText("Beam Trawl discard notes here")
           ),
           wellPanel(
@@ -744,10 +759,11 @@ server <- function(input, output) {
               "Demersal Seine Discard:",
               min = 0,
               max = 1.0,
-              value = 0.0,
-              step = model$data$fleet.model$gear_group_discard$demersal[5],
+              value = model$data$fleet.model$gear_group_discard$demersal[5],
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalSeineDiscard_dem_reset", "Reset"),
             helpText("Demersal Seine discard notes here")
           ),
         #column(
@@ -759,9 +775,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$demersal[6],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalOtterTrawlDiscard_dem_reset", "Reset"),
             helpText("Demersal OtterTrawl discard notes here")
           ),
           wellPanel(
@@ -771,9 +788,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$demersal[7],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("gillLongDemersalDiscard_dem_reset", "Reset"),
             helpText("Gill Long Demersal discard notes here")
           ),
           wellPanel(
@@ -783,9 +801,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$demersal[8],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlShrimpDiscard_dem_reset", "Reset"),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
           wellPanel(
@@ -795,9 +814,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$demersal[9],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("nephropsTrawlDiscard_dem_reset", "Reset"),
             helpText("Nephrops Trawl discard notes here")
           ),
           wellPanel(
@@ -807,9 +827,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$demersal[10],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("creelsDiscard_dem_reset", "Reset"),
             helpText("Creels discard notes here")
           ),
           wellPanel(
@@ -819,9 +840,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$demersal[11],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("molluscDredgeDiscard_dem_reset", "Reset"),
             helpText("Mollusc Dredge discard notes here")
           ),
           wellPanel(
@@ -831,9 +853,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$demersal[12],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("whalerDiscard_dem_reset", "Reset"),
             helpText("Whaler discard notes here")
           )
       ),
@@ -847,9 +870,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[1],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("pelagicTrawlDiscard_mig_reset", "Reset"),
             helpText("Pelgic discard notes here")
           ),
           wellPanel(
@@ -859,9 +883,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[2],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("sanSpratTrawlDiscard_mig_reset", "Reset"),
             helpText("San spart trawl discard notes here")
           ),
           wellPanel(
@@ -871,9 +896,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[3],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("llMackerelDiscard_mig_reset", "Reset"),
             helpText("llMackeral discard notes here")
           ),
           wellPanel(
@@ -883,9 +909,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[4],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlDiscard_mig_reset", "Reset"),
             helpText("Beam Trawl discard notes here")
           ),
           wellPanel(
@@ -895,12 +922,12 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[5],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalSeineDiscard_mig_reset", "Reset"),
             helpText("Demersal Seine discard notes here")
           ),
-        ),
 #        column(
 #          width = 5,
           wellPanel(
@@ -910,9 +937,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[6],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalOtterTrawlDiscard_mig_reset", "Reset"),
             helpText("Demersal OtterTrawl discard notes here")
             ),
           wellPanel(
@@ -922,9 +950,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[7],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("gillLongDemersalDiscard_mig_reset", "Reset"),
             helpText("Gill Long Demersal discard notes here")
           ),
           wellPanel(
@@ -934,9 +963,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[8],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlShrimpDiscard_mig_reset", "Reset"),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
           wellPanel(
@@ -946,9 +976,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[9],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("nephropsTrawlDiscard_mig_reset", "Reset"),
             helpText("Nephrops Trawl discard notes here")
           ),
           wellPanel(
@@ -958,9 +989,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[10],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("creelsDiscard_mig_reset", "Reset"),
             helpText("Creels discard notes here")
           ),
           wellPanel(
@@ -970,9 +1002,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[11],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("molluscDredgeDiscard_mig_reset", "Reset"),
             helpText("Mollusc Dredge discard notes here")
           ),
           wellPanel(
@@ -982,12 +1015,12 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$migratory[12],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("whalerDiscard_mig_reset", "Reset"),
             helpText("Whaler discard notes here")
           )
-        )
       ),
       "Filtben" = fluidRow(
  #       column(
@@ -999,9 +1032,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[1],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("pelagicTrawlDiscard_fb_reset", "Reset"),
             helpText("Pelgic discard notes here")
           ),
           wellPanel(
@@ -1011,9 +1045,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[2],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("sanSpratTrawlDiscard_fb_reset", "Reset"),
             helpText("San spart trawl discard notes here")
           ),
           wellPanel(
@@ -1023,9 +1058,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[3],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("llMackerelDiscard_fb_reset", "Reset"),
             helpText("llMackeral discard notes here")
           ),
           wellPanel(
@@ -1035,9 +1071,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[4],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlDiscard_fb_reset", "Reset"),
             helpText("Beam Trawl discard notes here")
           ),
           wellPanel(
@@ -1047,9 +1084,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[5],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalSeineDiscard_fb_reset", "Reset"),
             helpText("Demersal Seine discard notes here")
           ),
 #        column(
@@ -1061,9 +1099,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[6],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalOtterTrawlDiscard_fb_reset", "Reset"),
             helpText("Demersal OtterTrawl discard notes here")
           ),
           wellPanel(
@@ -1073,9 +1112,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[7],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("gillLongDemersalDiscard_fb_reset", "Reset"),
             helpText("Gill Long Demersal discard notes here")
           ),
           wellPanel(
@@ -1085,9 +1125,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[8],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlShrimpDiscard_fb_reset", "Reset"),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
           wellPanel(
@@ -1097,9 +1138,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[9],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("nephropsTrawlDiscard_fb_reset", "Reset"),
             helpText("Nephrops Trawl discard notes here")
           ),
           wellPanel(
@@ -1109,9 +1151,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[10],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("creelsDiscard_fb_reset", "Reset"),
             helpText("Creels discard notes here")
           ),
           wellPanel(
@@ -1121,9 +1164,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[11],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("molluscDredgeDiscard_fb_reset", "Reset"),
             helpText("Mollusc Dredge discard notes here")
           ),
           wellPanel(
@@ -1133,9 +1177,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$filtben[12],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("whalerDiscard_fb_reset", "Reset"),
             helpText("Whaler discard notes here")
           )
       ),
@@ -1149,9 +1194,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[1],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("pelagicTrawlDiscard_cb_reset", "Reset"),
             helpText("Pelgic discard notes here")
           ),
           wellPanel(
@@ -1161,9 +1207,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[2],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("sanSpratTrawlDiscard_cb_reset", "Reset"),
             helpText("San spart trawl discard notes here")
           ),
           wellPanel(
@@ -1173,9 +1220,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[3],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("llMackerelDiscard_cb_reset", "Reset"),
             helpText("llMackeral discard notes here")
           ),
           wellPanel(
@@ -1185,9 +1233,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[4],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlDiscard_cb_reset", "Reset"),
             helpText("Beam Trawl discard notes here")
           ),
           wellPanel(
@@ -1197,9 +1246,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[5],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalSeineDiscard_cb_reset", "Reset"),
             helpText("Demersal Seine discard notes here")
           ),
 #        column(
@@ -1211,9 +1261,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[6],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalOtterTrawlDiscard_cb_reset", "Reset"),
             helpText("Demersal OtterTrawl discard notes here")
           ),
           wellPanel(
@@ -1223,9 +1274,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[7],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("gillLongDemersalDiscard_cb_reset", "Reset"),
             helpText("Gill Long Demersal discard notes here")
           ),
           wellPanel(
@@ -1235,9 +1287,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[8],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlShrimpDiscard_cb_reset", "Reset"),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
           wellPanel(
@@ -1247,9 +1300,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[9],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("nephropsTrawlDiscard_cb_reset", "Reset"),
             helpText("Nephrops Trawl discard notes here")
           ),
           wellPanel(
@@ -1259,9 +1313,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[10],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("creelsDiscard_cb_reset", "Reset"),
             helpText("Creels discard notes here")
           ),
           wellPanel(
@@ -1271,9 +1326,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[11],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("molluscDredgeDiscard_cb_reset", "Reset"),
             helpText("Mollusc Dredge discard notes here")
           ),
           wellPanel(
@@ -1283,9 +1339,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnben[12],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("whalerDiscard_cb_reset", "Reset"),
             helpText("Whaler discard notes here")
           )
       ),
@@ -1299,9 +1356,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnzoo[1],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("pelagicTrawlDiscard_cz_reset", "Reset"),
             helpText("Pelgic discard notes here")
           ),
           wellPanel(
@@ -1311,9 +1369,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnzoo[1],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("sanSpratTrawlDiscard_cz_reset", "Reset"),
             helpText("San spart trawl discard notes here")
           ),
           wellPanel(
@@ -1326,6 +1385,7 @@ server <- function(input, output) {
               step = 0.1,
               width = "100%"
             ),
+            actionButton("llMackerelDiscard_cz_reset", "Reset"),
             helpText("llMackeral discard notes here")
           ),
           wellPanel(
@@ -1335,9 +1395,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnzoo[3],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlDiscard_cz_reset", "Reset"),
             helpText("Beam Trawl discard notes here")
           ),
           wellPanel(
@@ -1347,9 +1408,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnzoo[4],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalSeineDiscard_cz_reset", "Reset"),
             helpText("Demersal Seine discard notes here")
           #)
         ),
@@ -1362,9 +1424,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnzoo[5],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalOtterTrawlDiscard_cz_reset", "Reset"),
             helpText("Demersal OtterTrawl discard notes here")
           ),
           wellPanel(
@@ -1374,9 +1437,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnzoo[6],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("gillLongDemersalDiscard_cz_reset", "Reset"),
             helpText("Gill Long Demersal discard notes here")
           ),
           wellPanel(
@@ -1386,9 +1450,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnzoo[7],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlShrimpDiscard_cz_reset", "Reset"),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
           wellPanel(
@@ -1398,9 +1463,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnzoo[8],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("nephropsTrawlDiscard_cz_reset", "Reset"),
             helpText("Nephrops Trawl discard notes here")
           ),
           wellPanel(
@@ -1410,9 +1476,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnzoo[9],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("creelsDiscard_cz_reset", "Reset"),
             helpText("Creels discard notes here")
           ),
           wellPanel(
@@ -1422,9 +1489,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnzoo[10],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("molluscDredgeDiscard_cz_reset", "Reset"),
             helpText("Mollusc Dredge discard notes here")
           ),
           wellPanel(
@@ -1434,9 +1502,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$carnzoo[11],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("whalerDiscard_cz_reset", "Reset"),
             helpText("Whaler discard notes here")
           )
       ),
@@ -1450,9 +1519,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[1],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("pelagicTrawlDiscard_b_reset", "Reset"),
             helpText("Pelgic discard notes here")
           ),
           wellPanel(
@@ -1462,9 +1532,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[2],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("sanSpratTrawlDiscard_b_reset", "Reset"),
             helpText("San spart trawl discard notes here")
           ),
           wellPanel(
@@ -1474,9 +1545,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[3],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("llMackerelDiscard_b_reset", "Reset"),
             helpText("llMackeral discard notes here")
           ),
           wellPanel(
@@ -1486,9 +1558,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[4],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlDiscard_b_reset", "Reset"),
             helpText("Beam Trawl discard notes here")
           ),
           wellPanel(
@@ -1498,12 +1571,12 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[5],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalSeineDiscard_b_reset", "Reset"),
             helpText("Demersal Seine discard notes here")
           ),
-        ),
 #        column(
 #          width = 5,
           wellPanel(
@@ -1513,9 +1586,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[6],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalOtterTrawlDiscard_b_reset", "Reset"),
             helpText("Demersal OtterTrawl discard notes here")
           ),
           wellPanel(
@@ -1525,9 +1599,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[7],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("gillLongDemersalDiscard_b_reset", "Reset"),
             helpText("Gill Long Demersal discard notes here")
           ),
           wellPanel(
@@ -1537,9 +1612,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[8],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlShrimpDiscard_b_reset", "Reset"),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
           wellPanel(
@@ -1549,9 +1625,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[9],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("nephropsTrawlDiscard_b_reset", "Reset"),
             helpText("Nephrops Trawl discard notes here")
           ),
           wellPanel(
@@ -1561,9 +1638,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[10],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("creelsDiscard_b_reset", "Reset"),
             helpText("Creels discard notes here")
           ),
           wellPanel(
@@ -1573,9 +1651,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[11],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("molluscDredgeDiscard_b_reset", "Reset"),
             helpText("Mollusc Dredge discard notes here")
           ),
           wellPanel(
@@ -1585,9 +1664,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$bird[12],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("whalerDiscard_b_reset", "Reset"),
             helpText("Whaler discard notes here")
           )
       ),
@@ -1601,9 +1681,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[1],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("pelagicTrawlDiscard_s_reset", "Reset"),
             helpText("Pelgic discard notes here")
           ),
           wellPanel(
@@ -1613,9 +1694,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[2],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("sanSpratTrawlDiscard_s_reset", "Reset"),
             helpText("San spart trawl discard notes here")
           ),
           wellPanel(
@@ -1625,9 +1707,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[3],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("llMackerelDiscard_s_reset", "Reset"),
             helpText("llMackeral discard notes here")
           ),
           wellPanel(
@@ -1637,9 +1720,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[4],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlDiscard_s_reset", "Reset"),
             helpText("Beam Trawl discard notes here")
           ),
           wellPanel(
@@ -1649,12 +1733,12 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[5],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalSeineDiscard_s_reset", "Reset"),
             helpText("Demersal Seine discard notes here")
           ),
-        ),
 #        column(
 #          width = 5,
           wellPanel(
@@ -1664,9 +1748,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[6],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalOtterTrawlDiscard_s_reset", "Reset"),
             helpText("Demersal OtterTrawl discard notes here")
           ),
           wellPanel(
@@ -1676,9 +1761,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[7],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("gillLongDemersalDiscard_s_reset", "Reset"),
             helpText("Gill Long Demersal discard notes here")
           ),
           wellPanel(
@@ -1688,9 +1774,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[8],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlShrimpDiscard_s_reset", "Reset"),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
           wellPanel(
@@ -1700,9 +1787,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[9],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("nephropsTrawlDiscard_s_reset", "Reset"),
             helpText("Nephrops Trawl discard notes here")
           ),
           wellPanel(
@@ -1712,9 +1800,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[10],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("creelsDiscard_s_reset", "Reset"),
             helpText("Creels discard notes here")
           ),
           wellPanel(
@@ -1724,9 +1813,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[11],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("molluscDredgeDiscard_s_reset", "Reset"),
             helpText("Mollusc Dredge discard notes here")
           ),
           wellPanel(
@@ -1736,9 +1826,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$seal[12],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("whalerDiscard_s_reset", "Reset"),
             helpText("Whaler discard notes here")
           )
       ),
@@ -1752,9 +1843,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[1],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("pelagicTrawlDiscard_ceta_reset", "Reset"),
             helpText("Pelgic discard notes here")
           ),
           wellPanel(
@@ -1764,9 +1856,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[2],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("sanSpratTrawlDiscard_ceta_reset", "Reset"),
             helpText("San spart trawl discard notes here")
           ),
           wellPanel(
@@ -1776,9 +1869,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[3],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("llMackerelDiscard_ceta_reset", "Reset"),
             helpText("llMackeral discard notes here")
           ),
           wellPanel(
@@ -1788,9 +1882,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[4],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlDiscard_ceta_reset", "Reset"),
             helpText("Beam Trawl discard notes here")
           ),
           wellPanel(
@@ -1800,12 +1895,12 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[5],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalSeineDiscard_ceta_reset", "Reset"),
             helpText("Demersal Seine discard notes here")
           ),
-        ),
 #        column(
 #          width = 5,
           wellPanel(
@@ -1815,9 +1910,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[6],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalOtterTrawlDiscard_ceta_reset", "Reset"),
             helpText("Demersal OtterTrawl discard notes here")
           ),
           wellPanel(
@@ -1827,9 +1923,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[7],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("gillLongDemersalDiscard_ceta_reset", "Reset"),
             helpText("Gill Long Demersal discard notes here")
           ),
           wellPanel(
@@ -1839,9 +1936,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[8],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlShrimpDiscard_ceta_reset", "Reset"),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
           wellPanel(
@@ -1851,9 +1949,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[9],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("nephropsTrawlDiscard_ceta_reset", "Reset"),
             helpText("Nephrops Trawl discard notes here")
           ),
           wellPanel(
@@ -1863,9 +1962,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[10],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("creelsDiscard_ceta_reset", "Reset"),
             helpText("Creels discard notes here")
           ),
           wellPanel(
@@ -1875,9 +1975,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[11],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("molluscDredgeDiscard_ceta_reset", "Reset"),
             helpText("Mollusc Dredge discard notes here")
           ),
           wellPanel(
@@ -1887,9 +1988,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$ceta[12],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("whalerDiscard_ceta_reset", "Reset"),
             helpText("Whaler discard notes here")
           )
       ),
@@ -1903,9 +2005,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[1],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("pelagicTrawlDiscard_kelp_reset", "Reset"),
             helpText("Pelgic discard notes here")
           ),
           wellPanel(
@@ -1915,9 +2018,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[2],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("sanSpratTrawlDiscard_kelp_reset", "Reset"),
             helpText("San spart trawl discard notes here")
           ),
           wellPanel(
@@ -1927,9 +2031,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[3],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("llMackerelDiscard_kelp_reset", "Reset"),
             helpText("llMackeral discard notes here")
           ),
           wellPanel(
@@ -1939,9 +2044,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[4],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlDiscard_kelp_reset", "Reset"),
             helpText("Beam Trawl discard notes here")
           ),
           wellPanel(
@@ -1951,12 +2057,12 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[5],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalSeineDiscard_kelp_reset", "Reset"),
             helpText("Demersal Seine discard notes here")
           ),
-        ),
 #        column(
  #         width = 5,
           wellPanel(
@@ -1966,9 +2072,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[6],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("demersalOtterTrawlDiscard_kelp_reset", "Reset"),
             helpText("Demersal OtterTrawl discard notes here")
           ),
           wellPanel(
@@ -1978,9 +2085,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[7],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("gillLongDemersalDiscard_kelp_reset", "Reset"),
             helpText("Gill Long Demersal discard notes here")
           ),
           wellPanel(
@@ -1990,9 +2098,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[8],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("beamTrawlShrimpDiscard_kelp_reset", "Reset"),
             helpText("Beam Trawl Shrimp discard notes here")
           ),
           wellPanel(
@@ -2002,9 +2111,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[9],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("nephropsTrawlDiscard_kelp_reset", "Reset"),
             helpText("Nephrops Trawl discard notes here")
           ),
           wellPanel(
@@ -2014,9 +2124,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[10],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("creelsDiscard_kelp_reset", "Reset"),
             helpText("Creels discard notes here")
           ),
           wellPanel(
@@ -2026,9 +2137,10 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[11],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("molluscDredgeDiscard_kelp_reset", "Reset"),
             helpText("Mollusc Dredge discard notes here")
           ),
           wellPanel(
@@ -2038,14 +2150,629 @@ server <- function(input, output) {
               min = 0,
               max = 1.0,
               value = model$data$fleet.model$gear_group_discard$kelp[12],
-              step = 0.001,
+              step = 0.000001,
               width = "100%"
             ),
+            actionButton("whalerDiscard_kelp_reset", "Reset"),
             helpText("Whaler discard notes here")
           )
       )
-      )
     )
+  })
+  
+  #Pelagic discard reset
+  
+  observeEvent(input$pelagicTrawlDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "pelagicTrawlDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[1])
+  })
+  
+  observeEvent(input$sanSpratTrawlDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "sanSpratTrawlDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[2])
+  })
+  
+  observeEvent(input$llMackerelDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "llMackerelDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[3])
+  })
+  
+  observeEvent(input$beamTrawlDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[4])
+  })
+  
+  observeEvent(input$demersalSeineDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalSeineDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[5])
+  })
+  
+  observeEvent(input$demersalOtterTrawlDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalOtterTrawlDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[6])
+  })
+  
+  observeEvent(input$gillLongDemersalDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "gillLongDemersalDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[7])
+  })
+  
+  observeEvent(input$beamTrawlShrimpDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlShrimpDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[8])
+  })
+  
+  observeEvent(input$nephropsTrawlDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "nephropsTrawlDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[9])
+  })
+  
+  observeEvent(input$creelsDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "creelsDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[10])
+  })
+  
+  observeEvent(input$molluscDredgeDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "molluscDredgeDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[11])
+  })
+  
+  observeEvent(input$whalerDiscard_pel_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "whalerDiscard_pel", value = model$data$fleet.model$gear_group_discard$pelagic[12])
+  })
+  
+  #Demersal discard reset
+  
+  observeEvent(input$pelagicTrawlDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "pelagicTrawlDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[1])
+  })
+  
+  observeEvent(input$sanSpratTrawlDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "sanSpratTrawlDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[2])
+  })
+  
+  observeEvent(input$llMackerelDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "llMackerelDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[3])
+  })
+  
+  observeEvent(input$beamTrawlDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[4])
+  })
+  
+  observeEvent(input$demersalSeineDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalSeineDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[5])
+  })
+  
+  observeEvent(input$demersalOtterTrawlDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalOtterTrawlDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[6])
+  })
+  
+  observeEvent(input$gillLongDemersalDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "gillLongDemersalDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[7])
+  })
+  
+  observeEvent(input$beamTrawlShrimpDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlShrimpDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[8])
+  })
+  
+  observeEvent(input$nephropsTrawlDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "nephropsTrawlDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[9])
+  })
+  
+  observeEvent(input$creelsDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "creelsDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[10])
+  })
+  
+  observeEvent(input$molluscDredgeDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "molluscDredgeDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[11])
+  })
+  
+  observeEvent(input$whalerDiscard_dem_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "whalerDiscard_dem", value = model$data$fleet.model$gear_group_discard$demersal[12])
+  })
+  
+  #Migratory discard reset
+  
+  observeEvent(input$pelagicTrawlDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "pelagicTrawlDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[1])
+  })
+  
+  observeEvent(input$sanSpratTrawlDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "sanSpratTrawlDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[2])
+  })
+  
+  observeEvent(input$llMackerelDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "llMackerelDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[3])
+  })
+  
+  observeEvent(input$beamTrawlDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[4])
+  })
+  
+  observeEvent(input$demersalSeineDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalSeineDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[5])
+  })
+  
+  observeEvent(input$demersalOtterTrawlDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalOtterTrawlDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[6])
+  })
+  
+  observeEvent(input$gillLongDemersalDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "gillLongDemersalDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[7])
+  })
+  
+  observeEvent(input$beamTrawlShrimpDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlShrimpDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[8])
+  })
+  
+  observeEvent(input$nephropsTrawlDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "nephropsTrawlDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[9])
+  })
+  
+  observeEvent(input$creelsDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "creelsDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[10])
+  })
+  
+  observeEvent(input$molluscDredgeDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "molluscDredgeDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[11])
+  })
+  
+  observeEvent(input$whalerDiscard_mig_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "whalerDiscard_mig", value = model$data$fleet.model$gear_group_discard$migratory[12])
+  })
+  
+  #Filtben discard reset
+  
+  observeEvent(input$pelagicTrawlDiscard_fb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "pelagicTrawlDiscard_fb", value = model$data$fleet.model$gear_group_discard$filtben[1])
+  })
+  
+  observeEvent(input$sanSpratTrawlDiscard_fb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "sanSpratTrawlDiscard_fb", value = model$data$fleet.model$gear_group_discard$filtben[2])
+  })
+  
+  observeEvent(input$llMackerelDiscard_fb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "llMackerelDiscard_fb", value = model$data$fleet.model$gear_group_discard$filtben[3])
+  })
+  
+  observeEvent(input$beamTrawlDiscard_fb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlDiscard_fb", value = model$data$fleet.model$gear_group_discard$filtben[4])
+  })
+  
+  observeEvent(input$demersalSeineDiscard_fb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalSeineDiscard_fb", value = model$data$fleet.model$gear_group_discard$filtben[5])
+  })
+  
+  observeEvent(input$demersalOtterTrawlDiscard_fb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalOtterTrawlDiscard_fb", value = model$data$fleet.model$gear_group_discard$filtben[6])
+  })
+  
+  observeEvent(input$gillLongDemersalDiscard_fb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "gillLongDemersalDiscard_fb", value = model$data$fleet.model$gear_group_discard$filtben[7])
+  })
+  
+  observeEvent(input$beamTrawlShrimpDiscard_fb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlShrimpDiscard_fb", value = model$data$fleet.model$gear_group_discard$filtben[8])
+  })
+  
+  observeEvent(input$nephropsTrawlDiscard_fb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "nephropsTrawlDiscard_fb", value = model$data$fleet.model$gear_group_discard$filtben[9])
+  })
+  
+  observeEvent(input$creelsDiscard_fb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "creelsDiscard_fb", value = model$data$fleet.model$gear_group_discard$filtben[10])
+  })
+  
+  observeEvent(input$molluscDredgeDiscard_fb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "molluscDredgeDiscard_fb", value = model$data$fleet.model$gear_group_discard$filtben[11])
+  })
+  
+  #Carnben discard reset
+  
+  observeEvent(input$pelagicTrawlDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "pelagicTrawlDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[1])
+  })
+  
+  observeEvent(input$sanSpratTrawlDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "sanSpratTrawlDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[2])
+  })
+  
+  observeEvent(input$llMackerelDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "llMackerelDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[3])
+  })
+  
+  observeEvent(input$beamTrawlDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[4])
+  })
+  
+  observeEvent(input$demersalSeineDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalSeineDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[5])
+  })
+  
+  observeEvent(input$demersalOtterTrawlDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalOtterTrawlDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[6])
+  })
+  
+  observeEvent(input$gillLongDemersalDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "gillLongDemersalDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[7])
+  })
+  
+  observeEvent(input$beamTrawlShrimpDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlShrimpDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[8])
+  })
+  
+  observeEvent(input$nephropsTrawlDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "nephropsTrawlDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[9])
+  })
+  
+  observeEvent(input$creelsDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "creelsDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[10])
+  })
+  
+  observeEvent(input$molluscDredgeDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "molluscDredgeDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[11])
+  })
+  
+  observeEvent(input$whalerDiscard_cb_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "whalerDiscard_cb", value = model$data$fleet.model$gear_group_discard$carnben[12])
+  })
+  
+  #Carnzoo discard reset
+  
+  observeEvent(input$pelagicTrawlDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "pelagicTrawlDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[1])
+  })
+  
+  observeEvent(input$sanSpratTrawlDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "sanSpratTrawlDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[2])
+  })
+  
+  observeEvent(input$llMackerelDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "llMackerelDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[3])
+  })
+  
+  observeEvent(input$beamTrawlDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[4])
+  })
+  
+  observeEvent(input$demersalSeineDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalSeineDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[5])
+  })
+  
+  observeEvent(input$demersalOtterTrawlDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalOtterTrawlDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[6])
+  })
+  
+  observeEvent(input$gillLongDemersalDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "gillLongDemersalDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[7])
+  })
+  
+  observeEvent(input$beamTrawlShrimpDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlShrimpDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[8])
+  })
+  
+  observeEvent(input$nephropsTrawlDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "nephropsTrawlDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[9])
+  })
+  
+  observeEvent(input$creelsDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "creelsDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[10])
+  })
+  
+  observeEvent(input$molluscDredgeDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "molluscDredgeDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[11])
+  })
+  
+  observeEvent(input$whalerDiscard_cz_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "whalerDiscard_cz", value = model$data$fleet.model$gear_group_discard$carnzoo[12])
+  })
+  
+  #Bird discard reset
+  
+  observeEvent(input$pelagicTrawlDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "pelagicTrawlDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[1])
+  })
+  
+  observeEvent(input$sanSpratTrawlDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "sanSpratTrawlDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[2])
+  })
+  
+  observeEvent(input$llMackerelDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "llMackerelDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[3])
+  })
+  
+  observeEvent(input$beamTrawlDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[4])
+  })
+  
+  observeEvent(input$demersalSeineDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalSeineDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[5])
+  })
+  
+  observeEvent(input$demersalOtterTrawlDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalOtterTrawlDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[6])
+  })
+  
+  observeEvent(input$gillLongDemersalDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "gillLongDemersalDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[7])
+  })
+  
+  observeEvent(input$beamTrawlShrimpDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlShrimpDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[8])
+  })
+  
+  observeEvent(input$nephropsTrawlDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "nephropsTrawlDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[9])
+  })
+  
+  observeEvent(input$creelsDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "creelsDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[10])
+  })
+  
+  observeEvent(input$molluscDredgeDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "molluscDredgeDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[11])
+  })
+  
+  observeEvent(input$whalerDiscard_b_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "whalerDiscard_b", value = model$data$fleet.model$gear_group_discard$bird[12])
+  })
+  
+  #Seal discard reset
+  
+  observeEvent(input$pelagicTrawlDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "pelagicTrawlDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[1])
+  })
+  
+  observeEvent(input$sanSpratTrawlDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "sanSpratTrawlDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[2])
+  })
+  
+  observeEvent(input$llMackerelDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "llMackerelDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[3])
+  })
+  
+  observeEvent(input$beamTrawlDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[4])
+  })
+  
+  observeEvent(input$demersalSeineDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalSeineDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[5])
+  })
+  
+  observeEvent(input$demersalOtterTrawlDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalOtterTrawlDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[6])
+  })
+  
+  observeEvent(input$gillLongDemersalDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "gillLongDemersalDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[7])
+  })
+  
+  observeEvent(input$beamTrawlShrimpDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlShrimpDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[8])
+  })
+  
+  observeEvent(input$nephropsTrawlDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "nephropsTrawlDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[9])
+  })
+  
+  observeEvent(input$creelsDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "creelsDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[10])
+  })
+  
+  observeEvent(input$molluscDredgeDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "molluscDredgeDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[11])
+  })
+  
+  observeEvent(input$whalerDiscard_s_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "whalerDiscard_s", value = model$data$fleet.model$gear_group_discard$seal[12])
+  })
+  
+  #Ceta discard reset
+  
+  observeEvent(input$pelagicTrawlDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "pelagicTrawlDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[1])
+  })
+  
+  observeEvent(input$sanSpratTrawlDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "sanSpratTrawlDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[2])
+  })
+  
+  observeEvent(input$llMackerelDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "llMackerelDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[3])
+  })
+  
+  observeEvent(input$beamTrawlDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[4])
+  })
+  
+  observeEvent(input$demersalSeineDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalSeineDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[5])
+  })
+  
+  observeEvent(input$demersalOtterTrawlDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalOtterTrawlDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[6])
+  })
+  
+  observeEvent(input$gillLongDemersalDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "gillLongDemersalDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[7])
+  })
+  
+  observeEvent(input$beamTrawlShrimpDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlShrimpDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[8])
+  })
+  
+  observeEvent(input$nephropsTrawlDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "nephropsTrawlDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[9])
+  })
+  
+  observeEvent(input$creelsDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "creelsDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[10])
+  })
+  
+  observeEvent(input$molluscDredgeDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "molluscDredgeDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[11])
+  })
+  
+  observeEvent(input$whalerDiscard_ceta_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "whalerDiscard_ceta", value = model$data$fleet.model$gear_group_discard$ceta[12])
+  })
+  
+  #Kelp discard reset
+  
+  observeEvent(input$pelagicTrawlDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "pelagicTrawlDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[1])
+  })
+  
+  observeEvent(input$sanSpratTrawlDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "sanSpratTrawlDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[2])
+  })
+  
+  observeEvent(input$llMackerelDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "llMackerelDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[3])
+  })
+  
+  observeEvent(input$beamTrawlDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[4])
+  })
+  
+  observeEvent(input$demersalSeineDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalSeineDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[5])
+  })
+  
+  observeEvent(input$demersalOtterTrawlDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "demersalOtterTrawlDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[6])
+  })
+  
+  observeEvent(input$gillLongDemersalDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "gillLongDemersalDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[7])
+  })
+  
+  observeEvent(input$beamTrawlShrimpDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "beamTrawlShrimpDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[8])
+  })
+  
+  observeEvent(input$nephropsTrawlDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "nephropsTrawlDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[9])
+  })
+  
+  observeEvent(input$creelsDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "creelsDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[10])
+  })
+  
+  observeEvent(input$molluscDredgeDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "molluscDredgeDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[11])
+  })
+  
+  observeEvent(input$whalerDiscard_kelp_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateSliderInput(session, "whalerDiscard_kelp", value = model$data$fleet.model$gear_group_discard$kelp[12])
   })
   
   observeEvent(input$runBaseline, {
