@@ -540,6 +540,100 @@ ui <- navbarPage(
           )
         )
       ),
+      tabPanel(
+        title = "Compare scenario with observational data",
+        h3("Box and whisker plots comparing annual or monthly observational data with corresponding model outputs"),
+        fluidRow(
+          column(
+            6,
+            h5("Annual observational versus scenario"),
+            plotOutput("scenario_compare_obs")
+          )),
+      ),
+      tabPanel(
+        title = "Compare baseline with scenario - tornado plot",
+        h5("Create a tornado bar-plot diagram of the differences in annual average masses of ecology model varibles and annual fishery catches, between baseline and scenario runs"),
+        fluidRow(
+          column(
+            6,
+            h3("AAM tornado plot - baseline vs scenario"),
+            plotOutput("e2e_compare_runs_bar_aam")
+          ),
+          column(
+            6,
+            h3("Catch tornado plot - baseline vs scenario"),
+            plotOutput("e2e_compare_runs_bar_catch")
+          )),
+      ),
+      tabPanel(
+        title = "Ecological scenario plots",
+        h3("Plot daily data on ecological outputs from the model over the final year of a run"),
+        fluidRow(column(
+          6,
+          h3("NUT_PHYT"),
+          plotOutput("ecoPlot_nut_phyt")
+        ),
+        column(
+          6,
+          h3("SEDIMENT"),
+          plotOutput("ecoPlot_sediment")
+        )),
+        fluidRow(column(
+          6,
+          h3("ZOOPLANKTON"),
+          plotOutput("ecoPlot_zooplankton")
+        ),
+        column(
+          6,
+          h3("FISH"),
+          plotOutput("ecoPlot_fish")
+        )),
+        fluidRow(column(
+          6,
+          h3("BENTHOS"),
+          plotOutput("ecoPlot_benthos")
+        ),
+        column(
+          6,
+          h3("PREDATORS"),
+          plotOutput("ecoPlot_predators")
+        )),
+        fluidRow(column(
+          6,
+          h3("CORP_DISC"),
+          plotOutput("ecoPlot_corp_disc")
+        ),
+        column(
+          6,
+          h3("MACROPHYTE"),
+          plotOutput("ecoPlot_macrophyte")
+        )),
+      ),
+      tabPanel(
+        title = "Catch scenario plots",
+        h3("Plot the distribution and composition of annual catches across guild, zones and gears in the final year of a model run"),
+        fluidRow(
+          column(
+          6,
+          h3("Catch plots per gear"),
+          plotOutput("ecoPlot_catch_gear")
+        ),
+        column(
+          6,
+          h3("Catch plots per guild"),
+          plotOutput("ecoPlot_catch_guild")
+        )),
+      ),
+      tabPanel(
+        title = "Biomass density scenario plots",
+        h3("Plot showing the annual average biomass densities of each guild in the inshore and offshore zones"),
+        fluidRow(
+          column(
+            6,
+            h3("Biomass plots"),
+            plotOutput("ecoPlot_biomass")
+          )),
+      ),
       tabPanel(title = "Yield curves", fluidRow(
         h4(
           "Add info here about yield curves - maybe this will become sub menu under plots tab using navbar"
@@ -4090,6 +4184,167 @@ ui <- navbarPage(
         renderPlot({
           e2e_plot_ts(scenario_model, results_scenario)
         })
+      output$ecoPlot_nut_phyt <-
+        renderPlot({ 
+        e2e_plot_eco(
+          scenario_model,
+        selection = "NUT_PHYT",
+        ci.data = FALSE,
+        use.saved = FALSE,
+        use.example = FALSE,
+        results = results_scenario)
+        })
+      
+      output$ecoPlot_sediment <-
+        renderPlot({ 
+          e2e_plot_eco(
+            scenario_model,
+            selection = "SEDIMENT",
+            ci.data = FALSE,
+            use.saved = FALSE,
+            use.example = FALSE,
+            results = results_scenario)
+        }) 
+      
+      output$ecoPlot_zooplankton <-
+        renderPlot({ 
+          e2e_plot_eco(
+            scenario_model,
+            selection = "ZOOPLANKTON",
+            ci.data = FALSE,
+            use.saved = FALSE,
+            use.example = FALSE,
+            results = results_scenario)
+        })
+      
+      output$ecoPlot_fish <-
+        renderPlot({ 
+          e2e_plot_eco(
+            scenario_model,
+            selection = "FISH",
+            ci.data = FALSE,
+            use.saved = FALSE,
+            use.example = FALSE,
+            results = results_scenario)
+        })
+      
+      output$ecoPlot_benthos <-
+        renderPlot({ 
+          e2e_plot_eco(
+            scenario_model,
+            selection = "BENTHOS",
+            ci.data = FALSE,
+            use.saved = FALSE,
+            use.example = FALSE,
+            results =results_scenario)
+        })
+      
+      output$ecoPlot_predators <-
+        renderPlot({ 
+          e2e_plot_eco(
+            scenario_model,
+            selection = "PREDATORS",
+            ci.data = FALSE,
+            use.saved = FALSE,
+            use.example = FALSE,
+            results = results_scenario)
+        })
+      
+      output$ecoPlot_corp_disc <-
+        renderPlot({ 
+          e2e_plot_eco(
+            scenario_model,
+            selection = "CORP_DISC",
+            ci.data = FALSE,
+            use.saved = FALSE,
+            use.example = FALSE,
+            results = results_scenario)
+        })
+      
+      output$ecoPlot_macrophyte <-
+        renderPlot({ 
+          e2e_plot_eco(
+            scenario_model,
+            selection = "MACROPHYTE",
+            ci.data = FALSE,
+            use.saved = FALSE,
+            use.example = FALSE,
+            results = results_scenario)
+        })
+      
+      output$ecoPlot_catch_gear <-
+        renderPlot({ 
+          e2e_plot_catch(scenario_model, results_scenario, selection = "BY_GEAR")
+        })
+      
+      output$ecoPlot_catch_guild <-
+        renderPlot({ 
+          e2e_plot_catch(scenario_model, results_scenario, selection = "BY_GUILD")
+        })
+      
+      output$ecoPlot_biomass <-
+        renderPlot({ 
+          e2e_plot_biomass(
+            scenario_model,
+            ci.data = FALSE,
+            use.saved = FALSE,
+            use.example = FALSE,
+            results = results_scenario
+          )
+          })
+      
+      output$scenario_compare_obs <-
+        renderPlot({ 
+          e2e_compare_obs(
+            selection = "ANNUAL",
+            scenario_model,
+            ci.data = FALSE,
+            use.saved = FALSE,
+            use.example = FALSE,
+            results = results_scenario
+          )
+        })
+      
+      output$e2e_compare_runs_bar_aam <-
+        renderPlot({ 
+          e2e_compare_runs_bar(
+            selection = "AAM",
+            model1 = model,
+            use.saved1 = FALSE,
+            results_baseline,
+            model2 = scenario_model,
+            use.saved2 = FALSE,
+            results_scenario,
+            log.pc = "PC",
+            zone = "W",
+            bpmin = (-50),
+            bpmax = (+50),
+            maintitle = ""
+          )
+        })
+      
+      #TODO make the running of baseline conditional again on choosing this plot
+      results_baseline <-
+        e2e_run(model, nyears = input$year, csv.output = TRUE)
+      
+      output$e2e_compare_runs_bar_catch <-
+        renderPlot({ 
+          e2e_compare_runs_bar(
+            selection = "CATCH",
+            model1 = model,
+            use.saved1 = FALSE,
+            results_baseline,
+            model2 = scenario_model,
+            use.saved2 = FALSE,
+            results_scenario,
+            log.pc = "PC",
+            zone = "W",
+            bpmin = (-50),
+            bpmax = (+50),
+            maintitle = ""
+          )
+        })
+      
       removeModal()
       resultDirScenario <- toString(scenario_model$setup$resultsdir)
       output$downloadData_scenario1 <- downloadHandler(
