@@ -9,7 +9,44 @@ library(shinyjs)
 ui <- navbarPage(
   "StrathE2E App",
   theme = shinytheme("cerulean"),
-  navbarMenu("Overview",
+  navbarMenu("Home",
+             tabPanel(
+               title = "Model Workflow",
+               fluidRow(
+                 column(
+                   6,
+                   h4("StrathE2E model"),
+                   p(
+                     "StrathE2E is a marine food web model of intermediate complexity which represents a spatially aggregated shelf sea region. The model simulates the fluxes of nutrient (nitrogen) through the ecosystem from dissolved inorganic (nitrate and ammonia), through plankton, benthos and fish, to birds and mammals, its regeneration through excretion and mineralization of detritus in the water column and sediment, and the physical oceanographic, land-sea, and air-sea exchanges across the geographic boundaries. The model incorporates Holling II function relationships between each predator-prey couplet in the food web, and density dependent mortality control of the upper trophic levels (top-levels plus most interior levels). External drivers include sea surface irradiance, temperature, hydrodynamic fluxes, freshwater input, river and atmospheric nitrate and ammonia inputs, ocean boundary nitrate, ammonia and suspended particulate concentrations, and density independent fishery harvesting rates of shellfish, pelagic and demersal fish. Outputs from the model include time-series of the nitrogen mass of all state variables components, fluxes between components due to e.g. feeding, excretion, and exports to the ocean, atmosphere and to fishery landings."
+                     ,
+                     style = "font-family: 'times'; font-si16pt"
+                   )
+                 ),
+                 column(
+                   6,
+                   img(src = "strathe2e_2.jpg", width = '100%'),
+                   h6(
+                     "Schematic showing the North Sea food web model components and driving variables, in relation to physical structures (surface water layer, deep water layer, and sediments)."
+                   )
+                 ),
+                 column(
+                   width = 11,
+                   offset = 0.5,
+                   fluidRow(
+                     p(
+                       "The model is intentionally minimalist in terms of spatial and taxonomic resolution in order to permit the use of global sensitivity analysis and formal optimisation procedures to fit the model to an assemblage of observed data. Simulated annealing has been used to locate the maximum likelihood parameter set for the stationary state of the model given driving data and a suite of observed state variable values for the North Sea between 1970 and 1999. The model is designed to explore trophic cascades in the marine ecosystem, in particular the propagation of effects of harvesting and river nutrient inputs through the food web, under oceanographic and temperature climate scenarios. The model has been intensively analysed for the North Sea and is currently being configured for a range of NW European shelf sea regions extending from northern Spain to the Faroe Islands, taking driving data from ERSEM-NEMO model outputs. The model is available as a C-shared object for the R statistical environment.",
+                       style = "font-family: 'times'; font-si16pt; text-align: justify;padding:20px;"
+                     )
+                   ),
+                   column(width = 11, fluidRow(
+                     p(
+                       "Key reference: Heath, M.R. (2012). Ecosystem limits to food web fluxes and fisheries yields in the North Sea simulated with an end-to-end food web model. Progress in Oceanography 102, 42-66.",
+                       style = "font-family: 'times'; font-si16pt"
+                     )
+                   ))
+                 )
+               )
+             ),
              tabPanel(
                title = "Model Overview",
                fluidRow(
@@ -48,7 +85,7 @@ ui <- navbarPage(
                )
              )),
   navbarMenu(
-    "Setup",
+    "Model Selection",
     tabPanel(
       title = "Location",
       h4("Some text about setup to go here"),
@@ -74,7 +111,84 @@ ui <- navbarPage(
           "Png's to be supplied by Jack here"
         )))
       )
+    )), 
+  navbarMenu(
+    "Model Exploration",
+    tabPanel(
+      title = "Ecological plots",
+      h3(
+        "Plot daily data on ecological outputs from the model over the final year of a run"
+      ),
+      fluidRow(column(
+        6,
+        h3("NUT_PHYT"),
+        plotOutput("ecoPlot_nut_phyt")
+      ),
+      column(
+        6,
+        h3("SEDIMENT"),
+        plotOutput("ecoPlot_sediment")
+      )),
+      fluidRow(column(
+        6,
+        h3("ZOOPLANKTON"),
+        plotOutput("ecoPlot_zooplankton")
+      ),
+      column(
+        6,
+        h3("FISH"),
+        plotOutput("ecoPlot_fish")
+      )),
+      fluidRow(column(
+        6,
+        h3("BENTHOS"),
+        plotOutput("ecoPlot_benthos")
+      ),
+      column(
+        6,
+        h3("PREDATORS"),
+        plotOutput("ecoPlot_predators")
+      )),
+      fluidRow(column(
+        6,
+        h3("CORP_DISC"),
+        plotOutput("ecoPlot_corp_disc")
+      ),
+      column(
+        6,
+        h3("MACROPHYTE"),
+        plotOutput("ecoPlot_macrophyte")
+      )),
     ),
+    tabPanel(
+      title = "Catch plots",
+      h3(
+        "Plot the distribution and composition of annual catches across guild, zones and gears in the final year of a model run"
+      ),
+      fluidRow(column(
+        6,
+        h3("Catch plots per gear"),
+        plotOutput("ecoPlot_catch_gear")
+      ),
+      column(
+        6,
+        h3("Catch plots per guild"),
+        plotOutput("ecoPlot_catch_guild")
+      )),
+    ),
+    tabPanel(
+      title = "Biomass density plots",
+      h3(
+        "Plot showing the annual average biomass densities of each guild in the inshore and offshore zones"
+      ),
+      fluidRow(column(
+        6,
+        h3("Biomass plots"),
+        plotOutput("ecoPlot_biomass")
+      )),
+    )), 
+  navbarMenu(
+    "Scenario Setup",
     tabPanel(
       title = "Temperature",
       h4("Some text about Temperature to go here"),
@@ -599,79 +713,7 @@ ui <- navbarPage(
         )
       ),
     ),
-    tabPanel(
-      title = "Ecological scenario plots",
-      h3(
-        "Plot daily data on ecological outputs from the model over the final year of a run"
-      ),
-      fluidRow(column(
-        6,
-        h3("NUT_PHYT"),
-        plotOutput("ecoPlot_nut_phyt")
-      ),
-      column(
-        6,
-        h3("SEDIMENT"),
-        plotOutput("ecoPlot_sediment")
-      )),
-      fluidRow(column(
-        6,
-        h3("ZOOPLANKTON"),
-        plotOutput("ecoPlot_zooplankton")
-      ),
-      column(
-        6,
-        h3("FISH"),
-        plotOutput("ecoPlot_fish")
-      )),
-      fluidRow(column(
-        6,
-        h3("BENTHOS"),
-        plotOutput("ecoPlot_benthos")
-      ),
-      column(
-        6,
-        h3("PREDATORS"),
-        plotOutput("ecoPlot_predators")
-      )),
-      fluidRow(column(
-        6,
-        h3("CORP_DISC"),
-        plotOutput("ecoPlot_corp_disc")
-      ),
-      column(
-        6,
-        h3("MACROPHYTE"),
-        plotOutput("ecoPlot_macrophyte")
-      )),
-    ),
-    tabPanel(
-      title = "Catch scenario plots",
-      h3(
-        "Plot the distribution and composition of annual catches across guild, zones and gears in the final year of a model run"
-      ),
-      fluidRow(column(
-        6,
-        h3("Catch plots per gear"),
-        plotOutput("ecoPlot_catch_gear")
-      ),
-      column(
-        6,
-        h3("Catch plots per guild"),
-        plotOutput("ecoPlot_catch_guild")
-      )),
-    ),
-    tabPanel(
-      title = "Biomass density scenario plots",
-      h3(
-        "Plot showing the annual average biomass densities of each guild in the inshore and offshore zones"
-      ),
-      fluidRow(column(
-        6,
-        h3("Biomass plots"),
-        plotOutput("ecoPlot_biomass")
-      )),
-    ),
+    
     tabPanel(title = "Yield curves - example only", fluidRow(
       column(
         width = 11,
@@ -3475,6 +3517,122 @@ server <- function(input, output, session) {
       disable("downloadData_baseline1")
       runjs("$('#dwnbutton_b').attr('title', 'Data not available');")
     }
+    output$ecoPlot_nut_phyt <-
+      renderPlot({
+        e2e_plot_eco(
+          model,
+          selection = "NUT_PHYT",
+          ci.data = FALSE,
+          use.saved = FALSE,
+          use.example = FALSE,
+          results = results_scenario
+        )
+      })
+    
+    output$ecoPlot_sediment <-
+      renderPlot({
+        e2e_plot_eco(
+          model,
+          selection = "SEDIMENT",
+          ci.data = FALSE,
+          use.saved = FALSE,
+          use.example = FALSE,
+          results = results_scenario
+        )
+      })
+    
+    output$ecoPlot_zooplankton <-
+      renderPlot({
+        e2e_plot_eco(
+          model,
+          selection = "ZOOPLANKTON",
+          ci.data = FALSE,
+          use.saved = FALSE,
+          use.example = FALSE,
+          results = results_scenario
+        )
+      })
+    
+    output$ecoPlot_fish <-
+      renderPlot({
+        e2e_plot_eco(
+          model,
+          selection = "FISH",
+          ci.data = FALSE,
+          use.saved = FALSE,
+          use.example = FALSE,
+          results = results_scenario
+        )
+      })
+    
+    output$ecoPlot_benthos <-
+      renderPlot({
+        e2e_plot_eco(
+          model,
+          selection = "BENTHOS",
+          ci.data = FALSE,
+          use.saved = FALSE,
+          use.example = FALSE,
+          results = results_scenario
+        )
+      })
+    
+    output$ecoPlot_predators <-
+      renderPlot({
+        e2e_plot_eco(
+          model,
+          selection = "PREDATORS",
+          ci.data = FALSE,
+          use.saved = FALSE,
+          use.example = FALSE,
+          results = results_scenario
+        )
+      })
+    
+    output$ecoPlot_corp_disc <-
+      renderPlot({
+        e2e_plot_eco(
+          model,
+          selection = "CORP_DISC",
+          ci.data = FALSE,
+          use.saved = FALSE,
+          use.example = FALSE,
+          results = results_scenario
+        )
+      })
+    
+    output$ecoPlot_macrophyte <-
+      renderPlot({
+        e2e_plot_eco(
+          model,
+          selection = "MACROPHYTE",
+          ci.data = FALSE,
+          use.saved = FALSE,
+          use.example = FALSE,
+          results = results_scenario
+        )
+      })
+    
+    output$ecoPlot_catch_gear <-
+      renderPlot({
+        e2e_plot_catch(model, results_scenario, selection = "BY_GEAR")
+      })
+    
+    output$ecoPlot_catch_guild <-
+      renderPlot({
+        e2e_plot_catch(model, results_scenario, selection = "BY_GUILD")
+      })
+    
+    output$ecoPlot_biomass <-
+      renderPlot({
+        e2e_plot_biomass(
+          model,
+          ci.data = FALSE,
+          use.saved = FALSE,
+          use.example = FALSE,
+          results = results_scenario
+        )
+      })
   })
   
   observeEvent(input$runScenario, {
@@ -4283,122 +4441,6 @@ server <- function(input, output, session) {
     output$scenarioPlot <-
       renderPlot({
         e2e_plot_ts(scenario_model, results_scenario)
-      })
-    output$ecoPlot_nut_phyt <-
-      renderPlot({
-        e2e_plot_eco(
-          scenario_model,
-          selection = "NUT_PHYT",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_scenario
-        )
-      })
-    
-    output$ecoPlot_sediment <-
-      renderPlot({
-        e2e_plot_eco(
-          scenario_model,
-          selection = "SEDIMENT",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_scenario
-        )
-      })
-    
-    output$ecoPlot_zooplankton <-
-      renderPlot({
-        e2e_plot_eco(
-          scenario_model,
-          selection = "ZOOPLANKTON",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_scenario
-        )
-      })
-    
-    output$ecoPlot_fish <-
-      renderPlot({
-        e2e_plot_eco(
-          scenario_model,
-          selection = "FISH",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_scenario
-        )
-      })
-    
-    output$ecoPlot_benthos <-
-      renderPlot({
-        e2e_plot_eco(
-          scenario_model,
-          selection = "BENTHOS",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_scenario
-        )
-      })
-    
-    output$ecoPlot_predators <-
-      renderPlot({
-        e2e_plot_eco(
-          scenario_model,
-          selection = "PREDATORS",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_scenario
-        )
-      })
-    
-    output$ecoPlot_corp_disc <-
-      renderPlot({
-        e2e_plot_eco(
-          scenario_model,
-          selection = "CORP_DISC",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_scenario
-        )
-      })
-    
-    output$ecoPlot_macrophyte <-
-      renderPlot({
-        e2e_plot_eco(
-          scenario_model,
-          selection = "MACROPHYTE",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_scenario
-        )
-      })
-    
-    output$ecoPlot_catch_gear <-
-      renderPlot({
-        e2e_plot_catch(scenario_model, results_scenario, selection = "BY_GEAR")
-      })
-    
-    output$ecoPlot_catch_guild <-
-      renderPlot({
-        e2e_plot_catch(scenario_model, results_scenario, selection = "BY_GUILD")
-      })
-    
-    output$ecoPlot_biomass <-
-      renderPlot({
-        e2e_plot_biomass(
-          scenario_model,
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_scenario
-        )
       })
     
     output$scenario_compare_obs <-
