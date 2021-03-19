@@ -5,6 +5,13 @@ library(shinycssloaders)
 library(dplyr)
 library(shinyjs)
 
+library(shinyAce)
+library(sendmailR)
+
+library(promises)
+library(future)
+plan(multisession)
+
 # Define UI for miles per gallon app ----
 ui <- navbarPage(
   "StrathE2E App",
@@ -88,7 +95,6 @@ ui <- navbarPage(
     "Model Selection",
     tabPanel(
       title = "Location",
-      h4("Some text about setup to go here"),
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -104,16 +110,47 @@ ui <- navbarPage(
             choices
             = list("1970-1999"),
             selected = "1970-1999"
-          )
+          ), width = 3
         ),
         #Main Panel: plot map here in the future
-        mainPanel(fluidRow(h4(
-          "Png's to be supplied by Jack here"
-        )))
+        mainPanel(
+          div(img(src = "dummy_map.png", width = '80%') , style="text-align: center;"),  width = 9
+        )
       )
     )), 
   navbarMenu(
     "Model Exploration",
+    tabPanel(
+      title = "Run Baseline",
+      h4("Some text about running baseline to go here"),
+      # sliderInput(
+      #   "year",
+      #   "Year:",
+      #   min = 1,
+      #   max = 50,
+      #   value = 5,
+      #   width = "100%"
+      # ),
+      fluidRow(column(
+        6,
+        h3("Run Baseline"),
+        actionButton("runBaseline", "Run Baseline Model")
+      ),
+      column(
+        6,
+        h3("Baseline output"),
+        useShinyjs(),
+        div(
+          id = "dwnbutton_b",
+          downloadButton(
+            "downloadData_baseline1",
+            "Download Baseline output",
+            disabled = "disabled"
+          )
+        )
+      )
+      ),
+    ),
     tabPanel(
       title = "Ecological plots",
       h3(
@@ -201,7 +238,7 @@ ui <- navbarPage(
             "Temperature to add:",
             min = -3,
             max = 3,
-            value = 0.5,
+            value = 0.0,
             width = "100%"
           ),
           helpText("Additional temperature")
@@ -606,84 +643,50 @@ ui <- navbarPage(
       mainPanel (uiOutput("ui")))
     )
   ),
-  navbarMenu("Run",
-             tabPanel(
-               title = "Run",
-               h4("Some text about running baseline and scenario to go here"),
-               sliderInput(
-                 "year",
-                 "Year:",
-                 min = 1,
-                 max = 50,
-                 value = 5,
-                 width = "100%"
-               ),
-               fluidRow(column(
-                 6,
-                 h3("Run Baseline"),
-                 actionButton("runBaseline", "Run Baseline Model")
-               ),
-               column(
-                 6,
-                 h3("Run Scenario"),
-                 actionButton("runScenario", "Run Scenario Model")
-               ),
-               # column(
-               #   12,
-               #   h6("Note: If a plot need scenario and baseline run in same scope - choose below "),
-               #   radioButtons(
-               #     "runBaselinePlusScenario",
-               #     label = ("Run Baseline with Scenario Model"),
-               #     choices = list("Yes" = 1,
-               #                    "No" = 2),
-               #     selected = 2
-               #   )
-               # ),
-               ))),
   navbarMenu(
     "Results",
     tabPanel(
-      title = "Baseline versus Scenario plots",
-      h3("Compare baseline and scenario"),
-      fluidRow(column(
+      title = "Run Scenario",
+      h4("Some text about running baseline and scenario to go here"),
+      sliderInput(
+        "year",
+        "Year:",
+        min = 1,
+        max = 50,
+        value = 5,
+        width = "100%"
+      ),
+      fluidRow(
+      column(
         6,
-        h3("Baseline"),
-        plotOutput("baselinePlot")
+        h3("Run Scenario"),
+        actionButton("runScenario", "Run Scenario Model")
       ),
       column(
         6,
-        h3("Scenario"),
-        plotOutput("scenarioPlot")
-      )),
-      fluidRow(
-        column(
-          6,
-          h3("Baseline output"),
-          useShinyjs(),
-          div(
-            id = "dwnbutton_b",
-            downloadButton(
-              "downloadData_baseline1",
-              "Download Baseline output",
-              disabled = "disabled"
-            )
-          )
-        ),
-        column(
-          6,
-          h3("Scenario output"),
-          useShinyjs(),
-          div(
-            id = "dwnbutton_s",
-            downloadButton(
-              "downloadData_scenario1",
-              "Download Scenario output",
-              disabled = "disabled"
-            )
+        h3("Scenario output"),
+        useShinyjs(),
+        div(
+          id = "dwnbutton_s",
+          downloadButton(
+            "downloadData_scenario1",
+            "Download Scenario output",
+            disabled = "disabled"
           )
         )
       )
-    ),
+      # column(
+      #   12,
+      #   h6("Note: If a plot need scenario and baseline run in same scope - choose below "),
+      #   radioButtons(
+      #     "runBaselinePlusScenario",
+      #     label = ("Run Baseline with Scenario Model"),
+      #     choices = list("Yes" = 1,
+      #                    "No" = 2),
+      #     selected = 2
+      #   )
+      # ),
+      )),
     tabPanel(
       title = "Compare scenario with observational data",
       h3(
@@ -711,9 +714,8 @@ ui <- navbarPage(
           h3("Catch tornado plot - baseline vs scenario"),
           plotOutput("e2e_compare_runs_bar_catch")
         )
-      ),
+      )
     ),
-    
     tabPanel(title = "Yield curves - example only", fluidRow(
       column(
         width = 11,
@@ -770,7 +772,17 @@ ui <- navbarPage(
               "Yield data plot for planktivoirous fish in the 1970-1999 North Sea model with baseline demersal harvest ratios. Upper panel, annual average biomass of planktivorous fish (mMN.m-2 in the whole modle domain) as a function of harvest ratio. Lower panel: catch divided into landings and discards of planktivorous fish (mMN.m-2.y-1) as a function of harvest ratio."
               ,style = "font-family: 'times'; font-si16pt; text-align: justify;padding:10px;"
             )
-          )
+          ),
+          column(
+            6,
+            h3("Run Yield"),
+            actionButton("runYield", "Run Yield Plot")
+          ),
+          column(
+            6,
+            h5("Yield plot"),
+            plotOutput("yield_plot")
+          ),
         )
     )))
   )
@@ -3482,6 +3494,40 @@ server <- function(input, output, session) {
     )
   })
   
+  observeEvent(input$runYield, {
+    showModal(
+      modalDialog(
+        "Please wait whilst yield run finishes- this can take from 8 to 10 minutes",
+        footer = NULL
+      )
+    )
+    # Run yield
+    location <- input$selectedlocation
+    variant <- input$selectedVariant
+    
+    #a <- future({
+    model <<- e2e_read(location,variant)
+    pf_yield_data <- e2e_run_ycurve(
+      model,
+      selection="PLANKTIV",
+      nyears = 50,
+      HRvector = c(0, 0.5, 1, 1.5, 2, 2.5, 3),
+      HRfixed = 1,
+      csv.output = FALSE
+    )
+
+    removeModal()
+    
+    output$yield_plot <-
+      renderPlot({
+        e2e_plot_ycurve(model, selection="PLANKTIV", results=pf_yield_data,
+                        title="Planktivorous yield with baseline demersal fishing")
+      })
+    
+    #sendmail("thomas.doherty@strath.ac.uk", "thomas.doherty@strath.ac.uk", "Test", "Test")
+   # })
+  })
+  
   observeEvent(input$runBaseline, {
     showModal(
       modalDialog(
@@ -3525,7 +3571,7 @@ server <- function(input, output, session) {
           ci.data = FALSE,
           use.saved = FALSE,
           use.example = FALSE,
-          results = results_scenario
+          results = results_baseline
         )
       })
     
@@ -3537,7 +3583,7 @@ server <- function(input, output, session) {
           ci.data = FALSE,
           use.saved = FALSE,
           use.example = FALSE,
-          results = results_scenario
+          results = results_baseline
         )
       })
     
@@ -3549,7 +3595,7 @@ server <- function(input, output, session) {
           ci.data = FALSE,
           use.saved = FALSE,
           use.example = FALSE,
-          results = results_scenario
+          results = results_baseline
         )
       })
     
@@ -3561,7 +3607,7 @@ server <- function(input, output, session) {
           ci.data = FALSE,
           use.saved = FALSE,
           use.example = FALSE,
-          results = results_scenario
+          results = results_baseline
         )
       })
     
@@ -3573,7 +3619,7 @@ server <- function(input, output, session) {
           ci.data = FALSE,
           use.saved = FALSE,
           use.example = FALSE,
-          results = results_scenario
+          results = results_baseline
         )
       })
     
@@ -3585,7 +3631,7 @@ server <- function(input, output, session) {
           ci.data = FALSE,
           use.saved = FALSE,
           use.example = FALSE,
-          results = results_scenario
+          results = results_baseline
         )
       })
     
@@ -3597,7 +3643,7 @@ server <- function(input, output, session) {
           ci.data = FALSE,
           use.saved = FALSE,
           use.example = FALSE,
-          results = results_scenario
+          results = results_baseline
         )
       })
     
@@ -3609,18 +3655,18 @@ server <- function(input, output, session) {
           ci.data = FALSE,
           use.saved = FALSE,
           use.example = FALSE,
-          results = results_scenario
+          results = results_baseline
         )
       })
     
     output$ecoPlot_catch_gear <-
       renderPlot({
-        e2e_plot_catch(model, results_scenario, selection = "BY_GEAR")
+        e2e_plot_catch(model, results_baseline, selection = "BY_GEAR")
       })
     
     output$ecoPlot_catch_guild <-
       renderPlot({
-        e2e_plot_catch(model, results_scenario, selection = "BY_GUILD")
+        e2e_plot_catch(model, results_baseline, selection = "BY_GUILD")
       })
     
     output$ecoPlot_biomass <-
@@ -3630,7 +3676,7 @@ server <- function(input, output, session) {
           ci.data = FALSE,
           use.saved = FALSE,
           use.example = FALSE,
-          results = results_scenario
+          results = results_baseline
         )
       })
   })
@@ -3646,10 +3692,10 @@ server <- function(input, output, session) {
     model <-
       e2e_read(input$selectedlocation, input$selectedVariant)
     # If simultaneous run - do baseline first
-    if (input$runBaselinePlusScenario == 1) {
+    #if (input$runBaselinePlusScenario == 1) {
       #print("Running baseline within scenario run")
       results_baseline <- e2e_run(model, nyears = input$year, csv.output = TRUE)
-    }
+    #}
     scenario_model <- model
     #print("Got this far 1")
     # Temperature
@@ -4473,7 +4519,6 @@ server <- function(input, output, session) {
         )
       })
     
-    #TODO make the running of baseline conditional again on choosing this plot
     results_baseline <-
       e2e_run(model, nyears = input$year, csv.output = TRUE)
     
