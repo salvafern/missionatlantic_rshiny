@@ -5,12 +5,14 @@ library(shinycssloaders)
 library(dplyr)
 library(shinyjs)
 
-library(shinyAce)
-library(sendmailR)
+#library(shinyAce)
+#library(sendmailR)
 
-library(promises)
-library(future)
-plan(multisession)
+#library(promises)
+#library(future)
+#plan(multisession)
+
+source("createEcoplots.R")
 
 # Define UI for miles per gallon app ----
 ui <- navbarPage(
@@ -157,6 +159,11 @@ ui <- navbarPage(
         "Plot daily data on ecological outputs from the model over the final year of a run"
       ),
       fluidRow(column(
+        6,
+        h3("ecoPlot_nut_phyt_Detritus"),
+        plotOutput("ecoPlot_nut_phyt_Detritus")
+      ),
+      column(
         6,
         h3("NUT_PHYT"),
         plotOutput("ecoPlot_nut_phyt")
@@ -3531,7 +3538,7 @@ server <- function(input, output, session) {
   observeEvent(input$runBaseline, {
     showModal(
       modalDialog(
-        "Please wait whilst model runs baseline. See baseline plot in results tab once run completed",
+        "Please wait whilst model runs baseline. Once completed you can explore plots below",
         footer = NULL
       )
     )
@@ -3563,6 +3570,15 @@ server <- function(input, output, session) {
       disable("downloadData_baseline1")
       runjs("$('#dwnbutton_b').attr('title', 'Data not available');")
     }
+    output$ecoPlot_nut_phyt_Detritus <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "NUT_PHYT",
+          subSelection = "Detritus"
+        )
+      })
     output$ecoPlot_nut_phyt <-
       renderPlot({
         e2e_plot_eco(
@@ -3684,7 +3700,7 @@ server <- function(input, output, session) {
   observeEvent(input$runScenario, {
     showModal(
       modalDialog(
-        "Please wait whilst model runs scenario .... once completed plots available on results tab",
+        "Please wait whilst model runs scenario .... once completed tornado plot available below on results tab",
         footer = NULL
       )
     )
