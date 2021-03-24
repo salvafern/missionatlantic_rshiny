@@ -14,7 +14,6 @@ library(shinyjs)
 
 source("createEcoplots.R")
 
-# Define UI for miles per gallon app ----
 ui <- navbarPage(
   "StrathE2E App",
   theme = shinytheme("cerulean"),
@@ -125,14 +124,6 @@ ui <- navbarPage(
     tabPanel(
       title = "Run Baseline",
       h4("Some text about running baseline to go here"),
-      # sliderInput(
-      #   "year",
-      #   "Year:",
-      #   min = 1,
-      #   max = 50,
-      #   value = 5,
-      #   width = "100%"
-      # ),
       fluidRow(column(
         6,
         h3("Run Baseline"),
@@ -152,6 +143,24 @@ ui <- navbarPage(
         )
       )
       ),
+    ),
+    tabPanel(
+      title = "Ecological plots new",
+      sidebarLayout(
+        sidebarPanel(
+          selectInput(
+            "outputEcoType",
+            h4("Ecological Output Type"),
+            choices
+            = list("Nutrient_Phytoplankton", "Sediment", "Zooplankton" , 
+                   "Fish" , "Benthos" , "Preadators", "Corpse_Discard" , "Macrophyte"),
+            selected = "Nutrient_Phytoplankton"
+          ),
+        ),
+        #Main Panel: plot map here in the future
+        mainPanel(
+          uiOutput("uiEco"))
+        )
     ),
     tabPanel(
       title = "Ecological plots",
@@ -796,6 +805,15 @@ ui <- navbarPage(
 )
 
 server <- function(input, output, session) {
+  output$uiEco <- renderUI({
+    switch(
+      input$outputEcoType,
+      "Nutrient_Phytoplankton" = 
+        tabsetPanel(type = "pills",
+                    tabPanel("Detritus", plotOutput("ecoPlot_nut_phyt_Detritus"))
+        )
+    )
+  })
   output$ui <- renderUI({
     model <- e2e_read(input$selectedlocation, input$selectedVariant)
     switch(
