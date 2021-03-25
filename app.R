@@ -13,6 +13,7 @@ library(shinyjs)
 #plan(multisession)
 
 source("createEcoplots.R")
+source("createCatchPlotPerGuild.R")
 
 ui <- navbarPage(
   "StrathE2E App",
@@ -145,7 +146,7 @@ ui <- navbarPage(
       ),
     ),
     tabPanel(
-      title = "Ecological plots new",
+      title = "Ecological plots",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -162,57 +163,34 @@ ui <- navbarPage(
           uiOutput("uiEco"))
         )
     ),
-    # tabPanel(
-    #   title = "Ecological plots",
-    #   h3(
-    #     "Plot daily data on ecological outputs from the model over the final year of a run"
-    #   ),
-    #    fluidRow(column(
-    #    6,
-    #    h3("ecoPlot_nut_phyt_Detritus"),
-    #    plotOutput("ecoPlot_nut_phyt_Detritus")
-    #  ),
-    #  column(
-    #     6,
-    #     h3("NUT_PHYT"),
-    #     plotOutput("ecoPlot_nut_phyt")
-    #   ),
-    #   column(
-    #     6,
-    #     h3("SEDIMENT"),
-    #     plotOutput("ecoPlot_sediment")
-    #   )),
-    #   fluidRow(column(
-    #     6,
-    #     h3("ZOOPLANKTON"),
-    #     plotOutput("ecoPlot_zooplankton")
-    #   ),
-    #   column(
-    #     6,
-    #     h3("FISH"),
-    #     plotOutput("ecoPlot_fish")
-    #   )),
-    #   fluidRow(column(
-    #     6,
-    #     h3("BENTHOS"),
-    #     plotOutput("ecoPlot_benthos")
-    #   ),
-    #   column(
-    #     6,
-    #     h3("PREDATORS"),
-    #     plotOutput("ecoPlot_predators")
-    #   )),
-    #   fluidRow(column(
-    #     6,
-    #     h3("CORP_DISC"),
-    #     plotOutput("ecoPlot_corp_disc")
-    #   ),
-    #   column(
-    #     6,
-    #     h3("MACROPHYTE"),
-    #     plotOutput("ecoPlot_macrophyte")
-    #   )),
-    # ),
+    tabPanel(
+      title = "Catch plots per guild",
+      sidebarLayout(
+        sidebarPanel(
+          selectInput(
+            "outputCatchType",
+            h4("Guild"),
+            choices
+            = list(
+              "Pelagic",
+              "Demersal",
+              "Migratory",
+              "Filtben",
+              "Carnben",
+              "Carnzoo",
+              "Bird",
+              "Seal",
+              "Ceta",
+              "Kelp"
+            ),
+            selected = "Pelagic"
+          ),
+        ),
+        #Main Panel: plot map here in the future
+        mainPanel(
+          uiOutput("uiCatchGuild"))
+      )
+    ),
     tabPanel(
       title = "Catch plots",
       h3(
@@ -805,6 +783,14 @@ ui <- navbarPage(
 )
 
 server <- function(input, output, session) {
+  
+  output$uiCatchGuild <- renderUI({
+    switch(
+      input$outputCatchType,
+      "Pelagic" =
+        fluidRow(plotOutput("ecoPlot_catch_gear_1"))
+    )
+  })
 
   output$uiEco <- renderUI({
     switch(
@@ -3944,6 +3930,15 @@ server <- function(input, output, session) {
           results = results_baseline,
           selection = "MACROPHYTE",
           subSelection = "Inshore macrophyte debris"
+        )
+      })
+    
+    output$ecoPlot_catch_gear_1 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 1
         )
       })
     
