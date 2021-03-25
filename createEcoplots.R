@@ -3,6 +3,9 @@
 createEcoplots	<- function( model, results, selection, subSelection ) {
   elt <- StrathE2E2:::elt
   fyplot3 <-StrathE2E2:::fyplot3
+  fyplot3_hab <-StrathE2E2:::fyplot3_hab
+  fyplot2 <-StrathE2E2:::fyplot2
+  fyplot1 <-StrathE2E2:::fyplot1
   start_par = par()$mfrow
   on.exit(par(mfrow = start_par))
   build <- elt(results, "build")

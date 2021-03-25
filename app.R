@@ -153,7 +153,7 @@ ui <- navbarPage(
             h4("Ecological Output Type"),
             choices
             = list("Nutrient_Phytoplankton", "Sediment", "Zooplankton" , 
-                   "Fish" , "Benthos" , "Preadators", "Corpse_Discard" , "Macrophyte"),
+                   "Fish" , "Benthos" , "Predators", "Corpse_Discard" , "Macrophyte"),
             selected = "Nutrient_Phytoplankton"
           ),
         ),
@@ -162,57 +162,57 @@ ui <- navbarPage(
           uiOutput("uiEco"))
         )
     ),
-    tabPanel(
-      title = "Ecological plots",
-      h3(
-        "Plot daily data on ecological outputs from the model over the final year of a run"
-      ),
-      fluidRow(column(
-        6,
-        h3("ecoPlot_nut_phyt_Detritus"),
-        plotOutput("ecoPlot_nut_phyt_Detritus")
-      ),
-      column(
-        6,
-        h3("NUT_PHYT"),
-        plotOutput("ecoPlot_nut_phyt")
-      ),
-      column(
-        6,
-        h3("SEDIMENT"),
-        plotOutput("ecoPlot_sediment")
-      )),
-      fluidRow(column(
-        6,
-        h3("ZOOPLANKTON"),
-        plotOutput("ecoPlot_zooplankton")
-      ),
-      column(
-        6,
-        h3("FISH"),
-        plotOutput("ecoPlot_fish")
-      )),
-      fluidRow(column(
-        6,
-        h3("BENTHOS"),
-        plotOutput("ecoPlot_benthos")
-      ),
-      column(
-        6,
-        h3("PREDATORS"),
-        plotOutput("ecoPlot_predators")
-      )),
-      fluidRow(column(
-        6,
-        h3("CORP_DISC"),
-        plotOutput("ecoPlot_corp_disc")
-      ),
-      column(
-        6,
-        h3("MACROPHYTE"),
-        plotOutput("ecoPlot_macrophyte")
-      )),
-    ),
+    # tabPanel(
+    #   title = "Ecological plots",
+    #   h3(
+    #     "Plot daily data on ecological outputs from the model over the final year of a run"
+    #   ),
+    #    fluidRow(column(
+    #    6,
+    #    h3("ecoPlot_nut_phyt_Detritus"),
+    #    plotOutput("ecoPlot_nut_phyt_Detritus")
+    #  ),
+    #  column(
+    #     6,
+    #     h3("NUT_PHYT"),
+    #     plotOutput("ecoPlot_nut_phyt")
+    #   ),
+    #   column(
+    #     6,
+    #     h3("SEDIMENT"),
+    #     plotOutput("ecoPlot_sediment")
+    #   )),
+    #   fluidRow(column(
+    #     6,
+    #     h3("ZOOPLANKTON"),
+    #     plotOutput("ecoPlot_zooplankton")
+    #   ),
+    #   column(
+    #     6,
+    #     h3("FISH"),
+    #     plotOutput("ecoPlot_fish")
+    #   )),
+    #   fluidRow(column(
+    #     6,
+    #     h3("BENTHOS"),
+    #     plotOutput("ecoPlot_benthos")
+    #   ),
+    #   column(
+    #     6,
+    #     h3("PREDATORS"),
+    #     plotOutput("ecoPlot_predators")
+    #   )),
+    #   fluidRow(column(
+    #     6,
+    #     h3("CORP_DISC"),
+    #     plotOutput("ecoPlot_corp_disc")
+    #   ),
+    #   column(
+    #     6,
+    #     h3("MACROPHYTE"),
+    #     plotOutput("ecoPlot_macrophyte")
+    #   )),
+    # ),
     tabPanel(
       title = "Catch plots",
       h3(
@@ -805,15 +805,67 @@ ui <- navbarPage(
 )
 
 server <- function(input, output, session) {
+
   output$uiEco <- renderUI({
     switch(
       input$outputEcoType,
-      "Nutrient_Phytoplankton" = 
-        tabsetPanel(type = "pills",
-                    tabPanel("Detritus", plotOutput("ecoPlot_nut_phyt_Detritus"))
-        )
+      "Nutrient_Phytoplankton" =
+        fluidRow(tabsetPanel(type = "pills",
+                    tabPanel("Detritus", plotOutput("ecoPlot_nut_phyt_Detritus")),
+                    tabPanel("Ammonia", plotOutput("ecoPlot_nut_phyt_Ammonia")),
+                    tabPanel("Nitrate", plotOutput("ecoPlot_nut_phyt_Nitrate")),
+                    tabPanel("Phytoplankton", plotOutput("ecoPlot_nut_phyt_Phytoplankton"))
+        )),
+      "Sediment" =
+        fluidRow(tabsetPanel(type = "pills",
+                    tabPanel("Inshore ammonia", plotOutput("ecoPlot_sediment_InAmm")),
+                    tabPanel("Offshore ammonia", plotOutput("ecoPlot_sediment_OffAmm")),
+                    tabPanel("Inshore nitrate", plotOutput("ecoPlot_sediment_InNit")),
+                    tabPanel("Offshore nitrate", plotOutput("ecoPlot_sediment_OffNit")),
+                    tabPanel("Inshore detritus", plotOutput("ecoPlot_sediment_InDet")),
+                    tabPanel("Offshore detritus", plotOutput("ecoPlot_sediment_OffDet")),
+                    tabPanel("Inshore corpses", plotOutput("ecoPlot_sediment_InCorp")),
+                    tabPanel("Offshore corpses", plotOutput("ecoPlot_sediment_OffCorp"))
+        )),
+      "Zooplankton" =
+        fluidRow(tabsetPanel(type = "pills",
+                             tabPanel("Omnivorous zooplankton", plotOutput("ecoPlot_zooplankton_OmnZoo")),
+                             tabPanel("Carnivorous zooplankton", plotOutput("ecoPlot_zooplankton_CarnZoo"))
+        )),
+      "Fish" =
+        fluidRow(tabsetPanel(type = "pills",
+                             tabPanel("Planktivorous fish", plotOutput("ecoPlot_fish_PlankFish")),
+                             tabPanel("Planktivorous fish larvae", plotOutput("ecoPlot_fish_PlankFishLarv")),
+                             tabPanel("Demersal fish", plotOutput("ecoPlot_fish_DemFish")),
+                             tabPanel("Demersal fish larvae", plotOutput("ecoPlot_fish_DemFishLarv"))
+        )),
+      "Benthos" =
+        fluidRow(tabsetPanel(type = "pills",
+                             tabPanel("Benthos susp/dep feeders", plotOutput("ecoPlot_benthos_BenSusFeed")),
+                             tabPanel("Benthos susp/dep feeders larvae", plotOutput("ecoPlot_benthos_BenSusFeedLarv")),
+                             tabPanel("Benthos carn/scav feeders", plotOutput("ecoPlot_benthos_BenCarnFeed")),
+                             tabPanel("Benthos carn/scav feeders larvae", plotOutput("ecoPlot_benthos_BenCarnFeedLarv"))
+        )),
+      "Predators" =
+        fluidRow(tabsetPanel(type = "pills",
+                             tabPanel("Birds", plotOutput("ecoPlot_predator_birds")),
+                             tabPanel("Pinnipeds", plotOutput("ecoPlot_predator_pinnipeds")),
+                             tabPanel("Cetaceans", plotOutput("ecoPlot_predator_cetaceans")),
+                             tabPanel("Migratory fish", plotOutput("ecoPlot_predator_migFish"))
+        )),
+      "Corpse_Discard" =
+        fluidRow(tabsetPanel(type = "pills",
+                             tabPanel("Corpses", plotOutput("ecoPlot_corpdisc_corpses")),
+                             tabPanel("Discards", plotOutput("ecoPlot_corpdisc_discard"))
+        )),
+      "Macrophyte" =
+        fluidRow(tabsetPanel(type = "pills",
+                             tabPanel("Inshore macrophytes", plotOutput("ecoPlot_macrophyte_inshore")),
+                             tabPanel("Inshore macrophyte debris", plotOutput("ecoPlot_macrophyte_inshoreDeb"))
+        ))
     )
   })
+  
   output$ui <- renderUI({
     model <- e2e_read(input$selectedlocation, input$selectedVariant)
     switch(
@@ -3597,99 +3649,301 @@ server <- function(input, output, session) {
           subSelection = "Detritus"
         )
       })
-    output$ecoPlot_nut_phyt <-
+    output$ecoPlot_nut_phyt_Ammonia <-
       renderPlot({
-        e2e_plot_eco(
+        createEcoplots(
           model,
+          results = results_baseline,
           selection = "NUT_PHYT",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_baseline
+          subSelection = "Ammonia"
+        )
+      })
+    output$ecoPlot_nut_phyt_Nitrate <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "NUT_PHYT",
+          subSelection = "Nitrate"
+        )
+      })
+    output$ecoPlot_nut_phyt_Phytoplankton <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "NUT_PHYT",
+          subSelection = "Phytoplankton"
         )
       })
     
-    output$ecoPlot_sediment <-
+    output$ecoPlot_sediment_InAmm <-
       renderPlot({
-        e2e_plot_eco(
+        createEcoplots(
           model,
+          results = results_baseline,
           selection = "SEDIMENT",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_baseline
+          subSelection = "Inshore ammonia"
         )
       })
     
-    output$ecoPlot_zooplankton <-
+    output$ecoPlot_sediment_OffAmm <-
       renderPlot({
-        e2e_plot_eco(
+        createEcoplots(
           model,
+          results = results_baseline,
+          selection = "SEDIMENT",
+          subSelection = "Offshore ammonia"
+        )
+      })
+    
+    output$ecoPlot_sediment_InNit <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "SEDIMENT",
+          subSelection = "Inshore nitrate"
+        )
+      })
+    
+    output$ecoPlot_sediment_OffNit <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "SEDIMENT",
+          subSelection = "Offshore nitrate"
+        )
+      })
+    
+    output$ecoPlot_sediment_InDet <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "SEDIMENT",
+          subSelection = "Inshore detritus"
+        )
+      })
+    
+    output$ecoPlot_sediment_OffDet <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "SEDIMENT",
+          subSelection = "Offshore detritus"
+        )
+      })
+    
+    output$ecoPlot_sediment_InCorp <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "SEDIMENT",
+          subSelection = "Inshore corpses"
+        )
+      })
+    
+    output$ecoPlot_sediment_OffCorp <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "SEDIMENT",
+          subSelection = "Offshore corpses"
+        )
+      })
+    
+    output$ecoPlot_zooplankton_OmnZoo <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
           selection = "ZOOPLANKTON",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_baseline
+          subSelection = "Omnivorous zooplankton"
         )
       })
     
-    output$ecoPlot_fish <-
+    output$ecoPlot_zooplankton_CarnZoo <-
       renderPlot({
-        e2e_plot_eco(
+        createEcoplots(
           model,
+          results = results_baseline,
+          selection = "ZOOPLANKTON",
+          subSelection = "Carnivorous zooplankton"
+        )
+      })
+    
+    output$ecoPlot_fish_PlankFish <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
           selection = "FISH",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_baseline
+          subSelection = "Planktivorous fish"
         )
       })
     
-    output$ecoPlot_benthos <-
+    output$ecoPlot_fish_PlankFishLarv <-
       renderPlot({
-        e2e_plot_eco(
+        createEcoplots(
           model,
+          results = results_baseline,
+          selection = "FISH",
+          subSelection = "Planktivorous fish larvae"
+        )
+      })
+    
+    output$ecoPlot_fish_DemFish <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "FISH",
+          subSelection = "Demersal fish"
+        )
+      })
+    
+    output$ecoPlot_fish_DemFishLarv <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "FISH",
+          subSelection = "Demersal fish larvae"
+        )
+      })
+    
+    output$ecoPlot_benthos_BenSusFeed <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
           selection = "BENTHOS",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_baseline
+          subSelection = "Benthos susp/dep feeders"
         )
       })
     
-    output$ecoPlot_predators <-
+    output$ecoPlot_benthos_BenSusFeedLarv <-
       renderPlot({
-        e2e_plot_eco(
+        createEcoplots(
           model,
+          results = results_baseline,
+          selection = "BENTHOS",
+          subSelection = "Benthos susp/dep feeders larvae"
+        )
+      })
+    
+    output$ecoPlot_benthos_BenCarnFeed <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "BENTHOS",
+          subSelection = "Benthos carn/scav feeders"
+        )
+      })
+    
+    output$ecoPlot_benthos_BenCarnFeed <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "BENTHOS",
+          subSelection = "Benthos carn/scav feeders"
+        )
+      })
+    
+    output$ecoPlot_benthos_BenCarnFeedLarv <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "BENTHOS",
+          subSelection = "Benthos carn/scav feeders larvae"
+        )
+      })
+    
+    output$ecoPlot_predator_birds <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
           selection = "PREDATORS",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_baseline
+          subSelection = "Birds"
         )
       })
     
-    output$ecoPlot_corp_disc <-
+    output$ecoPlot_predator_pinnipeds <-
       renderPlot({
-        e2e_plot_eco(
+        createEcoplots(
           model,
+          results = results_baseline,
+          selection = "PREDATORS",
+          subSelection = "Pinnipeds"
+        )
+      })
+    
+    output$ecoPlot_predator_cetaceans <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "PREDATORS",
+          subSelection = "Cetaceans"
+        )
+      })
+    
+    output$ecoPlot_predator_migFish <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "PREDATORS",
+          subSelection = "Migratory fish"
+        )
+      })
+    
+    output$ecoPlot_corpdisc_corpses <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
           selection = "CORP_DISC",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_baseline
+          subSelection = "Corpses"
         )
       })
     
-    output$ecoPlot_macrophyte <-
+    output$ecoPlot_corpdisc_discard <-
       renderPlot({
-        e2e_plot_eco(
+        createEcoplots(
           model,
+          results = results_baseline,
+          selection = "CORP_DISC",
+          subSelection = "Discards"
+        )
+      })
+    
+    output$ecoPlot_macrophyte_inshore <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
           selection = "MACROPHYTE",
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_baseline
+          subSelection = "Inshore macrophytes"
+        )
+      })
+    
+    output$ecoPlot_macrophyte_inshoreDeb <-
+      renderPlot({
+        createEcoplots(
+          model,
+          results = results_baseline,
+          selection = "MACROPHYTE",
+          subSelection = "Inshore macrophyte debris"
         )
       })
     
