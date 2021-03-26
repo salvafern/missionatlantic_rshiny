@@ -37,6 +37,10 @@ createCatchPlotPerGuild	<- function( model, results, dsa ) {
   barplot(inshore_data2plot, col = c("grey", "blue"),
           add = T, width = rep(0.4, 12), space = c(1.5, rep(1.2,
                                                             11)), yaxt = "n", xaxt = "n", ann = FALSE)
+  legend(grconvertX(0.15, "ndc", "user"), grconvertY(0.05,
+                                                     "ndc", "user"), c("offshore landings", "offshore discards",
+                                                                       "inshore landings", "inshore discards"), fill = c("green",
+                                                                                                                         "black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
   }
   if(dsa == 12){
   mt <- "All guilds combined"
