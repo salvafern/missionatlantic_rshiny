@@ -14,6 +14,7 @@ library(shinyjs)
 
 source("createEcoplots.R")
 source("createCatchPlotPerGuild.R")
+source("createCatchPlotPerGear.R")
 
 ui <- navbarPage(
   "StrathE2E App",
@@ -191,6 +192,35 @@ ui <- navbarPage(
         #Main Panel: plot map here in the future
         mainPanel(
           uiOutput("uiCatchGuild"))
+      )
+    ),
+    tabPanel(
+      title = "Catch plots per gear",
+      sidebarLayout(
+        sidebarPanel(
+          selectInput(
+            "outputGearType",
+            h4("Gear"),
+            choices
+            = list(
+              "Fash",
+              "More fash"
+              # "Non quota demersal fish",
+              # "Migratory fish",
+              # "Susp/deposit feeding benthos",
+              # "Carn/scavebge feeding benthos",
+              # "Pelagic invertebrates",
+              # "Birds",
+              # "Pinnipeds",
+              # "Cetaceans",
+              # "Macrophytes",
+              # "All guilds combined"
+            ),
+            selected = "Planktivorous fish"
+          ),
+        ),
+        mainPanel(
+          uiOutput("uiCatchGear"))
       )
     ),
     tabPanel(
@@ -788,18 +818,36 @@ server <- function(input, output, session) {
   output$uiCatchGuild <- renderUI({
     switch(
       input$outputCatchType,
-      "Planktivorous fish" = fluidRow(plotOutput("ecoPlot_catch_gear_1")),
-      "Quota limited Demersal fish" = fluidRow(plotOutput("ecoPlot_catch_gear_2")),
-      "Non quota demersal fish" = fluidRow(plotOutput("ecoPlot_catch_gear_3")),
-      "Migratory fish" = fluidRow(plotOutput("ecoPlot_catch_gear_4")),
-      "Susp/deposit feeding benthos" = fluidRow(plotOutput("ecoPlot_catch_gear_5")),
-      "Carn/scavebge feeding benthos" = fluidRow(plotOutput("ecoPlot_catch_gear_6")),
-      "Pelagic invertebrates" = fluidRow(plotOutput("ecoPlot_catch_gear_7")),
-      "Birds" = fluidRow(plotOutput("ecoPlot_catch_gear_8")),
-      "Pinnipeds" = fluidRow(plotOutput("ecoPlot_catch_gear_9")),
-      "Cetaceans" = fluidRow(plotOutput("ecoPlot_catch_gear_10")),
-      "Macrophytes" = fluidRow(plotOutput("ecoPlot_catch_gear_11")),
-      "All guilds combined" = fluidRow(plotOutput("ecoPlot_catch_gear_12"))
+      "Planktivorous fish" = fluidRow(plotOutput("ecoPlot_catch_guild_1")),
+      "Quota limited Demersal fish" = fluidRow(plotOutput("ecoPlot_catch_guild_2")),
+      "Non quota demersal fish" = fluidRow(plotOutput("ecoPlot_catch_guild_3")),
+      "Migratory fish" = fluidRow(plotOutput("ecoPlot_catch_guild_4")),
+      "Susp/deposit feeding benthos" = fluidRow(plotOutput("ecoPlot_catch_guild_5")),
+      "Carn/scavebge feeding benthos" = fluidRow(plotOutput("ecoPlot_catch_guild_6")),
+      "Pelagic invertebrates" = fluidRow(plotOutput("ecoPlot_catch_guild_7")),
+      "Birds" = fluidRow(plotOutput("ecoPlot_catch_guild_8")),
+      "Pinnipeds" = fluidRow(plotOutput("ecoPlot_catch_guild_9")),
+      "Cetaceans" = fluidRow(plotOutput("ecoPlot_catch_guild_10")),
+      "Macrophytes" = fluidRow(plotOutput("ecoPlot_catch_guild_11")),
+      "All guilds combined" = fluidRow(plotOutput("ecoPlot_catch_guild_12"))
+    )
+  })
+  
+  output$uiCatchGear <- renderUI({
+    switch(
+      input$outputGearType,
+      "Fash" = fluidRow(plotOutput("ecoPlot_catch_gear_1")),
+      "More fash" = fluidRow(plotOutput("ecoPlot_catch_gear_2"))
+      # "Non quota demersal fish" = fluidRow(plotOutput("ecoPlot_catch_gear_3")),
+      # "Migratory fish" = fluidRow(plotOutput("ecoPlot_catch_gear_4")),
+      # "Susp/deposit feeding benthos" = fluidRow(plotOutput("ecoPlot_catch_gear_5")),
+      # "Carn/scavebge feeding benthos" = fluidRow(plotOutput("ecoPlot_catch_gear_6")),
+      # "Pelagic invertebrates" = fluidRow(plotOutput("ecoPlot_catch_gear_7")),
+      # "Birds" = fluidRow(plotOutput("ecoPlot_catch_gear_8")),
+      # "Pinnipeds" = fluidRow(plotOutput("ecoPlot_catch_gear_9")),
+      # "Cetaceans" = fluidRow(plotOutput("ecoPlot_catch_gear_10")),
+      # "Macrophytes" = fluidRow(plotOutput("ecoPlot_catch_gear_11")),
+      # "All guilds combined" = fluidRow(plotOutput("ecoPlot_catch_gear_12"))
     )
   })
 
@@ -3944,7 +3992,7 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_1 <- 
+    output$ecoPlot_catch_guild_1 <- 
       renderPlot({
         createCatchPlotPerGuild(
           model,
@@ -3953,7 +4001,7 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_2 <- 
+    output$ecoPlot_catch_guild_2 <- 
       renderPlot({
         createCatchPlotPerGuild(
           model,
@@ -3962,7 +4010,7 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_3 <- 
+    output$ecoPlot_catch_guild_3 <- 
       renderPlot({
         createCatchPlotPerGuild(
           model,
@@ -3971,7 +4019,7 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_4 <- 
+    output$ecoPlot_catch_guild_4 <- 
       renderPlot({
         createCatchPlotPerGuild(
           model,
@@ -3980,7 +4028,7 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_5 <- 
+    output$ecoPlot_catch_guild_5 <- 
       renderPlot({
         createCatchPlotPerGuild(
           model,
@@ -3989,7 +4037,7 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_6 <- 
+    output$ecoPlot_catch_guild_6 <- 
       renderPlot({
         createCatchPlotPerGuild(
           model,
@@ -3998,7 +4046,7 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_7 <- 
+    output$ecoPlot_catch_guild_7 <- 
       renderPlot({
         createCatchPlotPerGuild(
           model,
@@ -4007,7 +4055,7 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_8 <- 
+    output$ecoPlot_catch_guild_8 <- 
       renderPlot({
         createCatchPlotPerGuild(
           model,
@@ -4016,7 +4064,7 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_9 <- 
+    output$ecoPlot_catch_guild_9 <- 
       renderPlot({
         createCatchPlotPerGuild(
           model,
@@ -4025,7 +4073,7 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_10 <- 
+    output$ecoPlot_catch_guild_10 <- 
       renderPlot({
         createCatchPlotPerGuild(
           model,
@@ -4034,7 +4082,7 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_11 <- 
+    output$ecoPlot_catch_guild_11 <- 
       renderPlot({
         createCatchPlotPerGuild(
           model,
@@ -4043,9 +4091,117 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_12 <- 
+    output$ecoPlot_catch_guild_12 <- 
       renderPlot({
         createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 12
+        )
+      })
+    
+    output$ecoPlot_catch_gear_1 <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 1
+        )
+      })
+    
+    output$ecoPlot_catch_gear_2 <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 2
+        )
+      })
+    
+    output$ecoPlot_catch_gear_3 <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 3
+        )
+      })
+    
+    output$ecoPlot_catch_gear_4 <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 4
+        )
+      })
+    
+    output$ecoPlot_catch_gear_5 <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 5
+        )
+      })
+    
+    output$ecoPlot_catch_gear_6 <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 6
+        )
+      })
+    
+    output$ecoPlot_catch_gear_7 <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 7
+        )
+      })
+    
+    output$ecoPlot_catch_gear_8 <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 8
+        )
+      })
+    
+    output$ecoPlot_catch_gear_9 <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 9
+        )
+      })
+    
+    output$ecoPlot_catch_gear_10 <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 10
+        )
+      })
+    
+    output$ecoPlot_catch_gear_11 <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 11
+        )
+      })
+    
+    output$ecoPlot_catch_gear_12 <- 
+      renderPlot({
+        createCatchPlotPerGear(
           model,
           results = results_baseline,
           dsa = 12
