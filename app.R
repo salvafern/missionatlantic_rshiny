@@ -172,18 +172,20 @@ ui <- navbarPage(
             h4("Guild"),
             choices
             = list(
-              "Pelagic",
-              "Demersal",
-              "Migratory",
-              "Filtben",
-              "Carnben",
-              "Carnzoo",
-              "Bird",
-              "Seal",
-              "Ceta",
-              "Kelp"
+              "Planktivorous fish",
+              "Quota limited Demersal fish",
+              "Non quota demersal fish",
+              "Migratory fish",
+              "Susp/deposit feeding benthos",
+              "Carn/scavebge feeding benthos",
+              "Pelagic invertebrates",
+              "Birds",
+              "Pinnipeds",
+              "Cetaceans",
+              "Macrophytes",
+              "All guilds combined"
             ),
-            selected = "Pelagic"
+            selected = "Planktivorous fish"
           ),
         ),
         #Main Panel: plot map here in the future
@@ -783,12 +785,21 @@ ui <- navbarPage(
 )
 
 server <- function(input, output, session) {
-  
   output$uiCatchGuild <- renderUI({
     switch(
       input$outputCatchType,
-      "Pelagic" =
-        fluidRow(plotOutput("ecoPlot_catch_gear_1"))
+      "Planktivorous Fish" = fluidRow(plotOutput("ecoPlot_catch_gear_1")),
+      "Quota limited Demersal fish" = fluidRow(plotOutput("ecoPlot_catch_gear_2")),
+      "Non quota demersal fish" = fluidRow(plotOutput("ecoPlot_catch_gear_3")),
+      "Migratory fish" = fluidRow(plotOutput("ecoPlot_catch_gear_4")),
+      "Susp/deposit feeding benthos" = fluidRow(plotOutput("ecoPlot_catch_gear_5")),
+      "Carn/scavebge feeding benthos" = fluidRow(plotOutput("ecoPlot_catch_gear_6")),
+      "Pelagic invertebrates" = fluidRow(plotOutput("ecoPlot_catch_gear_7")),
+      "Birds" = fluidRow(plotOutput("ecoPlot_catch_gear_8")),
+      "Pinnipeds" = fluidRow(plotOutput("ecoPlot_catch_gear_9")),
+      "Cetaceans" = fluidRow(plotOutput("ecoPlot_catch_gear_10")),
+      "Macrophytes" = fluidRow(plotOutput("ecoPlot_catch_gear_11")),
+      "All guilds combined" = fluidRow(plotOutput("ecoPlot_catch_gear_12"))
     )
   })
 
@@ -3939,6 +3950,105 @@ server <- function(input, output, session) {
           model,
           results = results_baseline,
           dsa = 1
+        )
+      })
+    
+    output$ecoPlot_catch_gear_2 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 2
+        )
+      })
+    
+    output$ecoPlot_catch_gear_3 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 3
+        )
+      })
+    
+    output$ecoPlot_catch_gear_4 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 4
+        )
+      })
+    
+    output$ecoPlot_catch_gear_5 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 5
+        )
+      })
+    
+    output$ecoPlot_catch_gear_6 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 6
+        )
+      })
+    
+    output$ecoPlot_catch_gear_7 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 7
+        )
+      })
+    
+    output$ecoPlot_catch_gear_8 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 8
+        )
+      })
+    
+    output$ecoPlot_catch_gear_9 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 9
+        )
+      })
+    
+    output$ecoPlot_catch_gear_10 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 10
+        )
+      })
+    
+    output$ecoPlot_catch_gear_11 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 11
+        )
+      })
+    
+    output$ecoPlot_catch_gear_12 <- 
+      renderPlot({
+        createCatchPlotPerGuild(
+          model,
+          results = results_baseline,
+          dsa = 12
         )
       })
     
