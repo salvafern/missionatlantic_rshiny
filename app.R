@@ -788,7 +788,7 @@ server <- function(input, output, session) {
   output$uiCatchGuild <- renderUI({
     switch(
       input$outputCatchType,
-      "Planktivorous Fish" = fluidRow(plotOutput("ecoPlot_catch_gear_1")),
+      "Planktivorous fish" = fluidRow(plotOutput("ecoPlot_catch_gear_1")),
       "Quota limited Demersal fish" = fluidRow(plotOutput("ecoPlot_catch_gear_2")),
       "Non quota demersal fish" = fluidRow(plotOutput("ecoPlot_catch_gear_3")),
       "Migratory fish" = fluidRow(plotOutput("ecoPlot_catch_gear_4")),
