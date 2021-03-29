@@ -203,20 +203,20 @@ ui <- navbarPage(
             h4("Gear"),
             choices
             = list(
-              "Fash",
-              "More fash"
-              # "Non quota demersal fish",
-              # "Migratory fish",
-              # "Susp/deposit feeding benthos",
-              # "Carn/scavebge feeding benthos",
-              # "Pelagic invertebrates",
-              # "Birds",
-              # "Pinnipeds",
-              # "Cetaceans",
-              # "Macrophytes",
-              # "All guilds combined"
+              "Pelagic_Trawl+Seine",
+              "Sandeel+sprat_trawl(Otter30-70mm+TR3)",
+              "Longline_mackerel",
+              "Beam_Trawl_BT1+BT2",
+              "Demeral_Seine",
+              "Demersal_Otter_Trawl_TR1",
+              "Gill_Nets+Longline_demersal",
+              "Beam_Trawl_shrimp",
+              "Nephrops_Trawl_TR2",
+              "Creels",
+              "Mollusc_Dredge",
+              "Whaler"
             ),
-            selected = "Planktivorous fish"
+            selected = "Pelagic_Trawl+Seine"
           ),
         ),
         mainPanel(
@@ -836,18 +836,18 @@ server <- function(input, output, session) {
   output$uiCatchGear <- renderUI({
     switch(
       input$outputGearType,
-      "Fash" = fluidRow(plotOutput("ecoPlot_catch_gear_1")),
-      "More fash" = fluidRow(plotOutput("ecoPlot_catch_gear_2"))
-      # "Non quota demersal fish" = fluidRow(plotOutput("ecoPlot_catch_gear_3")),
-      # "Migratory fish" = fluidRow(plotOutput("ecoPlot_catch_gear_4")),
-      # "Susp/deposit feeding benthos" = fluidRow(plotOutput("ecoPlot_catch_gear_5")),
-      # "Carn/scavebge feeding benthos" = fluidRow(plotOutput("ecoPlot_catch_gear_6")),
-      # "Pelagic invertebrates" = fluidRow(plotOutput("ecoPlot_catch_gear_7")),
-      # "Birds" = fluidRow(plotOutput("ecoPlot_catch_gear_8")),
-      # "Pinnipeds" = fluidRow(plotOutput("ecoPlot_catch_gear_9")),
-      # "Cetaceans" = fluidRow(plotOutput("ecoPlot_catch_gear_10")),
-      # "Macrophytes" = fluidRow(plotOutput("ecoPlot_catch_gear_11")),
-      # "All guilds combined" = fluidRow(plotOutput("ecoPlot_catch_gear_12"))
+      "Pelagic_Trawl+Seine" = fluidRow(plotOutput("ecoPlot_catch_gear_1")),
+      "Sandeel+sprat_trawl(Otter30-70mm+TR3)" = fluidRow(plotOutput("ecoPlot_catch_gear_2")),
+      "Longline_mackerel" = fluidRow(plotOutput("ecoPlot_catch_gear_3")),
+      "Beam_Trawl_BT1+BT2" = fluidRow(plotOutput("ecoPlot_catch_gear_4")),
+      "Demeral_Seine" = fluidRow(plotOutput("ecoPlot_catch_gear_5")),
+      "Demersal_Otter_Trawl_TR1" = fluidRow(plotOutput("ecoPlot_catch_gear_6")),
+      "Gill_Nets+Longline_demersal" = fluidRow(plotOutput("ecoPlot_catch_gear_7")),
+      "Beam_Trawl_shrimp" = fluidRow(plotOutput("ecoPlot_catch_gear_8")),
+      "Nephrops_Trawl_TR2" = fluidRow(plotOutput("ecoPlot_catch_gear_9")),
+      "Creels" = fluidRow(plotOutput("ecoPlot_catch_gear_10")),
+      "Mollusc_Dredge" = fluidRow(plotOutput("ecoPlot_catch_gear_11")),
+      "Whaler" = fluidRow(plotOutput("ecoPlot_catch_gear_12"))
     )
   })
 
