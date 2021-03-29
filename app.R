@@ -224,32 +224,17 @@ ui <- navbarPage(
       )
     ),
     tabPanel(
-      title = "Catch plots",
+      title = "Edrivers",
       h3(
-        "Plot the distribution and composition of annual catches across guild, zones and gears in the final year of a model run"
+        "Edrivers"
       ),
       fluidRow(column(
         6,
-        h3("Catch plots per gear"),
-        plotOutput("ecoPlot_catch_gear")
-      ),
-      column(
-        6,
-        h3("Catch plots per guild"),
-        plotOutput("ecoPlot_catch_guild")
+        h3("Edriver plots"),
+        plotOutput("basePlot_edriver")
       )),
-    ),
-    tabPanel(
-      title = "Biomass density plots",
-      h3(
-        "Plot showing the annual average biomass densities of each guild in the inshore and offshore zones"
-      ),
-      fluidRow(column(
-        6,
-        h3("Biomass plots"),
-        plotOutput("ecoPlot_biomass")
-      )),
-    )), 
+    )
+    ), 
   navbarMenu(
     "Scenario Setup",
     tabPanel(
@@ -4208,26 +4193,31 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear <-
+    output$basePlot_edriver <-
       renderPlot({
-        e2e_plot_catch(model, results_baseline, selection = "BY_GEAR")
+        e2e_plot_edrivers(model)
       })
     
-    output$ecoPlot_catch_guild <-
-      renderPlot({
-        e2e_plot_catch(model, results_baseline, selection = "BY_GUILD")
-      })
-    
-    output$ecoPlot_biomass <-
-      renderPlot({
-        e2e_plot_biomass(
-          model,
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_baseline
-        )
-      })
+    # output$ecoPlot_catch_gear <-
+    #   renderPlot({
+    #     e2e_plot_catch(model, results_baseline, selection = "BY_GEAR")
+    #   })
+    # 
+    # output$ecoPlot_catch_guild <-
+    #   renderPlot({
+    #     e2e_plot_catch(model, results_baseline, selection = "BY_GUILD")
+    #   })
+    # 
+    # output$ecoPlot_biomass <-
+    #   renderPlot({
+    #     e2e_plot_biomass(
+    #       model,
+    #       ci.data = FALSE,
+    #       use.saved = FALSE,
+    #       use.example = FALSE,
+    #       results = results_baseline
+    #     )
+    #   })
   })
   
   observeEvent(input$runScenario, {
