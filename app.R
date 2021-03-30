@@ -15,6 +15,7 @@ library(shinyjs)
 source("createEcoplots.R")
 source("createCatchPlotPerGuild.R")
 source("createCatchPlotPerGear.R")
+source("createEDriversPlots.R")
 
 ui <- navbarPage(
   "StrathE2E App",
@@ -144,7 +145,7 @@ ui <- navbarPage(
           )
         )
       )
-      ),
+      )
     ),
     tabPanel(
       title = "Ecological plots",
@@ -225,16 +226,59 @@ ui <- navbarPage(
     ),
     tabPanel(
       title = "Edrivers",
-      h3(
-        "Edrivers"
-      ),
-      fluidRow(column(
-        6,
-        h3("Edriver plots"),
-        plotOutput("basePlot_edriver")
-      )),
-    )
-    ), 
+      sidebarLayout(
+        sidebarPanel(
+          selectInput(
+            "edriverType",
+            h4("Edriver Type"),
+            choices
+            = list(
+              "Surface irradiance",
+              "Susp.partic. matter",
+              "Temperature",
+              "Diffusivity gradient",
+              "External Inflow",
+              "River discharge",
+              "Wave height",
+              "Sediment disturbance",
+              "Boundary nitrate",
+              "Boundary ammonia",
+              "Boundary phytoplankton",
+              "Boundary detritus",
+              "River nitrate",
+              "River ammonia",
+              "Atmospheric nitrate",
+              "Atmospheric ammonia"
+            ),
+            selected = "Surface irradiance"
+          ),
+        ),
+        mainPanel(
+          uiOutput("UiEdriver"))
+      )
+    ),
+    tabPanel(
+      title = "Fdrivers",
+      sidebarLayout(
+        sidebarPanel(
+          selectInput(
+            "fdriverType",
+            h4("Fdriver Type"),
+            choices
+            = list(
+              "Activity",
+              "Abrasion",
+              "HarvestR",
+              "Discards",
+              "Offal"
+            ),
+            selected = "Activity"
+          ),
+        ),
+        mainPanel(
+          uiOutput("UiFdriver"))
+      ))
+  ), 
   navbarMenu(
     "Scenario Setup",
     tabPanel(
@@ -833,6 +877,38 @@ server <- function(input, output, session) {
       "Creels" = fluidRow(plotOutput("ecoPlot_catch_gear_10")),
       "Mollusc_Dredge" = fluidRow(plotOutput("ecoPlot_catch_gear_11")),
       "Whaler" = fluidRow(plotOutput("ecoPlot_catch_gear_12"))
+    )
+  })
+  
+  output$UiEdriver <- renderUI({
+    switch(
+      input$edriverType,
+      "Surface irradiance" = fluidRow(plotOutput("edriver_plot_1")),
+      "Susp.partic. matter" = fluidRow(plotOutput("edriver_plot_2")),
+      "Temperature" = fluidRow(plotOutput("edriver_plot_3")),
+      "Diffusivity gradient" = fluidRow(plotOutput("edriver_plot_4")),
+      "External Inflow" = fluidRow(plotOutput("edriver_plot_5")),
+      "River discharge" = fluidRow(plotOutput("edriver_plot_6")),
+      "Wave height" = fluidRow(plotOutput("edriver_plot_7")),
+      "Sediment disturbance" = fluidRow(plotOutput("edriver_plot_8")),
+      "Boundary nitrate" = fluidRow(plotOutput("edriver_plot_9")),
+      "Boundary ammonia" = fluidRow(plotOutput("edriver_plot_10")),
+      "Boundary phytoplankton" = fluidRow(plotOutput("edriver_plot_11")),
+      "Boundary detritus" = fluidRow(plotOutput("edriver_plot_12")),
+      "River nitrate" = fluidRow(plotOutput("edriver_plot_13")),
+      "River ammonia" = fluidRow(plotOutput("edriver_plot_14")),
+      "Atmospheric nitrate" = fluidRow(plotOutput("edriver_plot_15")),
+      "Atmospheric ammonia" = fluidRow(plotOutput("edriver_plot_16"))
+    )
+  })
+  output$UiFdriver <- renderUI({
+    switch(
+      input$fdriverType,
+      "Activity" = fluidRow(plotOutput("basePlot_fdriver_activity")),
+      "Abrasion" = fluidRow(plotOutput("basePlot_fdriver_abrasion")),
+      "HarvestR" = fluidRow(plotOutput("basePlot_fdriver_harvestr")),
+      "Discards" = fluidRow(plotOutput("basePlot_fdriver_discards")),
+      "Offal" = fluidRow(plotOutput("basePlot_fdriver_offal"))
     )
   })
 
@@ -4193,9 +4269,157 @@ server <- function(input, output, session) {
         )
       })
     
-    output$basePlot_edriver <-
+    output$edriver_plot_1 <- 
       renderPlot({
-        e2e_plot_edrivers(model)
+        createEDriversPlots(
+          model,
+          selection = "Surface irradiance"
+        )
+      })
+    
+    output$edriver_plot_2 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "Susp.partic. matter"
+        )
+      })
+    
+    output$edriver_plot_3 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "Temperature"
+        )
+      })
+    
+    output$edriver_plot_4 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "Diffusivity gradient"
+        )
+      })
+    
+    output$edriver_plot_5 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "External Inflow"
+        )
+      })
+    
+    output$edriver_plot_6 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "River discharge"
+        )
+      })
+    
+    output$edriver_plot_7 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "Wave height"
+        )
+      })
+    
+    output$edriver_plot_8 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "Sediment disturbance"
+        )
+      })
+    
+    output$edriver_plot_9 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "Boundary nitrate"
+        )
+      })
+    
+    output$edriver_plot_10 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "Boundary ammonia"
+        )
+      })
+    
+    output$edriver_plot_11 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "Boundary phytoplankton"
+        )
+      })
+    
+    output$edriver_plot_12 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "Boundary detritus"
+        )
+      })
+    
+    output$edriver_plot_13 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "River nitrate"
+        )
+      })
+    
+    output$edriver_plot_14 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "River ammonia"
+        )
+      })
+    
+    output$edriver_plot_15 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "Atmospheric nitrate"
+        )
+      })
+    
+    output$edriver_plot_16 <- 
+      renderPlot({
+        createEDriversPlots(
+          model,
+          selection = "Atmospheric ammonia"
+        )
+      })
+    
+    output$basePlot_fdriver_activity <-
+      renderPlot({
+        e2e_plot_fdrivers(model, selection = "ACTIVITY")
+      })
+    
+    output$basePlot_fdriver_abrasion <-
+      renderPlot({
+        e2e_plot_fdrivers(model, selection = "ABRASION")
+      })
+    
+    output$basePlot_fdriver_harvestr <-
+      renderPlot({
+        e2e_plot_fdrivers(model, selection = "HARVESTR")
+      })
+    
+    output$basePlot_fdriver_discards <-
+      renderPlot({
+        e2e_plot_fdrivers(model, selection = "DISCARDS")
+      })
+    
+    output$basePlot_fdriver_offal <-
+      renderPlot({
+        e2e_plot_fdrivers(model, selection = "OFFAL")
       })
     
     # output$ecoPlot_catch_gear <-
