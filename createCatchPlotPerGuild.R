@@ -19,7 +19,11 @@ createCatchPlotPerGuild	<- function( model, results, dsa ) {
                               offshore_landmat[dsa, ])
   inshore_data2plot <- rbind(inshore_discmat[dsa, ], inshore_landmat[dsa, 
   ])
-  colnames(offshore_data2plot) <- gear_codes
+  #colnames(offshore_data2plot) <- gear_codes
+  gear_labels <- c("Pelagic_Trawl+Seine", "Sandeel+sprat_trawl", "Longline_mackerel",
+                    "Beam_Trawl_BT1+BT2", "Demeral_Seine", "Demersal_Otter_Trawl_TR1", 
+                    "Gill_Nets+Longline_demersal", "Beam_Trawl_shrimp", "Nephrops_Trawl_TR2", 
+                    "Creels", "Mollusc_Dredge", "Whaler")
   if (sum(offshore_data2plot + inshore_data2plot) > 0) {
     yaxmax <- (1.2 * max(c(offshore_catchmat[dsa, ], 
                            inshore_catchmat[dsa, ])))
@@ -29,17 +33,21 @@ createCatchPlotPerGuild	<- function( model, results, dsa ) {
   }
   barplot(offshore_data2plot, col = c("black", "green"), 
           ylim = c(0, yaxmax), xlim = c(0, 12), width = rep(0.4, 
-                                                            12), space = c(0.5, rep(1.2, 11)), yaxt = "n", 
+                                                            12), space = c(0.5, rep(1.2, 11)), yaxt = "n", xaxt = "n", 
           ann = FALSE, cex.axis = 0.6)
+   axis(1, labels = FALSE)
    axis(side = 2, las = 1, cex.axis = 0.9)
+   text(x = 1:12, y = 0, srt = 45, label = gear_labels, adj = 1,  xpd = NA, cex = 1.0)
    mtext("Catch", cex = 0.7, side = 2, line = 3.5)
    title(main = mt, cex.main = 1)
   barplot(inshore_data2plot, col = c("grey", "blue"),
           add = T, width = rep(0.4, 12), space = c(1.5, rep(1.2,
                                                             11)), yaxt = "n", xaxt = "n", ann = FALSE)
-  legend(grconvertX(0.15, "ndc", "user"), grconvertY(0.05,
-                                                     "ndc", "user"), c("offshore landings", "offshore discards",
-                                                                       "inshore landings", "inshore discards"), fill = c("green",
+  # legend(grconvertX(0.15, "ndc", "user"), grconvertY(0.05,
+  #                                                    "ndc", "user"), c("offshore landings", "offshore discards",
+  #                                                                      "inshore landings", "inshore discards"), fill = c("green",
+  #                                                                                                                        "black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
+  legend("topright", c("offshore landings", "offshore discards","inshore landings", "inshore discards"), fill = c("green",
                                                                                                                          "black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
   }
   if(dsa == 12){
@@ -53,17 +61,25 @@ createCatchPlotPerGuild	<- function( model, results, dsa ) {
   if (sum(offshore_data2plot + inshore_data2plot) == 0) {
     yaxmax <- 1
   }
+  gear_labels <- c("Pelagic_Trawl+Seine", "Sandeel+sprat_trawl", "Longline_mackerel",
+                   "Beam_Trawl_BT1+BT2", "Demeral_Seine", "Demersal_Otter_Trawl_TR1", 
+                   "Gill_Nets+Longline_demersal", "Beam_Trawl_shrimp", "Nephrops_Trawl_TR2", 
+                   "Creels", "Mollusc_Dredge", "Whaler")
   barplot(offshore_data2plot, col = c("black", "green"), ylim = c(0,
-                                                                  yaxmax), xlim = c(0, 12), width = rep(0.4, 12), space = c(0.5,                                                                                                                       rep(1.2, 11)), yaxt = "n", ann = FALSE, cex.axis = 0.5)
+                                                                  yaxmax), xlim = c(0, 12), width = rep(0.4, 12), space = c(0.5, rep(1.2, 11)), yaxt = "n", xaxt = "n", ann = FALSE, cex.axis = 0.5)
+
+  axis(1, labels = FALSE)
   axis(side = 2, las = 1, cex.axis = 0.9)
+  text(x = 1:12, y = 0, srt = 45, label = gear_labels, adj = 1,  xpd = NA, cex = 1.0)
   mtext("Catch", cex = 0.7, side = 2, line = 3.5)
   title(main = mt, cex.main = 1)
   barplot(inshore_data2plot, col = c("grey", "blue"), add = T,
           width = rep(0.4, 12), space = c(1.5, rep(1.2, 11)),
           yaxt = "n", xaxt = "n", ann = FALSE)
-  legend(grconvertX(0.15, "ndc", "user"), grconvertY(0.05,
-                                                     "ndc", "user"), c("offshore landings", "offshore discards",
-                                                                       "inshore landings", "inshore discards"), fill = c("green",
-                                                                                                                        "black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
-}
+  # legend(grconvertX(0.15, "ndc", "user"), grconvertY(0.05,
+  #                                                    "ndc", "user"), c("offshore landings", "offshore discards",
+  #                                                                      "inshore landings", "inshore discards"), fill = c("green",
+  #                                                                                                                       "black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
+  legend("topright", c("offshore landings", "offshore discards","inshore landings", "inshore discards"), fill = c("green","black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
+  }
 }

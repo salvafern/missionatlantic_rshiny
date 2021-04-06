@@ -225,12 +225,12 @@ ui <- navbarPage(
       )
     ),
     tabPanel(
-      title = "Edrivers",
+      title = "Environmental drivers",
       sidebarLayout(
         sidebarPanel(
           selectInput(
             "edriverType",
-            h4("Edriver Type"),
+            h4("Environmental driver Type"),
             choices
             = list(
               "Surface irradiance",
@@ -258,12 +258,12 @@ ui <- navbarPage(
       )
     ),
     tabPanel(
-      title = "Fdrivers",
+      title = "Fishery drivers",
       sidebarLayout(
         sidebarPanel(
           selectInput(
             "fdriverType",
-            h4("Fdriver Type"),
+            h4("Fishery driver Type"),
             choices
             = list(
               "Activity",

@@ -15,8 +15,8 @@ createCatchPlotPerGear	<- function( model, results, dsa ) {
                               offshore_landmat[, dsa])
   inshore_data2plot <- rbind(inshore_discmat[, dsa], inshore_landmat[,
                                                                      dsa])
-  colnames(offshore_data2plot) <- c("PF", "DFq", "DFnq",
-                                    "MF", "Bsd", "Bcs", "CZ", "BD", "PIN", "CT", "MP")
+ # colnames(offshore_data2plot) <- c("Planktivorous Fish", "DFq", "DFnq",
+  #                                  "MF", "Bsd", "Bcs", "CZ", "BD", "PIN", "CT", "MP")
   if (sum(offshore_data2plot + inshore_data2plot) > 0) {
     yaxmax <- (1.2 * max(c(offshore_catchmat[, dsa],
                            inshore_catchmat[, dsa])))
@@ -24,18 +24,24 @@ createCatchPlotPerGear	<- function( model, results, dsa ) {
   if (sum(offshore_data2plot + inshore_data2plot) == 0) {
     yaxmax <- 1
   }
-  barplot(offshore_data2plot, col = c("black", "green"),
+  guild_labels <- c("Planktivorous", "Demersal quota", "Demersal non-quota",
+                                    "Migratory", "Susp/deposit benthos", "Carn/scavenge benthos", "Pelagic invert", "Bird", "Pinnipeds", "Cetaceans", "Macrophytes")
+  b <- barplot(offshore_data2plot, col = c("black", "green"),
           ylim = c(0, yaxmax), xlim = c(0, 12), width = rep(0.5,
-                                                            11), space = c(0.5, rep(1.2, 10)), yaxt = "n",
+                                                            11), space = c(0.5, rep(1.2, 10)), yaxt = "n", xaxt = "n",
           ann = FALSE, cex.axis = 0.5)
+  axis(1, labels = FALSE)
   axis(side = 2, las = 1, cex.axis = 0.9)
+  #cat("par usr ",par("usr"))
+  text(x = 1:11, y = 0, srt = 45, label = guild_labels, adj = 1,  xpd = NA, cex = 1.0)
   mtext("Catch", cex = 0.7, side = 2, line = 3.5)
   title(main = mt, cex.main = 1, line = +0.02)
   barplot(inshore_data2plot, col = c("grey", "blue"),
           add = T, width = rep(0.5, 11), space = c(1.5, rep(1.2,
                                                             10)), yaxt = "n", xaxt = "n", ann = FALSE)
-legend(grconvertX(0.15, "ndc", "user"), grconvertY(0.05,
-                                                   "ndc", "user"), c("offshore landings", "offshore discards",
-                                                                     "inshore landings", "inshore discards"), fill = c("green",
-                                                                                                                       "black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
-}
+# legend(grconvertX(0.15, "ndc", "user"), grconvertY(0.05,
+#                                                    "ndc", "user"), c("offshore landings", "offshore discards",
+#                                                                      "inshore landings", "inshore discards"), fill = c("green",
+#                                                                                                                        "black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
+  legend("topright", c("offshore landings", "offshore discards","inshore landings", "inshore discards"), fill = c("green","black", "blue", "grey"), bty = "n", xpd = NA)
+  }
