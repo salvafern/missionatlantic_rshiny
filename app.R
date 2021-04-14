@@ -295,8 +295,7 @@ ui <- navbarPage(
             max = 3,
             value = 0.0,
             width = "100%"
-          ),
-          helpText("Additional temperature")
+          )
         ),
       ))
     ),
@@ -316,8 +315,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Atmospheric Nitrate")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -328,8 +326,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Atmospheric Ammonia")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -340,8 +337,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Additional River Nitrate")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -352,8 +348,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Additional River Ammonia")
+            )
           ),
         )
       )
@@ -373,8 +368,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Pelagic Trawl+Seine activity help notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -385,8 +379,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Sandeel sprat trawl activity help notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -397,8 +390,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Longline mackerel activity help notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -409,8 +401,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Beam Trawl BT1+BT2 activity help notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -421,8 +412,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Demersal Seine activity help notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -433,8 +423,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Demersal Otter Trawl TR1 help notes here")
+            )
           )
         ),
         column(
@@ -448,8 +437,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Gill Nets+Longline demersal activity notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -460,8 +448,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Beam Trawl shrimp activity notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -472,8 +459,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Nephrops Trawl TR2 activity notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -484,8 +470,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Creels activity notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -496,8 +481,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Mollusc Dredge activity notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -508,8 +492,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Whaler activity notes here")
+            )
           )
         )
       )
@@ -530,8 +513,7 @@ ui <- navbarPage(
                                value = 0.0,
                                step = 0.2,
                                width = "100%"
-                             ),
-                             helpText("Pelagic Trawl+Seine seabed abrasion help notes here")
+                             )
                            ), ),
           wellPanel(
             sliderInput(
@@ -542,8 +524,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Sandeel sprat trawl seabed abrasion help notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -554,8 +535,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Longline mackerel seabed abrasion help notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -566,8 +546,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Beam Trawl BT1+BT2 seabed abrasion help notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -578,8 +557,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Demersal Seine seabed abrasion help notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -590,8 +568,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Demersal Otter Trawl TR1 seabed abrasion help notes here")
+            )
           )
         ),
         column(
@@ -605,8 +582,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Gill Nets+Longline demersal seabed abrasion notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -617,8 +593,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Beam Trawl shrimp seabed abrasion notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -629,8 +604,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Nephrops Trawl TR2 seabed abrasion notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -641,8 +615,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Creels seabed abrasion notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -653,8 +626,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Mollusc Dredge seabed abrasion notes here")
+            )
           ),
           wellPanel(
             sliderInput(
@@ -665,8 +637,7 @@ ui <- navbarPage(
               value = 1.0,
               step = 0.2,
               width = "100%"
-            ),
-            helpText("Whaler seabed abrasion notes here")
+            )
           )
         )
       )
@@ -987,8 +958,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("pelagicTrawlDiscard_pel_reset", "Reset"),
-          helpText("Pelgic discard notes here")
+          actionButton("pelagicTrawlDiscard_pel_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1000,8 +970,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("sanSpratTrawlDiscard_pel_reset", "Reset"),
-          helpText("San spart trawl discard notes here")
+          actionButton("sanSpratTrawlDiscard_pel_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1013,8 +982,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("llMackerelDiscard_pel_reset", "Reset"),
-          helpText("llMackeral discard notes here")
+          actionButton("llMackerelDiscard_pel_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1026,8 +994,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlDiscard_pel_reset", "Reset"),
-          helpText("Beam Trawl discard notes here")
+          actionButton("beamTrawlDiscard_pel_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1039,8 +1006,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalSeineDiscard_pel_reset", "Reset"),
-          helpText("Demersal Seine discard notes here")
+          actionButton("demersalSeineDiscard_pel_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1052,8 +1018,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalOtterTrawlDiscard_pel_reset", "Reset"),
-          helpText("Demersal OtterTrawl discard notes here")
+          actionButton("demersalOtterTrawlDiscard_pel_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1065,8 +1030,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("gillLongDemersalDiscard_pel_reset", "Reset"),
-          helpText("Gill Long Demersal discard notes here")
+          actionButton("gillLongDemersalDiscard_pel_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1078,8 +1042,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlShrimpDiscard_pel_reset", "Reset"),
-          helpText("Beam Trawl Shrimp discard notes here")
+          actionButton("beamTrawlShrimpDiscard_pel_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1091,8 +1054,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("nephropsTrawlDiscard_pel_reset", "Reset"),
-          helpText("Nephrops Trawl discard notes here")
+          actionButton("nephropsTrawlDiscard_pel_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1104,8 +1066,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("creelsDiscard_pel_reset", "Reset"),
-          helpText("Creels discard notes here")
+          actionButton("creelsDiscard_pel_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1117,8 +1078,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("molluscDredgeDiscard_pel_reset", "Reset"),
-          helpText("Mollusc Dredge discard notes here")
+          actionButton("molluscDredgeDiscard_pel_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1130,8 +1090,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("whalerDiscard_pel_reset", "Reset"),
-          helpText("Whaler discard notes here")
+          actionButton("whalerDiscard_pel_reset", "Reset")
         )
       ),
       "Demersal" = fluidRow(
@@ -1145,8 +1104,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("pelagicTrawlDiscard_dem_reset", "Reset"),
-          helpText("Pelgic discard notes here")
+          actionButton("pelagicTrawlDiscard_dem_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1158,8 +1116,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("sanSpratTrawlDiscard_dem_reset", "Reset"),
-          helpText("San spart trawl discard notes here")
+          actionButton("sanSpratTrawlDiscard_dem_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1171,8 +1128,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("llMackerelDiscard_dem_reset", "Reset"),
-          helpText("llMackeral discard notes here")
+          actionButton("llMackerelDiscard_dem_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1184,8 +1140,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlDiscard_dem_reset", "Reset"),
-          helpText("Beam Trawl discard notes here")
+          actionButton("beamTrawlDiscard_dem_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1197,8 +1152,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalSeineDiscard_dem_reset", "Reset"),
-          helpText("Demersal Seine discard notes here")
+          actionButton("demersalSeineDiscard_dem_reset", "Reset")
         ),
         #column(
         #  width = 5,
@@ -1212,8 +1166,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalOtterTrawlDiscard_dem_reset", "Reset"),
-          helpText("Demersal OtterTrawl discard notes here")
+          actionButton("demersalOtterTrawlDiscard_dem_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1225,8 +1178,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("gillLongDemersalDiscard_dem_reset", "Reset"),
-          helpText("Gill Long Demersal discard notes here")
+          actionButton("gillLongDemersalDiscard_dem_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1238,8 +1190,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlShrimpDiscard_dem_reset", "Reset"),
-          helpText("Beam Trawl Shrimp discard notes here")
+          actionButton("beamTrawlShrimpDiscard_dem_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1251,8 +1202,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("nephropsTrawlDiscard_dem_reset", "Reset"),
-          helpText("Nephrops Trawl discard notes here")
+          actionButton("nephropsTrawlDiscard_dem_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1264,8 +1214,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("creelsDiscard_dem_reset", "Reset"),
-          helpText("Creels discard notes here")
+          actionButton("creelsDiscard_dem_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1277,8 +1226,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("molluscDredgeDiscard_dem_reset", "Reset"),
-          helpText("Mollusc Dredge discard notes here")
+          actionButton("molluscDredgeDiscard_dem_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1290,8 +1238,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("whalerDiscard_dem_reset", "Reset"),
-          helpText("Whaler discard notes here")
+          actionButton("whalerDiscard_dem_reset", "Reset")
         )
       ),
       "Migratory" = fluidRow(
@@ -1307,8 +1254,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("pelagicTrawlDiscard_mig_reset", "Reset"),
-          helpText("Pelgic discard notes here")
+          actionButton("pelagicTrawlDiscard_mig_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1320,8 +1266,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("sanSpratTrawlDiscard_mig_reset", "Reset"),
-          helpText("San spart trawl discard notes here")
+          actionButton("sanSpratTrawlDiscard_mig_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1333,8 +1278,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("llMackerelDiscard_mig_reset", "Reset"),
-          helpText("llMackeral discard notes here")
+          actionButton("llMackerelDiscard_mig_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1346,8 +1290,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlDiscard_mig_reset", "Reset"),
-          helpText("Beam Trawl discard notes here")
+          actionButton("beamTrawlDiscard_mig_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1359,8 +1302,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalSeineDiscard_mig_reset", "Reset"),
-          helpText("Demersal Seine discard notes here")
+          actionButton("demersalSeineDiscard_mig_reset", "Reset")
         ),
         #        column(
         #          width = 5,
@@ -1374,8 +1316,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalOtterTrawlDiscard_mig_reset", "Reset"),
-          helpText("Demersal OtterTrawl discard notes here")
+          actionButton("demersalOtterTrawlDiscard_mig_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1387,8 +1328,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("gillLongDemersalDiscard_mig_reset", "Reset"),
-          helpText("Gill Long Demersal discard notes here")
+          actionButton("gillLongDemersalDiscard_mig_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1400,8 +1340,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlShrimpDiscard_mig_reset", "Reset"),
-          helpText("Beam Trawl Shrimp discard notes here")
+          actionButton("beamTrawlShrimpDiscard_mig_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1413,8 +1352,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("nephropsTrawlDiscard_mig_reset", "Reset"),
-          helpText("Nephrops Trawl discard notes here")
+          actionButton("nephropsTrawlDiscard_mig_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1426,8 +1364,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("creelsDiscard_mig_reset", "Reset"),
-          helpText("Creels discard notes here")
+          actionButton("creelsDiscard_mig_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1439,8 +1376,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("molluscDredgeDiscard_mig_reset", "Reset"),
-          helpText("Mollusc Dredge discard notes here")
+          actionButton("molluscDredgeDiscard_mig_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1452,8 +1388,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("whalerDiscard_mig_reset", "Reset"),
-          helpText("Whaler discard notes here")
+          actionButton("whalerDiscard_mig_reset", "Reset")
         )
       ),
       "Filtben" = fluidRow(
@@ -1469,8 +1404,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("pelagicTrawlDiscard_fb_reset", "Reset"),
-          helpText("Pelgic discard notes here")
+          actionButton("pelagicTrawlDiscard_fb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1482,8 +1416,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("sanSpratTrawlDiscard_fb_reset", "Reset"),
-          helpText("San spart trawl discard notes here")
+          actionButton("sanSpratTrawlDiscard_fb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1495,8 +1428,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("llMackerelDiscard_fb_reset", "Reset"),
-          helpText("llMackeral discard notes here")
+          actionButton("llMackerelDiscard_fb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1508,8 +1440,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlDiscard_fb_reset", "Reset"),
-          helpText("Beam Trawl discard notes here")
+          actionButton("beamTrawlDiscard_fb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1521,8 +1452,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalSeineDiscard_fb_reset", "Reset"),
-          helpText("Demersal Seine discard notes here")
+          actionButton("demersalSeineDiscard_fb_reset", "Reset")
         ),
         #        column(
         #          width = 5,
@@ -1536,8 +1466,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalOtterTrawlDiscard_fb_reset", "Reset"),
-          helpText("Demersal OtterTrawl discard notes here")
+          actionButton("demersalOtterTrawlDiscard_fb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1549,8 +1478,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("gillLongDemersalDiscard_fb_reset", "Reset"),
-          helpText("Gill Long Demersal discard notes here")
+          actionButton("gillLongDemersalDiscard_fb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1562,8 +1490,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlShrimpDiscard_fb_reset", "Reset"),
-          helpText("Beam Trawl Shrimp discard notes here")
+          actionButton("beamTrawlShrimpDiscard_fb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1575,8 +1502,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("nephropsTrawlDiscard_fb_reset", "Reset"),
-          helpText("Nephrops Trawl discard notes here")
+          actionButton("nephropsTrawlDiscard_fb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1588,8 +1514,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("creelsDiscard_fb_reset", "Reset"),
-          helpText("Creels discard notes here")
+          actionButton("creelsDiscard_fb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1601,8 +1526,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("molluscDredgeDiscard_fb_reset", "Reset"),
-          helpText("Mollusc Dredge discard notes here")
+          actionButton("molluscDredgeDiscard_fb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1614,8 +1538,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("whalerDiscard_fb_reset", "Reset"),
-          helpText("Whaler discard notes here")
+          actionButton("whalerDiscard_fb_reset", "Reset")
         )
       ),
       "Carnben" = fluidRow(
@@ -1631,8 +1554,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("pelagicTrawlDiscard_cb_reset", "Reset"),
-          helpText("Pelgic discard notes here")
+          actionButton("pelagicTrawlDiscard_cb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1644,8 +1566,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("sanSpratTrawlDiscard_cb_reset", "Reset"),
-          helpText("San spart trawl discard notes here")
+          actionButton("sanSpratTrawlDiscard_cb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1657,8 +1578,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("llMackerelDiscard_cb_reset", "Reset"),
-          helpText("llMackeral discard notes here")
+          actionButton("llMackerelDiscard_cb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1670,8 +1590,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlDiscard_cb_reset", "Reset"),
-          helpText("Beam Trawl discard notes here")
+          actionButton("beamTrawlDiscard_cb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1683,8 +1602,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalSeineDiscard_cb_reset", "Reset"),
-          helpText("Demersal Seine discard notes here")
+          actionButton("demersalSeineDiscard_cb_reset", "Reset")
         ),
         #        column(
         #          width = 5,
@@ -1698,8 +1616,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalOtterTrawlDiscard_cb_reset", "Reset"),
-          helpText("Demersal OtterTrawl discard notes here")
+          actionButton("demersalOtterTrawlDiscard_cb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1711,8 +1628,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("gillLongDemersalDiscard_cb_reset", "Reset"),
-          helpText("Gill Long Demersal discard notes here")
+          actionButton("gillLongDemersalDiscard_cb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1724,8 +1640,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlShrimpDiscard_cb_reset", "Reset"),
-          helpText("Beam Trawl Shrimp discard notes here")
+          actionButton("beamTrawlShrimpDiscard_cb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1737,8 +1652,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("nephropsTrawlDiscard_cb_reset", "Reset"),
-          helpText("Nephrops Trawl discard notes here")
+          actionButton("nephropsTrawlDiscard_cb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1750,8 +1664,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("creelsDiscard_cb_reset", "Reset"),
-          helpText("Creels discard notes here")
+          actionButton("creelsDiscard_cb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1763,8 +1676,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("molluscDredgeDiscard_cb_reset", "Reset"),
-          helpText("Mollusc Dredge discard notes here")
+          actionButton("molluscDredgeDiscard_cb_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1776,8 +1688,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("whalerDiscard_cb_reset", "Reset"),
-          helpText("Whaler discard notes here")
+          actionButton("whalerDiscard_cb_reset", "Reset")
         )
       ),
       "Carnzoo" = fluidRow(
@@ -1793,8 +1704,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("pelagicTrawlDiscard_cz_reset", "Reset"),
-          helpText("Pelgic discard notes here")
+          actionButton("pelagicTrawlDiscard_cz_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1806,8 +1716,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("sanSpratTrawlDiscard_cz_reset", "Reset"),
-          helpText("San spart trawl discard notes here")
+          actionButton("sanSpratTrawlDiscard_cz_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1819,8 +1728,7 @@ server <- function(input, output, session) {
             step = 0.1,
             width = "100%"
           ),
-          actionButton("llMackerelDiscard_cz_reset", "Reset"),
-          helpText("llMackeral discard notes here")
+          actionButton("llMackerelDiscard_cz_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1832,8 +1740,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlDiscard_cz_reset", "Reset"),
-          helpText("Beam Trawl discard notes here")
+          actionButton("beamTrawlDiscard_cz_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1845,8 +1752,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalSeineDiscard_cz_reset", "Reset"),
-          helpText("Demersal Seine discard notes here")
+          actionButton("demersalSeineDiscard_cz_reset", "Reset")
           #)
         ),
         #        column(
@@ -1861,8 +1767,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalOtterTrawlDiscard_cz_reset", "Reset"),
-          helpText("Demersal OtterTrawl discard notes here")
+          actionButton("demersalOtterTrawlDiscard_cz_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1874,8 +1779,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("gillLongDemersalDiscard_cz_reset", "Reset"),
-          helpText("Gill Long Demersal discard notes here")
+          actionButton("gillLongDemersalDiscard_cz_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1887,8 +1791,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlShrimpDiscard_cz_reset", "Reset"),
-          helpText("Beam Trawl Shrimp discard notes here")
+          actionButton("beamTrawlShrimpDiscard_cz_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1900,8 +1803,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("nephropsTrawlDiscard_cz_reset", "Reset"),
-          helpText("Nephrops Trawl discard notes here")
+          actionButton("nephropsTrawlDiscard_cz_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1913,8 +1815,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("creelsDiscard_cz_reset", "Reset"),
-          helpText("Creels discard notes here")
+          actionButton("creelsDiscard_cz_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1926,8 +1827,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("molluscDredgeDiscard_cz_reset", "Reset"),
-          helpText("Mollusc Dredge discard notes here")
+          actionButton("molluscDredgeDiscard_cz_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1939,8 +1839,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("whalerDiscard_cz_reset", "Reset"),
-          helpText("Whaler discard notes here")
+          actionButton("whalerDiscard_cz_reset", "Reset")
         )
       ),
       "Bird" = fluidRow(
@@ -1956,8 +1855,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("pelagicTrawlDiscard_b_reset", "Reset"),
-          helpText("Pelgic discard notes here")
+          actionButton("pelagicTrawlDiscard_b_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1969,8 +1867,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("sanSpratTrawlDiscard_b_reset", "Reset"),
-          helpText("San spart trawl discard notes here")
+          actionButton("sanSpratTrawlDiscard_b_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1982,8 +1879,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("llMackerelDiscard_b_reset", "Reset"),
-          helpText("llMackeral discard notes here")
+          actionButton("llMackerelDiscard_b_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -1995,8 +1891,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlDiscard_b_reset", "Reset"),
-          helpText("Beam Trawl discard notes here")
+          actionButton("beamTrawlDiscard_b_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2008,8 +1903,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalSeineDiscard_b_reset", "Reset"),
-          helpText("Demersal Seine discard notes here")
+          actionButton("demersalSeineDiscard_b_reset", "Reset")
         ),
         #        column(
         #          width = 5,
@@ -2023,8 +1917,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalOtterTrawlDiscard_b_reset", "Reset"),
-          helpText("Demersal OtterTrawl discard notes here")
+          actionButton("demersalOtterTrawlDiscard_b_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2036,8 +1929,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("gillLongDemersalDiscard_b_reset", "Reset"),
-          helpText("Gill Long Demersal discard notes here")
+          actionButton("gillLongDemersalDiscard_b_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2049,8 +1941,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlShrimpDiscard_b_reset", "Reset"),
-          helpText("Beam Trawl Shrimp discard notes here")
+          actionButton("beamTrawlShrimpDiscard_b_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2062,8 +1953,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("nephropsTrawlDiscard_b_reset", "Reset"),
-          helpText("Nephrops Trawl discard notes here")
+          actionButton("nephropsTrawlDiscard_b_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2075,8 +1965,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("creelsDiscard_b_reset", "Reset"),
-          helpText("Creels discard notes here")
+          actionButton("creelsDiscard_b_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2088,8 +1977,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("molluscDredgeDiscard_b_reset", "Reset"),
-          helpText("Mollusc Dredge discard notes here")
+          actionButton("molluscDredgeDiscard_b_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2101,8 +1989,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("whalerDiscard_b_reset", "Reset"),
-          helpText("Whaler discard notes here")
+          actionButton("whalerDiscard_b_reset", "Reset")
         )
       ),
       "Seal" = fluidRow(
@@ -2118,8 +2005,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("pelagicTrawlDiscard_s_reset", "Reset"),
-          helpText("Pelgic discard notes here")
+          actionButton("pelagicTrawlDiscard_s_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2131,8 +2017,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("sanSpratTrawlDiscard_s_reset", "Reset"),
-          helpText("San spart trawl discard notes here")
+          actionButton("sanSpratTrawlDiscard_s_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2144,8 +2029,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("llMackerelDiscard_s_reset", "Reset"),
-          helpText("llMackeral discard notes here")
+          actionButton("llMackerelDiscard_s_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2157,8 +2041,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlDiscard_s_reset", "Reset"),
-          helpText("Beam Trawl discard notes here")
+          actionButton("beamTrawlDiscard_s_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2170,8 +2053,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalSeineDiscard_s_reset", "Reset"),
-          helpText("Demersal Seine discard notes here")
+          actionButton("demersalSeineDiscard_s_reset", "Reset")
         ),
         #        column(
         #          width = 5,
@@ -2185,8 +2067,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalOtterTrawlDiscard_s_reset", "Reset"),
-          helpText("Demersal OtterTrawl discard notes here")
+          actionButton("demersalOtterTrawlDiscard_s_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2198,8 +2079,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("gillLongDemersalDiscard_s_reset", "Reset"),
-          helpText("Gill Long Demersal discard notes here")
+          actionButton("gillLongDemersalDiscard_s_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2211,8 +2091,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlShrimpDiscard_s_reset", "Reset"),
-          helpText("Beam Trawl Shrimp discard notes here")
+          actionButton("beamTrawlShrimpDiscard_s_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2224,8 +2103,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("nephropsTrawlDiscard_s_reset", "Reset"),
-          helpText("Nephrops Trawl discard notes here")
+          actionButton("nephropsTrawlDiscard_s_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2237,8 +2115,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("creelsDiscard_s_reset", "Reset"),
-          helpText("Creels discard notes here")
+          actionButton("creelsDiscard_s_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2250,8 +2127,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("molluscDredgeDiscard_s_reset", "Reset"),
-          helpText("Mollusc Dredge discard notes here")
+          actionButton("molluscDredgeDiscard_s_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2263,8 +2139,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("whalerDiscard_s_reset", "Reset"),
-          helpText("Whaler discard notes here")
+          actionButton("whalerDiscard_s_reset", "Reset")
         )
       ),
       "Ceta" = fluidRow(
@@ -2280,8 +2155,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("pelagicTrawlDiscard_ceta_reset", "Reset"),
-          helpText("Pelgic discard notes here")
+          actionButton("pelagicTrawlDiscard_ceta_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2293,8 +2167,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("sanSpratTrawlDiscard_ceta_reset", "Reset"),
-          helpText("San spart trawl discard notes here")
+          actionButton("sanSpratTrawlDiscard_ceta_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2306,8 +2179,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("llMackerelDiscard_ceta_reset", "Reset"),
-          helpText("llMackeral discard notes here")
+          actionButton("llMackerelDiscard_ceta_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2319,8 +2191,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlDiscard_ceta_reset", "Reset"),
-          helpText("Beam Trawl discard notes here")
+          actionButton("beamTrawlDiscard_ceta_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2332,8 +2203,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalSeineDiscard_ceta_reset", "Reset"),
-          helpText("Demersal Seine discard notes here")
+          actionButton("demersalSeineDiscard_ceta_reset", "Reset")
         ),
         #        column(
         #          width = 5,
@@ -2347,8 +2217,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalOtterTrawlDiscard_ceta_reset", "Reset"),
-          helpText("Demersal OtterTrawl discard notes here")
+          actionButton("demersalOtterTrawlDiscard_ceta_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2360,8 +2229,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("gillLongDemersalDiscard_ceta_reset", "Reset"),
-          helpText("Gill Long Demersal discard notes here")
+          actionButton("gillLongDemersalDiscard_ceta_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2373,8 +2241,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlShrimpDiscard_ceta_reset", "Reset"),
-          helpText("Beam Trawl Shrimp discard notes here")
+          actionButton("beamTrawlShrimpDiscard_ceta_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2386,8 +2253,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("nephropsTrawlDiscard_ceta_reset", "Reset"),
-          helpText("Nephrops Trawl discard notes here")
+          actionButton("nephropsTrawlDiscard_ceta_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2399,8 +2265,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("creelsDiscard_ceta_reset", "Reset"),
-          helpText("Creels discard notes here")
+          actionButton("creelsDiscard_ceta_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2412,8 +2277,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("molluscDredgeDiscard_ceta_reset", "Reset"),
-          helpText("Mollusc Dredge discard notes here")
+          actionButton("molluscDredgeDiscard_ceta_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2425,8 +2289,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("whalerDiscard_ceta_reset", "Reset"),
-          helpText("Whaler discard notes here")
+          actionButton("whalerDiscard_ceta_reset", "Reset")
         )
       ),
       "Kelp" = fluidRow(
@@ -2442,8 +2305,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("pelagicTrawlDiscard_kelp_reset", "Reset"),
-          helpText("Pelgic discard notes here")
+          actionButton("pelagicTrawlDiscard_kelp_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2455,8 +2317,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("sanSpratTrawlDiscard_kelp_reset", "Reset"),
-          helpText("San spart trawl discard notes here")
+          actionButton("sanSpratTrawlDiscard_kelp_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2468,8 +2329,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("llMackerelDiscard_kelp_reset", "Reset"),
-          helpText("llMackeral discard notes here")
+          actionButton("llMackerelDiscard_kelp_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2481,8 +2341,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlDiscard_kelp_reset", "Reset"),
-          helpText("Beam Trawl discard notes here")
+          actionButton("beamTrawlDiscard_kelp_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2494,8 +2353,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalSeineDiscard_kelp_reset", "Reset"),
-          helpText("Demersal Seine discard notes here")
+          actionButton("demersalSeineDiscard_kelp_reset", "Reset")
         ),
         #        column(
         #         width = 5,
@@ -2509,8 +2367,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("demersalOtterTrawlDiscard_kelp_reset", "Reset"),
-          helpText("Demersal OtterTrawl discard notes here")
+          actionButton("demersalOtterTrawlDiscard_kelp_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2522,8 +2379,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("gillLongDemersalDiscard_kelp_reset", "Reset"),
-          helpText("Gill Long Demersal discard notes here")
+          actionButton("gillLongDemersalDiscard_kelp_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2535,8 +2391,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("beamTrawlShrimpDiscard_kelp_reset", "Reset"),
-          helpText("Beam Trawl Shrimp discard notes here")
+          actionButton("beamTrawlShrimpDiscard_kelp_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2548,8 +2403,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("nephropsTrawlDiscard_kelp_reset", "Reset"),
-          helpText("Nephrops Trawl discard notes here")
+          actionButton("nephropsTrawlDiscard_kelp_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2561,8 +2415,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("creelsDiscard_kelp_reset", "Reset"),
-          helpText("Creels discard notes here")
+          actionButton("creelsDiscard_kelp_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2574,8 +2427,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("molluscDredgeDiscard_kelp_reset", "Reset"),
-          helpText("Mollusc Dredge discard notes here")
+          actionButton("molluscDredgeDiscard_kelp_reset", "Reset")
         ),
         wellPanel(
           sliderInput(
@@ -2587,8 +2439,7 @@ server <- function(input, output, session) {
             step = 0.000001,
             width = "100%"
           ),
-          actionButton("whalerDiscard_kelp_reset", "Reset"),
-          helpText("Whaler discard notes here")
+          actionButton("whalerDiscard_kelp_reset", "Reset")
         )
       )
     )
