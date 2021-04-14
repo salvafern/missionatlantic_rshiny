@@ -31,15 +31,16 @@ createCatchPlotPerGuild	<- function( model, results, dsa ) {
   if (sum(offshore_data2plot + inshore_data2plot) == 0) {
     yaxmax <- 1
   }
+  par(mar=c(11,6,4,4))
   barplot(offshore_data2plot, col = c("black", "green"), 
           ylim = c(0, yaxmax), xlim = c(0, 12), width = rep(0.4, 
                                                             12), space = c(0.5, rep(1.2, 11)), yaxt = "n", xaxt = "n", 
           ann = FALSE, cex.axis = 0.6)
    axis(1, labels = FALSE)
    axis(side = 2, las = 1, cex.axis = 0.9)
-   text(x = 1:12, y = 0, srt = 45, label = gear_labels, adj = 1,  xpd = NA, cex = 1.0)
-   mtext("Catch", cex = 0.7, side = 2, line = 3.5)
-   title(main = mt, cex.main = 1)
+   text(x = 1:12, y = 0, srt = 45, label = gear_labels, adj = 1.1,  xpd = NA, cex = 1.2)
+   mtext("Catch", cex = 1.2, side = 2, line = 3.5)
+   title(main = mt, cex.main = 1.2)
   barplot(inshore_data2plot, col = c("grey", "blue"),
           add = T, width = rep(0.4, 12), space = c(1.5, rep(1.2,
                                                             11)), yaxt = "n", xaxt = "n", ann = FALSE)
@@ -47,7 +48,7 @@ createCatchPlotPerGuild	<- function( model, results, dsa ) {
   #                                                    "ndc", "user"), c("offshore landings", "offshore discards",
   #                                                                      "inshore landings", "inshore discards"), fill = c("green",
   #                                                                                                                        "black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
-  legend("topright", c("offshore landings", "offshore discards","inshore landings", "inshore discards"), fill = c("green",
+  legend("top", c("offshore landings", "offshore discards","inshore landings", "inshore discards"), fill = c("green",
                                                                                                                          "black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
   }
   if(dsa == 12){
@@ -65,14 +66,15 @@ createCatchPlotPerGuild	<- function( model, results, dsa ) {
                    "Beam_Trawl_BT1+BT2", "Demeral_Seine", "Demersal_Otter_Trawl_TR1", 
                    "Gill_Nets+Longline_demersal", "Beam_Trawl_shrimp", "Nephrops_Trawl_TR2", 
                    "Creels", "Mollusc_Dredge", "Whaler")
+  par(mar=c(11,6,4,4))
   barplot(offshore_data2plot, col = c("black", "green"), ylim = c(0,
                                                                   yaxmax), xlim = c(0, 12), width = rep(0.4, 12), space = c(0.5, rep(1.2, 11)), yaxt = "n", xaxt = "n", ann = FALSE, cex.axis = 0.5)
 
   axis(1, labels = FALSE)
   axis(side = 2, las = 1, cex.axis = 0.9)
-  text(x = 1:12, y = 0, srt = 45, label = gear_labels, adj = 1,  xpd = NA, cex = 1.0)
-  mtext("Catch", cex = 0.7, side = 2, line = 3.5)
-  title(main = mt, cex.main = 1)
+  text(x = 1:12, y = 0, srt = 45, label = gear_labels, adj = 1.1,  xpd = NA, cex = 1.2)
+  mtext("Catch", cex = 1.2, side = 2, line = 3.5)
+  title(main = mt, cex.main = 1.2)
   barplot(inshore_data2plot, col = c("grey", "blue"), add = T,
           width = rep(0.4, 12), space = c(1.5, rep(1.2, 11)),
           yaxt = "n", xaxt = "n", ann = FALSE)

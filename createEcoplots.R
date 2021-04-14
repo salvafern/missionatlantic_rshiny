@@ -1,11 +1,81 @@
 # useful function to create plots or UI
+fyplot1<-function(tspmain,axtitle,tspvar1){
+  #par(mar=c(3,3.8,2.5,0.4))
+  tsyears<-length(tspvar1)
+  tseq<-seq(0,360,by=1)
+  plmax<-1.5*max(max(tspvar1))
+  plmin<-0
+  plot(tseq,tspvar1,type="l",yaxt="n",xlim=c(0,360),ylim=c(plmin,plmax),xaxt="n",ann=FALSE,main=tspmain)
+  axis(side=1,at=c(0,60,120,180,240,300,360),las=1,cex.axis=0.9)
+  axis(side=2,las=1,cex.axis=0.9)
+  mtext("Days",cex=1.5,side=1,line=2)
+  mtext(axtitle,cex=1.5,side=2,line=2.8)
+  mtext(tspmain,cex=1.5,side=3,line=0.5)
+}
+
+fyplot2<-function(tspmain,axtitle,tsptitle1,tsptitle2,tspvar1,tspvar2){
+  #par(mar=c(3,3.8,2.5,0.4))
+  tsyears<-length(tspvar1)
+  tseq<-seq(0,360,by=1)
+  plmax<-max(max(tspvar1),max(tspvar2))
+  plmin<-0
+  plmax<-plmax+0.55*(plmax-plmin)
+  plot(tseq,tspvar1,type="l",yaxt="n",xlim=c(0,360),ylim=c(plmin,plmax),xaxt="n",ann=FALSE)
+  lines(tseq,tspvar2,type="l",lty="dashed")
+  axis(side=1,at=c(0,60,120,180,240,300,360),las=1,cex.axis=0.9)
+  axis(side=2,las=1,cex.axis=0.9)
+  mtext("Days",cex=1.5,side=1,line=2)
+  mtext(axtitle,cex=1.5,side=2,line=2.8)
+  mtext(tspmain,cex=1.5,side=3,line=0.5)
+  legend("topleft",c(tsptitle1,tsptitle2),box.lty=0,bg="transparent",col=c("black","black"),lty=c(1,2),cex=c(0.9,0.9),pt.cex=c(1,1))
+}
+
+
+
+fyplot3<-function(tspmain,axtitle,tsptitle1,tsptitle2,tsptitle3,tspvar1,tspvar2,tspvar3){
+  #par(mar=c(3,3.8,2.5,0.4))
+  tsyears<-length(tspvar1)
+  tseq<-seq(0,360,by=1)
+  plmax<-max(max(tspvar1),max(tspvar2),max(tspvar3))
+  plmin<-0
+  plmax<-plmax+1.15*(plmax-plmin)
+  plot(tseq,tspvar1,type="l",col="black",yaxt="n",xlim=c(0,360),ylim=c(plmin,plmax),xaxt="n",ann=FALSE)
+  lines(tseq,tspvar2,type="l",col="black",lty="dashed")
+  lines(tseq,tspvar3,type="l",col="red",lty="dashed")
+  axis(side=1,at=c(0,60,120,180,240,300,360),las=1,cex.axis=0.9)
+  axis(side=2,las=1,cex.axis=0.9)
+  mtext("Days",cex=1.5,side=1,line=2)
+  mtext(axtitle,cex=1.5,side=2,line=2.8)
+  mtext(tspmain,cex=1.5,side=3,line=0.5)
+  legend("topleft",c(tsptitle1,tsptitle2,tsptitle3),box.lty=0,bg="transparent",col=c("black","black","red"),lty=c(1,2,2),cex=c(0.9,0.9,0.9),pt.cex=c(1,1,1))
+}
+
+fyplot3_hab <- function(tspmain,axtitle,tsptitle1,tsptitle2,tsptitle3,tspvar1,tspvar2,tspvar3) {
+  #par(mar=c(3,3.8,1.3,0.4))
+  tsyears<-length(tspvar1)
+  tseq<-seq(0,360,by=1)
+  plmax<-max(max(tspvar1),max(tspvar2),max(tspvar3))
+  plmin<-0
+  plmax<-plmax+(1.4*(plmax-plmin))
+  plot(tseq,tspvar1,type="l",col="red",yaxt="n",xlim=c(0,360),ylim=c(plmin,plmax),xaxt="n",ann=FALSE)
+  lines(tseq,tspvar2,type="l",col="red",lty="dashed")
+  lines(tseq,tspvar3,type="l",col="black",lty="dashed")
+  axis(side=1,at=c(0,60,120,180,240,300,360),las=1,cex.axis=0.9)
+  axis(side=2,las=1,cex.axis=0.9)
+  mtext("Days",cex=1.5,side=1,line=2)
+  mtext(axtitle,cex=1.5,side=2,line=2.8)
+  mtext(tspmain,cex=1.5,side=3,line=0.2)
+  legend("topleft",c(tsptitle1,tsptitle2,tsptitle3),box.lty=0,bg="transparent",col=c("red","red","black"),lty=c(1,2,2),pt.cex=c(1,1,1),cex=c(0.9,0.9,0.9))
+}
+
+
 
 createEcoplots	<- function( model, results, selection, subSelection ) {
   elt <- StrathE2E2:::elt
-  fyplot3 <-StrathE2E2:::fyplot3
-  fyplot3_hab <-StrathE2E2:::fyplot3_hab
-  fyplot2 <-StrathE2E2:::fyplot2
-  fyplot1 <-StrathE2E2:::fyplot1
+  #fyplot3 <-StrathE2E2:::fyplot3
+  #fyplot3_hab <-StrathE2E2:::fyplot3_hab
+  #fyplot2 <-StrathE2E2:::fyplot2
+  #fyplot1 <-StrathE2E2:::fyplot1
   start_par = par()$mfrow
   on.exit(par(mfrow = start_par))
   build <- elt(results, "build")
@@ -125,8 +195,8 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l3 <- detritus_d[((nyears - 1) * 360 + 1):ndays]/xd_volume
     fyplot3("Suspended bact. & detritus", "", "S-offshore", 
             "S-inshore", "Deep", l1, l2, l3)
-    mtext(bquote("Concentration mMN.m"^-3), cex = 0.7, side = 2, 
-          line = 2.5)
+    mtext(bquote("Concentration mMN.m"^-3), cex = 1.5, side = 2,line = 2.5)
+    #mtext("Suspended bact. & detritus",cex=1.5,side=3,line=0.5)
     }
     if (subSelection == "Ammonia") {
     l1 <- ammonia_so[((nyears - 1) * 360 + 1):ndays]/xvolume_so
@@ -134,7 +204,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l3 <- ammonia_d[((nyears - 1) * 360 + 1):ndays]/xd_volume
     fyplot3("Ammonia", "", "S-offshore", "S-inshore", "Deep", 
             l1, l2, l3)
-    mtext(bquote("Concentration mMN.m"^-3), cex = 0.7, side = 2, 
+    mtext(bquote("Concentration mMN.m"^-3), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Nitrate") {
@@ -143,7 +213,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l3 <- nitrate_d[((nyears - 1) * 360 + 1):ndays]/xd_volume
     fyplot3("Nitrate", "", "S-offshore", "S-inshore", "Deep", 
             l1, l2, l3)
-    mtext(bquote("Concentration mMN.m"^-3), cex = 0.7, side = 2, 
+    mtext(bquote("Concentration mMN.m"^-3), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Phytoplankton") {
@@ -152,7 +222,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l3 <- phyt_d[((nyears - 1) * 360 + 1):ndays]/xd_volume
     fyplot3("Phytoplankton", "", "S-offshore", "S-inshore", 
             "Deep", l1, l2, l3)
-    mtext(bquote("Concentration mMN.m"^-3), cex = 0.7, side = 2, 
+    mtext(bquote("Concentration mMN.m"^-3), cex = 1.5, side = 2, 
           line = 2.5)
     }
   }
@@ -183,7 +253,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     fyplot3_hab("Inshore ammonia", "", "Area_s1 porewater", 
                 "Area_s2 porewater", "Area_s3 porewater", l1, l2, 
                 l3)
-    mtext(bquote("Concentration mMN.m"^-3), cex = 0.7, side = 2, 
+    mtext(bquote("Concentration mMN.m"^-3), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Offshore ammonia") {
@@ -211,7 +281,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     fyplot3_hab("Offshore ammonia", "", "Area_d1 porewater", 
                 "Area_d2 porewater", "Area_d3 porewater", l1, l2, 
                 l3)
-    mtext(bquote("Concentration mMN.m"^-3), cex = 0.7, side = 2, 
+    mtext(bquote("Concentration mMN.m"^-3), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Inshore nitrate") {
@@ -239,7 +309,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     fyplot3_hab("Inshore nitrate", "", "Area_s1 porewater", 
                 "Area_s2 porewater", "Area_s3 porewater", l1, l2, 
                 l3)
-    mtext(bquote("Concentration mMN.m"^-3), cex = 0.7, side = 2, 
+    mtext(bquote("Concentration mMN.m"^-3), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Offshore nitrate") {
@@ -267,7 +337,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     fyplot3_hab("Offshore nitrate", "", "Area_d1 porewater", 
                 "Area_d2 porewater", "Area_d3 porewater", l1, l2, 
                 l3)
-    mtext(bquote("Concentration mMN.m"^-3), cex = 0.7, side = 2, 
+    mtext(bquote("Concentration mMN.m"^-3), cex = 1.5, side = 2, 
           line = 2.5)
     }
    # }
@@ -314,7 +384,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     fyplot3_hab("Inshore detritus", "", "Area_s1 sediment", 
                 "Area_s2 sediment", "Area_s3 sediment", l1, l2, 
                 l3)
-    mtext(bquote("Nitrogen.DW"^-1 ~ " g.g"^-1), cex = 0.7, 
+    mtext(bquote("Nitrogen.DW"^-1 ~ " g.g"^-1), cex = 1.5, 
           side = 2, line = 2.5)
     }
     if (subSelection == "Offshore detritus") {
@@ -360,7 +430,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     fyplot3_hab("Offshore detritus", "", "Area_d1 sediment", 
                 "Area_d2 sediment", "Area_d3 sediment", l1, l2, 
                 l3)
-    mtext(bquote("Nitrogen.DW"^-1 ~ " g.g"^-1), cex = 0.7, 
+    mtext(bquote("Nitrogen.DW"^-1 ~ " g.g"^-1), cex = 1.5, 
           side = 2, line = 2.5)
     }
     if (subSelection == "Inshore corpses") {
@@ -384,7 +454,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     }
     fyplot3_hab("Inshore corpses", "", "Area_s1", "Area_s2", 
                 "Area_s3", l1, l2, l3)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Offshore corpses") {
@@ -408,7 +478,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     }
     fyplot3_hab("Offshore corpses", "", "Area_d1", "Area_d2", 
                 "Area_d3", l1, l2, l3)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
   }
@@ -419,7 +489,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- omni_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Omnivorous zooplankton", "", "Offshore", "Inshore", 
             l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Carnivorous zooplankton") {
@@ -427,7 +497,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- carn_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Carnivorous zooplankton", "", "Offshore", "Inshore", 
             l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
   }
@@ -438,7 +508,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- fishp_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Planktivorous fish", "", "Offshore", "Inshore", 
             l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Planktivorous fish larvae") {
@@ -447,7 +517,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- fishplar_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Planktivorous fish larvae", "", "Offshore", 
             "Inshore", l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Demersal fish") {
@@ -455,7 +525,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- fishd_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Demersal fish", "", "Offshore", "Inshore", 
             l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Demersal fish larvae") {
@@ -464,7 +534,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- fishdlar_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Demersal fish larvae", "", "Offshore", "Inshore", 
             l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
   }
@@ -476,7 +546,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- benths_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Benthos susp/dep feeders", "", "Offshore", 
             "Inshore", l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Benthos susp/dep feeders larvae") {
@@ -485,7 +555,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- benthslar_i[((nyears - 1) * 360 + 1):ndays]/xvolume_si
     fyplot2("Benthos susp/dep feeders larvae", "", "Offshore", 
             "Inshore", l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Benthos carn/scav feeders") {
@@ -494,7 +564,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- benthc_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Benthos carn/scav feeders", "", "Offshore", 
             "Inshore", l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Benthos carn/scav feeders larvae") {
@@ -503,7 +573,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- benthclar_i[((nyears - 1) * 360 + 1):ndays]/xvolume_si
     fyplot2("Benthos carn/scav feeders larvae", "", "Offshore", 
             "Inshore", l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
   }
@@ -513,7 +583,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l1 <- bird_o[((nyears - 1) * 360 + 1):ndays]/(1 - x_shallowprop)
     l2 <- bird_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Birds", "", "Offshore", "Inshore", l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Pinnipeds") {
@@ -521,7 +591,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- seal_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Pinnipeds", "", "Offshore", "Inshore", l1, 
             l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Cetaceans") {
@@ -529,7 +599,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- ceta_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Cetaceans", "", "Offshore", "Inshore", l1, 
             l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Migratory fish") {
@@ -537,7 +607,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     l2 <- fishm_i[((nyears - 1) * 360 + 1):ndays]/x_shallowprop
     fyplot2("Migratory fish", "", "Offshore", "Inshore", 
             l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
   }
@@ -551,7 +621,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
                                                                      1) * 360 + 1):ndays] + corpse_s3[((nyears - 1) * 
                                                                                                          360 + 1):ndays])/x_shallowprop
     fyplot2("Corpses", "", "Offshore", "Inshore", l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Discards") {
@@ -559,7 +629,7 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
                                                          x_shallowprop)
     l2 <- (discard_i[((nyears - 1) * 360 + 1):ndays])/x_shallowprop
     fyplot2("Discards", "", "Offshore", "Inshore", l1, l2)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
   }
@@ -568,13 +638,13 @@ createEcoplots	<- function( model, results, selection, subSelection ) {
     if (subSelection == "Inshore macrophytes") {
     l1 <- kelpN[((nyears - 1) * 360 + 1):ndays]/(1 - x_shallowprop)
     fyplot1("Inshore macrophytes", "", l1)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
     if (subSelection == "Inshore macrophyte debris") {
     l1 <- (kelpdebris[((nyears - 1) * 360 + 1):ndays])/x_shallowprop
     fyplot1("Inshore macrophyte debris", "", l1)
-    mtext(bquote("Area density mMN.m"^-2), cex = 0.7, side = 2, 
+    mtext(bquote("Area density mMN.m"^-2), cex = 1.5, side = 2, 
           line = 2.5)
     }
   }

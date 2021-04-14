@@ -26,6 +26,7 @@ createCatchPlotPerGear	<- function( model, results, dsa ) {
   }
   guild_labels <- c("Planktivorous", "Demersal quota", "Demersal non-quota",
                                     "Migratory", "Susp/deposit benthos", "Carn/scavenge benthos", "Pelagic invert", "Bird", "Pinnipeds", "Cetaceans", "Macrophytes")
+  par(mar=c(11,6,4,4))
   b <- barplot(offshore_data2plot, col = c("black", "green"),
           ylim = c(0, yaxmax), xlim = c(0, 12), width = rep(0.5,
                                                             11), space = c(0.5, rep(1.2, 10)), yaxt = "n", xaxt = "n",
@@ -33,9 +34,9 @@ createCatchPlotPerGear	<- function( model, results, dsa ) {
   axis(1, labels = FALSE)
   axis(side = 2, las = 1, cex.axis = 0.9)
   #cat("par usr ",par("usr"))
-  text(x = 1:11, y = 0, srt = 45, label = guild_labels, adj = 1,  xpd = NA, cex = 1.0)
-  mtext("Catch", cex = 0.7, side = 2, line = 3.5)
-  title(main = mt, cex.main = 1, line = +0.02)
+  text(x = 1:11, y = 0, srt = 45, label = guild_labels, adj = 1.1,  xpd = NA, cex = 1.2)
+  mtext("Catch", cex = 1.2, side = 2, line = 3.5)
+  title(main = mt, cex.main = 1.2, line = +0.02)
   barplot(inshore_data2plot, col = c("grey", "blue"),
           add = T, width = rep(0.5, 11), space = c(1.5, rep(1.2,
                                                             10)), yaxt = "n", xaxt = "n", ann = FALSE)
@@ -43,5 +44,5 @@ createCatchPlotPerGear	<- function( model, results, dsa ) {
 #                                                    "ndc", "user"), c("offshore landings", "offshore discards",
 #                                                                      "inshore landings", "inshore discards"), fill = c("green",
 #                                                                                                                        "black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
-  legend("topright", c("offshore landings", "offshore discards","inshore landings", "inshore discards"), fill = c("green","black", "blue", "grey"), bty = "n", xpd = NA)
+  legend("top", c("offshore landings", "offshore discards","inshore landings", "inshore discards"), fill = c("green","black", "blue", "grey"), bty = "n", xpd = NA)
   }

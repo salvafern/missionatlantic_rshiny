@@ -158,7 +158,7 @@ ui <- navbarPage(
             = list("Nutrient_Phytoplankton", "Sediment", "Zooplankton" , 
                    "Fish" , "Benthos" , "Predators", "Corpse_Discard" , "Macrophyte"),
             selected = "Nutrient_Phytoplankton"
-          ),
+          ), 
         ),
         #Main Panel: plot map here in the future
         mainPanel(
@@ -714,30 +714,23 @@ ui <- navbarPage(
       # ),
       )),
     tabPanel(
-      title = "Compare scenario with observational data",
+      title = "Annual Average Masses (Biomass)",
       h3(
-        "Box and whisker plots comparing annual or monthly observational data with corresponding model outputs"
+        "Tornado bar-plot diagram of the differences in annual average masses of ecology model variables between baseline and scenario runs"
       ),
       fluidRow(column(
         6,
-        h5("Annual observational versus scenario"),
-        plotOutput("scenario_compare_obs")
+        plotOutput("e2e_compare_runs_bar_aam")
       )),
     ),
     tabPanel(
-      title = "Compare baseline with scenario for AAM and annual fisheries catch - tornado plot",
+      title = "Annual fisheries catch",
       h4(
-        "Create a tornado bar-plot diagram of the differences in annual average masses of ecology model varibles and annual fishery catches, between baseline and scenario runs"
+        "Tornado bar-plot diagram of the differences in annual fishery catches, between baseline and scenario runs"
       ),
       fluidRow(
         column(
           6,
-          h3("AAM tornado plot - baseline vs scenario"),
-          plotOutput("e2e_compare_runs_bar_aam")
-        ),
-        column(
-          6,
-          h3("Catch tornado plot - baseline vs scenario"),
           plotOutput("e2e_compare_runs_bar_catch")
         )
       )
@@ -798,17 +791,18 @@ ui <- navbarPage(
               "Yield data plot for planktivoirous fish in the 1970-1999 North Sea model with baseline demersal harvest ratios. Upper panel, annual average biomass of planktivorous fish (mMN.m-2 in the whole modle domain) as a function of harvest ratio. Lower panel: catch divided into landings and discards of planktivorous fish (mMN.m-2.y-1) as a function of harvest ratio."
               ,style = "font-family: 'times'; font-si16pt; text-align: justify;padding:10px;"
             )
-          ),
-          column(
-            6,
-            h3("Run Yield"),
-            actionButton("runYield", "Run Yield Plot")
-          ),
-          column(
-            6,
-            h5("Yield plot"),
-            plotOutput("yield_plot")
-          ),
+          )
+          # ,
+          # column(
+          #   6,
+          #   h3("Run Yield"),
+          #   actionButton("runYield", "Run Yield Plot")
+          # ),
+          # column(
+          #   6,
+          #   h5("Yield plot"),
+          #   plotOutput("yield_plot")
+          # ),
         )
     )))
   )

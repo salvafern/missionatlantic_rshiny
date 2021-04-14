@@ -1,10 +1,60 @@
 # useful function to create plots or UI
+tsmonthplot1 <- function(tsptitle, tspvar1) {
+  #par(mar=c(3,4.1,0.5,0.4))
+  tseq<-seq(0.5,11.5,by=1)
+  plmax<-max((tspvar1))
+  #	plmin<-min((tspvar1))
+  plmin<-0
+  plmax<-plmax+(0.1*(plmax-plmin))
+  plot(tseq,tspvar1,type="l",lty=1,yaxt="n",xlim=c(0,12),ylim=c(plmin,plmax),xaxt="n",ann=FALSE)
+  points(tseq,tspvar1,pch=16)
+  axis(side=1,at=c(0,3,6,9,12),las=1,cex.axis=0.9,padj=-0.80)
+  axis(side=2,las=1,cex.axis=0.9, hadj=0.82)
+  mtext("Months",cex=1.2,side=1,line=1.5)
+  mtext(tsptitle,cex=1.2,side=2,line=3.1)
+}
+
+tsmonthplot2 <- function(tsptitle,tspvar1,tspvar2) {
+ # par(mar=c(3,4.1,0.5,0.4))
+  tseq<-seq(0.5,11.5,by=1)
+  plmax<-max(max(tspvar1),max(tspvar2))
+  #	plmin<-min(min(tspvar1),min(tspvar2))
+  plmin<-0
+  plmax<-plmax+(0.5*(plmax-plmin))
+  plot(tseq,tspvar1,type="l",lty=1,yaxt="n",xlim=c(0,12),ylim=c(plmin,plmax),xaxt="n",ann=FALSE)
+  points(tseq,tspvar1,pch=16)
+  lines(tseq,tspvar2,lty="dashed")
+  points(tseq,tspvar2,pch=1)
+  axis(side=1,at=c(0,3,6,9,12),las=1,cex.axis=0.9,padj=-0.80)
+  axis(side=2,las=1,cex.axis=0.9, hadj=0.82)
+  mtext("Months",cex=1.2,side=1,line=1.5)
+  mtext(tsptitle,cex=1.2,side=2,line=3.1)
+}
+
+tsmonthplot3 <- function(tsptitle,tspvar1,tspvar2,tspvar3) {
+#  par(mar=c(3,4.1,0.5,0.4))
+  tseq<-seq(0.5,11.5,by=1)
+  plmax<-max(max(tspvar1),max(tspvar2),max(tspvar3))
+  #	plmin<-min(min(tspvar1),min(tspvar2),min(tspvar3))
+  plmin<-0
+  plmax<-plmax+(0.8*(plmax-plmin))
+  plot(tseq,tspvar1,type="l",lty=1,yaxt="n",xlim=c(0,12),ylim=c(plmin,plmax),xaxt="n",ann=FALSE)
+  points(tseq,tspvar1,pch=16)
+  lines(tseq,tspvar2,lty="dashed")
+  points(tseq,tspvar2,pch=1)
+  lines(tseq,tspvar3,lty=1,col="grey")
+  points(tseq,tspvar3,pch=16,col="grey")
+  axis(side=1,at=c(0,3,6,9,12),las=1,cex.axis=0.9,padj=-0.80)
+  axis(side=2,las=1,cex.axis=0.9, hadj=0.82)
+  mtext("Months",cex=1.2,side=1,line=1.5)
+  mtext(tsptitle,cex=1.2,side=2,line=3.1)
+}
 
 createEDriversPlots	<- function( model, selection) {
   elt <- StrathE2E2:::elt
-  tsmonthplot1 <-StrathE2E2:::tsmonthplot1
-  tsmonthplot2 <-StrathE2E2:::tsmonthplot2
-  tsmonthplot3 <-StrathE2E2:::tsmonthplot3
+  #tsmonthplot1 <-StrathE2E2:::tsmonthplot1
+  #tsmonthplot2 <-StrathE2E2:::tsmonthplot2
+  #tsmonthplot3 <-StrathE2E2:::tsmonthplot3
   oo <- options()
   on.exit(options(oo))
   #start_par = par()$mfrow
