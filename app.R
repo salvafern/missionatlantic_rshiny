@@ -28,8 +28,15 @@ ui <- navbarPage(
                    6,
                    h4("StrathE2E model"),
                    p(
-                     "StrathE2E is a marine food web model of intermediate complexity which represents a spatially aggregated shelf sea region. The model simulates the fluxes of nutrient (nitrogen) through the ecosystem from dissolved inorganic (nitrate and ammonia), through plankton, benthos and fish, to birds and mammals, its regeneration through excretion and mineralization of detritus in the water column and sediment, and the physical oceanographic, land-sea, and air-sea exchanges across the geographic boundaries. The model incorporates Holling II function relationships between each predator-prey couplet in the food web, and density dependent mortality control of the upper trophic levels (top-levels plus most interior levels). External drivers include sea surface irradiance, temperature, hydrodynamic fluxes, freshwater input, river and atmospheric nitrate and ammonia inputs, ocean boundary nitrate, ammonia and suspended particulate concentrations, and density independent fishery harvesting rates of shellfish, pelagic and demersal fish. Outputs from the model include time-series of the nitrogen mass of all state variables components, fluxes between components due to e.g. feeding, excretion, and exports to the ocean, atmosphere and to fishery landings."
-                     ,
+                     "StrathE2E is an open-source computer model of the marine food web in continental shelf sea regions. You can use StratheE2E to explore how the natural ecosystem works, and how it changes with human activity.",
+                     style = "font-family: 'times'; font-si16pt"
+                   ),
+                   p(
+                     "Sunlight and nutrients absorbed by plants in the sea - microscopic algae and seaweeds in shallow water - support all the rest of marine life. But how this happens, depends on how energy and nutrient flow through the food web. The food web comprises all the microbes, plankton, fish, seabed-living animals, birds, seals and whales, which live in the sea and eat each other.",
+                     style = "font-family: 'times'; font-si16pt"
+                   ),
+                   p(
+                     "StrathE2E represents all of the who-eats-whom connections in the food web, and how fast animals grow and die as a result of eating and being eaten, using mathematical equations. The equations are solved computationally to provide a simulation of how the different plants and animals change during the year, and from year-to-year. These changes depend on the environmental condition and human activities such as fishing. The model provides a way to carry out experiments to answer 'what-if' type questions, for example, what would happen if we reduced fishing activity, not just to fish but to everything else in the ecosystem.",
                      style = "font-family: 'times'; font-si16pt"
                    )
                  ),
@@ -37,7 +44,7 @@ ui <- navbarPage(
                    6,
                    img(src = "strathe2e_2.jpg", width = '100%'),
                    h6(
-                     "Schematic showing the North Sea food web model components and driving variables, in relation to physical structures (surface water layer, deep water layer, and sediments)."
+                     "NOTE This diagram to be replace by appropriate picture or illustration"
                    )
                  ),
                  column(
@@ -45,16 +52,19 @@ ui <- navbarPage(
                    offset = 0.5,
                    fluidRow(
                      p(
-                       "The model is intentionally minimalist in terms of spatial and taxonomic resolution in order to permit the use of global sensitivity analysis and formal optimisation procedures to fit the model to an assemblage of observed data. Simulated annealing has been used to locate the maximum likelihood parameter set for the stationary state of the model given driving data and a suite of observed state variable values for the North Sea between 1970 and 1999. The model is designed to explore trophic cascades in the marine ecosystem, in particular the propagation of effects of harvesting and river nutrient inputs through the food web, under oceanographic and temperature climate scenarios. The model has been intensively analysed for the North Sea and is currently being configured for a range of NW European shelf sea regions extending from northern Spain to the Faroe Islands, taking driving data from ERSEM-NEMO model outputs. The model is available as a C-shared object for the R statistical environment.",
+                       "The inputs to the model, which we call the driving data, are variables such as temperature, sunlight intensity, suspended sediment in the water, current speeds, river outflows, and seabed depths and sediment properties. These data are gathered together from a variety of sources for each region. Some of the data come from other models of the water circulation, others from satellite data and field surveys.",
                        style = "font-family: 'times'; font-si16pt; text-align: justify;padding:20px;"
-                     )
-                   ),
-                   column(width = 11, fluidRow(
+                     ),
                      p(
-                       "Key reference: Heath, M.R. (2012). Ecosystem limits to food web fluxes and fisheries yields in the North Sea simulated with an end-to-end food web model. Progress in Oceanography 102, 42-66.",
-                       style = "font-family: 'times'; font-si16pt"
-                     )
-                   ))
+                       "Each model contains a large number of parameters, to which the results can be very sensitive. These parameter values are determined by computationally fitting the model to a database of observational records on the quantities of plants and animals in the sea, how much they eat and their diet compositions. This process is similar to code-cracking in that it involves searching through thousands of combinations of parameters to find the set of values that generate model output that best matches all the observations. Then we conduct an independent validation by comparing model results with other data that were not included in the fitting process. By this means we can establish the credibility of the model.",
+                       style = "font-family: 'times'; font-si16pt; text-align: justify;padding:20px;"
+                     ),
+                     p(
+                       "StrathE2E is available as a free computer software package for researchers to use. Here we provide an online version so that anyone can explore the marine ecosystem and design and conduct their own experiments, without needing to know anything about writing computer code. However, the underlying model is exactly the same as in the research software package. Models for different regions are available to explore, and each has been subjected to the parameter fitting and model validation process.",
+                       style = "font-family: 'times'; font-si16pt; text-align: justify;padding:20px;"
+                     ),
+                       HTML("<p style = \"font-family: 'times'; font-si16pt; text-align: justify;padding:20px;\">If you want to read more about StrathE2E you can download an open-source article from <a href='https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13510'>here</a>. To use the software package you need to be familiar with the R statistical computing environment, and then install the package from <a href='https://cran.r-project.org/web/packages/StrathE2E2/index.html'>here</a>.</p>")
+                   )
                  )
                )
              ),
@@ -65,8 +75,7 @@ ui <- navbarPage(
                    6,
                    h4("StrathE2E model"),
                    p(
-                     "StrathE2E is a marine food web model of intermediate complexity which represents a spatially aggregated shelf sea region. The model simulates the fluxes of nutrient (nitrogen) through the ecosystem from dissolved inorganic (nitrate and ammonia), through plankton, benthos and fish, to birds and mammals, its regeneration through excretion and mineralization of detritus in the water column and sediment, and the physical oceanographic, land-sea, and air-sea exchanges across the geographic boundaries. The model incorporates Holling II function relationships between each predator-prey couplet in the food web, and density dependent mortality control of the upper trophic levels (top-levels plus most interior levels). External drivers include sea surface irradiance, temperature, hydrodynamic fluxes, freshwater input, river and atmospheric nitrate and ammonia inputs, ocean boundary nitrate, ammonia and suspended particulate concentrations, and density independent fishery harvesting rates of shellfish, pelagic and demersal fish. Outputs from the model include time-series of the nitrogen mass of all state variables components, fluxes between components due to e.g. feeding, excretion, and exports to the ocean, atmosphere and to fishery landings."
-                     ,
+                     "StrathE2E is a marine food web model of intermediate complexity which represents a spatially aggregated shelf sea region. The model simulates the fluxes of nutrient (nitrogen) through the ecosystem from dissolved inorganic (nitrate and ammonia), through plankton, benthos and fish, to birds and mammals, its regeneration through excretion and mineralization of detritus in the water column and sediment, and the physical oceanographic, land-sea, and air-sea exchanges across the geographic boundaries. The model incorporates Holling II function relationships between each predator-prey couplet in the food web, and density dependent mortality control of the upper trophic levels (top-levels plus most interior levels). External drivers include sea surface irradiance, temperature, hydrodynamic fluxes, freshwater input, river and atmospheric nitrate and ammonia inputs, ocean boundary nitrate, ammonia and suspended particulate concentrations, and density independent fishery harvesting rates of shellfish, pelagic and demersal fish. Outputs from the model include time-series of the nitrogen mass of all state variables components, fluxes between components due to e.g. feeding, excretion, and exports to the ocean, atmosphere and to fishery landings.",
                      style = "font-family: 'times'; font-si16pt"
                    )
                  ),
