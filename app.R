@@ -22,7 +22,10 @@ ui <- navbarPage(
   theme = shinytheme("cerulean"),
   navbarMenu("Home",
              tabPanel(
-               title = "Model Workflow",
+               title = "Home",
+             tabsetPanel(type = "pills",
+             tabPanel(
+               title = "Model Summary",
                fluidRow(
                  column(
                    6,
@@ -73,36 +76,25 @@ ui <- navbarPage(
                fluidRow(
                  column(
                    6,
-                   h4("StrathE2E model"),
+                   h4("StrathE2E overview"),
                    p(
-                     "StrathE2E is a marine food web model of intermediate complexity which represents a spatially aggregated shelf sea region. The model simulates the fluxes of nutrient (nitrogen) through the ecosystem from dissolved inorganic (nitrate and ammonia), through plankton, benthos and fish, to birds and mammals, its regeneration through excretion and mineralization of detritus in the water column and sediment, and the physical oceanographic, land-sea, and air-sea exchanges across the geographic boundaries. The model incorporates Holling II function relationships between each predator-prey couplet in the food web, and density dependent mortality control of the upper trophic levels (top-levels plus most interior levels). External drivers include sea surface irradiance, temperature, hydrodynamic fluxes, freshwater input, river and atmospheric nitrate and ammonia inputs, ocean boundary nitrate, ammonia and suspended particulate concentrations, and density independent fishery harvesting rates of shellfish, pelagic and demersal fish. Outputs from the model include time-series of the nitrogen mass of all state variables components, fluxes between components due to e.g. feeding, excretion, and exports to the ocean, atmosphere and to fishery landings.",
+                     "Detailed StrathE2E overview text here",
                      style = "font-family: 'times'; font-si16pt"
-                   )
-                 ),
-                 column(
-                   6,
-                   img(src = "strathe2e_2.jpg", width = '100%'),
-                   h6(
-                     "Schematic showing the North Sea food web model components and driving variables, in relation to physical structures (surface water layer, deep water layer, and sediments)."
-                   )
-                 ),
-                 column(
-                   width = 11,
-                   offset = 0.5,
-                   fluidRow(
-                     p(
-                       "The model is intentionally minimalist in terms of spatial and taxonomic resolution in order to permit the use of global sensitivity analysis and formal optimisation procedures to fit the model to an assemblage of observed data. Simulated annealing has been used to locate the maximum likelihood parameter set for the stationary state of the model given driving data and a suite of observed state variable values for the North Sea between 1970 and 1999. The model is designed to explore trophic cascades in the marine ecosystem, in particular the propagation of effects of harvesting and river nutrient inputs through the food web, under oceanographic and temperature climate scenarios. The model has been intensively analysed for the North Sea and is currently being configured for a range of NW European shelf sea regions extending from northern Spain to the Faroe Islands, taking driving data from ERSEM-NEMO model outputs. The model is available as a C-shared object for the R statistical environment.",
-                       style = "font-family: 'times'; font-si16pt; text-align: justify;padding:20px;"
-                     )
-                   ),
-                   column(width = 11, fluidRow(
-                     p(
-                       "Key reference: Heath, M.R. (2012). Ecosystem limits to food web fluxes and fisheries yields in the North Sea simulated with an end-to-end food web model. Progress in Oceanography 102, 42-66.",
-                       style = "font-family: 'times'; font-si16pt"
-                     )
                    ))
                  )
+               ),
+             tabPanel(
+               title = "Model Worflow",
+               fluidRow(
+                 column(
+                   6,
+                   h4("StrathE2E Workflow"),
+                   p(
+                     "StrathE2E workflow text here",
+                     style = "font-family: 'times'; font-si16pt"
+                   ))
                )
+             ))
              )),
   navbarMenu(
     "Model Selection",
