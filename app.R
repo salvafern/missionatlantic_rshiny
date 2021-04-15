@@ -3561,7 +3561,7 @@ server <- function(input, output, session) {
   observeEvent(input$runBaseline, {
     showModal(
       modalDialog(
-        "Please wait whilst model runs baseline. Once completed you can explore plots below",
+        "Please wait whilst model runs baseline. Once completed you can explore plots below on model exploration tab menu",
         footer = NULL
       )
     )
