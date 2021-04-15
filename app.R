@@ -20,7 +20,7 @@ source("createEDriversPlots.R")
 ui <- navbarPage(
   "StrathE2E App",
   theme = shinytheme("cerulean"),
-  navbarMenu("Home",
+#  navbarMenu("Home",
              tabPanel(
                title = "Home",
              tabsetPanel(type = "pills",
@@ -95,7 +95,8 @@ ui <- navbarPage(
                    ))
                )
              ))
-             )),
+             ),
+            # ),
   navbarMenu(
     "Model Selection",
     tabPanel(
