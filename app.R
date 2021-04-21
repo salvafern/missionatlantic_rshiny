@@ -107,16 +107,17 @@ ui <- navbarPage(
             "selectedlocation",
             h4("Location"),
             choices
-            = list("North_Sea"),
+            = list("North_Sea","Celtic_Sea"),
             selected = "North_Sea"
           ),
-          selectInput(
-            "selectedVariant",
-            h4("Model Variant"),
-            choices
-            = list("1970-1999"),
-            selected = "1970-1999"
-          ), width = 3
+          uiOutput("variant_dropdown")
+          # selectInput(
+          #   "selectedVariant",
+          #   h4("Model Variant"),
+          #   choices
+          #   = list("1970-1999"),
+          #   selected = "1970-1999"
+          # ), width = 3
         ),
         #Main Panel: plot map here in the future
         mainPanel(
@@ -811,6 +812,18 @@ ui <- navbarPage(
 )
 
 server <- function(input, output, session) {
+  output$variant_dropdown <- renderUI({
+    # current chosen model on dropdown lost
+    modelChosen <- input$selectedlocation
+    modelChosenPath <- file.path(getwd(), "Models", modelChosen)
+    variants <- list.dirs(path = modelChosenPath, full.names = FALSE, recursive=FALSE)
+    variants <- as.list(variants)
+    selectInput("selectedVariant", 
+                "Select Variant",
+                choices = variants
+    )
+  })
+  
   output$uiCatchGuild <- renderUI({
     switch(
       input$outputCatchType,
@@ -940,7 +953,7 @@ server <- function(input, output, session) {
   })
   
   output$ui <- renderUI({
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     switch(
       input$selectedParameter,
       "Pelagic" = fluidRow(
@@ -2444,7 +2457,7 @@ server <- function(input, output, session) {
   #Pelagic discard reset
   
   observeEvent(input$pelagicTrawlDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "pelagicTrawlDiscard_pel",
@@ -3567,7 +3580,7 @@ server <- function(input, output, session) {
     )
     # Run baseline
     model <<-
-      e2e_read(input$selectedlocation, input$selectedVariant)
+      e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models")
     #View(model)
     
     results_baseline <-
@@ -4300,7 +4313,7 @@ server <- function(input, output, session) {
     )
     # Run scenario
     model <-
-      e2e_read(input$selectedlocation, input$selectedVariant)
+      e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     # If simultaneous run - do baseline first
     #if (input$runBaselinePlusScenario == 1) {
       #print("Running baseline within scenario run")
