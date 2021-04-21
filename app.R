@@ -110,7 +110,7 @@ ui <- navbarPage(
             = list("North_Sea","Celtic_Sea"),
             selected = "North_Sea"
           ),
-          uiOutput("variant_dropdown")
+          uiOutput("variant_dropdown"), width = 3
           # selectInput(
           #   "selectedVariant",
           #   h4("Model Variant"),
@@ -121,7 +121,9 @@ ui <- navbarPage(
         ),
         #Main Panel: plot map here in the future
         mainPanel(
-          div(img(src = "dummy_map.png", width = '80%') , style="text-align: center;"),  width = 9
+          #div(img(src = "dummy_map.png", width = '80%') , style="text-align: center;")
+          uiOutput("model_map")
+          ,  width = 9
         )
       )
     )), 
@@ -821,6 +823,15 @@ server <- function(input, output, session) {
     selectInput("selectedVariant", 
                 "Select Variant",
                 choices = variants
+    )
+  })
+  
+  output$model_map <- renderUI({
+    # current chosen model on dropdown lost
+    switch(
+      input$selectedlocation,
+    "North_Sea" = div(img(src = "North.png", width = '80%') , style="text-align: center;"),
+    "Celtic_Sea" = div(img(src = "Celtic.png", width = '80%') , style="text-align: center;")
     )
   })
   
