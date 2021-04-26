@@ -111,13 +111,6 @@ ui <- navbarPage(
             selected = "North_Sea"
           ),
           uiOutput("variant_dropdown"), width = 3
-          # selectInput(
-          #   "selectedVariant",
-          #   h4("Model Variant"),
-          #   choices
-          #   = list("1970-1999"),
-          #   selected = "1970-1999"
-          # ), width = 3
         ),
         #Main Panel: plot map here in the future
         mainPanel(
@@ -204,26 +197,27 @@ ui <- navbarPage(
       title = "Catch plots per gear",
       sidebarLayout(
         sidebarPanel(
-          selectInput(
-            "outputGearType",
-            h4("Gear"),
-            choices
-            = list(
-              "Pelagic_Trawl+Seine",
-              "Sandeel+sprat_trawl(Otter30-70mm+TR3)",
-              "Longline_mackerel",
-              "Beam_Trawl_BT1+BT2",
-              "Demeral_Seine",
-              "Demersal_Otter_Trawl_TR1",
-              "Gill_Nets+Longline_demersal",
-              "Beam_Trawl_shrimp",
-              "Nephrops_Trawl_TR2",
-              "Creels",
-              "Mollusc_Dredge",
-              "Whaler"
-            ),
-            selected = "Pelagic_Trawl+Seine"
-          ),
+          uiOutput("gear_dropdown")
+          # selectInput(
+          #   "outputGearType",
+          #   h4("Gear"),
+          #   choices
+          #   = list(
+          #     "Pelagic_Trawl+Seine",
+          #     "Sandeel+sprat_trawl(Otter30-70mm+TR3)",
+          #     "Longline_mackerel",
+          #     "Beam_Trawl_BT1+BT2",
+          #     "Demeral_Seine",
+          #     "Demersal_Otter_Trawl_TR1",
+          #     "Gill_Nets+Longline_demersal",
+          #     "Beam_Trawl_shrimp",
+          #     "Nephrops_Trawl_TR2",
+          #     "Creels",
+          #     "Mollusc_Dredge",
+          #     "Whaler"
+          #   ),
+          #   selected = "Pelagic_Trawl+Seine"
+          # ),
         ),
         mainPanel(
           uiOutput("uiCatchGear"))
@@ -814,6 +808,29 @@ ui <- navbarPage(
 )
 
 server <- function(input, output, session) {
+  
+  output$gear_dropdown <- renderUI({
+    # current chosen model on dropdown lists
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    gear1 <- model$data$fleet.model$gear_labels[1]
+    gear2 <- model$data$fleet.model$gear_labels[2]
+    gear3 <- model$data$fleet.model$gear_labels[3]
+    gear4 <- model$data$fleet.model$gear_labels[4]
+    gear5 <- model$data$fleet.model$gear_labels[5]
+    gear6 <- model$data$fleet.model$gear_labels[6]
+    gear7 <- model$data$fleet.model$gear_labels[7]
+    gear8 <- model$data$fleet.model$gear_labels[8]
+    gear9 <- model$data$fleet.model$gear_labels[9]
+    gear10 <- model$data$fleet.model$gear_labels[10]
+    gear11 <- model$data$fleet.model$gear_labels[11]
+    gear12 <- model$data$fleet.model$gear_labels[12]
+    gears <- list(gear1,gear2,gear3,gear4,gear5,gear6,gear7,gear8,gear9,gear10,gear11,gear12)
+    selectInput("outputGearType",
+                "Select Gear",
+                choices = gears
+    )
+  })
+  
   output$variant_dropdown <- renderUI({
     # current chosen model on dropdown lost
     modelChosen <- input$selectedlocation
@@ -860,14 +877,15 @@ server <- function(input, output, session) {
       "Sandeel+sprat_trawl(Otter30-70mm+TR3)" = fluidRow(plotOutput("ecoPlot_catch_gear_2")),
       "Longline_mackerel" = fluidRow(plotOutput("ecoPlot_catch_gear_3")),
       "Beam_Trawl_BT1+BT2" = fluidRow(plotOutput("ecoPlot_catch_gear_4")),
-      "Demeral_Seine" = fluidRow(plotOutput("ecoPlot_catch_gear_5")),
+      "Demersal_Seine" = fluidRow(plotOutput("ecoPlot_catch_gear_5")),
       "Demersal_Otter_Trawl_TR1" = fluidRow(plotOutput("ecoPlot_catch_gear_6")),
       "Gill_Nets+Longline_demersal" = fluidRow(plotOutput("ecoPlot_catch_gear_7")),
       "Beam_Trawl_shrimp" = fluidRow(plotOutput("ecoPlot_catch_gear_8")),
       "Nephrops_Trawl_TR2" = fluidRow(plotOutput("ecoPlot_catch_gear_9")),
       "Creels" = fluidRow(plotOutput("ecoPlot_catch_gear_10")),
       "Mollusc_Dredge" = fluidRow(plotOutput("ecoPlot_catch_gear_11")),
-      "Whaler" = fluidRow(plotOutput("ecoPlot_catch_gear_12"))
+      "Whaler" = fluidRow(plotOutput("ecoPlot_catch_gear_12")),
+      "KelpHarvester" = fluidRow(plotOutput("ecoPlot_catch_gear_12"))
     )
   })
   
@@ -3592,7 +3610,7 @@ server <- function(input, output, session) {
     # Run baseline
     model <<-
       e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models")
-    #View(model)
+    View(model)
     
     results_baseline <-
       e2e_run(model, nyears = input$year, csv.output = TRUE)
