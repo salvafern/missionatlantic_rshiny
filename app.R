@@ -335,146 +335,7 @@ ui <- navbarPage(
     tabPanel(
       title = "Fishing Activity",
       h4("Some text about fishing activity to go here"),
-      fluidRow(
-        column(
-          width = 5,
-          wellPanel(
-            sliderInput(
-              "pelTrawlAct",
-              "Pelagic Trawl+Seine activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "sanSpratTrawlAct",
-              "Sandeel sprat trawl activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "llMackerel",
-              "Longline mackerel activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "beamTrawl",
-              "Beam Trawl BT1+BT2 activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "demersalSeine",
-              "Demersal Seine activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "demersalOtterTrawl",
-              "Demersal Otter Trawl TR1 activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          )
-        ),
-        column(
-          width = 5,
-          wellPanel(
-            sliderInput(
-              "gillLongDemersal",
-              "Gill Nets+Longline demersal activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "beamTrawlShrimp",
-              "Beam Trawl shrimp activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "nephropsTrawl",
-              "Nephrops Trawl TR2 activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "creels",
-              "Creels activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "molluscDredge",
-              "Mollusc Dredge activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "whaler",
-              "Whaler activity:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          )
-        )
-      )
+      uiOutput("uiFishingActivity")
     ),
     tabPanel(title = "Seabed Abrasion",
       h4("Some text about seabed abrasion to go here"),
@@ -647,6 +508,177 @@ ui <- navbarPage(
 
 server <- function(input, output, session) {
   
+  output$uiFishingActivity <- renderUI({
+    # current chosen model on dropdown lists
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    gear1 <- model$data$fleet.model$gear_labels[1]
+    gear2 <- model$data$fleet.model$gear_labels[2]
+    gear3 <- model$data$fleet.model$gear_labels[3]
+    gear4 <- model$data$fleet.model$gear_labels[4]
+    gear5 <- model$data$fleet.model$gear_labels[5]
+    gear6 <- model$data$fleet.model$gear_labels[6]
+    gear7 <- model$data$fleet.model$gear_labels[7]
+    gear8 <- model$data$fleet.model$gear_labels[8]
+    gear9 <- model$data$fleet.model$gear_labels[9]
+    gear10 <- model$data$fleet.model$gear_labels[10]
+    gear11 <- model$data$fleet.model$gear_labels[11]
+    gear12 <- model$data$fleet.model$gear_labels[12]
+    # gear1Activity <- model$data$fleet.model$gear_activity[1]
+    # gear2Activity <- model$data$fleet.model$gear_activity[2]
+    # gear3Activity <- model$data$fleet.model$gear_activity[3]
+    # gear4Activity <- model$data$fleet.model$gear_activity[4]
+    # gear5Activity <- model$data$fleet.model$gear_activity[5]
+    # gear6Activity <- model$data$fleet.model$gear_activity[6]
+    # gear7Activity <- model$data$fleet.model$gear_activity[7]
+    # gear8Activity <- model$data$fleet.model$gear_activity[8]
+    # gear9Activity <- model$data$fleet.model$gear_activity[9]
+    # gear10Activity <- model$data$fleet.model$gear_activity[10]
+    # gear11Activity <- model$data$fleet.model$gear_activity[11]
+    # gear12Activity <- model$data$fleet.model$gear_activity[12]
+    fluidRow(
+      column(
+        width = 5,
+        wellPanel(
+          sliderInput(
+            "pelTrawlAct",
+            paste(gear1, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        ),
+        wellPanel(
+          sliderInput(
+            "sanSpratTrawlAct",
+            paste(gear2, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        ),
+        wellPanel(
+          sliderInput(
+            "llMackerel",
+            paste(gear3, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        ),
+        wellPanel(
+          sliderInput(
+            "beamTrawl",
+            paste(gear4, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        ),
+        wellPanel(
+          sliderInput(
+            "demersalSeine",
+            paste(gear5, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        ),
+        wellPanel(
+          sliderInput(
+            "demersalOtterTrawl",
+            paste(gear6, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+      ),
+      column(
+        width = 5,
+        wellPanel(
+          sliderInput(
+            "gillLongDemersal",
+            paste(gear7, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        ),
+        wellPanel(
+          sliderInput(
+            "beamTrawlShrimp",
+            paste(gear8, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        ),
+        wellPanel(
+          sliderInput(
+            "nephropsTrawl",
+            paste(gear9, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        ),
+        wellPanel(
+          sliderInput(
+            "creels",
+            paste(gear10, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        ),
+        wellPanel(
+          sliderInput(
+            "molluscDredge",
+            paste(gear11, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        ),
+        wellPanel(
+          sliderInput(
+            "whaler",
+            paste(gear12, "activity", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+      )
+    )
+    
+  })
+    
+  
   output$uiSeabedAbrasian <- renderUI({
     # current chosen model on dropdown lists
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -675,7 +707,6 @@ server <- function(input, output, session) {
     gear11Plough <- model$data$fleet.model$gear_ploughing_rate[11]
     gear12Plough <- model$data$fleet.model$gear_ploughing_rate[12]
     
-
     fluidRow(
         if (gear1Plough > 0) {
                          wellPanel(
@@ -686,7 +717,7 @@ server <- function(input, output, session) {
                              max = 2.0,
                              value = 0.0,
                              step = 0.2,
-                             width = "75%"
+                             width = "100%"
                            )
                          )
         },
@@ -699,7 +730,7 @@ server <- function(input, output, session) {
             max = 2.0,
             value = 1.0,
             step = 0.2,
-            width = "75%"
+            width = "100%"
           )
         )
         },
