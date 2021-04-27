@@ -265,7 +265,7 @@ ui <- navbarPage(
       h4("Some text about Temperature to go here"),
       fluidRow(column(
         width = 5,
-        offset = 2,
+        #offset = 2,
         wellPanel(
           sliderInput(
             "temperature",
@@ -284,7 +284,7 @@ ui <- navbarPage(
       fluidRow(
         column(
           width = 5,
-          offset = 2,
+         # offset = 2,
           wellPanel(
             sliderInput(
               "atmnitrate",
