@@ -5,6 +5,7 @@ createCatchPlotPerGuild	<- function( model, results, dsa ) {
   data <- elt(model, "data")
   fleet.model <- elt(data, "fleet.model")
   gear_codes <- elt(fleet.model, "gear_codes")
+  gear_labels <- elt(fleet.model, "gear_labels")
   final.year.outputs <- elt(results, "final.year.outputs")
   offshore_catchmat <- elt(final.year.outputs, "offshore_catchmat")
   offshore_discmat <- elt(final.year.outputs, "offshore_discmat")
@@ -20,10 +21,10 @@ createCatchPlotPerGuild	<- function( model, results, dsa ) {
   inshore_data2plot <- rbind(inshore_discmat[dsa, ], inshore_landmat[dsa, 
   ])
   #colnames(offshore_data2plot) <- gear_codes
-  gear_labels <- c("Pelagic_Trawl+Seine", "Sandeel+sprat_trawl", "Longline_mackerel",
-                    "Beam_Trawl_BT1+BT2", "Demeral_Seine", "Demersal_Otter_Trawl_TR1", 
-                    "Gill_Nets+Longline_demersal", "Beam_Trawl_shrimp", "Nephrops_Trawl_TR2", 
-                    "Creels", "Mollusc_Dredge", "Whaler")
+  # gear_labels <- c("Pelagic_Trawl+Seine", "Sandeel+sprat_trawl", "Longline_mackerel",
+  #                   "Beam_Trawl_BT1+BT2", "Demeral_Seine", "Demersal_Otter_Trawl_TR1", 
+  #                   "Gill_Nets+Longline_demersal", "Beam_Trawl_shrimp", "Nephrops_Trawl_TR2", 
+  #                   "Creels", "Mollusc_Dredge", "Whaler")
   if (sum(offshore_data2plot + inshore_data2plot) > 0) {
     yaxmax <- (1.2 * max(c(offshore_catchmat[dsa, ], 
                            inshore_catchmat[dsa, ])))
