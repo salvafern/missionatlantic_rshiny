@@ -827,8 +827,9 @@ server <- function(input, output, session) {
     gears <- list(gear1,gear2,gear3,gear4,gear5,gear6,gear7,gear8,gear9,gear10,gear11,gear12)
     selectInput("outputGearType",
                 "Select Gear",
-                choices = gears
-    )
+                choices = gears,
+       selected = "Pelagic_Trawl+Seine"
+    ),
   })
   
   output$variant_dropdown <- renderUI({
@@ -882,10 +883,11 @@ server <- function(input, output, session) {
       "Gill_Nets+Longline_demersal" = fluidRow(plotOutput("ecoPlot_catch_gear_7")),
       "Beam_Trawl_shrimp" = fluidRow(plotOutput("ecoPlot_catch_gear_8")),
       "Nephrops_Trawl_TR2" = fluidRow(plotOutput("ecoPlot_catch_gear_9")),
+      "Nephrops_Trawl_TR3" = fluidRow(plotOutput("ecoPlot_catch_gear_9")),
       "Creels" = fluidRow(plotOutput("ecoPlot_catch_gear_10")),
       "Mollusc_Dredge" = fluidRow(plotOutput("ecoPlot_catch_gear_11")),
-      "Whaler" = fluidRow(plotOutput("ecoPlot_catch_gear_12")),
-      "KelpHarvester" = fluidRow(plotOutput("ecoPlot_catch_gear_12"))
+      "Whaler" = fluidRow(plotOutput("ecoPlot_catch_gear_12_Whaler")),
+      "KelpHarvester" = fluidRow(plotOutput("ecoPlot_catch_gear_12_KelpHarvester"))
     )
   })
   
@@ -4149,7 +4151,16 @@ server <- function(input, output, session) {
         )
       })
     
-    output$ecoPlot_catch_gear_12 <- 
+    output$ecoPlot_catch_gear_12_Whaler <- 
+      renderPlot({
+        createCatchPlotPerGear(
+          model,
+          results = results_baseline,
+          dsa = 12
+        )
+      })
+
+    output$ecoPlot_catch_gear_12_KelpHarvester <- 
       renderPlot({
         createCatchPlotPerGear(
           model,
