@@ -198,26 +198,6 @@ ui <- navbarPage(
       sidebarLayout(
         sidebarPanel(
           uiOutput("gear_dropdown")
-          # selectInput(
-          #   "outputGearType",
-          #   h4("Gear"),
-          #   choices
-          #   = list(
-          #     "Pelagic_Trawl+Seine",
-          #     "Sandeel+sprat_trawl(Otter30-70mm+TR3)",
-          #     "Longline_mackerel",
-          #     "Beam_Trawl_BT1+BT2",
-          #     "Demeral_Seine",
-          #     "Demersal_Otter_Trawl_TR1",
-          #     "Gill_Nets+Longline_demersal",
-          #     "Beam_Trawl_shrimp",
-          #     "Nephrops_Trawl_TR2",
-          #     "Creels",
-          #     "Mollusc_Dredge",
-          #     "Whaler"
-          #   ),
-          #   selected = "Pelagic_Trawl+Seine"
-          # ),
         ),
         mainPanel(
           uiOutput("uiCatchGear"))
@@ -811,6 +791,7 @@ server <- function(input, output, session) {
   
   output$gear_dropdown <- renderUI({
     # current chosen model on dropdown lists
+    gears <- list("Pelagic_Trawl+Seine")
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     gear1 <- model$data$fleet.model$gear_labels[1]
     gear2 <- model$data$fleet.model$gear_labels[2]
@@ -829,7 +810,7 @@ server <- function(input, output, session) {
                 "Select Gear",
                 choices = gears,
        selected = "Pelagic_Trawl+Seine"
-    ),
+    )
   })
   
   output$variant_dropdown <- renderUI({
@@ -876,6 +857,7 @@ server <- function(input, output, session) {
       input$outputGearType,
       "Pelagic_Trawl+Seine" = fluidRow(plotOutput("ecoPlot_catch_gear_1")),
       "Sandeel+sprat_trawl(Otter30-70mm+TR3)" = fluidRow(plotOutput("ecoPlot_catch_gear_2")),
+      "Otter30-70mm+TR3(sandeel+sprat)" = fluidRow(plotOutput("ecoPlot_catch_gear_2")),
       "Longline_mackerel" = fluidRow(plotOutput("ecoPlot_catch_gear_3")),
       "Beam_Trawl_BT1+BT2" = fluidRow(plotOutput("ecoPlot_catch_gear_4")),
       "Demersal_Seine" = fluidRow(plotOutput("ecoPlot_catch_gear_5")),
@@ -985,13 +967,25 @@ server <- function(input, output, session) {
   
   output$ui <- renderUI({
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    gear1 <- model$data$fleet.model$gear_labels[1]
+    gear2 <- model$data$fleet.model$gear_labels[2]
+    gear3 <- model$data$fleet.model$gear_labels[3]
+    gear4 <- model$data$fleet.model$gear_labels[4]
+    gear5 <- model$data$fleet.model$gear_labels[5]
+    gear6 <- model$data$fleet.model$gear_labels[6]
+    gear7 <- model$data$fleet.model$gear_labels[7]
+    gear8 <- model$data$fleet.model$gear_labels[8]
+    gear9 <- model$data$fleet.model$gear_labels[9]
+    gear10 <- model$data$fleet.model$gear_labels[10]
+    gear11 <- model$data$fleet.model$gear_labels[11]
+    gear12 <- model$data$fleet.model$gear_labels[12]
     switch(
       input$selectedParameter,
       "Pelagic" = fluidRow(
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_pel",
-            "Pelagic Trawl Discard:",
+            paste(gear1, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[1],
@@ -1003,7 +997,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "sanSpratTrawlDiscard_pel",
-            "San spart trawl discard:",
+            paste(gear2, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[2],
@@ -1015,7 +1009,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "llMackerelDiscard_pel",
-            "llMackerel Discard:",
+            paste(gear3, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[3],
@@ -1027,7 +1021,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlDiscard_pel",
-            "Beam Trawl Discard:",
+            paste(gear4, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[4],
@@ -1039,7 +1033,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalSeineDiscard_pel",
-            "Demersal Seine Discard:",
+            paste(gear5, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[5],
@@ -1051,7 +1045,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalOtterTrawlDiscard_pel",
-            "Demersal OtterTrawl Discard:",
+            paste(gear6, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[6],
@@ -1063,7 +1057,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "gillLongDemersalDiscard_pel",
-            "Gill Long Demersal Discard:",
+            paste(gear7, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[7],
@@ -1075,7 +1069,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlShrimpDiscard_pel",
-            "Beam Trawl Shrimp Discard:",
+            paste(gear8, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[8],
@@ -1087,7 +1081,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "nephropsTrawlDiscard_pel",
-            "Nephrops Trawl Discard:",
+            paste(gear9, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[9],
@@ -1099,7 +1093,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "creelsDiscard_pel",
-            "Creels Discard:",
+            paste(gear10, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[10],
@@ -1111,7 +1105,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "molluscDredgeDiscard_pel",
-            "Mollusc Dredge Discard:",
+            paste(gear11, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[11],
@@ -1123,7 +1117,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "whalerDiscard_pel",
-            "Whaler Discard:",
+            paste(gear12, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$pelagic[12],
@@ -1137,7 +1131,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_dem",
-            "Pelagic Trawl Discard:",
+            paste(gear1, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[1],
@@ -1149,7 +1143,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "sanSpratTrawlDiscard_dem",
-            "San spart trawl discard:",
+            paste(gear2, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[2],
@@ -1161,7 +1155,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "llMackerelDiscard_dem",
-            "llMackerel Discard:",
+            paste(gear3, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[3],
@@ -1173,7 +1167,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlDiscard_dem",
-            "Beam Trawl Discard:",
+            paste(gear4, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[4],
@@ -1185,7 +1179,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalSeineDiscard_dem",
-            "Demersal Seine Discard:",
+            paste(gear5, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[5],
@@ -1199,7 +1193,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalOtterTrawlDiscard_dem",
-            "Demersal OtterTrawl Discard:",
+            paste(gear6, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[6],
@@ -1211,7 +1205,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "gillLongDemersalDiscard_dem",
-            "Gill Long Demersal Discard:",
+            paste(gear7, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[7],
@@ -1223,7 +1217,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlShrimpDiscard_dem",
-            "Beam Trawl Shrimp Discard:",
+            paste(gear8, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[8],
@@ -1235,7 +1229,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "nephropsTrawlDiscard_dem",
-            "Nephrops Trawl Discard:",
+            paste(gear9, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[9],
@@ -1247,7 +1241,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "creelsDiscard_dem",
-            "Creels Discard:",
+            paste(gear10, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[10],
@@ -1259,7 +1253,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "molluscDredgeDiscard_dem",
-            "Mollusc Dredge Discard Discard:",
+            paste(gear11, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[11],
@@ -1271,7 +1265,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "whalerDiscard_dem",
-            "Whaler Discard:",
+            paste(gear12, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$demersal[12],
@@ -1287,7 +1281,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_mig",
-            "Pelagic Trawl Discard:",
+            paste(gear1, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[1],
@@ -1299,7 +1293,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "sanSpratTrawlDiscard_mig",
-            "San spart trawl discard:",
+            paste(gear2, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[2],
@@ -1311,7 +1305,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "llMackerelDiscard_mig",
-            "llMackerel Discard:",
+            paste(gear3, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[3],
@@ -1323,7 +1317,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlDiscard_mig",
-            "Beam Trawl Discard:",
+            paste(gear4, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[4],
@@ -1335,7 +1329,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalSeineDiscard_mig",
-            "Demersal Seine Discard:",
+            paste(gear5, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[5],
@@ -1349,7 +1343,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalOtterTrawlDiscard_mig",
-            "Demersal OtterTrawl Discard:",
+            paste(gear6, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[6],
@@ -1361,7 +1355,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "gillLongDemersalDiscard_mig",
-            "Gill Long Demersal Discard:",
+            paste(gear7, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[7],
@@ -1373,7 +1367,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlShrimpDiscard_mig",
-            "Beam Trawl Shrimp Discard:",
+            paste(gear8, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[8],
@@ -1385,7 +1379,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "nephropsTrawlDiscard_mig",
-            "Nephrops Trawl Discard:",
+            paste(gear9, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[9],
@@ -1397,7 +1391,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "creelsDiscard_mig",
-            "Creels Discard:",
+            paste(gear10, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[10],
@@ -1409,7 +1403,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "molluscDredgeDiscard_mig",
-            "Mollusc Dredge Discard Discard:",
+            paste(gear11, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[11],
@@ -1421,7 +1415,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "whalerDiscard_mig",
-            "Whaler Discard:",
+            paste(gear12, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$migratory[12],
@@ -1437,7 +1431,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_fb",
-            "Pelagic Trawl Discard:",
+            paste(gear1, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[1],
@@ -1449,7 +1443,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "sanSpratTrawlDiscard_fb",
-            "San spart trawl discard:",
+            paste(gear2, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[2],
@@ -1461,7 +1455,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "llMackerelDiscard_fb",
-            "llMackerel Discard:",
+            paste(gear3, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[3],
@@ -1473,7 +1467,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlDiscard_fb",
-            "Beam Trawl Discard:",
+            paste(gear4, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[4],
@@ -1485,7 +1479,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalSeineDiscard_fb",
-            "Demersal Seine Discard:",
+            paste(gear5, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[5],
@@ -1499,7 +1493,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalOtterTrawlDiscard_fb",
-            "Demersal OtterTrawl Discard:",
+            paste(gear6, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[6],
@@ -1511,7 +1505,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "gillLongDemersalDiscard_fb",
-            "Gill Long Demersal Discard:",
+            paste(gear7, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[7],
@@ -1523,7 +1517,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlShrimpDiscard_fb",
-            "Beam Trawl Shrimp Discard:",
+            paste(gear8, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[8],
@@ -1535,7 +1529,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "nephropsTrawlDiscard_fb",
-            "Nephrops Trawl Discard:",
+            paste(gear9, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[9],
@@ -1547,7 +1541,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "creelsDiscard_fb",
-            "Creels Discard:",
+            paste(gear10, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[10],
@@ -1559,7 +1553,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "molluscDredgeDiscard_fb",
-            "Mollusc Dredge Discard Discard:",
+            paste(gear11, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[11],
@@ -1571,7 +1565,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "whalerDiscard_fb",
-            "Whaler Discard:",
+            paste(gear12, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$filtben[12],
@@ -1587,7 +1581,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_cb",
-            "Pelagic Trawl Discard:",
+            paste(gear1, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[1],
@@ -1599,7 +1593,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "sanSpratTrawlDiscard_cb",
-            "San spart trawl discard:",
+            paste(gear2, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[2],
@@ -1611,7 +1605,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "llMackerelDiscard_cb",
-            "llMackerel Discard:",
+            paste(gear3, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[3],
@@ -1623,7 +1617,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlDiscard_cb",
-            "Beam Trawl Discard:",
+            paste(gear4, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[4],
@@ -1635,7 +1629,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalSeineDiscard_cb",
-            "Demersal Seine Discard:",
+            paste(gear5, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[5],
@@ -1649,7 +1643,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalOtterTrawlDiscard_cb",
-            "Demersal OtterTrawl Discard:",
+            paste(gear6, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[6],
@@ -1661,7 +1655,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "gillLongDemersalDiscard_cb",
-            "Gill Long Demersal Discard:",
+            paste(gear7, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[7],
@@ -1673,7 +1667,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlShrimpDiscard_cb",
-            "Beam Trawl Shrimp Discard:",
+            paste(gear8, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[8],
@@ -1685,7 +1679,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "nephropsTrawlDiscard_cb",
-            "Nephrops Trawl Discard:",
+            paste(gear9, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[9],
@@ -1697,7 +1691,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "creelsDiscard_cb",
-            "Creels Discard:",
+            paste(gear10, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[10],
@@ -1709,7 +1703,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "molluscDredgeDiscard_cb",
-            "Mollusc Dredge Discard Discard:",
+            paste(gear11, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[11],
@@ -1721,7 +1715,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "whalerDiscard_cb",
-            "Whaler Discard:",
+            paste(gear12, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnben[12],
@@ -1737,7 +1731,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_cz",
-            "Pelagic Trawl Discard:",
+            paste(gear1, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[1],
@@ -1749,7 +1743,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "sanSpratTrawlDiscard_cz",
-            "San spart trawl discard:",
+            paste(gear2, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[1],
@@ -1761,7 +1755,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "llMackerelDiscard_cz",
-            "llMackerel Discard:",
+            paste(gear3, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[2],
@@ -1773,7 +1767,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlDiscard_cz",
-            "Beam Trawl Discard:",
+            paste(gear4, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[3],
@@ -1785,7 +1779,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalSeineDiscard_cz",
-            "Demersal Seine Discard:",
+            paste(gear5, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[4],
@@ -1800,7 +1794,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalOtterTrawlDiscard_cz",
-            "Demersal OtterTrawl Discard:",
+            paste(gear6, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[5],
@@ -1812,7 +1806,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "gillLongDemersalDiscard_cz",
-            "Gill Long Demersal Discard:",
+            paste(gear7, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[6],
@@ -1824,7 +1818,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlShrimpDiscard_cz",
-            "Beam Trawl Shrimp Discard:",
+            paste(gear8, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[7],
@@ -1836,7 +1830,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "nephropsTrawlDiscard_cz",
-            "Nephrops Trawl Discard:",
+            paste(gear9, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[8],
@@ -1848,7 +1842,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "creelsDiscard_cz",
-            "Creels Discard:",
+            paste(gear10, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[9],
@@ -1860,7 +1854,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "molluscDredgeDiscard_cz",
-            "Mollusc Dredge Discard Discard:",
+            paste(gear11, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[10],
@@ -1872,7 +1866,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "whalerDiscard_cz",
-            "Whaler Discard:",
+            paste(gear12, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$carnzoo[11],
@@ -1888,7 +1882,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_b",
-            "Pelagic Trawl Discard:",
+            paste(gear1, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[1],
@@ -1900,7 +1894,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "sanSpratTrawlDiscard_b",
-            "San spart trawl discard:",
+            paste(gear2, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[2],
@@ -1912,7 +1906,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "llMackerelDiscard_b",
-            "llMackerel Discard:",
+            paste(gear3, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[3],
@@ -1924,7 +1918,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlDiscard_b",
-            "Beam Trawl Discard:",
+            paste(gear4, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[4],
@@ -1936,7 +1930,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalSeineDiscard_b",
-            "Demersal Seine Discard:",
+            paste(gear5, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[5],
@@ -1950,7 +1944,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalOtterTrawlDiscard_b",
-            "Demersal OtterTrawl Discard:",
+            paste(gear6, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[6],
@@ -1962,7 +1956,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "gillLongDemersalDiscard_b",
-            "Gill Long Demersal Discard:",
+            paste(gear7, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[7],
@@ -1974,7 +1968,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlShrimpDiscard_b",
-            "Beam Trawl Shrimp Discard:",
+            paste(gear8, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[8],
@@ -1986,7 +1980,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "nephropsTrawlDiscard_b",
-            "Nephrops Trawl Discard:",
+            paste(gear9, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[9],
@@ -1998,7 +1992,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "creelsDiscard_b",
-            "Creels Discard:",
+            paste(gear10, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[10],
@@ -2010,7 +2004,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "molluscDredgeDiscard_b",
-            "Mollusc Dredge Discard Discard:",
+            paste(gear11, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[11],
@@ -2022,7 +2016,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "whalerDiscard_b",
-            "Whaler Discard:",
+            paste(gear12, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$bird[12],
@@ -2038,7 +2032,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_s",
-            "Pelagic Trawl Discard:",
+            paste(gear1, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[1],
@@ -2050,7 +2044,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "sanSpratTrawlDiscard_s",
-            "San spart trawl discard:",
+            paste(gear2, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[2],
@@ -2062,7 +2056,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "llMackerelDiscard_s",
-            "llMackerel Discard:",
+            paste(gear3, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[3],
@@ -2074,7 +2068,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlDiscard_s",
-            "Beam Trawl Discard:",
+            paste(gear4, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[4],
@@ -2086,7 +2080,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalSeineDiscard_s",
-            "Demersal Seine Discard:",
+            paste(gear5, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[5],
@@ -2100,7 +2094,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalOtterTrawlDiscard_s",
-            "Demersal OtterTrawl Discard:",
+            paste(gear6, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[6],
@@ -2112,7 +2106,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "gillLongDemersalDiscard_s",
-            "Gill Long Demersal Discard:",
+            paste(gear7, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[7],
@@ -2124,7 +2118,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlShrimpDiscard_s",
-            "Beam Trawl Shrimp Discard:",
+            paste(gear8, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[8],
@@ -2136,7 +2130,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "nephropsTrawlDiscard_s",
-            "Nephrops Trawl Discard:",
+            paste(gear9, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[9],
@@ -2148,7 +2142,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "creelsDiscard_s",
-            "Creels Discard:",
+            paste(gear10, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[10],
@@ -2160,7 +2154,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "molluscDredgeDiscard_s",
-            "Mollusc Dredge Discard Discard:",
+            paste(gear11, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[11],
@@ -2172,7 +2166,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "whalerDiscard_s",
-            "Whaler Discard:",
+            paste(gear12, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$seal[12],
@@ -2188,7 +2182,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_ceta",
-            "Pelagic Trawl Discard:",
+            paste(gear1, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[1],
@@ -2200,7 +2194,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "sanSpratTrawlDiscard_ceta",
-            "San spart trawl discard:",
+            paste(gear2, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[2],
@@ -2212,7 +2206,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "llMackerelDiscard_ceta",
-            "llMackerel Discard:",
+            paste(gear3, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[3],
@@ -2224,7 +2218,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlDiscard_ceta",
-            "Beam Trawl Discard:",
+            paste(gear4, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[4],
@@ -2236,7 +2230,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalSeineDiscard_ceta",
-            "Demersal Seine Discard:",
+            paste(gear5, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[5],
@@ -2250,7 +2244,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalOtterTrawlDiscard_ceta",
-            "Demersal OtterTrawl Discard:",
+            paste(gear6, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[6],
@@ -2262,7 +2256,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "gillLongDemersalDiscard_ceta",
-            "Gill Long Demersal Discard:",
+            paste(gear7, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[7],
@@ -2274,7 +2268,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlShrimpDiscard_ceta",
-            "Beam Trawl Shrimp Discard:",
+            paste(gear8, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[8],
@@ -2286,7 +2280,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "nephropsTrawlDiscard_ceta",
-            "Nephrops Trawl Discard:",
+            paste(gear9, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[9],
@@ -2298,7 +2292,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "creelsDiscard_ceta",
-            "Creels Discard:",
+            paste(gear10, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[10],
@@ -2310,7 +2304,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "molluscDredgeDiscard_ceta",
-            "Mollusc Dredge Discard Discard:",
+            paste(gear11, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[11],
@@ -2322,7 +2316,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "whalerDiscard_ceta",
-            "Whaler Discard:",
+            paste(gear12, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$ceta[12],
@@ -2338,7 +2332,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_kelp",
-            "Pelagic Trawl Discard:",
+            paste(gear1, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[1],
@@ -2350,7 +2344,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "sanSpratTrawlDiscard_kelp",
-            "San spart trawl discard:",
+            paste(gear2, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[2],
@@ -2362,7 +2356,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "llMackerelDiscard_kelp",
-            "llMackerel Discard:",
+            paste(gear3, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[3],
@@ -2374,7 +2368,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlDiscard_kelp",
-            "Beam Trawl Discard:",
+            paste(gear4, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[4],
@@ -2386,7 +2380,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalSeineDiscard_kelp",
-            "Demersal Seine Discard:",
+            paste(gear5, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[5],
@@ -2400,7 +2394,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "demersalOtterTrawlDiscard_kelp",
-            "Demersal OtterTrawl Discard:",
+            paste(gear6, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[6],
@@ -2412,7 +2406,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "gillLongDemersalDiscard_kelp",
-            "Gill Long Demersal Discard:",
+            paste(gear7, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[7],
@@ -2424,7 +2418,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "beamTrawlShrimpDiscard_kelp",
-            "Beam Trawl Shrimp Discard:",
+            paste(gear8, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[8],
@@ -2436,7 +2430,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "nephropsTrawlDiscard_kelp",
-            "Nephrops Trawl Discard:",
+            paste(gear9, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[9],
@@ -2448,7 +2442,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "creelsDiscard_kelp",
-            "Creels Discard:",
+            paste(gear10, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[10],
@@ -2460,7 +2454,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "molluscDredgeDiscard_kelp",
-            "Mollusc Dredge Discard Discard:",
+            paste(gear11, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[11],
@@ -2472,7 +2466,7 @@ server <- function(input, output, session) {
         wellPanel(
           sliderInput(
             "whalerDiscard_kelp",
-            "Whaler Discard:",
+            paste(gear12, "Discard", sep=" "),
             min = 0,
             max = 1.0,
             value = model$data$fleet.model$gear_group_discard$kelp[12],
