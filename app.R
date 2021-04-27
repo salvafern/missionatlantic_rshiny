@@ -476,151 +476,9 @@ ui <- navbarPage(
         )
       )
     ),
-    tabPanel(
-      title = "Seabed Abrasion",
+    tabPanel(title = "Seabed Abrasion",
       h4("Some text about seabed abrasion to go here"),
-      fluidRow(
-        column(
-          width = 5,
-          conditionalPanel(condition = "input.pelTrawlPlough > 0",
-                           wellPanel(
-                             sliderInput(
-                               "pelTrawlPlough",
-                               "Pelagic Trawl+Seine seabed abrasion:",
-                               min = 0,
-                               max = 2.0,
-                               value = 0.0,
-                               step = 0.2,
-                               width = "100%"
-                             )
-                           ), ),
-          wellPanel(
-            sliderInput(
-              "sanSpratTrawlPlough",
-              "Sandeel sprat trawl seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "llMackerelPlough",
-              "Longline mackerel seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "beamTrawlPlough",
-              "Beam Trawl BT1+BT2 seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "demersalSeinePlough",
-              "Demersal Seine seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "demersalOtterTrawlPlough",
-              "Demersal Otter Trawl TR1 seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          )
-        ),
-        column(
-          width = 5,
-          wellPanel(
-            sliderInput(
-              "gillLongDemersalPlough",
-              "Gill Nets+Longline demersal seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "beamTrawlShrimpPlough",
-              "Beam Trawl shrimp seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "nephropsTrawlPlough",
-              "Nephrops Trawl TR2 seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "creelsPlough",
-              "Creels seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "molluscDredgePlough",
-              "Mollusc Dredge seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          ),
-          wellPanel(
-            sliderInput(
-              "whalerPlough",
-              "Whaler seabed abrasion:",
-              min = 0,
-              max = 2.0,
-              value = 1.0,
-              step = 0.2,
-              width = "100%"
-            )
-          )
-        )
-      )
-    ),
+      uiOutput("uiSeabedAbrasian")),
     tabPanel(
       title = "Guild Discard Per Gear",
       h4("Some text about discards per gear to go here"),
@@ -788,6 +646,195 @@ ui <- navbarPage(
 )
 
 server <- function(input, output, session) {
+  
+  output$uiSeabedAbrasian <- renderUI({
+    # current chosen model on dropdown lists
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    gear1 <- model$data$fleet.model$gear_labels[1]
+    gear2 <- model$data$fleet.model$gear_labels[2]
+    gear3 <- model$data$fleet.model$gear_labels[3]
+    gear4 <- model$data$fleet.model$gear_labels[4]
+    gear5 <- model$data$fleet.model$gear_labels[5]
+    gear6 <- model$data$fleet.model$gear_labels[6]
+    gear7 <- model$data$fleet.model$gear_labels[7]
+    gear8 <- model$data$fleet.model$gear_labels[8]
+    gear9 <- model$data$fleet.model$gear_labels[9]
+    gear10 <- model$data$fleet.model$gear_labels[10]
+    gear11 <- model$data$fleet.model$gear_labels[11]
+    gear12 <- model$data$fleet.model$gear_labels[12]
+    gear1Plough <- model$data$fleet.model$gear_ploughing_rate[1]
+    gear2Plough <- model$data$fleet.model$gear_ploughing_rate[2]
+    gear3Plough <- model$data$fleet.model$gear_ploughing_rate[3]
+    gear4Plough <- model$data$fleet.model$gear_ploughing_rate[4]
+    gear5Plough <- model$data$fleet.model$gear_ploughing_rate[5]
+    gear6Plough <- model$data$fleet.model$gear_ploughing_rate[6]
+    gear7Plough <- model$data$fleet.model$gear_ploughing_rate[7]
+    gear8Plough <- model$data$fleet.model$gear_ploughing_rate[8]
+    gear9Plough <- model$data$fleet.model$gear_ploughing_rate[9]
+    gear10Plough <- model$data$fleet.model$gear_ploughing_rate[10]
+    gear11Plough <- model$data$fleet.model$gear_ploughing_rate[11]
+    gear12Plough <- model$data$fleet.model$gear_ploughing_rate[12]
+    
+
+    fluidRow(
+        if (gear1Plough > 0) {
+                         wellPanel(
+                           sliderInput(
+                             "pelTrawlPlough",
+                             paste(gear1, "seabed abrasion", sep=" "),
+                             min = 0,
+                             max = 2.0,
+                             value = 0.0,
+                             step = 0.2,
+                             width = "75%"
+                           )
+                         )
+        },
+        if (gear2Plough > 0) {
+          wellPanel(
+          sliderInput(
+            "sanSpratTrawlPlough",
+            paste(gear2, "seabed abrasion", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "75%"
+          )
+        )
+        },
+        if (gear3Plough > 0) {
+          wellPanel(
+          sliderInput(
+            "llMackerelPlough",
+            paste(gear3, "seabed abrasion", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+        },
+        if (gear4Plough > 0) {
+        wellPanel(
+          sliderInput(
+            "beamTrawlPlough",
+            paste(gear4, "seabed abrasion", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+        },
+        if (gear5Plough > 0) {
+        wellPanel(
+          sliderInput(
+            "demersalSeinePlough",
+            paste(gear5, "seabed abrasion", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+        },
+        if (gear6Plough > 0) {
+        wellPanel(
+          sliderInput(
+            "demersalOtterTrawlPlough",
+            paste(gear6, "seabed abrasion", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+        },
+        if (gear7Plough > 0) {
+        wellPanel(
+          sliderInput(
+            "gillLongDemersalPlough",
+            paste(gear7, "seabed abrasion", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+        },
+        if (gear8Plough > 0) {
+        wellPanel(
+          sliderInput(
+            "beamTrawlShrimpPlough",
+            paste(gear8, "seabed abrasion", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+        },
+        if (gear9Plough > 0) {
+        wellPanel(
+          sliderInput(
+            "nephropsTrawlPlough",
+            paste(gear9, "seabed abrasion", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+        },
+        if (gear10Plough > 0) {
+        wellPanel(
+          sliderInput(
+            "creelsPlough",
+            paste(gear10, "seabed abrasion", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+        },
+        if (gear11Plough > 0) {
+        wellPanel(
+          sliderInput(
+            "molluscDredgePlough",
+            paste(gear11, "seabed abrasion", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+        },
+        if (gear12Plough > 0) {
+        wellPanel(
+          sliderInput(
+            "whalerPlough",
+            paste(gear12, "seabed abrasion", sep=" "),
+            min = 0,
+            max = 2.0,
+            value = 1.0,
+            step = 0.2,
+            width = "100%"
+          )
+        )
+        }
+    )
+  })
   
   output$gear_dropdown <- renderUI({
     # current chosen model on dropdown lists
