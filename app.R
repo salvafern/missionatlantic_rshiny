@@ -867,10 +867,42 @@ server <- function(input, output, session) {
     )
   })
   
-  output$gear_dropdown <- renderUI({
+  chooseGear <- reactive({ ## This all works locally - but not on server (populates dropdown with number without this)- so adding hacky belts and braces 
+    selectedModel <- input$selectedlocation
+    selectedYears <- input$selectedVariant
     # current chosen model on dropdown lists
-    gears <- list("Pelagic_Trawl+Seine")
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    model <- e2e_read(selectedModel, selectedYears, models.path="Models")
+    if(selectedModel == "North_Sea"){
+      gears = list(
+        "Pelagic_Trawl+Seine",
+        "Sandeel+sprat_trawl(Otter30-70mm+TR3)",
+        "Longline_mackerel",
+        "Beam_Trawl_BT1+BT2",
+        "Demeral_Seine",
+        "Demersal_Otter_Trawl_TR1",
+        "Gill_Nets+Longline_demersal",
+        "Beam_Trawl_shrimp",
+        "Nephrops_Trawl_TR2",
+        "Creels",
+        "Mollusc_Dredge",
+        "Whaler"
+      )
+    } else if (selectedModel == "Celtic_Sea"){
+      gears = list(
+        "Pelagic_Trawl+Seine",
+        "Otter30-70mm+TR3(sandeel+sprat)",
+        "Longline_mackerel",
+        "Beam_Trawl_BT1+BT2",
+        "Demeral_Seine",
+        "Demersal_Otter_Trawl_TR1",
+        "Gill_Nets+Longline_demersal",
+        "Beam_Trawl_shrimp",
+        "Nephrops_Trawl_TR3",
+        "Creels",
+        "Mollusc_Dredge",
+        "KelpHarvester"
+      )
+    } else { # Not sure if this will still populate dropdown list with numbers for new models
     gear1 <- model$data$fleet.model$gear_labels[1]
     gear2 <- model$data$fleet.model$gear_labels[2]
     gear3 <- model$data$fleet.model$gear_labels[3]
@@ -884,6 +916,33 @@ server <- function(input, output, session) {
     gear11 <- model$data$fleet.model$gear_labels[11]
     gear12 <- model$data$fleet.model$gear_labels[12]
     gears <- list(gear1,gear2,gear3,gear4,gear5,gear6,gear7,gear8,gear9,gear10,gear11,gear12)
+    }
+    })
+  
+  output$gear_dropdown <- renderUI({
+    selectedModel <- input$selectedlocation
+    selectedYears <- input$selectedVariant
+    # current chosen model on dropdown lists
+    model <- e2e_read(selectedModel, selectedYears, models.path="Models")
+    if(is.null(model)){
+    gears = list(
+      "Pelagic_Trawl+Seine",
+      "Sandeel+sprat_trawl(Otter30-70mm+TR3)",
+      "Longline_mackerel",
+      "Beam_Trawl_BT1+BT2",
+      "Demeral_Seine",
+      "Demersal_Otter_Trawl_TR1",
+      "Gill_Nets+Longline_demersal",
+      "Beam_Trawl_shrimp",
+      "Nephrops_Trawl_TR2",
+      "Creels",
+      "Mollusc_Dredge",
+      "Whaler"
+    )}
+    else {
+      gears = chooseGear()
+    }
+   
     selectInput("outputGearType",
                 "Select Gear",
                 choices = gears,
@@ -930,9 +989,12 @@ server <- function(input, output, session) {
     )
   })
   
-  output$uiCatchGear <- renderUI({
+ # output$uiCatchGear <- renderUI({
+  catchGear <- reactive({
+    gearType <- input$outputGearType
+    if (is.null(input$outputGearType)) gearType <- c("Pelagic_Trawl+Seine")
     switch(
-      input$outputGearType,
+      gearType,
       "Pelagic_Trawl+Seine" = fluidRow(plotOutput("ecoPlot_catch_gear_1")),
       "Sandeel+sprat_trawl(Otter30-70mm+TR3)" = fluidRow(plotOutput("ecoPlot_catch_gear_2")),
       "Otter30-70mm+TR3(sandeel+sprat)" = fluidRow(plotOutput("ecoPlot_catch_gear_2")),
@@ -947,10 +1009,13 @@ server <- function(input, output, session) {
       "Creels" = fluidRow(plotOutput("ecoPlot_catch_gear_10")),
       "Mollusc_Dredge" = fluidRow(plotOutput("ecoPlot_catch_gear_11")),
       "Whaler" = fluidRow(plotOutput("ecoPlot_catch_gear_12_Whaler")),
-      "KelpHarvester" = fluidRow(plotOutput("ecoPlot_catch_gear_12_KelpHarvester"))
+      "KelpHarvester" = fluidRow(plotOutput("ecoPlot_catch_gear_12_KelpHarvester")),
+      fluidRow(plotOutput("ecoPlot_catch_gear_1")) #Default
     )
   })
   
+  output$uiCatchGear <- renderUI({catchGear()}) 
+
   output$UiEdriver <- renderUI({
     switch(
       input$edriverType,
@@ -3684,7 +3749,7 @@ server <- function(input, output, session) {
     # Run baseline
     model <<-
       e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models")
-    View(model)
+    #View(model)
     
     results_baseline <-
       e2e_run(model, nyears = input$year, csv.output = TRUE)
