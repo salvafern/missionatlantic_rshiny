@@ -30,43 +30,44 @@ ui <- navbarPage(
                   column(
                     6,
                     #HTML("<p style = \"font-family: 'calibri'; font-si14pt; text-align: justify;padding:20px;\">Wherever we live, we depend on the sea. Over one-third of all humans live within 100 km of a <a href='https://science.nasa.gov/earth-science/oceanography/living-ocean'>coastline</a>. Even more, about 45% of us, rely on fish for at least 20% of our annual protein <a href='https://www.reuters.com/article/us-global-fisheries-hunger-idUSKBN1JZ0YA'>intake</a>. At the same time, healthy functioning ocean ecosystems are vital for everyone's wellbeing since they regulate Earth's climate by absorbing carbon dioxide from the atmosphere.</p>"),
-                    HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Wherever we live, we depend on the sea. Over one-third of all humans live within 100 km of a <a href='https://science.nasa.gov/earth-science/oceanography/living-ocean'>coastline</a>. Even more, about 45% of us, rely on fish for at least 20% of our annual protein <a href='https://www.reuters.com/article/us-global-fisheries-hunger-idUSKBN1JZ0YA'>intake</a>. At the same time, healthy functioning ocean ecosystems are vital for everyone's wellbeing since they regulate Earth's climate by absorbing carbon dioxide from the atmosphere.</p>"),
+                    HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Wherever we live, we depend on the sea. Over one-third of all humans live within 100 km of a <a href='https://science.nasa.gov/earth-science/oceanography/living-ocean'>coastline</a>. Even more, about 45% of us, rely on fish for at least 20% of our annual protein <a href='https://www.reuters.com/article/us-global-fisheries-hunger-idUSKBN1JZ0YA'>intake</a>. At the same time, healthy functioning ocean ecosystems are vital for everyone's wellbeing since they regulate Earth's climate by absorbing carbon dioxide from the atmosphere.</p>"),
                     p(
                      "Our seas and oceans are being subjected to a wide range of pressures, from warming, fishing, and pollution by nutrients, plastic particles and litter. However, these pressures act together in complex ways. How can we work out the most effective strategies for alleviating their impacts on the sea while still being able to harvest the food that we need?",
-                     style = "font-family: 'calibri'; font-si10pt"
+                     style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
                      "One way is through 'what-if?' experiments with computer simulation models. Computer models of the oceans and seas underpin advice on fisheries management, regulation of pollution, and making the case for reducing fossil fuel consumption. These models are highly technical, but we'd like everyone to have the chance to play with one and do their own experiments. That's what this website is all about.",
-                     style = "font-family: 'calibri'; font-si10pt"
+                     style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
                      "We've designed a model of food webs in continental shelf seas, called \"StrathE2E\". It's free for anyone to access, but it needs some specialist knowledge to use it. So we've built this website which makes it possible for anyone to be a marine modeller and do their own experiments.",
-                     style = "font-family: 'calibri'; font-si10pt"
+                     style = "font-family: 'calibri'; font-si16pt"
                    ),
                      p(
                        "Just follow the workflow  through the site - pick a geographic region from the ones we've configured (we'll be adding more over time), explore the results from a model run, then change the inputs and see how they affect the outputs.",
-                       style = "font-family: 'calibri'; font-si10pt"
-                     )
+                       style = "font-family: 'calibri'; font-si16pt"
+                     ),
+                    img(src = "Mission Atlantic Logo BW-01-01.png", width = '60%',style = "text-align: center; padding:20px")
                   ),
                  column(
                    6,
-                   img(src = "strathe2e_collage.png", width = '95%')
+                   img(src = "strathe2e_collage.png", width = '85%',style = "text-align: center; padding:10px")
                    # h6(
                    #   "Text for pic here"
                    # )
                  ),
+                 #column(
+                 #  6,
+                 #  img(src = "Mission Atlantic Logo BW-01-01.png", width = '60%',style = "text-align: center; padding:20px")
+                 #),
                  column(
-                   6,
-                   img(src = "Mission Atlantic Logo BW-01-01.png", width = '60%',style = "text-align: center; padding:20px")
-                 ),
-                 column(
-                   6,
+                   9,
                    img(src = "Mission Atlantic _EC_disclaimer.png", width = '80%')
-                 )
-                 # column(
-                 #   6,
-                 #   img(src = "strath_fullcolour.JPG", width = '25%')
-                 # )
+                 ),
+                  column(
+                    3,
+                    img(src = "strath_fullcolour.jpg", width = '45%')
+                  )
                  # column(
                  #   12,
                  #   p(
