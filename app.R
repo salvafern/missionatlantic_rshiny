@@ -25,62 +25,168 @@ ui <- navbarPage(
                title = "Home",
              tabsetPanel(type = "pills",
              tabPanel(
-               title = "Model Summary",
+               title = "Home",
                fluidRow(
+                  column(
+                    6,
+                    #HTML("<p style = \"font-family: 'calibri'; font-si14pt; text-align: justify;padding:20px;\">Wherever we live, we depend on the sea. Over one-third of all humans live within 100 km of a <a href='https://science.nasa.gov/earth-science/oceanography/living-ocean'>coastline</a>. Even more, about 45% of us, rely on fish for at least 20% of our annual protein <a href='https://www.reuters.com/article/us-global-fisheries-hunger-idUSKBN1JZ0YA'>intake</a>. At the same time, healthy functioning ocean ecosystems are vital for everyone's wellbeing since they regulate Earth's climate by absorbing carbon dioxide from the atmosphere.</p>"),
+                    HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Wherever we live, we depend on the sea. Over one-third of all humans live within 100 km of a <a href='https://science.nasa.gov/earth-science/oceanography/living-ocean'>coastline</a>. Even more, about 45% of us, rely on fish for at least 20% of our annual protein <a href='https://www.reuters.com/article/us-global-fisheries-hunger-idUSKBN1JZ0YA'>intake</a>. At the same time, healthy functioning ocean ecosystems are vital for everyone's wellbeing since they regulate Earth's climate by absorbing carbon dioxide from the atmosphere.</p>"),
+                    p(
+                     "Our seas and oceans are being subjected to a wide range of pressures, from warming, fishing, and pollution by nutrients, plastic particles and litter. However, these pressures act together in complex ways. How can we work out the most effective strategies for alleviating their impacts on the sea while still being able to harvest the food that we need?",
+                     style = "font-family: 'calibri'; font-si10pt"
+                   ),
+                   p(
+                     "One way is through 'what-if?' experiments with computer simulation models. Computer models of the oceans and seas underpin advice on fisheries management, regulation of pollution, and making the case for reducing fossil fuel consumption. These models are highly technical, but we'd like everyone to have the chance to play with one and do their own experiments. That's what this website is all about.",
+                     style = "font-family: 'calibri'; font-si10pt"
+                   ),
+                   p(
+                     "We've designed a model of food webs in continental shelf seas, called \"StrathE2E\". It's free for anyone to access, but it needs some specialist knowledge to use it. So we've built this website which makes it possible for anyone to be a marine modeller and do their own experiments.",
+                     style = "font-family: 'calibri'; font-si10pt"
+                   ),
+                     p(
+                       "Just follow the workflow  through the site - pick a geographic region from the ones we've configured (we'll be adding more over time), explore the results from a model run, then change the inputs and see how they affect the outputs.",
+                       style = "font-family: 'calibri'; font-si10pt"
+                     )
+                  ),
                  column(
                    6,
-                   h4("StrathE2E model"),
-                   p(
-                     "StrathE2E is an open-source computer model of the marine food web in continental shelf sea regions. You can use StratheE2E to explore how the natural ecosystem works, and how it changes with human activity.",
-                     style = "font-family: 'times'; font-si16pt"
-                   ),
-                   p(
-                     "Sunlight and nutrients absorbed by plants in the sea - microscopic algae and seaweeds in shallow water - support all the rest of marine life. But how this happens, depends on how energy and nutrient flow through the food web. The food web comprises all the microbes, plankton, fish, seabed-living animals, birds, seals and whales, which live in the sea and eat each other.",
-                     style = "font-family: 'times'; font-si16pt"
-                   ),
-                   p(
-                     "StrathE2E represents all of the who-eats-whom connections in the food web, and how fast animals grow and die as a result of eating and being eaten, using mathematical equations. The equations are solved computationally to provide a simulation of how the different plants and animals change during the year, and from year-to-year. These changes depend on the environmental condition and human activities such as fishing. The model provides a way to carry out experiments to answer 'what-if' type questions, for example, what would happen if we reduced fishing activity, not just to fish but to everything else in the ecosystem.",
-                     style = "font-family: 'times'; font-si16pt"
-                   )
+                   img(src = "strathe2e_collage.png", width = '95%')
+                   # h6(
+                   #   "Text for pic here"
+                   # )
                  ),
                  column(
                    6,
-                   img(src = "strathe2e_2.jpg", width = '100%'),
-                   h6(
-                     "NOTE This diagram to be replace by appropriate picture or illustration"
-                   )
+                   img(src = "Mission Atlantic Logo BW-01-01.png", width = '60%',style = "text-align: center; padding:20px")
                  ),
                  column(
-                   width = 11,
-                   offset = 0.5,
-                   fluidRow(
-                     p(
-                       "The inputs to the model, which we call the driving data, are variables such as temperature, sunlight intensity, suspended sediment in the water, current speeds, river outflows, and seabed depths and sediment properties. These data are gathered together from a variety of sources for each region. Some of the data come from other models of the water circulation, others from satellite data and field surveys.",
-                       style = "font-family: 'times'; font-si16pt; text-align: justify;padding:20px;"
-                     ),
-                     p(
-                       "Each model contains a large number of parameters, to which the results can be very sensitive. These parameter values are determined by computationally fitting the model to a database of observational records on the quantities of plants and animals in the sea, how much they eat and their diet compositions. This process is similar to code-cracking in that it involves searching through thousands of combinations of parameters to find the set of values that generate model output that best matches all the observations. Then we conduct an independent validation by comparing model results with other data that were not included in the fitting process. By this means we can establish the credibility of the model.",
-                       style = "font-family: 'times'; font-si16pt; text-align: justify;padding:20px;"
-                     ),
-                     p(
-                       "StrathE2E is available as a free computer software package for researchers to use. Here we provide an online version so that anyone can explore the marine ecosystem and design and conduct their own experiments, without needing to know anything about writing computer code. However, the underlying model is exactly the same as in the research software package. Models for different regions are available to explore, and each has been subjected to the parameter fitting and model validation process.",
-                       style = "font-family: 'times'; font-si16pt; text-align: justify;padding:20px;"
-                     ),
-                       HTML("<p style = \"font-family: 'times'; font-si16pt; text-align: justify;padding:20px;\">If you want to read more about StrathE2E you can download an open-source article from <a href='https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13510'>here</a>. To use the software package you need to be familiar with the R statistical computing environment, and then install the package from <a href='https://cran.r-project.org/web/packages/StrathE2E2/index.html'>here</a>.</p>")
-                   )
+                   6,
+                   img(src = "Mission Atlantic _EC_disclaimer.png", width = '80%')
                  )
+                 # column(
+                 #   6,
+                 #   img(src = "strath_fullcolour.JPG", width = '25%')
+                 # )
+                 # column(
+                 #   12,
+                 #   p(
+                 #     "Just follow the workflow  through the site - pick a geographic region from the ones we've configured (we'll be adding more over time), explore the results from a model run, then change the inputs and see how they affect the outputs.",
+                 #     style = "font-family: 'calibri'; font-si10pt"
+                 #   )
+                 # )                 
                )
              ),
              tabPanel(
-               title = "Model Overview",
+               title = "Model Description",
                fluidRow(
                  column(
-                   6,
-                   h4("StrathE2E overview"),
+                   12,
+                  # h4("StrathE2E Model Description"),
                    p(
-                     "Detailed StrathE2E overview text here",
-                     style = "font-family: 'times'; font-si16pt"
-                   ))
+                     "The StrathE2E model has two parts - a model of the marine ecology, and a model of fishing fleets, which are inter-connected. To simplify the ecology, all the plants and animals in the sea are grouped together into what we call 'guilds' of species that have similar properties (Table 1). These guilds range from microbes to whales. Likewise, the different types of fishing gears used in a region are grouped together into up to 12 different types",
+                     style = "font-family: 'calibri'; font-si10pt"
+                   ),
+                   p(
+                     "The models consists sets of mathematical equations which are solved by the computer programme to calculate at daily intervals, ",
+                     style = "font-family: 'calibri'; font-si10pt"
+                   ),
+                   tags$ul(
+                     tags$li("The quantities of dissolved nutrients, detritus, the guilds of plants and animals in the sea.",style = "font-family: 'calibri'; font-si10pt"), 
+                     tags$li("How much each of the guilds consumes as nutrient or food by preying on other guilds.",style = "font-family: 'calibri'; font-si10pt"), 
+                     tags$li("How much nutrient is returned to the sea by excretion",style = "font-family: 'calibri'; font-si10pt"),
+                     tags$li("How much nutrient and plankton is carried into and out of the model region, and between inshore and offshore zones, by water currents, and between inshore and offshore zones",style = "font-family: 'calibri'; font-si10pt"),
+                     tags$li("The movements of fish, birds, seals and whales between inshore and offshore zones by active migration, motivated by the concentrations of their food.",style = "font-family: 'calibri'; font-si10pt"),
+                     tags$li("How much nutrient and sediment are stirred up from the seabed by fishing gears",style = "font-family: 'calibri'; font-si10pt"),
+                     tags$li("How much of each guild is caught by the fishing gears, and what proportion is landed or discarded",style = "font-family: 'calibri'; font-si10pt")
+                   ),
+                   p(
+                     "All of these quantities are continually varying over time due to the changing temperature, sunlight intensity, water currents, mixing and waves, and external nutrient inputs from rivers and in rainfall over each yearly cycle. So these time-varying physical properties are key inputs to the model.",
+                     style = "font-family: 'calibri'; font-si10pt"
+                   ),
+                   p(
+                     "Other key inputs to the model are the selectivity patterns and activity rates of the fishing gears, and their distribution over different seabed sediment types in inshore and offshore zones of the model region.",
+                     style = "font-family: 'calibri'; font-si10pt"
+                   ),
+                   p(
+                     "For each model region, we have assembled all the required input data and then rigorously tested and tuned the model parameters against databases of field measurements and monitoring data on e.g. fishery landings.",
+                     style = "font-family: 'calibri'; font-si10pt"
+                   ),
+                   HTML("<p style = \"font-family: 'calibri'; font-si10pt \">You can download an open access article about the model from  <a href='https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13510'>here</a>.</p>"),
+                   HTML("<p style = \"font-family: 'calibri'; font-si10pt \">If you want to download the model code then you can get it from <a href='https://cran.r-project.org/package=StrathE2E2'>here</a>. You will need to be familiar with the <a href='https://cran.r-project.org/'>R statistical programming environment </a> to install and use it.</p>"),
+                  p(
+                    "Table 1. Ecological guilds or classes of dead and living material included in the StrathE2E model",
+                    style = "font-family: 'calibri'; font-si10pt"
+                  ),
+                   tags$table(border = 5, 
+                                       tags$tbody(
+                                         tags$tr(
+                                           tags$td(align = "center", strong("Categories in the model ")),
+                                           tags$td(align = "center", strong("Specific guilds"))
+                                         ),
+                                         tags$tr(
+                                           tags$td(align = "center", "Dissolved inorganic nutrients"),
+                                           tags$td(align = "left", tags$ul(
+                                             tags$li("Nitrate in the water column",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Nitrate in sediment porewaters",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Ammonia in the water column",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Ammonia in sediment porewaters",style = "font-family: 'calibri'; font-si10pt")
+                                           ))
+                                         ),
+                                         tags$tr(
+                                           tags$td(align = "center", "Dead organic material and bacteria"),
+                                           tags$td(align = "left", tags$ul(
+                                             tags$li("Suspended detritus and bacteria",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Labile (reactive) sediment detritus and bacteria",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Refractory (inert) sediment detritus ",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Macrophyte (kelp) debris",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Corpses",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Fishery discards",style = "font-family: 'calibri'; font-si10pt")
+                                           ))
+                                         ),
+                                         tags$tr(
+                                           tags$td(align = "center", "Primary producers"),
+                                           tags$td(align = "left", tags$ul(
+                                             tags$li("Phytoplankton (micro-algae)",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Macrophytes (kelp)",style = "font-family: 'calibri'; font-si10pt")
+                                           ))
+                                         ),
+                                         tags$tr(
+                                           tags$td(align = "center", "Zooplankton"),
+                                           tags$td(align = "left", tags$ul(
+                                             tags$li("Omnivorous zooplankton (e.g. copepods)",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Carnivorous zooplankton (e.g. krill)",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Larvae of planktivorous (plankton-eating) fish",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Larvae of demersal (other fish and benthos-eating) fish",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Larvae of suspension and deposit feeding benthos",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Larvae of carnivore and scavenge feeding benthos",style = "font-family: 'calibri'; font-si10pt")
+                                           ))
+                                         ),
+                                         tags$tr(
+                                           tags$td(align = "center", "Benthos (seabed living animals)"),
+                                           tags$td(align = "left", tags$ul(
+                                             tags$li("Suspension and deposit feeders",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Carnivore and scavenge feeders",style = "font-family: 'calibri'; font-si10pt")
+                                           ))
+                                         ),
+                                         tags$tr(
+                                           tags$td(align = "center", "Fish"),
+                                           tags$td(align = "left", tags$ul(
+                                             tags$li("Planktivorous (plankton-eating, e.g. herring, sardines)",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Migratory (e.g. mackerel)",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Demersal (other fish and benthos-eating, e.g. cod, haddock)",style = "font-family: 'calibri'; font-si10pt")
+                                           ))
+                                         ),
+                                         tags$tr(
+                                           tags$td(align = "center", "Upper trophic levels"),
+                                           tags$td(align = "left", tags$ul(
+                                             tags$li("Seabirds",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Pinnipeds (seals)",style = "font-family: 'calibri'; font-si10pt"), 
+                                             tags$li("Cetaceans (whales, dolphins)",style = "font-family: 'calibri'; font-si10pt")
+                                           ))
+                                         )
+                                       )
+                  )
+                 )
                  )
                ),
              tabPanel(
@@ -88,11 +194,41 @@ ui <- navbarPage(
                fluidRow(
                  column(
                    6,
-                   h4("StrathE2E Workflow"),
+                   h5("There are four stages to using this website:"),
                    p(
-                     "StrathE2E workflow text here",
+                     tags$b("1. Selecting a model region"),
                      style = "font-family: 'times'; font-si16pt"
-                   ))
+                   ),
+                   p(
+                     "Here you need to select a model region and time period from the list of implementations that we have provided. We will be adding to this over time as we develop new ones.",
+                     style = "font-family: 'times'; font-si16pt"
+                   ),
+                   p(
+                     tags$b("2. Exploring your selected model"),
+                     style = "font-family: 'times'; font-si16pt"
+                   ),
+                   p(
+                     "Run the model in its 'out of the box' state - we call this a baseline run. This happens on our computer server and the results are returned to you to explore using a variety of different graph drawing tools, or download to analyse yourself if you wish.",
+                     style = "font-family: 'times'; font-si16pt"
+                   ),
+                   p(
+                     tags$b("3. Scenario setup"),
+                     style = "font-family: 'times'; font-si16pt"
+                   ),
+                   p(
+                     "Use slider-bars to configure a new set of inputs to the model in terms of variations from the baseline in temperature, nutrient inputs, fishing activity, scouring of the seabed by trawling, and discarding of fishery catches.",
+                     style = "font-family: 'times'; font-si16pt"
+                   ),
+                   p(
+                     tags$b("4. Scenario results"),
+                     style = "font-family: 'times'; font-si16pt"
+                   ),
+                   p(
+                     "Run the scenario model again (this may take a few minutes) and compare the results with the baseline version.",
+                     style = "font-family: 'times'; font-si16pt"
+                   )
+                   
+                   )
                )
              ))
              ),
