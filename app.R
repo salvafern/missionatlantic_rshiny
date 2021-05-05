@@ -85,6 +85,7 @@ ui <- navbarPage(
                      "The StrathE2E model has two parts - a model of the marine ecology, and a model of fishing fleets, which are inter-connected. To simplify the ecology, all the plants and animals in the sea are grouped together into what we call 'guilds' of species that have similar properties (Table 1). These guilds range from microbes to whales. Likewise, the different types of fishing gears used in a region are grouped together into up to 12 different types",
                      style = "font-family: 'calibri'; font-si10pt"
                    ),
+                  img(src = "Temperate model joined.svg", width = '50%', style = "display: block; margin-left: auto; margin-right: auto;"),
                    p(
                      "The models consists sets of mathematical equations which are solved by the computer programme to calculate at daily intervals, ",
                      style = "font-family: 'calibri'; font-si10pt"
@@ -116,15 +117,15 @@ ui <- navbarPage(
                     "Table 1. Ecological guilds or classes of dead and living material included in the StrathE2E model",
                     style = "font-family: 'calibri'; font-si10pt"
                   ),
-                   tags$table(border = 5, 
+                   tags$table(border = 1, style = " margin-left: auto; margin-right: auto;font-family: 'calibri'",
                                        tags$tbody(
                                          tags$tr(
-                                           tags$td(align = "center", strong("Categories in the model ")),
-                                           tags$td(align = "center", strong("Specific guilds"))
+                                           tags$td(align = "center", strong("Categories in the model "),style = "font-family: 'calibri'"),
+                                           tags$td(align = "center", strong("Specific guilds"),style = "font-family: 'calibri'")
                                          ),
                                          tags$tr(
                                            tags$td(align = "center", "Dissolved inorganic nutrients"),
-                                           tags$td(align = "left", tags$ul(
+                                           tags$td(align = "center", tags$ul(
                                              tags$li("Nitrate in the water column",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Nitrate in sediment porewaters",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Ammonia in the water column",style = "font-family: 'calibri'; font-si10pt"), 
@@ -133,7 +134,7 @@ ui <- navbarPage(
                                          ),
                                          tags$tr(
                                            tags$td(align = "center", "Dead organic material and bacteria"),
-                                           tags$td(align = "left", tags$ul(
+                                           tags$td(align = "center", tags$ul(
                                              tags$li("Suspended detritus and bacteria",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Labile (reactive) sediment detritus and bacteria",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Refractory (inert) sediment detritus ",style = "font-family: 'calibri'; font-si10pt"), 
@@ -144,14 +145,14 @@ ui <- navbarPage(
                                          ),
                                          tags$tr(
                                            tags$td(align = "center", "Primary producers"),
-                                           tags$td(align = "left", tags$ul(
+                                           tags$td(align = "center", tags$ul(
                                              tags$li("Phytoplankton (micro-algae)",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Macrophytes (kelp)",style = "font-family: 'calibri'; font-si10pt")
                                            ))
                                          ),
                                          tags$tr(
                                            tags$td(align = "center", "Zooplankton"),
-                                           tags$td(align = "left", tags$ul(
+                                           tags$td(align = "center", tags$ul(
                                              tags$li("Omnivorous zooplankton (e.g. copepods)",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Carnivorous zooplankton (e.g. krill)",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Larvae of planktivorous (plankton-eating) fish",style = "font-family: 'calibri'; font-si10pt"), 
@@ -162,14 +163,14 @@ ui <- navbarPage(
                                          ),
                                          tags$tr(
                                            tags$td(align = "center", "Benthos (seabed living animals)"),
-                                           tags$td(align = "left", tags$ul(
+                                           tags$td(align = "center", tags$ul(
                                              tags$li("Suspension and deposit feeders",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Carnivore and scavenge feeders",style = "font-family: 'calibri'; font-si10pt")
                                            ))
                                          ),
                                          tags$tr(
                                            tags$td(align = "center", "Fish"),
-                                           tags$td(align = "left", tags$ul(
+                                           tags$td(align = "center", tags$ul(
                                              tags$li("Planktivorous (plankton-eating, e.g. herring, sardines)",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Migratory (e.g. mackerel)",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Demersal (other fish and benthos-eating, e.g. cod, haddock)",style = "font-family: 'calibri'; font-si10pt")
@@ -177,14 +178,14 @@ ui <- navbarPage(
                                          ),
                                          tags$tr(
                                            tags$td(align = "center", "Upper trophic levels"),
-                                           tags$td(align = "left", tags$ul(
+                                           tags$td(align = "center", tags$ul(
                                              tags$li("Seabirds",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Pinnipeds (seals)",style = "font-family: 'calibri'; font-si10pt"), 
                                              tags$li("Cetaceans (whales, dolphins)",style = "font-family: 'calibri'; font-si10pt")
                                            ))
                                          )
                                        )
-                  )
+                              )
                  )
                  )
                ),
@@ -205,7 +206,8 @@ ui <- navbarPage(
                      style = "font-family: 'times'; font-si16pt"
                    ),
                    p(
-                     tags$b("2. Explore model"),
+                     #tags$b("2. Explore model"),
+                     tags$a("2. Explore model", onclick="customHref('Explore model')"),
                      style = "font-family: 'times'; font-si16pt"
                    ),
                    p(
