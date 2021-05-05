@@ -25,12 +25,10 @@ ui <- navbarPage(
                title = "Home",
              tabsetPanel(type = "pills",
              tabPanel(
-               title = "Home",
+               title = "Introduction",
                fluidRow(
                   column(
                     6,
-                    #HTML("<p style = \"font-family: 'calibri'; font-si14pt; text-align: justify;padding:20px;\">Wherever we live, we depend on the sea. Over one-third of all humans live within 100 km of a <a href='https://science.nasa.gov/earth-science/oceanography/living-ocean'>coastline</a>. Even more, about 45% of us, rely on fish for at least 20% of our annual protein <a href='https://www.reuters.com/article/us-global-fisheries-hunger-idUSKBN1JZ0YA'>intake</a>. At the same time, healthy functioning ocean ecosystems are vital for everyone's wellbeing since they regulate Earth's climate by absorbing carbon dioxide from the atmosphere.</p>"),
-                    HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Wherever we live, we depend on the sea. Over one-third of all humans live within 100 km of a <a href='https://science.nasa.gov/earth-science/oceanography/living-ocean'>coastline</a>. Even more, about 45% of us, rely on fish for at least 20% of our annual protein <a href='https://www.reuters.com/article/us-global-fisheries-hunger-idUSKBN1JZ0YA'>intake</a>. At the same time, healthy functioning ocean ecosystems are vital for everyone's wellbeing since they regulate Earth's climate by absorbing carbon dioxide from the atmosphere.</p>"),
                     p(
                      "Our seas and oceans are being subjected to a wide range of pressures, from warming, fishing, and pollution by nutrients, plastic particles and litter. However, these pressures act together in complex ways. How can we work out the most effective strategies for alleviating their impacts on the sea while still being able to harvest the food that we need?",
                      style = "font-family: 'calibri'; font-si16pt"
@@ -47,7 +45,7 @@ ui <- navbarPage(
                        "Just follow the workflow  through the site - pick a geographic region from the ones we've configured (we'll be adding more over time), explore the results from a model run, then change the inputs and see how they affect the outputs.",
                        style = "font-family: 'calibri'; font-si16pt"
                      ),
-                    img(src = "Mission Atlantic Logo BW-01-01.png", width = '60%',style = "text-align: center; padding:20px")
+                    img(src = "Mission Atlantic Logo Col-01.png", width = '60%',style = "text-align: center; padding:20px")
                   ),
                  column(
                    6,
@@ -191,13 +189,15 @@ ui <- navbarPage(
                  )
                ),
              tabPanel(
-               title = "Model Worflow",
+               title = "Model Workflow",
+               tags$head(tags$script(src="js/index.js")),
                fluidRow(
                  column(
                    6,
                    h5("There are four stages to using this website:"),
                    p(
-                     tags$b("1. Selecting a model region"),
+                     #tags$b("1. Select region"),
+                     tags$a("1. Select region", onclick="customHref('region')"),
                      style = "font-family: 'times'; font-si16pt"
                    ),
                    p(
@@ -205,7 +205,7 @@ ui <- navbarPage(
                      style = "font-family: 'times'; font-si16pt"
                    ),
                    p(
-                     tags$b("2. Exploring your selected model"),
+                     tags$b("2. Explore model"),
                      style = "font-family: 'times'; font-si16pt"
                    ),
                    p(
@@ -213,7 +213,7 @@ ui <- navbarPage(
                      style = "font-family: 'times'; font-si16pt"
                    ),
                    p(
-                     tags$b("3. Scenario setup"),
+                     tags$b("3. Setup scenario"),
                      style = "font-family: 'times'; font-si16pt"
                    ),
                    p(
@@ -235,9 +235,10 @@ ui <- navbarPage(
              ),
             # ),
   navbarMenu(
-    "Model Selection",
+    "Select Region",
     tabPanel(
       title = "Location",
+      value="region",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -258,7 +259,7 @@ ui <- navbarPage(
       )
     )), 
   navbarMenu(
-    "Model Exploration",
+    "Explore Model",
     tabPanel(
       title = "Run Baseline",
       h4("Some text about running baseline to go here"),
@@ -396,7 +397,7 @@ ui <- navbarPage(
       ))
   ), 
   navbarMenu(
-    "Scenario Setup",
+    "Setup Scenario ",
     tabPanel(
       title = "Temperature",
       h4("Some text about Temperature to go here"),
@@ -505,7 +506,7 @@ ui <- navbarPage(
     )
   ),
   navbarMenu(
-    "Results",
+    "Scenario Results",
     tabPanel(
       title = "Run Scenario",
       h4("Some text about running baseline and scenario to go here"),
