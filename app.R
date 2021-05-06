@@ -45,7 +45,7 @@ ui <- navbarPage(
                        "Just follow the workflow  through the site - pick a geographic region from the ones we've configured (we'll be adding more over time), explore the results from a model run, then change the inputs and see how they affect the outputs.",
                        style = "font-family: 'calibri'; font-si16pt"
                      ),
-                    img(src = "Mission Atlantic Logo Col-01.png", width = '60%',style = "text-align: center; padding:20px")
+                   tags$a(img(src = "Mission Atlantic Logo Col-01.png", width = '60%',style = "text-align: center; padding:20px"),href="https://missionatlantic.eu/")
                   ),
                  column(
                    6,
@@ -54,10 +54,6 @@ ui <- navbarPage(
                    #   "Text for pic here"
                    # )
                  ),
-                 #column(
-                 #  6,
-                 #  img(src = "Mission Atlantic Logo BW-01-01.png", width = '60%',style = "text-align: center; padding:20px")
-                 #),
                  column(
                    9,
                    img(src = "Mission Atlantic _EC_disclaimer.png", width = '80%')
