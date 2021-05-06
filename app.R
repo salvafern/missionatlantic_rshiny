@@ -19,13 +19,13 @@ source("createEDriversPlots.R")
 
 ui <- navbarPage(
   "StrathE2E App",
-  theme = shinytheme("cerulean"),
-#  navbarMenu("Home",
+  theme = shinytheme("cerulean"), #"strathe2e.css", 
              tabPanel(
                title = "Home",
              tabsetPanel(type = "pills",
              tabPanel(
                title = "Introduction",
+               tags$style(HTML(".irs-grid-text {font-size: 10pt;}")),
                fluidRow(
                   column(
                     6,
@@ -191,44 +191,44 @@ ui <- navbarPage(
                ),
              tabPanel(
                title = "Model Workflow",
-               tags$head(tags$script(src="js/index.js")),
+               #tags$head(tags$script(src="js/index.js")),
                fluidRow(
                  column(
                    6,
                    h5("There are four stages to using this website:"),
                    p(
-                     #tags$b("1. Select region"),
-                     tags$a("1. Select region", onclick="customHref('region')"),
-                     style = "font-family: 'times'; font-si16pt"
+                     tags$b("1. Select region"),
+                    # tags$a("1. Select region", onclick="customHref('region')"),
+                     style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
                      "Here you need to select a model region and time period from the list of implementations that we have provided. We will be adding to this over time as we develop new ones.",
-                     style = "font-family: 'times'; font-si16pt"
+                     style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
-                     #tags$b("2. Explore model"),
-                     tags$a("2. Explore model", onclick="customHref('Explore model')"),
-                     style = "font-family: 'times'; font-si16pt"
+                     tags$b("2. Explore model"),
+                     #tags$a("2. Explore model", onclick="customHref('Explore model')"),
+                     style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
                      "Run the model in its 'out of the box' state - we call this a baseline run. This happens on our computer server and the results are returned to you to explore using a variety of different graph drawing tools, or download to analyse yourself if you wish.",
-                     style = "font-family: 'times'; font-si16pt"
+                     style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
                      tags$b("3. Setup scenario"),
-                     style = "font-family: 'times'; font-si16pt"
+                     style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
                      "Use slider-bars to configure a new set of inputs to the model in terms of variations from the baseline in temperature, nutrient inputs, fishing activity, scouring of the seabed by trawling, and discarding of fishery catches.",
-                     style = "font-family: 'times'; font-si16pt"
+                     style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
                      tags$b("4. Scenario results"),
-                     style = "font-family: 'times'; font-si16pt"
+                     style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
                      "Run the scenario model again (this may take a few minutes) and compare the results with the baseline version.",
-                     style = "font-family: 'times'; font-si16pt"
+                     style = "font-family: 'calibri'; font-si16pt"
                    )
                    
                    )
@@ -578,20 +578,20 @@ ui <- navbarPage(
         width = 11,
         offset = 0.5,
         fluidRow(
-          h4("Run a set of models to generate fishery yield curve data for either planktivorous or demersal fish.",style = "font-family: 'times'; font-si16pt; text-align: justify;padding:10px;"),
+          h4("Run a set of models to generate fishery yield curve data for either planktivorous or demersal fish.",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
           p(
             "Perform a set of StrathE2E model runs along a sequence of values of either planktivorous or demersal fish harvest ratio multiplier, saving the annual average whole-domain biomass, annual landings and annual discards of all exploitable food web guilds from each run plus the annual average biomasses of all the other living components of the food web.",
-            style = "font-family: 'times'; font-si16pt; text-align: justify;padding:10px;"
+            style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"
           ),
-          h5("Usage",style = "font-family: 'times'; font-si16pt; text-align: justify;padding:10px;"),
+          h5("Usage",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
           code("e2e_run_ycurve( model,selection, nyears = 50, HRvector = c(0, 0.5, 1, 1.5, 2, 2.5, 3), HRfixed = 1, csv.output = FALSE)"
-          ,style = "font-family: 'times'; font-si16pt; text-align: justify;padding:10px;"),
-          h5("Details", style = "font-family: 'times'; font-si16pt; text-align: justify;padding:10px;"),
+          ,style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
+          h5("Details", style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
           p(
             "The baseline for the sequence of runs (harvest ratio multiplier = 1.0) is a model name and variant as loaded by the e2e_read() function. The planktivorous or demersal fish yield curve can be generated for a given fixed setting of the other (demersal or planktivorous) fish harvest ratio multiplier (default = 1.0). All other conditions are held constant as in the baseline model configuration. The yield curve represents the catch that would be generated from the stationary state of the model attained with long-term repeating annual cycles of all driving data. Hence it is important that each simulation is run for long enough that the model attains its stationary state, which may be some distance from the baseline model initial conditions. It is recommended that each run is at least 50 years. The data on annual average biomass and annual integrated catches stored in the returned data object (and optionally a csv file) can subsequently be plotted using the function e2e_plot_ycurve(). Users can easily plot any of the other saved data using their own plotting code. If csv output is selected then the resulting files in the current user results folder have names Yield_curve_data_PFHRmult-*.csv or Yield_curve_data_DFHRmult-*.csv, depending on the 'selection' argument, and * represents the model.ident text set in the prior e2e_read() function call.",
-            style = "font-family: 'times'; font-si16pt; text-align: justify;padding:10px;"
+            style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"
           ),
-          h5("Example",style = "font-family: 'times'; font-si16pt; text-align: justify;padding:10px;"),
+          h5("Example",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
           br(),
           code("# Load the 1970-1999 version of the North Sea model supplied with the package :"),
           br(),
@@ -621,13 +621,13 @@ ui <- navbarPage(
           br(),
           code("title=\"Planktivorous yield with baseline demersal fishing\")"),
           br(),
-          h5("Example Plot",style = "font-family: 'times'; font-si16pt; text-align: justify;padding:10px;"),
+          h5("Example Plot",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
           column(
             6,
             img(src = "yield_1.png", width = '100%'),
             h6(
               "Yield data plot for planktivoirous fish in the 1970-1999 North Sea model with baseline demersal harvest ratios. Upper panel, annual average biomass of planktivorous fish (mMN.m-2 in the whole modle domain) as a function of harvest ratio. Lower panel: catch divided into landings and discards of planktivorous fish (mMN.m-2.y-1) as a function of harvest ratio."
-              ,style = "font-family: 'times'; font-si16pt; text-align: justify;padding:10px;"
+              ,style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"
             )
           )
           # ,
