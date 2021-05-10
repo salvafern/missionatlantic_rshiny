@@ -26,9 +26,11 @@ ui <- navbarPage(
              tabPanel(
                title = "Introduction",
                tags$style(HTML(".irs-grid-text {font-size: 10pt;}")),
+               tags$style(HTML(".sup {vertical-align:text-top;}")),
                fluidRow(
                   column(
                     6,
+                    br(),
                     p(
                      "Our seas and oceans are being subjected to a wide range of pressures, from warming, fishing, and pollution by nutrients, plastic particles and litter. However, these pressures act together in complex ways. How can we work out the most effective strategies for alleviating their impacts on the sea while still being able to harvest the food that we need?",
                      style = "font-family: 'calibri'; font-si16pt"
@@ -77,11 +79,14 @@ ui <- navbarPage(
                  column(
                    12,
                   # h4("StrathE2E Model Description"),
+                  br(),
+                  HTML("<p style = \"font-family: 'calibri'; font-si10pt \">The StrathE2E model has two parts - a model of the marine ecology, and a model of fishing fleets, which are inter-connected. To simplify the ecology, all the plants and animals in the sea are grouped together into what we call 'guilds' of species that have similar properties <a href='#table1'>(Table 1)</a>. These guilds range from microbes to whales. Likewise, the different types of fishing gears used in a region are grouped together into up to 12 different types.</p>"),
                    p(
-                     "The StrathE2E model has two parts - a model of the marine ecology, and a model of fishing fleets, which are inter-connected. To simplify the ecology, all the plants and animals in the sea are grouped together into what we call 'guilds' of species that have similar properties (Table 1). These guilds range from microbes to whales. Likewise, the different types of fishing gears used in a region are grouped together into up to 12 different types",
+                     "The region covered by each model is divided into a shallow inshore and a deeper offshore zone. The water column in the offshore zone is further divided into  an upper (surface) layer, and a lower (deep) layer. The seabed in each zone is divided into up to four different sediment habitat types e.g. muddy, sandy, gravel, rocky.",
                      style = "font-family: 'calibri'; font-si10pt"
                    ),
                   img(src = "Temperate model joined.svg", width = '50%', style = "display: block; margin-left: auto; margin-right: auto;"),
+                  br(),
                    p(
                      "The models consists sets of mathematical equations which are solved by the computer programme to calculate at daily intervals, ",
                      style = "font-family: 'calibri'; font-si10pt"
@@ -107,13 +112,18 @@ ui <- navbarPage(
                      "For each model region, we have assembled all the required input data and then rigorously tested and tuned the model parameters against databases of field measurements and monitoring data on e.g. fishery landings.",
                      style = "font-family: 'calibri'; font-si10pt"
                    ),
+                  p(
+                    "The model tracks the changes in quantities of all the guilds and the flows between them in terms of nitrogen content. The units of the outputs are milli-Moles (mM) of nitrogen per m2 or per m3. Roughly, 1 mM nitrogen per m2 is equivalent to 500 kg of live weight per km2, depending on the guilds.",
+                    style = "font-family: 'calibri'; font-si10pt;"
+                  ),
                    HTML("<p style = \"font-family: 'calibri'; font-si10pt \">You can download an open access article about the model from  <a href='https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13510'>here</a>.</p>"),
                    HTML("<p style = \"font-family: 'calibri'; font-si10pt \">If you want to download the model code then you can get it from <a href='https://cran.r-project.org/package=StrathE2E2'>here</a>. You will need to be familiar with the <a href='https://cran.r-project.org/'>R statistical programming environment </a> to install and use it.</p>"),
                   p(
                     "Table 1. Ecological guilds or classes of dead and living material included in the StrathE2E model",
                     style = "font-family: 'calibri'; font-si10pt"
                   ),
-                   tags$table(border = 1, style = " margin-left: auto; margin-right: auto;font-family: 'calibri'",
+                  br(),
+                   tags$table(border = 1, style = " margin-left: auto; margin-right: auto;font-family: 'calibri'", id="table1",
                                        tags$tbody(
                                          tags$tr(
                                            tags$td(align = "center", strong("Categories in the model "),style = "font-family: 'calibri'"),
@@ -241,12 +251,12 @@ ui <- navbarPage(
         sidebarPanel(
           selectInput(
             "selectedlocation",
-            h4("Location"),
+            h4("Region"),
             choices
             = list("North_Sea","Celtic_Sea"),
             selected = "North_Sea"
           ),
-          uiOutput("variant_dropdown"), width = 3
+          uiOutput("variant_dropdown"), textOutput("textSelectRegion"), width = 3
         ),
         #Main Panel: plot map here in the future
         mainPanel(
@@ -292,7 +302,7 @@ ui <- navbarPage(
             = list("Nutrient_Phytoplankton", "Sediment", "Zooplankton" , 
                    "Fish" , "Benthos" , "Predators", "Corpse_Discard" , "Macrophyte"),
             selected = "Nutrient_Phytoplankton"
-          ), 
+          ), textOutput("textEco"),
         ),
         #Main Panel: plot map here in the future
         mainPanel(
@@ -1093,10 +1103,51 @@ server <- function(input, output, session) {
     variants <- list.dirs(path = modelChosenPath, full.names = FALSE, recursive=FALSE)
     variants <- as.list(variants)
     selectInput("selectedVariant", 
-                "Select Variant",
+                "Select Time Period",
                 choices = variants
     )
   })
+  
+  output$textSelectRegion <- renderText(quoted = FALSE,"Blue area represent the inshore zone of the model, orange offshore. D1, D2, D3, S1, S2, S3 refers to seabed habitats - D/S1 = mud, D/S2= sand, D/S3 = gravel. Rock is denoted by D/S0 or shown as a separate map of percentage of rock cover.")
+  output$textEco <- renderText(quoted = FALSE,
+                               if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Detritus") {
+                               "Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is approximately equivalent to 0.16 grams of material per m3"}
+                               else if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Ammonia"){
+                                 "Changes over the year in concentrations of ammonia dissolved in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is equivalent to 0.014 grams of nitrogen per m3"}
+                               else if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Nitrate"){
+                                 "Changes over the year in concentrations of nitrate dissolved in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is equivalent to 0.014 grams of nitrogen per m3"}
+                               else if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Phytoplankton"){
+                                 "Changes over the year in concentrations of phytoplankton in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is approximately equivalent to 0.5 grams of live weight per m3"}
+                               else if(input$outputEcoType == "Sediment" && input$Sediment_Tab == "sedInAmmonia"){
+                                 "Changes over the year in concentrations of ammonia dissolved in the water within  seabed sediments (\"porewaters\") of the inshore zone. s1 = muddy sediment, s2 = sandy, s3 = gravelly. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is equivalent to 0.014 grams of nitrogen per m3"}
+                               else if(input$outputEcoType == "Sediment" && input$Sediment_Tab == "sedOffAmmonia"){
+                                 "Changes over the year in concentrations of ammonia dissolved in the water within  seabed sediments (\"porewaters\") of the offshore zone. d1 = muddy sediment, d2 = sandy, d3 = gravelly. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is equivalent to 0.014 grams of nitrogen per m3"}
+                               else if(input$outputEcoType == "Sediment" && input$Sediment_Tab == "sedInNitrate"){
+                                 "Changes over the year in concentrations of nitrate dissolved in the water within  seabed sediments (\"porewaters\") of the inshore zone. s1 = muddy sediment, s2 = sandy, s3 = gravelly. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is equivalent to 0.014 grams of nitrogen per m3"}
+                               else if(input$outputEcoType == "Sediment" && input$Sediment_Tab == "sedOffNitrate"){
+                                 "Changes over the year in concentrations of nitrate dissolved in the water within  seabed sediments (\"porewaters\") of the offshore zone. d1 = muddy sediment, d2 = sandy, d3 = gravelly. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is equivalent to 0.014 grams of nitrogen per m3"}
+                               else if(input$outputEcoType == "Sediment" && input$Sediment_Tab == "sedInDetrius"){
+                                 "Changes over the year in the organic detritus and bacteria content of  seabed sediments of the inshore zone. s1 = muddy sediment, s2 = sandy, s3 = gravelly. Units: Grams of organic nitrogen per gram of dry sediment, expressed as a percentage"}
+                               else if(input$outputEcoType == "Sediment" && input$Sediment_Tab == "sedOffDetrius"){
+                                 "Changes over the year in the organic detritus and bacteria content of  seabed sediments of the offshore zone. d1 = muddy sediment, d2 = sandy, d3 = gravelly. Units: Grams of organic nitrogen per gram of dry sediment, expressed as a percentage"}
+                               else if(input$outputEcoType == "Sediment" && input$Sediment_Tab == "sedInCorpses"){
+                                 "Changes over the year in the quantity of dead animals  (from plankton to whales) in the seabed habitats of the inshore zone. s1 = muddy sediment, s2 = sandy, s3 = gravelly. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 0.5 grams of material per m2"}
+                               else if(input$outputEcoType == "Sediment" && input$Sediment_Tab == "sedOffCorpses"){
+                                 "Changes over the year in the quantity of dead animals  (from plankton to whales) in the seabed habitats of the offshore zone. d1 = muddy sediment, d2 = sandy, d3 = gravelly. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 0.5 grams of material per m2 "}
+                               else if(input$outputEcoType == "Zooplankton" && input$Zooplankton_Tab == "zooOmni"){
+                                 "Changes over the year in the quantity of omnivorous zooplankton in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"} 
+                               else if(input$outputEcoType == "Zooplankton" && input$Zooplankton_Tab == "zooCarn"){
+                                 "Changes over the year in the quantity of carnivorous zooplankton in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"} 
+                               else if(input$outputEcoType == "Fish" && input$Fish_Tab == "plankFish"){
+                                 "Changes over the year in the quantity of planktivorous (plankton-eating) fish in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
+                               else if(input$outputEcoType == "Fish" && input$Fish_Tab == "plankFishLarv"){
+                                 "Changes over the year in the quantity of larvae of planktivorous (plankton-eating) fish in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
+                               else if(input$outputEcoType == "Fish" && input$Fish_Tab == "demFish"){
+                                 "Changes over the year in the quantity of demersal (benthos and fish-eating) fish in the inshore and offshore zones.Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface "}
+                               else if(input$outputEcoType == "Fish" && input$Fish_Tab == "demFishLarv"){
+                                 "Changes over the year in the quantity of larvae of demersal (benthos and fish-eating) fish in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
+                               
+                               )
   
   output$model_map <- renderUI({
     # current chosen model on dropdown lost
@@ -1189,33 +1240,37 @@ server <- function(input, output, session) {
       input$outputEcoType,
       "Nutrient_Phytoplankton" =
         fluidRow(tabsetPanel(type = "pills",
-                    tabPanel("Detritus", plotOutput("ecoPlot_nut_phyt_Detritus")),
-                    tabPanel("Ammonia", plotOutput("ecoPlot_nut_phyt_Ammonia")),
-                    tabPanel("Nitrate", plotOutput("ecoPlot_nut_phyt_Nitrate")),
-                    tabPanel("Phytoplankton", plotOutput("ecoPlot_nut_phyt_Phytoplankton"))
+                    tabPanel("Detritus", value = "nut_phyt_Detritus", plotOutput("ecoPlot_nut_phyt_Detritus")),
+                    tabPanel("Ammonia", value = "nut_phyt_Ammonia", plotOutput("ecoPlot_nut_phyt_Ammonia")),
+                    tabPanel("Nitrate", value = "nut_phyt_Nitrate", plotOutput("ecoPlot_nut_phyt_Nitrate")),
+                    tabPanel("Phytoplankton", value = "nut_phyt_Phytoplankton", plotOutput("ecoPlot_nut_phyt_Phytoplankton")),
+                    id = "Nutrient_Phytoplankton_Tab"
         )),
       "Sediment" =
         fluidRow(tabsetPanel(type = "pills",
-                    tabPanel("Inshore ammonia", plotOutput("ecoPlot_sediment_InAmm")),
-                    tabPanel("Offshore ammonia", plotOutput("ecoPlot_sediment_OffAmm")),
-                    tabPanel("Inshore nitrate", plotOutput("ecoPlot_sediment_InNit")),
-                    tabPanel("Offshore nitrate", plotOutput("ecoPlot_sediment_OffNit")),
-                    tabPanel("Inshore detritus", plotOutput("ecoPlot_sediment_InDet")),
-                    tabPanel("Offshore detritus", plotOutput("ecoPlot_sediment_OffDet")),
-                    tabPanel("Inshore corpses", plotOutput("ecoPlot_sediment_InCorp")),
-                    tabPanel("Offshore corpses", plotOutput("ecoPlot_sediment_OffCorp"))
+                    tabPanel("Inshore ammonia", value = "sedInAmmonia", plotOutput("ecoPlot_sediment_InAmm")),
+                    tabPanel("Offshore ammonia", value = "sedOffAmmonia", plotOutput("ecoPlot_sediment_OffAmm")),
+                    tabPanel("Inshore nitrate", value = "sedInNitrate", plotOutput("ecoPlot_sediment_InNit")),
+                    tabPanel("Offshore nitrate", value = "sedOffNitrate", plotOutput("ecoPlot_sediment_OffNit")),
+                    tabPanel("Inshore detritus", value = "sedInDetrius", plotOutput("ecoPlot_sediment_InDet")),
+                    tabPanel("Offshore detritus", value = "sedOffDetrius", plotOutput("ecoPlot_sediment_OffDet")),
+                    tabPanel("Inshore corpses", value = "sedInCorpses", plotOutput("ecoPlot_sediment_InCorp")),
+                    tabPanel("Offshore corpses", value = "sedOffCorpses", plotOutput("ecoPlot_sediment_OffCorp")),
+                    id = "Sediment_Tab"
         )),
       "Zooplankton" =
         fluidRow(tabsetPanel(type = "pills",
-                             tabPanel("Omnivorous zooplankton", plotOutput("ecoPlot_zooplankton_OmnZoo")),
-                             tabPanel("Carnivorous zooplankton", plotOutput("ecoPlot_zooplankton_CarnZoo"))
+                             tabPanel("Omnivorous zooplankton", value = "zooOmni", plotOutput("ecoPlot_zooplankton_OmnZoo")),
+                             tabPanel("Carnivorous zooplankton", value = "zooCarn", plotOutput("ecoPlot_zooplankton_CarnZoo")),
+                             id = "Zooplankton_Tab"
         )),
       "Fish" =
         fluidRow(tabsetPanel(type = "pills",
-                             tabPanel("Planktivorous fish", plotOutput("ecoPlot_fish_PlankFish")),
-                             tabPanel("Planktivorous fish larvae", plotOutput("ecoPlot_fish_PlankFishLarv")),
-                             tabPanel("Demersal fish", plotOutput("ecoPlot_fish_DemFish")),
-                             tabPanel("Demersal fish larvae", plotOutput("ecoPlot_fish_DemFishLarv"))
+                             tabPanel("Planktivorous fish", value = "plankFish", plotOutput("ecoPlot_fish_PlankFish")),
+                             tabPanel("Planktivorous fish larvae", value = "plankFishLarv", plotOutput("ecoPlot_fish_PlankFishLarv")),
+                             tabPanel("Demersal fish", value = "demFish", plotOutput("ecoPlot_fish_DemFish")),
+                             tabPanel("Demersal fish larvae", value = "demFishLarv", plotOutput("ecoPlot_fish_DemFishLarv")),
+                             id = "Fish_Tab"
         )),
       "Benthos" =
         fluidRow(tabsetPanel(type = "pills",
@@ -3878,7 +3933,7 @@ server <- function(input, output, session) {
   observeEvent(input$runBaseline, {
     showModal(
       modalDialog(
-        "Please wait whilst model runs baseline. Once completed you can explore plots below on model exploration tab menu",
+        "Please wait whilst model runs baseline. Once completed you can explore plots on model exploration tab menu",
         footer = NULL
       )
     )
