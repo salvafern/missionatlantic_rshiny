@@ -1109,10 +1109,10 @@ server <- function(input, output, session) {
   })
   
   output$textSelectRegion <- renderText(quoted = FALSE,"Blue area represent the inshore zone of the model, orange offshore. D1, D2, D3, S1, S2, S3 refers to seabed habitats - D/S1 = mud, D/S2= sand, D/S3 = gravel. Rock is denoted by D/S0 or shown as a separate map of percentage of rock cover.")
-  output$textEco <- renderText(quoted = FALSE,#is.null(input$outputEcoType)
-                               if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Detritus") {
-                               "Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is approximately equivalent to 0.16 grams of material per m3"}
-                               else if(is.null(input$outputEcoType) && is.null(input$Nutrient_Phytoplankton_Tab)){
+  output$textEco <- renderText(quoted = FALSE,
+                               if(is.null(input$outputEcoType) || is.null(input$Nutrient_Phytoplankton_Tab) ){# && is.null(input$Zooplankton_Tab) && is.null(input$Fish_Tab) && is.null(input$Benthos_Tab) && is.null(input$Predators_Tab) && is.null(input$Corpse_Discard_Tab) && is.null(input$Macrophyte_Tab)){
+                                 "Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is approximately equivalent to 0.16 grams of material per m3"}
+                               else if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Detritus") {
                                  "Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is approximately equivalent to 0.16 grams of material per m3"}
                                else if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Ammonia"){
                                  "Changes over the year in concentrations of ammonia dissolved in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is equivalent to 0.014 grams of nitrogen per m3"}
@@ -1120,6 +1120,8 @@ server <- function(input, output, session) {
                                  "Changes over the year in concentrations of nitrate dissolved in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is equivalent to 0.014 grams of nitrogen per m3"}
                                else if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Phytoplankton"){
                                  "Changes over the year in concentrations of phytoplankton in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is approximately equivalent to 0.5 grams of live weight per m3"}
+                               else if(is.null(input$outputEcoType) || is.null(input$Sediment_Tab)){
+                                 "Changes over the year in concentrations of ammonia dissolved in the water within  seabed sediments (\"porewaters\") of the inshore zone. s1 = muddy sediment, s2 = sandy, s3 = gravelly. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is equivalent to 0.014 grams of nitrogen per m3"}
                                else if(input$outputEcoType == "Sediment" && input$Sediment_Tab == "sedInAmmonia"){
                                  "Changes over the year in concentrations of ammonia dissolved in the water within  seabed sediments (\"porewaters\") of the inshore zone. s1 = muddy sediment, s2 = sandy, s3 = gravelly. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is equivalent to 0.014 grams of nitrogen per m3"}
                                else if(input$outputEcoType == "Sediment" && input$Sediment_Tab == "sedOffAmmonia"){
@@ -1136,10 +1138,14 @@ server <- function(input, output, session) {
                                  "Changes over the year in the quantity of dead animals  (from plankton to whales) in the seabed habitats of the inshore zone. s1 = muddy sediment, s2 = sandy, s3 = gravelly. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 0.5 grams of material per m2"}
                                else if(input$outputEcoType == "Sediment" && input$Sediment_Tab == "sedOffCorpses"){
                                  "Changes over the year in the quantity of dead animals  (from plankton to whales) in the seabed habitats of the offshore zone. d1 = muddy sediment, d2 = sandy, d3 = gravelly. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 0.5 grams of material per m2 "}
+                               else if(is.null(input$outputEcoType) || is.null(input$Zooplankton_Tab)){
+                                 "Changes over the year in the quantity of omnivorous zooplankton in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"} 
                                else if(input$outputEcoType == "Zooplankton" && input$Zooplankton_Tab == "zooOmni"){
                                  "Changes over the year in the quantity of omnivorous zooplankton in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"} 
                                else if(input$outputEcoType == "Zooplankton" && input$Zooplankton_Tab == "zooCarn"){
                                  "Changes over the year in the quantity of carnivorous zooplankton in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"} 
+                               else if(is.null(input$outputEcoType) || is.null(input$Fish_Tab)){
+                                 "Changes over the year in the quantity of planktivorous (plankton-eating) fish in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
                                else if(input$outputEcoType == "Fish" && input$Fish_Tab == "plankFish"){
                                  "Changes over the year in the quantity of planktivorous (plankton-eating) fish in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
                                else if(input$outputEcoType == "Fish" && input$Fish_Tab == "plankFishLarv"){
@@ -1148,6 +1154,8 @@ server <- function(input, output, session) {
                                  "Changes over the year in the quantity of demersal (benthos and fish-eating) fish in the inshore and offshore zones.Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
                                else if(input$outputEcoType == "Fish" && input$Fish_Tab == "demFishLarv"){
                                  "Changes over the year in the quantity of larvae of demersal (benthos and fish-eating) fish in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
+                               else if(is.null(input$outputEcoType) || is.null(input$Benthos_Tab)){
+                                 "Changes over the year in the quantity of suspension and deposit feeding benthos (seabed -living invertebrate animals) in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight per km2 of seabed"}
                                else if(input$outputEcoType == "Benthos" && input$Benthos_Tab == "benSusFeed"){
                                  "Changes over the year in the quantity of suspension and deposit feeding benthos (seabed -living invertebrate animals) in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight per km2 of seabed"}
                                else if(input$outputEcoType == "Benthos" && input$Benthos_Tab == "benSusLarvFeed"){
@@ -1156,6 +1164,8 @@ server <- function(input, output, session) {
                                  "Changes over the year in the quantity of carnivorous and scavenge feeding benthos (seabed -living invertebrate animals) in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight per km2 of seabed"}
                                else if(input$outputEcoType == "Benthos" && input$Benthos_Tab == "benCarnLarvFeed"){
                                  "Changes over the year in the quantity of planktonic larvae of carnivorous and scavenge feeding benthos (seabed -living invertebrate animals) in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1  km2 of sea surface"}
+                               else if(is.null(input$outputEcoType) || is.null(input$Predators_Tab)){
+                                 "Changes over the year in the quantity of seabirds in the inshore and offshore zones. Units: 0.01 milli-Mole of nitrogen per m2 (0.01 mMN.m-2) is approximately equivalent to 5 kg of live weight per km2 of sea surface"}
                                else if(input$outputEcoType == "Predators" && input$Predators_Tab == "predBirds"){
                                  "Changes over the year in the quantity of seabirds in the inshore and offshore zones. Units: 0.01 milli-Mole of nitrogen per m2 (0.01 mMN.m-2) is approximately equivalent to 5 kg of live weight per km2 of sea surface"}
                                else if(input$outputEcoType == "Predators" && input$Predators_Tab == "predPinnipeds"){
@@ -1164,10 +1174,14 @@ server <- function(input, output, session) {
                                  "Changes over the year in the quantity of cetaceans (whales) in the inshore and offshore zones. Units: 0.01 milli-Mole of nitrogen per m2 (0.01 mMN.m-2) is approximately equivalent to 5 kg of live weight per km2 of sea surface"}
                                else if(input$outputEcoType == "Predators" && input$Predators_Tab == "predMigFish"){
                                  "Changes over the year in the quantity of migratory fish in the inshore and offshore zones. Migratory fish spend only part of the year in the model region. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
+                               else if(is.null(input$outputEcoType) || is.null(input$Corpse_Discard_Tab)){
+                                 "Changes over the year in the quantity of dead animals  (from plankton to whales) in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of material below 1 km2 of sea surface"}
                                else if(input$outputEcoType == "Corpse_Discard" && input$Corpse_Discard_Tab == "corpses"){
                                  "Changes over the year in the quantity of dead animals  (from plankton to whales) in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of material below 1 km2 of sea surface"}
                                else if(input$outputEcoType == "Corpse_Discard" && input$Corpse_Discard_Tab == "discard"){
                                  "Changes over the year in the quantity of dead fish discarded by fishing vessels in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of material below 1 km2 of sea surface"}
+                               else if(is.null(input$outputEcoType) || is.null(input$Macrophyte_Tab)){
+                                 "Changes over the year in the quantity of macrophytes (large seaweeds) in the inshore zone. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2  of sea surface"}
                                else if(input$outputEcoType == "Macrophyte" && input$Macrophyte_Tab == "inshoreMac"){
                                  "Changes over the year in the quantity of macrophytes (large seaweeds) in the inshore zone. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2  of sea surface"}
                                else if(input$outputEcoType == "Macrophyte" && input$Macrophyte_Tab == "inshoreMacDebris"){
