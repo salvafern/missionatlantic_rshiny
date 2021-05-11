@@ -332,7 +332,7 @@ ui <- navbarPage(
               "All guilds combined"
             ),
             selected = "Planktivorous fish"
-          ),
+          ), textOutput("textCatchGuild"),
         ),
         #Main Panel: plot map here in the future
         mainPanel(
@@ -1190,6 +1190,37 @@ server <- function(input, output, session) {
                                else {
                                  "Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is approximately equivalent to 0.16 grams of material per m3"}
                                ) 
+  # "All guilds combined"
+  output$textCatchGuild <- renderText(quoted = FALSE,
+                               if(is.null(input$outputCatchType)){
+                                 "Annual catches of planktivorous (plankton-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be herring, sardines. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+                               else if(input$outputCatchType == "Planktivorous fish") {
+                                 "Annual catches of planktivorous (plankton-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be herring, sardines. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+                               else if(input$outputCatchType == "Quota limited Demersal fish") {
+                                 "Annual catches of 'quota limited' demersal (benthos and fish-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. 'Quota-limited' means that these are species for which landings are governed by quota restrictions, e.g. cod, haddock. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+                               else if(input$outputCatchType == "Non quota demersal fish") {
+                                 "Annual catches of 'non-quota ' demersal (benthos and fish-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. 'Non-quota' means that these are by-catch species for which there are no landing quota restrictions, e.g. wrasse or long-rough dab. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+                               else if(input$outputCatchType == "Migratory fish") {
+                                 "Annual catches of migratory fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. An example of these species would be mackerel. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+                               else if(input$outputCatchType == "Susp/deposit feeding benthos") {
+                                 "Annual catches of suspension and deposit feeding benthos (seabed-living invertebrate animals) in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. An example of these species would be scallops. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region."}
+                               else if(input$outputCatchType == "Carn/scavebge feeding benthos") {
+                                 "Annual catches of carnivorous and scavenge feeding benthos (seabed-living invertebrate animals) in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be prawns, crabs and lobsters. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+                               else if(input$outputCatchType == "Pelagic invertebrates") {
+                                 "Annual catches of pelagic invertebrates (carnivorous zooplankton in the model) in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be squids. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+                               else if(input$outputCatchType == "Birds") {
+                                 "Annual catches of seabirds in the inshore and offshore zones by each fishing gear type. Other then in specific cases seabirds are taken unintentionally as a by-catch and discarded. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+                               else if(input$outputCatchType == "Pinnipeds") {
+                                 "Annual catches of pinnipeds (seals)  in the inshore and offshore zones by each fishing gear type. Other then in specific hunting cases pinnipeds are taken unintentionally as a by-catch and discarded. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+                               else if(input$outputCatchType == "Cetaceans") {
+                                 "Annual catches of cetaceans (whales)  in the inshore and offshore zones by each fishing gear type. Other then in specific hunting cases cetaceans are taken unintentionally as a by-catch and discarded. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+                               else if(input$outputCatchType == "Macrophytes") {
+                                 "Annual catches of macrophytes (seaweeds) in the inshore zone by each fishing gear type, broken down by landings and discards. Examples of these species would be kelps. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+                               else if(input$outputCatchType == "All guilds combined") {
+                                 "Combined annual catches of all guilds in the inshore  and offshore zones by each fishing gear type, broken down by landings and discards. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region."}
+                               else {
+                                 "Annual catches of planktivorous (plankton-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be herring, sardines. Units: 1 milli-Mole of nitrogen per m2 per year (1 mMN.m-2.y-1) is approximately equivalent to 500 kg of live weight per km2 of whole model region"}
+  ) 
   
   output$model_map <- renderUI({
     # current chosen model on dropdown lost
