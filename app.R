@@ -1109,9 +1109,11 @@ server <- function(input, output, session) {
   })
   
   output$textSelectRegion <- renderText(quoted = FALSE,"Blue area represent the inshore zone of the model, orange offshore. D1, D2, D3, S1, S2, S3 refers to seabed habitats - D/S1 = mud, D/S2= sand, D/S3 = gravel. Rock is denoted by D/S0 or shown as a separate map of percentage of rock cover.")
-  output$textEco <- renderText(quoted = FALSE,
+  output$textEco <- renderText(quoted = FALSE,#is.null(input$outputEcoType)
                                if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Detritus") {
                                "Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is approximately equivalent to 0.16 grams of material per m3"}
+                               else if(is.null(input$outputEcoType) && is.null(input$Nutrient_Phytoplankton_Tab)){
+                                 "Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is approximately equivalent to 0.16 grams of material per m3"}
                                else if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Ammonia"){
                                  "Changes over the year in concentrations of ammonia dissolved in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is equivalent to 0.014 grams of nitrogen per m3"}
                                else if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Nitrate"){
@@ -1143,11 +1145,37 @@ server <- function(input, output, session) {
                                else if(input$outputEcoType == "Fish" && input$Fish_Tab == "plankFishLarv"){
                                  "Changes over the year in the quantity of larvae of planktivorous (plankton-eating) fish in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
                                else if(input$outputEcoType == "Fish" && input$Fish_Tab == "demFish"){
-                                 "Changes over the year in the quantity of demersal (benthos and fish-eating) fish in the inshore and offshore zones.Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface "}
+                                 "Changes over the year in the quantity of demersal (benthos and fish-eating) fish in the inshore and offshore zones.Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
                                else if(input$outputEcoType == "Fish" && input$Fish_Tab == "demFishLarv"){
                                  "Changes over the year in the quantity of larvae of demersal (benthos and fish-eating) fish in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
-                               
-                               )
+                               else if(input$outputEcoType == "Benthos" && input$Benthos_Tab == "benSusFeed"){
+                                 "Changes over the year in the quantity of suspension and deposit feeding benthos (seabed -living invertebrate animals) in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight per km2 of seabed"}
+                               else if(input$outputEcoType == "Benthos" && input$Benthos_Tab == "benSusLarvFeed"){
+                                 "Changes over the year in the quantity of planktonic larvae of suspension and deposit feeding benthos (seabed -living invertebrate animals) in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1  km2 of sea surface"}
+                               else if(input$outputEcoType == "Benthos" && input$Benthos_Tab == "benCarnFeed"){
+                                 "Changes over the year in the quantity of carnivorous and scavenge feeding benthos (seabed -living invertebrate animals) in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight per km2 of seabed"}
+                               else if(input$outputEcoType == "Benthos" && input$Benthos_Tab == "benCarnLarvFeed"){
+                                 "Changes over the year in the quantity of planktonic larvae of carnivorous and scavenge feeding benthos (seabed -living invertebrate animals) in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1  km2 of sea surface"}
+                               else if(input$outputEcoType == "Predators" && input$Predators_Tab == "predBirds"){
+                                 "Changes over the year in the quantity of seabirds in the inshore and offshore zones. Units: 0.01 milli-Mole of nitrogen per m2 (0.01 mMN.m-2) is approximately equivalent to 5 kg of live weight per km2 of sea surface"}
+                               else if(input$outputEcoType == "Predators" && input$Predators_Tab == "predPinnipeds"){
+                                 "Changes over the year in the quantity of pinnipeds (seals) in the inshore and offshore zones. Units: 0.01 milli-Mole of nitrogen per m2 (0.01 mMN.m-2) is approximately equivalent to 5 kg of live weight per km2 of sea surface"}
+                               else if(input$outputEcoType == "Predators" && input$Predators_Tab == "predCetaceans"){
+                                 "Changes over the year in the quantity of cetaceans (whales) in the inshore and offshore zones. Units: 0.01 milli-Mole of nitrogen per m2 (0.01 mMN.m-2) is approximately equivalent to 5 kg of live weight per km2 of sea surface"}
+                               else if(input$outputEcoType == "Predators" && input$Predators_Tab == "predMigFish"){
+                                 "Changes over the year in the quantity of migratory fish in the inshore and offshore zones. Migratory fish spend only part of the year in the model region. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
+                               else if(input$outputEcoType == "Corpse_Discard" && input$Corpse_Discard_Tab == "corpses"){
+                                 "Changes over the year in the quantity of dead animals  (from plankton to whales) in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of material below 1 km2 of sea surface"}
+                               else if(input$outputEcoType == "Corpse_Discard" && input$Corpse_Discard_Tab == "discard"){
+                                 "Changes over the year in the quantity of dead fish discarded by fishing vessels in the inshore and offshore zones. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of material below 1 km2 of sea surface"}
+                               else if(input$outputEcoType == "Macrophyte" && input$Macrophyte_Tab == "inshoreMac"){
+                                 "Changes over the year in the quantity of macrophytes (large seaweeds) in the inshore zone. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2  of sea surface"}
+                               else if(input$outputEcoType == "Macrophyte" && input$Macrophyte_Tab == "inshoreMacDebris"){
+                                 "Changes over the year in the quantity of macrophyte debris (dead, broken-off pieces off seaweed) in the inshore zone. Units: 1 milli-Mole of nitrogen per m2 (1 mMN.m-2) is approximately equivalent to 500 kg of live weight below 1 km2 of sea surface"}
+                               else if(is.null(input$outputEcoType)){"Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is approximately equivalent to 0.16 grams of material per m3"}
+                               else {
+                                 "Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m3 (1 mMN.m-3) is approximately equivalent to 0.16 grams of material per m3"}
+                               ) 
   
   output$model_map <- renderUI({
     # current chosen model on dropdown lost
@@ -1274,27 +1302,31 @@ server <- function(input, output, session) {
         )),
       "Benthos" =
         fluidRow(tabsetPanel(type = "pills",
-                             tabPanel("Benthos susp/dep feeders", plotOutput("ecoPlot_benthos_BenSusFeed")),
-                             tabPanel("Benthos susp/dep feeders larvae", plotOutput("ecoPlot_benthos_BenSusFeedLarv")),
-                             tabPanel("Benthos carn/scav feeders", plotOutput("ecoPlot_benthos_BenCarnFeed")),
-                             tabPanel("Benthos carn/scav feeders larvae", plotOutput("ecoPlot_benthos_BenCarnFeedLarv"))
+                             tabPanel("Benthos susp/dep feeders", value = "benSusFeed", plotOutput("ecoPlot_benthos_BenSusFeed")),
+                             tabPanel("Benthos susp/dep feeders larvae", value = "benSusLarvFeed", plotOutput("ecoPlot_benthos_BenSusFeedLarv")),
+                             tabPanel("Benthos carn/scav feeders", value = "benCarnFeed", plotOutput("ecoPlot_benthos_BenCarnFeed")),
+                             tabPanel("Benthos carn/scav feeders larvae", value = "benCarnLarvFeed", plotOutput("ecoPlot_benthos_BenCarnFeedLarv")),
+                             id = "Benthos_Tab"
         )),
       "Predators" =
         fluidRow(tabsetPanel(type = "pills",
-                             tabPanel("Birds", plotOutput("ecoPlot_predator_birds")),
-                             tabPanel("Pinnipeds", plotOutput("ecoPlot_predator_pinnipeds")),
-                             tabPanel("Cetaceans", plotOutput("ecoPlot_predator_cetaceans")),
-                             tabPanel("Migratory fish", plotOutput("ecoPlot_predator_migFish"))
+                             tabPanel("Birds", value = "predBirds", plotOutput("ecoPlot_predator_birds")),
+                             tabPanel("Pinnipeds", value = "predPinnipeds", plotOutput("ecoPlot_predator_pinnipeds")),
+                             tabPanel("Cetaceans", value = "predCetaceans", plotOutput("ecoPlot_predator_cetaceans")),
+                             tabPanel("Migratory fish", value = "predMigFish", plotOutput("ecoPlot_predator_migFish")),
+                             id = "Predators_Tab"
         )),
       "Corpse_Discard" =
         fluidRow(tabsetPanel(type = "pills",
-                             tabPanel("Corpses", plotOutput("ecoPlot_corpdisc_corpses")),
-                             tabPanel("Discards", plotOutput("ecoPlot_corpdisc_discard"))
+                             tabPanel("Corpses", value = "corpses", plotOutput("ecoPlot_corpdisc_corpses")),
+                             tabPanel("Discards", value = "discards", plotOutput("ecoPlot_corpdisc_discard")),
+                             id = "Corpse_Discard_Tab"
         )),
       "Macrophyte" =
         fluidRow(tabsetPanel(type = "pills",
-                             tabPanel("Inshore macrophytes", plotOutput("ecoPlot_macrophyte_inshore")),
-                             tabPanel("Inshore macrophyte debris", plotOutput("ecoPlot_macrophyte_inshoreDeb"))
+                             tabPanel("Inshore macrophytes", value = "inshoreMac", plotOutput("ecoPlot_macrophyte_inshore")),
+                             tabPanel("Inshore macrophyte debris", value = "inshoreMacDebris", plotOutput("ecoPlot_macrophyte_inshoreDeb")),
+                             id = "Macrophyte_Tab"
         ))
     )
   })
