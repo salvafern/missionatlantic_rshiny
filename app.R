@@ -4,7 +4,8 @@ library(shinythemes)
 library(shinycssloaders)
 library(dplyr)
 library(shinyjs)
-
+library(ggplot2)
+library(tidyr)
 #library(shinyAce)
 #library(sendmailR)
 
