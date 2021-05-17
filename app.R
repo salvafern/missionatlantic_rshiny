@@ -19,7 +19,7 @@ source("createCatchPlotPerGear.R")
 source("createEDriversPlots.R")
 
 ui <- navbarPage(
-  "StrathE2E App",
+  "StrathE2E-online",
   theme = shinytheme("cerulean"), #"strathe2e.css", 
              tabPanel(
                title = "Home",
@@ -122,7 +122,7 @@ ui <- navbarPage(
                     style = "font-family: 'calibri'; font-si10pt"
                   ),
                   br(),
-                  img(src = "guilds.svg", width = '100%', style = "display: block; margin-left: auto; margin-right: auto;" ,id="diagram1"),
+                  img(src = "guilds.svg", width = '100%', style = "display: block; margin-left: auto; margin-right: auto;" ,id="diagram1")
                    # tags$table(border = 1, style = " margin-left: auto; margin-right: auto;font-family: 'calibri'", id="table1",
                    #                     tags$tbody(
                    #                       tags$tr(
@@ -225,7 +225,7 @@ ui <- navbarPage(
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
-                     "Use slider-bars to configure a new set of inputs to the model in terms of variations from the baseline in temperature, nutrient inputs, fishing activity, scouring of the seabed by trawling, and discarding of fishery catches.",
+                     "Use slider-bars to configure a new set of inputs to the model in terms of variations from the baseline in temperature, nutrient inputs, fishing activity, abrasion of the seabed by trawling, and discarding of fishery catches.",
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
@@ -269,12 +269,12 @@ ui <- navbarPage(
   navbarMenu(
     "Explore Model",
     tabPanel(
-      title = "Run Baseline",
-      h4("Some text about running baseline to go here"),
+      title = "Run baseline model",
       fluidRow(column(
         6,
         h3("Run Baseline"),
-        actionButton("runBaseline", "Run Baseline Model")
+        actionButton("runBaseline", "Run Baseline Model"),
+        uiOutput("textRunBaselineModel"),
       ),
       column(
         6,
@@ -284,7 +284,7 @@ ui <- navbarPage(
           id = "dwnbutton_b",
           downloadButton(
             "downloadData_baseline1",
-            "Download Baseline output",
+            "Download output as csv files",
             disabled = "disabled"
           )
         )
@@ -292,7 +292,61 @@ ui <- navbarPage(
       )
     ),
     tabPanel(
-      title = "Ecological plots",
+      title = "Plot environmental inputs",
+      sidebarLayout(
+        sidebarPanel(
+          selectInput(
+            "edriverType",
+            h4("Environmental input type"),
+            choices
+            = list(
+              "Surface irradiance",
+              "Susp.partic. matter",
+              "Temperature",
+              "Diffusivity gradient",
+              "External Inflow",
+              "River discharge",
+              "Wave height",
+              "Sediment disturbance",
+              "Boundary nitrate",
+              "Boundary ammonia",
+              "Boundary phytoplankton",
+              "Boundary detritus",
+              "River nitrate",
+              "River ammonia",
+              "Atmospheric nitrate",
+              "Atmospheric ammonia"
+            ),
+            selected = "Surface irradiance"
+          ) , uiOutput("textEnvironmental")
+        ),
+        mainPanel(
+          uiOutput("UiEdriver"))
+      )
+    ),
+    tabPanel(
+      title = "Plot fishery inputs",
+      sidebarLayout(
+        sidebarPanel(
+          selectInput(
+            "fdriverType",
+            h4("Fishery input type"),
+            choices
+            = list(
+              "Activity",
+              "Abrasion",
+              "HarvestR",
+              "Discards",
+              "Offal"
+            ),
+            selected = "Activity"
+          ),  uiOutput("textFishery")
+        ),
+        mainPanel(
+          uiOutput("UiFdriver"))
+      )),
+    tabPanel(
+      title = "Plot ecological outputs",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -302,15 +356,14 @@ ui <- navbarPage(
             = list("Nutrient_Phytoplankton", "Sediment", "Zooplankton" , 
                    "Fish" , "Benthos" , "Predators", "Corpse_Discard" , "Macrophyte"),
             selected = "Nutrient_Phytoplankton"
-          ), uiOutput("textEco"),
+          ), uiOutput("textEco")
         ),
-        #Main Panel: plot map here in the future
         mainPanel(
           uiOutput("uiEco"))
         )
     ),
     tabPanel(
-      title = "Catch plots per guild",
+      title = "Plot catch per guild",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -332,102 +385,52 @@ ui <- navbarPage(
               "All guilds combined"
             ),
             selected = "Planktivorous fish"
-          ), uiOutput("textCatchGuild"),
+          ), uiOutput("textCatchGuild")
         ),
-        #Main Panel: plot map here in the future
         mainPanel(
           uiOutput("uiCatchGuild"))
       )
     ),
     tabPanel(
-      title = "Catch plots per gear",
+      title = "Plot catch per gear",
       sidebarLayout(
         sidebarPanel(
           uiOutput("gear_dropdown"),
-          uiOutput("textCatchGear"),
+          uiOutput("textCatchGear")
         ), 
         mainPanel(
           uiOutput("uiCatchGear"))
       )
-    ),
-    tabPanel(
-      title = "Environmental drivers",
-      sidebarLayout(
-        sidebarPanel(
-          selectInput(
-            "edriverType",
-            h4("Environmental driver Type"),
-            choices
-            = list(
-              "Surface irradiance",
-              "Susp.partic. matter",
-              "Temperature",
-              "Diffusivity gradient",
-              "External Inflow",
-              "River discharge",
-              "Wave height",
-              "Sediment disturbance",
-              "Boundary nitrate",
-              "Boundary ammonia",
-              "Boundary phytoplankton",
-              "Boundary detritus",
-              "River nitrate",
-              "River ammonia",
-              "Atmospheric nitrate",
-              "Atmospheric ammonia"
-            ),
-            selected = "Surface irradiance"
-          ),
-        ),
-        mainPanel(
-          uiOutput("UiEdriver"))
-      )
-    ),
-    tabPanel(
-      title = "Fishery drivers",
-      sidebarLayout(
-        sidebarPanel(
-          selectInput(
-            "fdriverType",
-            h4("Fishery driver Type"),
-            choices
-            = list(
-              "Activity",
-              "Abrasion",
-              "HarvestR",
-              "Discards",
-              "Offal"
-            ),
-            selected = "Activity"
-          ),
-        ),
-        mainPanel(
-          uiOutput("UiFdriver"))
-      ))
+    )
   ), 
   navbarMenu(
     "Setup Scenario ",
     tabPanel(
       title = "Temperature",
-      h4("Some text about Temperature to go here"),
+      fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">Used the slider bar to add or subtract a temperature increment (°C) throughout the year in all layers and zones of the model."),
+                                                                  HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">0 (zero) represents no change from the baseline model temperatures.")))),
+      
       fluidRow(column(
         width = 5,
         #offset = 2,
         wellPanel(
           sliderInput(
             "temperature",
-            "Temperature to add:",
+            "Temperature to add/subtract:",
             min = -3,
             max = 3,
             value = 0.0,
             width = "100%"
           )
-        ),
+        )
       ))
     ),
     tabPanel(
-      title = "Nutrients",
-      h4("Some text about Nutrients to go here"),
+      title = "Nutrient Inputs",
+      fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">Use the slider bars to rescale the atmospheric and river nutrient inputs by a constant factor throughout the year."),
+                                           HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">1 represents no change from the baseline model inputs; 0.5 means that inputs are halved; 2 means that inputs are doubled."),
+                                           HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Atmospheric inputs are deposited as dust or in rainfall, and originate from both natural processes (lightning and volcanic activity) and emissions from industry and burning of fossil fuels."),
+                                           HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">River inputs are dissolved in river waters and originate from geological process and waste water discharges.")))),
       fluidRow(
         column(
           width = 5,
@@ -475,42 +478,39 @@ ui <- navbarPage(
               step = 0.2,
               width = "100%"
             )
-          ),
+          )
         )
       )
     ),
     tabPanel(
       title = "Fishing Activity",
-      h4("Some text about fishing activity to go here"),
       uiOutput("uiFishingActivity")
     ),
     tabPanel(title = "Seabed Abrasion",
-      h4("Some text about seabed abrasion to go here"),
       uiOutput("uiSeabedAbrasian")),
     tabPanel(
       title = "Guild Discard Per Gear",
-      h4("Some text about discards per gear to go here"),
       sidebarLayout(sidebarPanel(
         selectInput(
           "selectedParameter",
           h4("Guilds"),
           choices
           = list(
-            "Pelagic",
-            "Demersal",
-            "Migratory",
-            "Filtben",
-            "Carnben",
-            "Carnzoo",
-            "Bird",
-            "Seal",
-            "Ceta",
-            "Kelp"
+            "Planktivorous fish",
+            "Demersal fish",
+            "Migratory fish",
+            "Suspension/deposit feeding benthos",
+            "Carnivore/scavenge feeding benthos",
+            "Carnivorous zooplankton (e.g. squids)",
+            "Seabirds",
+            "Pinnipeds (seals)",
+            "Cetaceans",
+            "Macrophytes (kelp)"
           ),
           selected = "Pelagic"
-        ),
+        ), uiOutput("textDiscardGuild"),
         width = 3
-      ),
+      ), 
       mainPanel (uiOutput("ui")))
     )
   ),
@@ -518,7 +518,6 @@ ui <- navbarPage(
     "Scenario Results",
     tabPanel(
       title = "Run Scenario",
-      h4("Some text about running baseline and scenario to go here"),
       sliderInput(
         "year",
         "Year:",
@@ -531,7 +530,8 @@ ui <- navbarPage(
       column(
         6,
         h3("Run Scenario"),
-        actionButton("runScenario", "Run Scenario Model")
+        actionButton("runScenario", "Run Scenario Model"),
+        uiOutput("textRunScenarioModel"),
       ),
       column(
         6,
@@ -559,97 +559,95 @@ ui <- navbarPage(
       # ),
       )),
     tabPanel(
-      title = "Annual Average Masses (Biomass)",
-      h3(
-        "Tornado bar-plot diagram of the differences in annual average masses of ecology model variables between baseline and scenario runs"
-      ),
+      title = "Compare Biomasses",
+      fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual averaged quantities of model components in the whole model region between your scenario model run and the baseline."),
+                                           HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Green bars to the right indicate that the (bio)mass was higher in the scenario run than the baseline, and vice-versa for red bars to the left.")))),
       fluidRow(column(
-        6,
-        plotOutput("e2e_compare_runs_bar_aam")
-      )),
+        9,
+        plotOutput("e2e_compare_runs_bar_aam",height = "600px")
+      ))
     ),
     tabPanel(
-      title = "Annual fisheries catch",
-      h4(
-        "Tornado bar-plot diagram of the differences in annual fishery catches, between baseline and scenario runs"
-      ),
+      title = "Compare Fishery Catches",
+      fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual fishery landings and discards in the whole model region between your scenario model run and the baseline."),
+                                           HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Green and black bars to the right indicate that the landings or discards were higher in the scenario run than the baseline, and vice-versa for red and grey bars to the left.")))),
       fluidRow(
         column(
-          6,
-          plotOutput("e2e_compare_runs_bar_catch")
+          9,
+          plotOutput("e2e_compare_runs_bar_catch",height = "600px")
         )
       )
-    ),
-    tabPanel(title = "Yield curves - example only", fluidRow(
-      column(
-        width = 11,
-        offset = 0.5,
-        fluidRow(
-          h4("Run a set of models to generate fishery yield curve data for either planktivorous or demersal fish.",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
-          p(
-            "Perform a set of StrathE2E model runs along a sequence of values of either planktivorous or demersal fish harvest ratio multiplier, saving the annual average whole-domain biomass, annual landings and annual discards of all exploitable food web guilds from each run plus the annual average biomasses of all the other living components of the food web.",
-            style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"
-          ),
-          h5("Usage",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
-          code("e2e_run_ycurve( model,selection, nyears = 50, HRvector = c(0, 0.5, 1, 1.5, 2, 2.5, 3), HRfixed = 1, csv.output = FALSE)"
-          ,style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
-          h5("Details", style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
-          p(
-            "The baseline for the sequence of runs (harvest ratio multiplier = 1.0) is a model name and variant as loaded by the e2e_read() function. The planktivorous or demersal fish yield curve can be generated for a given fixed setting of the other (demersal or planktivorous) fish harvest ratio multiplier (default = 1.0). All other conditions are held constant as in the baseline model configuration. The yield curve represents the catch that would be generated from the stationary state of the model attained with long-term repeating annual cycles of all driving data. Hence it is important that each simulation is run for long enough that the model attains its stationary state, which may be some distance from the baseline model initial conditions. It is recommended that each run is at least 50 years. The data on annual average biomass and annual integrated catches stored in the returned data object (and optionally a csv file) can subsequently be plotted using the function e2e_plot_ycurve(). Users can easily plot any of the other saved data using their own plotting code. If csv output is selected then the resulting files in the current user results folder have names Yield_curve_data_PFHRmult-*.csv or Yield_curve_data_DFHRmult-*.csv, depending on the 'selection' argument, and * represents the model.ident text set in the prior e2e_read() function call.",
-            style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"
-          ),
-          h5("Example",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
-          br(),
-          code("# Load the 1970-1999 version of the North Sea model supplied with the package :"),
-          br(),
-          code("model <- e2e_read(\"North_Sea\", \"1970-1999\", model.ident=\"70-99base\")"),
-          br(),
-          code("# In this example csv output is directed to a temporary folder since results.path os not set."),
-          br(),
-          code("# In this illustrative example the StrathE2E() model is run for only 3 years to enable quick"),
-          br(),
-          code("# return of results. In a real simulation nyear would be at least 50."),
-          br(),
-          code("# This example illustrates that the vector of planktivorous fish harvest ratio multiplers"),
-          br(),
-          code("# does not have to be evenly spaced."),
-          br(),
-          code("hr <- c(0,0.5,0.75,1.0,1.25,2.0,3.0)"),
-          br(),
-          code("pf_yield_data <- e2e_run_ycurve(model,selection=\"PLANKTIV\", nyears=3, HRvector=hr, HRfixed=1, csv.output=FALSE)"),
-          br(),
-          code("names(pf_yield_data)"),
-          br(),
-          code("# Plotting the results..."),
-          br(),
-          code("# The planktivorous fish yield curve can be plotted using the function:"),
-          br(),
-          code("e2e_plot_ycurve(model, selection=\"PLANKTIV\", results=pf_yield_data,"),
-          br(),
-          code("title=\"Planktivorous yield with baseline demersal fishing\")"),
-          br(),
-          h5("Example Plot",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
-          column(
-            6,
-            img(src = "yield_1.png", width = '100%'),
-            h6(
-              "Yield data plot for planktivoirous fish in the 1970-1999 North Sea model with baseline demersal harvest ratios. Upper panel, annual average biomass of planktivorous fish (mMN.m-2 in the whole modle domain) as a function of harvest ratio. Lower panel: catch divided into landings and discards of planktivorous fish (mMN.m-2.y-1) as a function of harvest ratio."
-              ,style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"
-            )
-          )
-          # ,
-          # column(
-          #   6,
-          #   h3("Run Yield"),
-          #   actionButton("runYield", "Run Yield Plot")
-          # ),
-          # column(
-          #   6,
-          #   h5("Yield plot"),
-          #   plotOutput("yield_plot")
-          # ),
-        )
-    )))
+    )
+    # tabPanel(title = "Yield curves - example only", fluidRow(
+    #   column(
+    #     width = 11,
+    #     offset = 0.5,
+    #     fluidRow(
+    #       h4("Run a set of models to generate fishery yield curve data for either planktivorous or demersal fish.",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
+    #       p(
+    #         "Perform a set of StrathE2E model runs along a sequence of values of either planktivorous or demersal fish harvest ratio multiplier, saving the annual average whole-domain biomass, annual landings and annual discards of all exploitable food web guilds from each run plus the annual average biomasses of all the other living components of the food web.",
+    #         style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"
+    #       ),
+    #       h5("Usage",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
+    #       code("e2e_run_ycurve( model,selection, nyears = 50, HRvector = c(0, 0.5, 1, 1.5, 2, 2.5, 3), HRfixed = 1, csv.output = FALSE)"
+    #       ,style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
+    #       h5("Details", style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
+    #       p(
+    #         "The baseline for the sequence of runs (harvest ratio multiplier = 1.0) is a model name and variant as loaded by the e2e_read() function. The planktivorous or demersal fish yield curve can be generated for a given fixed setting of the other (demersal or planktivorous) fish harvest ratio multiplier (default = 1.0). All other conditions are held constant as in the baseline model configuration. The yield curve represents the catch that would be generated from the stationary state of the model attained with long-term repeating annual cycles of all driving data. Hence it is important that each simulation is run for long enough that the model attains its stationary state, which may be some distance from the baseline model initial conditions. It is recommended that each run is at least 50 years. The data on annual average biomass and annual integrated catches stored in the returned data object (and optionally a csv file) can subsequently be plotted using the function e2e_plot_ycurve(). Users can easily plot any of the other saved data using their own plotting code. If csv output is selected then the resulting files in the current user results folder have names Yield_curve_data_PFHRmult-*.csv or Yield_curve_data_DFHRmult-*.csv, depending on the 'selection' argument, and * represents the model.ident text set in the prior e2e_read() function call.",
+    #         style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"
+    #       ),
+    #       h5("Example",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
+    #       br(),
+    #       code("# Load the 1970-1999 version of the North Sea model supplied with the package :"),
+    #       br(),
+    #       code("model <- e2e_read(\"North_Sea\", \"1970-1999\", model.ident=\"70-99base\")"),
+    #       br(),
+    #       code("# In this example csv output is directed to a temporary folder since results.path os not set."),
+    #       br(),
+    #       code("# In this illustrative example the StrathE2E() model is run for only 3 years to enable quick"),
+    #       br(),
+    #       code("# return of results. In a real simulation nyear would be at least 50."),
+    #       br(),
+    #       code("# This example illustrates that the vector of planktivorous fish harvest ratio multiplers"),
+    #       br(),
+    #       code("# does not have to be evenly spaced."),
+    #       br(),
+    #       code("hr <- c(0,0.5,0.75,1.0,1.25,2.0,3.0)"),
+    #       br(),
+    #       code("pf_yield_data <- e2e_run_ycurve(model,selection=\"PLANKTIV\", nyears=3, HRvector=hr, HRfixed=1, csv.output=FALSE)"),
+    #       br(),
+    #       code("names(pf_yield_data)"),
+    #       br(),
+    #       code("# Plotting the results..."),
+    #       br(),
+    #       code("# The planktivorous fish yield curve can be plotted using the function:"),
+    #       br(),
+    #       code("e2e_plot_ycurve(model, selection=\"PLANKTIV\", results=pf_yield_data,"),
+    #       br(),
+    #       code("title=\"Planktivorous yield with baseline demersal fishing\")"),
+    #       br(),
+    #       h5("Example Plot",style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"),
+    #       column(
+    #         6,
+    #         img(src = "yield_1.png", width = '100%'),
+    #         h6(
+    #           "Yield data plot for planktivoirous fish in the 1970-1999 North Sea model with baseline demersal harvest ratios. Upper panel, annual average biomass of planktivorous fish (mMN.m-2 in the whole modle domain) as a function of harvest ratio. Lower panel: catch divided into landings and discards of planktivorous fish (mMN.m-2.y-1) as a function of harvest ratio."
+    #           ,style = "font-family: 'calibri'; font-si16pt; text-align: justify;padding:10px;"
+    #         )
+    #       )
+    #       # ,
+    #       # column(
+    #       #   6,
+    #       #   h3("Run Yield"),
+    #       #   actionButton("runYield", "Run Yield Plot")
+    #       # ),
+    #       # column(
+    #       #   6,
+    #       #   h5("Yield plot"),
+    #       #   plotOutput("yield_plot")
+    #       # ),
+    #     )
+    # )))
   )
 )
 
@@ -683,6 +681,11 @@ server <- function(input, output, session) {
     # gear11Activity <- model$data$fleet.model$gear_activity[11]
     # gear12Activity <- model$data$fleet.model$gear_activity[12]
     fluidRow(
+      wellPanel(
+        HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">Use the slider bars to rescale the activity rates of each fishing gear."),
+        HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">1 represents no change from the baseline model rates; 0.5 means that fishing rates are halved; 2 means that rates are doubled."),
+        HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Activity rate of each gear is measured in seconds of gear deployment per m<sup>2</sup per day")
+      ),
       column(
         width = 5,
         wellPanel(
@@ -855,6 +858,12 @@ server <- function(input, output, session) {
     gear12Plough <- model$data$fleet.model$gear_ploughing_rate[12]
     
     fluidRow(
+      wellPanel(
+        HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">Use the slider bars to rescale the seabed abrasion rate of each fishing gear."),
+        HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">1 represents no change from the baseline model rates; 0.5 means that abrasion rates are halved; 2 means that rates are doubled."),
+        HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Seabed abrasion rate of each gear is measured in m<sup>2</sup> of seabed abraded per second of gear deployment."),
+        HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">In the model, seabed abrasion re-suspends organic matter and releases nutrients from the sediment, and causes collateral mortality of benthos guilds.")
+      ),
         if (gear1Plough > 0) {
                          wellPanel(
                            sliderInput(
@@ -1109,8 +1118,8 @@ server <- function(input, output, session) {
     )
   })
   
-  output$textSelectRegion <- renderText(quoted = FALSE,"Blue area represent the inshore zone of the model, orange offshore. D1, D2, D3, S1, S2, S3 refers to seabed habitats - D/S1 = mud, D/S2= sand, D/S3 = gravel. Rock is denoted by D/S0 or shown as a separate map of percentage of rock cover.")
-  output$textEco <- renderUI(quoted = FALSE,
+  output$textSelectRegion <- renderText(quoted = FALSE,"Blue areas in the map opposite represent the inshore zone of the model, orange offshore. D1, D2, D3, S1, S2, S3 refers to seabed habitats - D/S1 = mud, D/S2= sand, D/S3 = gravel. Rock is denoted by D/S0 or shown as a separate map of percentage of rock cover.")
+  output$textEco <- renderUI(
                                if(is.null(input$outputEcoType) || is.null(input$Nutrient_Phytoplankton_Tab) ){# && is.null(input$Zooplankton_Tab) && is.null(input$Fish_Tab) && is.null(input$Benthos_Tab) && is.null(input$Predators_Tab) && is.null(input$Corpse_Discard_Tab) && is.null(input$Macrophyte_Tab)){
                                  fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m<sup>3</sup> (1 mMN.m<sup>-3</sup>) is approximately equivalent to 0.16 grams of material per m<sup>3</sup>"))}
                                else if(input$outputEcoType == "Nutrient_Phytoplankton" && input$Nutrient_Phytoplankton_Tab == "nut_phyt_Detritus") {
@@ -1193,38 +1202,110 @@ server <- function(input, output, session) {
                                  fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m<sup>3</sup> (1 mMN.m<sup>-3</sup>) is approximately equivalent to 0.16 grams of material per m<sup>3</sup>"))}
                                ) 
 
-  output$textCatchGuild <- renderUI(quoted = FALSE,
-                               if(is.null(input$outputCatchType)){
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of planktivorous (plankton-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be herring, sardines. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-                               else if(input$outputCatchType == "Planktivorous fish") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of planktivorous (plankton-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be herring, sardines. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-                               else if(input$outputCatchType == "Quota limited Demersal fish") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of 'quota limited' demersal (benthos and fish-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. 'Quota-limited' means that these are species for which landings are governed by quota restrictions, e.g. cod, haddock. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-                               else if(input$outputCatchType == "Non quota demersal fish") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of 'non-quota ' demersal (benthos and fish-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. 'Non-quota' means that these are by-catch species for which there are no landing quota restrictions, e.g. wrasse or long-rough dab. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-                               else if(input$outputCatchType == "Migratory fish") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of migratory fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. An example of these species would be mackerel. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-                               else if(input$outputCatchType == "Susp/deposit feeding benthos") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of suspension and deposit feeding benthos (seabed-living invertebrate animals) in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. An example of these species would be scallops. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region."))}
-                               else if(input$outputCatchType == "Carn/scavebge feeding benthos") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of carnivorous and scavenge feeding benthos (seabed-living invertebrate animals) in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be prawns, crabs and lobsters. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-                               else if(input$outputCatchType == "Pelagic invertebrates") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of pelagic invertebrates (carnivorous zooplankton in the model) in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be squids. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-                               else if(input$outputCatchType == "Birds") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of seabirds in the inshore and offshore zones by each fishing gear type. Other then in specific cases seabirds are taken unintentionally as a by-catch and discarded. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-                               else if(input$outputCatchType == "Pinnipeds") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of pinnipeds (seals)  in the inshore and offshore zones by each fishing gear type. Other then in specific hunting cases pinnipeds are taken unintentionally as a by-catch and discarded. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-                               else if(input$outputCatchType == "Cetaceans") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of cetaceans (whales)  in the inshore and offshore zones by each fishing gear type. Other then in specific hunting cases cetaceans are taken unintentionally as a by-catch and discarded. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-                               else if(input$outputCatchType == "Macrophytes") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of macrophytes (seaweeds) in the inshore zone by each fishing gear type, broken down by landings and discards. Examples of these species would be kelps. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-                               else if(input$outputCatchType == "All guilds combined") {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Combined annual catches of all guilds in the inshore  and offshore zones by each fishing gear type, broken down by landings and discards. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region."))}
-                               else {
-                                 fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of planktivorous (plankton-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be herring, sardines. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-3</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
-  ) 
+  output$textCatchGuild <- renderUI({
+                                    if(is.null(input$outputCatchType)){
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of planktivorous (plankton-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be herring, sardines. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+                                    else if(input$outputCatchType == "Planktivorous fish") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of planktivorous (plankton-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be herring, sardines. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+                                    else if(input$outputCatchType == "Quota limited Demersal fish") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of 'quota limited' demersal (benthos and fish-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. 'Quota-limited' means that these are species for which landings are governed by quota restrictions, e.g. cod, haddock. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+                                    else if(input$outputCatchType == "Non quota demersal fish") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of 'non-quota ' demersal (benthos and fish-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. 'Non-quota' means that these are by-catch species for which there are no landing quota restrictions, e.g. wrasse or long-rough dab. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+                                    else if(input$outputCatchType == "Migratory fish") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of migratory fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. An example of these species would be mackerel. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+                                    else if(input$outputCatchType == "Susp/deposit feeding benthos") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of suspension and deposit feeding benthos (seabed-living invertebrate animals) in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. An example of these species would be scallops. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region."))}
+                                    else if(input$outputCatchType == "Carn/scavebge feeding benthos") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of carnivorous and scavenge feeding benthos (seabed-living invertebrate animals) in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be prawns, crabs and lobsters. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+                                    else if(input$outputCatchType == "Pelagic invertebrates") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of pelagic invertebrates (carnivorous zooplankton in the model) in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be squids. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+                                    else if(input$outputCatchType == "Birds") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of seabirds in the inshore and offshore zones by each fishing gear type. Other then in specific cases seabirds are taken unintentionally as a by-catch and discarded. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+                                    else if(input$outputCatchType == "Pinnipeds") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of pinnipeds (seals)  in the inshore and offshore zones by each fishing gear type. Other then in specific hunting cases pinnipeds are taken unintentionally as a by-catch and discarded. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+                                    else if(input$outputCatchType == "Cetaceans") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of cetaceans (whales)  in the inshore and offshore zones by each fishing gear type. Other then in specific hunting cases cetaceans are taken unintentionally as a by-catch and discarded. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+                                    else if(input$outputCatchType == "Macrophytes") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of macrophytes (seaweeds) in the inshore zone by each fishing gear type, broken down by landings and discards. Examples of these species would be kelps. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+                                    else if(input$outputCatchType == "All guilds combined") {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Combined annual catches of all guilds in the inshore  and offshore zones by each fishing gear type, broken down by landings and discards. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region."))}
+                                    else {
+                                      fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of planktivorous (plankton-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be herring, sardines. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-3</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
+  }) 
+  
+  output$textEnvironmental <- renderUI({
+                                       # if(is.null(input$edriverType)){
+                                       if(is.null(input$edriverType)){
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged intensity of sunlight at the sea surface. Units: Einsteins per m<sup>2</sup> per day. An Einstein is a mole of photons (6.022×10<sup>23</sup> photons)"))}
+                                       else if(input$edriverType == "Surface irradiance") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged intensity of sunlight at the sea surface. Units: Einsteins per m<sup>2</sup> per day. An Einstein is a mole of photons (6.022×10<sup>23</sup> photons)"))}
+                                       else if(input$edriverType == "Susp.partic. matter") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged concentration of suspended particulate matter (silt) in the water of the offshore and inshore zones This determines how much sunlight penetrates below the sea surface. Units: grams per m<sup>3</sup>"))}
+                                       else if(input$edriverType == "Temperature") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged temperature in each zone and layer of the model  - upper (surface) layer offshore; lower (deep ) layer offshore; inshore"))}
+                                       else if(input$edriverType == "Diffusivity gradient") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged vertical diffusivity gradient in the offshore zone (m per day). Diffusivity is a measure of the intensity of mixing between the surface and deep water layers"))}
+                                       else if(input$edriverType == "External Inflow") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged current inflow rate of water to each layer and zone from the ocean outside the model. Units: m<sup>3</sup> of inflow per m<sup>2</sup> of sea surface area."))}
+                                       else if(input$edriverType == "River discharge") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged volume of water flowing into the model region from rivers. Units: m<sup>3</sup> of inflow per m<sup>2</sup> of sea surface area."))}
+                                       else if(input$edriverType == "Wave height") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged wave height in the inshore zone of the model. Waveheight determines the fragmentation rate of macrophytes in the model. Units: metres"))}
+                                       else if(input$edriverType == "Sediment disturbance") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged proportion of the seabed sediment area disturbed naturally by waves and currents in the inshore and offshore zones. Units: proportion of area per day."))}
+                                       else if(input$edriverType == "Boundary nitrate") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged concentration of nitrate in the water flowing into each layer and zone of the model from the ocean outside. Units: milli-Moles of nitrogen per m<sup>3</sup>"))}
+                                       else if(input$edriverType == "Boundary ammonia") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged concentration of ammonia in the water flowing into each layer and zone of the model from the ocean outside. Units: milli-Moles of nitrogen per m<sup>3</sup>"))}
+                                       else if(input$edriverType == "Boundary phytoplankton") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged concentration of phytoplankton in the water flowing into each layer and zone of the model from the ocean outside. Units: milli-Moles of nitrogen per m<sup>3</sup>"))}
+                                       else if(input$edriverType == "Boundary detritus") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged concentration of dead organic matter (detritus) in the water flowing into each layer and zone of the model from the ocean outside. Units: milli-Moles of nitrogen per m<sup>3</sup>"))}
+                                       else if(input$edriverType == "River nitrate") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged concentration of nitrate in the river waters flowing into the model region. Units: milli-Moles of nitrogen per m<sup>3</sup>"))}
+                                       else if(input$edriverType == "River ammonia") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged concentration of ammonia in the river waters flowing into the model region. Units: milli-Moles of nitrogen per m<sup>3</sup>"))}
+                                       else if(input$edriverType == "Atmospheric nitrate") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged deposition rate of nitrate onto the sea surface from the atmosphere in rain and dust. Units: milli-Moles of nitrogen per m<sup>2</sup> per day."))}
+                                       else if(input$edriverType == "Atmospheric ammonia") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged deposition rate of ammonia onto the sea surface from the atmosphere in rain and dust. Units: milli-Moles of nitrogen per m<sup>2</sup> per day."))}
+                                       else {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged intensity of sunlight at the sea surface. Units: Einsteins per m<sup>2</sup> per day. An Einstein is a mole of photons (6.022×10<sup>23</sup> photons)"))}
+  })
+  
+
+  output$textFishery <- renderUI({
+                                       if(is.null(input$fdriverType)){
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \"Distribution of seabed abrasion rates by each fishing gear. Darker purple indicates more intense abrasion. Units: log proportion sediment area abraded per day."))}
+                                       else if(input$fdriverType == "Activity") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Distribution of seabed abrasion rates by each fishing gear. Darker purple indicates more intense abrasion. Units: log proportion sediment area abraded per day."))}
+                                       else if(input$fdriverType == "Abrasion") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Monthly averaged concentration of suspended particulate matter (silt) in the water of the offshore and inshore zones This determines how much sunlight penetrates below the sea surface. Units: grams per m<sup>3</sup>"))}
+                                       else if(input$fdriverType == "HarvestR") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Selectivity pattern of each fishing gear, mapped in terms of the annual averaged harvest ratio on each guild of animals by each gear. Darker purple indicates higher harvest  ratio. Harvest ratio is the proportion of biomass captured per day, and is equivalent to the fishing mortality rate. Units: log proportion caught per day"))}
+                                       else if(input$fdriverType == "Discards") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Discard rate of each guild of organisms caught by each fishing gear. Discard rate of the proportion of catch which is returned to the sea. In the model these animals are presumed to be dead. Darker purple indicates higher discard rate. Units: log proportion of catch discarded."))}
+                                       else if(input$fdriverType == "Offal") {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Offal production rate of each guild of organisms caught by each fishing gear. Offal are the discarded viscera of fish which are processed at sea. Darker purple indicates higher offal production rate. Units: log proportion of catch discarded viscera due to processing."))}
+                                        else {
+                                         fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Distribution of seabed abrasion rates by each fishing gear. Darker purple indicates more intense abrasion. Units: log proportion sediment area abraded per day."))}
+  }) 
+  
   
   output$textCatchGear <- renderUI({fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of each guild by the selected gear type, broken down by landings and discards. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}) 
+  
+  output$textRunBaselineModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">Run your selected  model  here in its 'out of the box' state - we call this a baseline run."),
+                                                    HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Running the baseline will take a few seconds on our computer server. The results are saved in memory for you to explore using our graph drawing tools, or you can download the output as .csv files to analyse yourself if you wish (e.g. read them into Excel)."),
+                                                    HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Progress to the “Setup Scenario” tab to configure a new set of model inputs and then rerun the model and compare the results with your baseline run")))}) 
+
+  output$textRunScenarioModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">Run your scenario  model  here."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Use the slider bar to select the number of years to run. Up to 40 years may be required to arrive at a new steady state depending on the changes you have made from the baseline. However the extent of changes within shorter period may also be of interest."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">The model will take about 2 sec per year to run on our server."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">The results are saved in memory for you to compare with your baseline model run, or you can download the output as .csv files to analyse yourself if you wish (e.g. read them into Excel).")))}) 
+  
+  output$textDiscardGuild <- renderUI({fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">Use the slider bars to change the discard rate of each guild by each fishing gear."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Baseline discard rates are shown in blue boxes. Discard rate can be varied between 0 and 1."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Discard rate is the proportion of catch which is returned to the sea. The model, discards are assumed to be dead."))}) 
   
   output$model_map <- renderUI({
     # current chosen model on dropdown lost
@@ -1396,7 +1477,7 @@ server <- function(input, output, session) {
     gear12 <- model$data$fleet.model$gear_labels[12]
     switch(
       input$selectedParameter,
-      "Pelagic" = fluidRow(
+      "Planktivorous fish" = fluidRow(
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_pel",
@@ -1542,7 +1623,7 @@ server <- function(input, output, session) {
           actionButton("whalerDiscard_pel_reset", "Reset")
         )
       ),
-      "Demersal" = fluidRow(
+      "Demersal fish" = fluidRow(
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_dem",
@@ -1690,7 +1771,7 @@ server <- function(input, output, session) {
           actionButton("whalerDiscard_dem_reset", "Reset")
         )
       ),
-      "Migratory" = fluidRow(
+      "Migratory fish" = fluidRow(
         #column(
         #  width = 5,
         wellPanel(
@@ -1840,7 +1921,7 @@ server <- function(input, output, session) {
           actionButton("whalerDiscard_mig_reset", "Reset")
         )
       ),
-      "Filtben" = fluidRow(
+      "Suspension/deposit feeding benthos" = fluidRow(
         #       column(
         #         width = 5,
         wellPanel(
@@ -1990,7 +2071,7 @@ server <- function(input, output, session) {
           actionButton("whalerDiscard_fb_reset", "Reset")
         )
       ),
-      "Carnben" = fluidRow(
+      "Carnivore/scavenge feeding benthos" = fluidRow(
         #       column(
         #         width = 5,
         wellPanel(
@@ -2140,7 +2221,7 @@ server <- function(input, output, session) {
           actionButton("whalerDiscard_cb_reset", "Reset")
         )
       ),
-      "Carnzoo" = fluidRow(
+      "Carnivorous zooplankton (e.g. squids)" = fluidRow(
         #       column(
         #         width = 5,
         wellPanel(
@@ -2291,7 +2372,7 @@ server <- function(input, output, session) {
           actionButton("whalerDiscard_cz_reset", "Reset")
         )
       ),
-      "Bird" = fluidRow(
+      "Seabirds" = fluidRow(
         #       column(
         #         width = 5,
         wellPanel(
@@ -2441,7 +2522,7 @@ server <- function(input, output, session) {
           actionButton("whalerDiscard_b_reset", "Reset")
         )
       ),
-      "Seal" = fluidRow(
+      "Pinnipeds (seals)" = fluidRow(
         #        column(
         #          width = 5
         wellPanel(
@@ -2591,7 +2672,7 @@ server <- function(input, output, session) {
           actionButton("whalerDiscard_s_reset", "Reset")
         )
       ),
-      "Ceta" = fluidRow(
+      "Cetaceans" = fluidRow(
         #        column(
         #          width = 5,
         wellPanel(
@@ -2741,7 +2822,7 @@ server <- function(input, output, session) {
           actionButton("whalerDiscard_ceta_reset", "Reset")
         )
       ),
-      "Kelp" = fluidRow(
+      "Macrophytes (kelp)" = fluidRow(
         #        column(
         #          width = 5,
         wellPanel(
@@ -4756,7 +4837,7 @@ server <- function(input, output, session) {
   observeEvent(input$runScenario, {
     showModal(
       modalDialog(
-        "Please wait whilst model runs scenario .... once completed tornado plot available below on results tab",
+        "Please wait whilst your scenario model runs.....once completed you can compare the results with the baseline model using options from the Scenario Results tab",
         footer = NULL
       )
     )
