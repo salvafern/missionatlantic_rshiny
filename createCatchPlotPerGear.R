@@ -15,34 +15,31 @@ createCatchPlotPerGear	<- function( model, results, dsa ) {
                               offshore_landmat[, dsa])
   inshore_data2plot <- rbind(inshore_discmat[, dsa], inshore_landmat[,
                                                                      dsa])
- # colnames(offshore_data2plot) <- c("Planktivorous Fish", "DFq", "DFnq",
-  #                                  "MF", "Bsd", "Bcs", "CZ", "BD", "PIN", "CT", "MP")
-  if (sum(offshore_data2plot + inshore_data2plot) > 0) {
-    yaxmax <- (1.2 * max(c(offshore_catchmat[, dsa],
-                           inshore_catchmat[, dsa])))
-  }
-  if (sum(offshore_data2plot + inshore_data2plot) == 0) {
-    yaxmax <- 1
-  }
-  guild_labels <- c("Planktivorous", "Demersal quota", "Demersal non-quota",
-                                    "Migratory", "Susp/deposit benthos", "Carn/scavenge benthos", "Pelagic invert", "Bird", "Pinnipeds", "Cetaceans", "Macrophytes")
-  par(mar=c(11,6,4,4))
-  b <- barplot(offshore_data2plot, col = c("black", "green"),
-          ylim = c(0, yaxmax), xlim = c(0, 12), width = rep(0.5,
-                                                            11), space = c(0.5, rep(1.2, 10)), yaxt = "n", xaxt = "n",
-          ann = FALSE, cex.axis = 0.5)
-  axis(1, labels = FALSE)
-  axis(side = 2, las = 1, cex.axis = 0.9)
-  #cat("par usr ",par("usr"))
-  text(x = 1:11, y = 0, srt = 45, label = guild_labels, adj = 1.1,  xpd = NA, cex = 1.2)
-  mtext("Catch", cex = 1.2, side = 2, line = 3.5)
-  title(main = mt, cex.main = 1.2, line = +0.02)
-  barplot(inshore_data2plot, col = c("grey", "blue"),
-          add = T, width = rep(0.5, 11), space = c(1.5, rep(1.2,
-                                                            10)), yaxt = "n", xaxt = "n", ann = FALSE)
-# legend(grconvertX(0.15, "ndc", "user"), grconvertY(0.05,
-#                                                    "ndc", "user"), c("offshore landings", "offshore discards",
-#                                                                      "inshore landings", "inshore discards"), fill = c("green",
-#                                                                                                                        "black", "blue", "grey"), ncol = 4, bty = "n", xpd = NA)
-  legend("top", c("offshore landings", "offshore discards","inshore landings", "inshore discards"), fill = c("green","black", "blue", "grey"), bty = "n", xpd = NA)
+  
+  offshore_data2plot_df<- data.frame(offshore_data2plot)
+  inshore_data2plot_df <- data.frame(inshore_data2plot)
+  row.names(offshore_data2plot_df) <- c("landings","discards")
+  row.names(inshore_data2plot_df) <- c("landings","discards")
+  offshore_data2plot_df$type <- rownames(offshore_data2plot_df)
+  offshore_data2plot_df$zone <- c("offshore")
+  inshore_data2plot_df$type <- rownames(inshore_data2plot_df)
+  inshore_data2plot_df$zone <- c("inshore")
+  
+  offshore_long <- gather(offshore_data2plot_df, guild, catch, Planktivorous.fish:Macrophytes, factor_key=TRUE)
+  inshore_long <- gather(inshore_data2plot_df, guild, catch, Planktivorous.fish:Macrophytes, factor_key=TRUE)
+
+  combined <- rbind(offshore_long,inshore_long)
+  combined$x <- factor(paste(combined$guild, combined$zone))
+
+  barplot <-  ggplot(combined) +
+    geom_col(aes(x = as.numeric(x), y = catch, fill = paste(zone, type))) +
+    scale_x_continuous(breaks = seq(from = 1.5, to = length(unique(combined$x)), by = 2),
+                       labels = as.character(unique(combined$guild))) +
+    theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+    ggtitle(mt) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    theme(plot.title = element_text(size=16)) +
+    theme(axis.title=element_text(size=14)) +
+    xlab("Gear") + ylab("Catch")
+  return(barplot)
   }
