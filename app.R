@@ -65,14 +65,7 @@ ui <- navbarPage(
                   column(
                     3,
                     img(src = "strath_fullcolour.jpg", width = '45%')
-                  )
-                 # column(
-                 #   12,
-                 #   p(
-                 #     "Just follow the workflow  through the site - pick a geographic region from the ones we've configured (we'll be adding more over time), explore the results from a model run, then change the inputs and see how they affect the outputs.",
-                 #     style = "font-family: 'calibri'; font-si10pt"
-                 #   )
-                 # )                 
+                  )                
                )
              ),
              tabPanel(
@@ -80,7 +73,6 @@ ui <- navbarPage(
                fluidRow(
                  column(
                    12,
-                  # h4("StrathE2E Model Description"),
                   br(),
                   HTML("<p style = \"font-family: 'calibri'; font-si10pt \">The StrathE2E model has two parts - a model of the marine ecology, and a model of fishing fleets, which are inter-connected. To simplify the ecology, all the plants and animals in the sea are grouped together into what we call 'guilds' of species that have similar properties <a href='#diagram1'>(Diagram 1)</a>. These guilds range from microbes to whales. Likewise, the different types of fishing gears used in a region are grouped together into up to 12 different types.</p>"),
                    p(
@@ -260,7 +252,6 @@ ui <- navbarPage(
         ),
         #Main Panel: plot map here in the future
         mainPanel(
-          #div(img(src = "dummy_map.png", width = '80%') , style="text-align: center;")
           uiOutput("model_map")
           ,  width = 9
         )
@@ -546,17 +537,6 @@ ui <- navbarPage(
           )
         )
       )
-      # column(
-      #   12,
-      #   h6("Note: If a plot need scenario and baseline run in same scope - choose below "),
-      #   radioButtons(
-      #     "runBaselinePlusScenario",
-      #     label = ("Run Baseline with Scenario Model"),
-      #     choices = list("Yes" = 1,
-      #                    "No" = 2),
-      #     selected = 2
-      #   )
-      # ),
       )),
     tabPanel(
       title = "Compare Biomasses",
@@ -668,18 +648,6 @@ server <- function(input, output, session) {
     gear10 <- model$data$fleet.model$gear_labels[10]
     gear11 <- model$data$fleet.model$gear_labels[11]
     gear12 <- model$data$fleet.model$gear_labels[12]
-    # gear1Activity <- model$data$fleet.model$gear_activity[1]
-    # gear2Activity <- model$data$fleet.model$gear_activity[2]
-    # gear3Activity <- model$data$fleet.model$gear_activity[3]
-    # gear4Activity <- model$data$fleet.model$gear_activity[4]
-    # gear5Activity <- model$data$fleet.model$gear_activity[5]
-    # gear6Activity <- model$data$fleet.model$gear_activity[6]
-    # gear7Activity <- model$data$fleet.model$gear_activity[7]
-    # gear8Activity <- model$data$fleet.model$gear_activity[8]
-    # gear9Activity <- model$data$fleet.model$gear_activity[9]
-    # gear10Activity <- model$data$fleet.model$gear_activity[10]
-    # gear11Activity <- model$data$fleet.model$gear_activity[11]
-    # gear12Activity <- model$data$fleet.model$gear_activity[12]
     fluidRow(
       wellPanel(
         HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">Use the slider bars to rescale the activity rates of each fishing gear."),
@@ -4106,10 +4074,6 @@ server <- function(input, output, session) {
     
     results_baseline <-
       e2e_run(model, nyears = input$year, csv.output = TRUE)
-    output$baselinePlot <-
-      renderPlot({
-        e2e_plot_ts(model, results_baseline)
-      })
     removeModal()
     resultDirBaseline <- toString(model$setup$resultsdir)
     output$downloadData_baseline1 <- downloadHandler(
