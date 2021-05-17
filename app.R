@@ -343,8 +343,9 @@ ui <- navbarPage(
       title = "Catch plots per gear",
       sidebarLayout(
         sidebarPanel(
-          uiOutput("gear_dropdown")
-        ),
+          uiOutput("gear_dropdown"),
+          uiOutput("textCatchGear"),
+        ), 
         mainPanel(
           uiOutput("uiCatchGear"))
       )
@@ -1222,6 +1223,8 @@ server <- function(input, output, session) {
                                else {
                                  fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of planktivorous (plankton-eating) fish in the inshore and offshore zones by each fishing gear type, broken down by landings and discards. Examples of these species would be herring, sardines. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-3</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}
   ) 
+  
+  output$textCatchGear <- renderUI({fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si10pt \">Annual catches of each guild by the selected gear type, broken down by landings and discards. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}) 
   
   output$model_map <- renderUI({
     # current chosen model on dropdown lost
