@@ -6,6 +6,7 @@ library(dplyr)
 library(shinyjs)
 library(ggplot2)
 library(tidyr)
+library(uuid)
 #library(shinyAce)
 #library(sendmailR)
 
@@ -278,7 +279,8 @@ ui <- navbarPage(
             "Download output as csv files",
             disabled = "disabled"
           )
-        )
+        ),
+        uiOutput("textRunBaselineFiles"),
       )
       )
     ),
@@ -532,10 +534,11 @@ ui <- navbarPage(
           id = "dwnbutton_s",
           downloadButton(
             "downloadData_scenario1",
-            "Download Scenario output",
+            "Download output as csv files",
             disabled = "disabled"
           )
-        )
+        ),
+        uiOutput("textRunScenarioFiles"),
       )
       )),
     tabPanel(
@@ -1265,7 +1268,17 @@ server <- function(input, output, session) {
   output$textRunBaselineModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">Run your selected  model  here in its 'out of the box' state - we call this a baseline run."),
                                                     HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Running the baseline will take a few seconds on our computer server. The results are saved in memory for you to explore using our graph drawing tools, or you can download the output as .csv files to analyse yourself if you wish (e.g. read them into Excel)."),
                                                     HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Progress to the “Setup Scenario” tab to configure a new set of model inputs and then rerun the model and compare the results with your baseline run")))}) 
+  
+  output$textRunBaselineFiles <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">The following .csv files are available to download : WHOLEDOMAIN_model_anav_biomass-baseline, OFFSHORE_model_anav_biomass-baseline, INSHORE_model_anav_biomass-baseline, OFFSHORE_landingcomposition_by_gear-baseline, OFFSHORE_discardcomposition_by_gear-baseline, INSHORE_landingcomposition_by_gear-baseline, INSHORE_discardcomposition_by_gear-baseline where baseline is an identifier for your baseline data."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Data are scaled to represent the quantity per m<sup>2</sup> of the whole region for reach model."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">\"anav_biomass files\" contain annual average mass of each component of the model in the named zone. The files includes data on layer and zone thickness and area so that the mass data can be converted to concentrations."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">\"landingcomposition\" and \"discardcomposition\" files contain a matrix of landed and discarded quantity by living guild and gear type. Units: (milli-Moles of nitrogen per m<sup>2</sup> of whole model region per year).")))}) 
 
+  output$textRunScenarioFiles <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">The following .csv files are available to download : WHOLEDOMAIN_model_anav_biomass-scenario, OFFSHORE_model_anav_biomass-scenario, INSHORE_model_anav_biomass-scenario, OFFSHORE_landingcomposition_by_gear-scenario, OFFSHORE_discardcomposition_by_gear-scenario, INSHORE_landingcomposition_by_gear-scenario, INSHORE_discardcomposition_by_gear-scenario where scenario is an identifier for your scenario data."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Data are scaled to represent the quantity per m<sup>2</sup> of the whole region for reach model."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">\"anav_biomass files\" contain annual average mass of each component of the model in the named zone. The files includes data on layer and zone thickness and area so that the mass data can be converted to concentrations."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">\"landingcomposition\" and \"discardcomposition\" files contain a matrix of landed and discarded quantity by living guild and gear type. Units: (milli-Moles of nitrogen per m<sup>2</sup> of whole model region per year).")))}) 
+  
   output$textRunScenarioModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px \">Run your scenario  model  here."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">Use the slider bar to select the number of years to run. Up to 40 years may be required to arrive at a new steady state depending on the changes you have made from the baseline. However the extent of changes within shorter period may also be of interest."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si10pt; padding:5px  \">The model will take about 2 sec per year to run on our server."),
@@ -4069,8 +4082,9 @@ server <- function(input, output, session) {
     )
     # Run baseline
     model <<-
-      e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models")
+      e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
     #View(model)
+    uuid <- UUIDgenerate()
     
     results_baseline <-
       e2e_run(model, nyears = input$year, csv.output = TRUE)
@@ -4078,11 +4092,12 @@ server <- function(input, output, session) {
     resultDirBaseline <- toString(model$setup$resultsdir)
     output$downloadData_baseline1 <- downloadHandler(
       filename = function() {
-        'baseline.tar'
+        paste0("baseline_", uuid, ".zip")
       },
       content = function(file) {
-        tar(file, resultDirBaseline)
-      }
+        zip(zipfile=file, files=resultDirBaseline)
+      },
+      contentType = "application/zip"
     )
     if (!is.null(model)) {
       enable("downloadData_baseline1")
@@ -4807,7 +4822,7 @@ server <- function(input, output, session) {
     )
     # Run scenario
     model <-
-      e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+      e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models", model.ident = "scenario")
     # If simultaneous run - do baseline first
     #if (input$runBaselinePlusScenario == 1) {
       #print("Running baseline within scenario run")
@@ -5656,16 +5671,17 @@ server <- function(input, output, session) {
           maintitle = ""
         )
       })
-    
     removeModal()
+    uuid_s <- UUIDgenerate()
     resultDirScenario <- toString(scenario_model$setup$resultsdir)
     output$downloadData_scenario1 <- downloadHandler(
       filename = function() {
-        'scenario.tar'
+        paste0("scenario_", uuid_s, ".zip")
       },
       content = function(file) {
-        tar(file, resultDirScenario)
-      }
+        zip(zipfile=file, files=resultDirBaseline)
+      },
+      contentType = "application/zip"
     )
     if (!is.null(model)) {
       enable("downloadData_scenario1")
