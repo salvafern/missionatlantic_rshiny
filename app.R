@@ -366,9 +366,6 @@ ui <- navbarPage(
     "Setup Scenario ",
     tabPanel(
       title = "Temperature",
-      fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Used the slider bar to add or subtract a temperature increment (°C) throughout the year in all layers and zones of the model."),
-                                                                  HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">0 (zero) represents no change from the baseline model temperatures.")))),
-      
       fluidRow(column(
         width = 5,
         #offset = 2,
@@ -382,18 +379,21 @@ ui <- navbarPage(
             width = "100%"
           )
         )
-      ))
+      ),
+      column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Used the slider bar to add or subtract a temperature increment (°C) throughout the year in all layers and zones of the model."),
+                                  HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">0 (zero) represents no change from the baseline model temperatures."))))
     ),
     tabPanel(
       title = "Nutrient Inputs",
-      fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Use the slider bars to rescale the atmospheric and river nutrient inputs by a constant factor throughout the year."),
-                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">1 represents no change from the baseline model inputs; 0.5 means that inputs are halved; 2 means that inputs are doubled."),
-                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Atmospheric inputs are deposited as dust or in rainfall, and originate from both natural processes (lightning and volcanic activity) and emissions from industry and burning of fossil fuels."),
-                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">River inputs are dissolved in river waters and originate from geological process and waste water discharges.")))),
+      # fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Use the slider bars to rescale the atmospheric and river nutrient inputs by a constant factor throughout the year."),
+      #                                      HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">1 represents no change from the baseline model inputs; 0.5 means that inputs are halved; 2 means that inputs are doubled."),
+      #                                      HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Atmospheric inputs are deposited as dust or in rainfall, and originate from both natural processes (lightning and volcanic activity) and emissions from industry and burning of fossil fuels."),
+      #                                      HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">River inputs are dissolved in river waters and originate from geological process and waste water discharges.")))),
       fluidRow(
         column(
           width = 5,
          # offset = 2,
+         wellPanel(
           wellPanel(
             sliderInput(
               "atmnitrate",
@@ -437,8 +437,12 @@ ui <- navbarPage(
               step = 0.2,
               width = "100%"
             )
-          )
-        )
+          ))
+        ),
+        column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Use the slider bars to rescale the atmospheric and river nutrient inputs by a constant factor throughout the year."),
+                                    HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">1 represents no change from the baseline model inputs; 0.5 means that inputs are halved; 2 means that inputs are doubled."),
+                                    HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Atmospheric inputs are deposited as dust or in rainfall, and originate from both natural processes (lightning and volcanic activity) and emissions from industry and burning of fossil fuels."),
+                                    HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">River inputs are dissolved in river waters and originate from geological process and waste water discharges.")))
       )
     ),
     tabPanel(
@@ -618,13 +622,13 @@ server <- function(input, output, session) {
     gear11 <- model$data$fleet.model$gear_labels[11]
     gear12 <- model$data$fleet.model$gear_labels[12]
     fluidRow(
-      wellPanel(
-        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Use the slider bars to rescale the activity rates of each fishing gear."),
-        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">1 represents no change from the baseline model rates; 0.5 means that fishing rates are halved; 2 means that rates are doubled."),
-        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Activity rate of each gear is measured in seconds of gear deployment per m<sup>2</sup per day")
-      ),
-      column(
-        width = 5,
+      # wellPanel(
+      #   HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Use the slider bars to rescale the activity rates of each fishing gear."),
+      #   HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">1 represents no change from the baseline model rates; 0.5 means that fishing rates are halved; 2 means that rates are doubled."),
+      #   HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Activity rate of each gear is measured in seconds of gear deployment per m<sup>2</sup per day")
+      # ),
+      column(width = 5,
+      wellPanel(style = "overflow-y:scroll; max-height: 600px",
         wellPanel(
           sliderInput(
             "pelTrawlAct",
@@ -690,10 +694,7 @@ server <- function(input, output, session) {
             step = 0.2,
             width = "100%"
           )
-        )
-      ),
-      column(
-        width = 5,
+        ),
         wellPanel(
           sliderInput(
             "gillLongDemersal",
@@ -760,9 +761,16 @@ server <- function(input, output, session) {
             width = "100%"
           )
         )
+       )
+      ),
+      column(width = 5,
+      wellPanel(
+        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Use the slider bars to rescale the activity rates of each fishing gear."),
+        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">1 represents no change from the baseline model rates; 0.5 means that fishing rates are halved; 2 means that rates are doubled."),
+        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Activity rate of each gear is measured in seconds of gear deployment per m<sup>2</sup per day")
+      )
       )
     )
-    
   })
     
   
@@ -795,12 +803,8 @@ server <- function(input, output, session) {
     gear12Plough <- model$data$fleet.model$gear_ploughing_rate[12]
     
     fluidRow(
-      wellPanel(
-        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Use the slider bars to rescale the seabed abrasion rate of each fishing gear."),
-        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">1 represents no change from the baseline model rates; 0.5 means that abrasion rates are halved; 2 means that rates are doubled."),
-        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Seabed abrasion rate of each gear is measured in m<sup>2</sup> of seabed abraded per second of gear deployment."),
-        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">In the model, seabed abrasion re-suspends organic matter and releases nutrients from the sediment, and causes collateral mortality of benthos guilds.")
-      ),
+      column(width = 5,
+             wellPanel(style = "overflow-y:scroll; max-height: 600px",
         if (gear1Plough > 0) {
                          wellPanel(
                            sliderInput(
@@ -957,6 +961,16 @@ server <- function(input, output, session) {
           )
         )
         }
+       )
+      ),
+      column(width = 5,
+      wellPanel(
+        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Use the slider bars to rescale the seabed abrasion rate of each fishing gear."),
+        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">1 represents no change from the baseline model rates; 0.5 means that abrasion rates are halved; 2 means that rates are doubled."),
+        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Seabed abrasion rate of each gear is measured in m<sup>2</sup> of seabed abraded per second of gear deployment."),
+        HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">In the model, seabed abrasion re-suspends organic matter and releases nutrients from the sediment, and causes collateral mortality of benthos guilds.")
+      )
+      )
     )
   })
   
@@ -1437,6 +1451,7 @@ server <- function(input, output, session) {
     switch(
       input$selectedParameter,
       "Planktivorous fish" = fluidRow(
+        wellPanel(style = "overflow-y:scroll; max-height: 600px",
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_pel",
@@ -1581,8 +1596,10 @@ server <- function(input, output, session) {
           ),
           actionButton("whalerDiscard_pel_reset", "Reset")
         )
+        )
       ),
       "Demersal fish" = fluidRow(
+        wellPanel(style = "overflow-y:scroll; max-height: 600px",
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_dem",
@@ -1729,10 +1746,12 @@ server <- function(input, output, session) {
           ),
           actionButton("whalerDiscard_dem_reset", "Reset")
         )
+        )
       ),
       "Migratory fish" = fluidRow(
         #column(
         #  width = 5,
+        wellPanel(style = "overflow-y:scroll; max-height: 600px",
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_mig",
@@ -1879,10 +1898,12 @@ server <- function(input, output, session) {
           ),
           actionButton("whalerDiscard_mig_reset", "Reset")
         )
+        )
       ),
       "Suspension/deposit feeding benthos" = fluidRow(
         #       column(
         #         width = 5,
+        wellPanel(style = "overflow-y:scroll; max-height: 600px",
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_fb",
@@ -2029,10 +2050,12 @@ server <- function(input, output, session) {
           ),
           actionButton("whalerDiscard_fb_reset", "Reset")
         )
+        )
       ),
       "Carnivore/scavenge feeding benthos" = fluidRow(
         #       column(
         #         width = 5,
+        wellPanel(style = "overflow-y:scroll; max-height: 600px",
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_cb",
@@ -2179,10 +2202,12 @@ server <- function(input, output, session) {
           ),
           actionButton("whalerDiscard_cb_reset", "Reset")
         )
+        )
       ),
       "Carnivorous zooplankton (e.g. squids)" = fluidRow(
         #       column(
         #         width = 5,
+        wellPanel(style = "overflow-y:scroll; max-height: 600px",
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_cz",
@@ -2330,10 +2355,12 @@ server <- function(input, output, session) {
           ),
           actionButton("whalerDiscard_cz_reset", "Reset")
         )
+        )
       ),
       "Seabirds" = fluidRow(
         #       column(
         #         width = 5,
+        wellPanel(style = "overflow-y:scroll; max-height: 600px",
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_b",
@@ -2480,10 +2507,12 @@ server <- function(input, output, session) {
           ),
           actionButton("whalerDiscard_b_reset", "Reset")
         )
+        )
       ),
       "Pinnipeds (seals)" = fluidRow(
         #        column(
         #          width = 5
+        wellPanel(style = "overflow-y:scroll; max-height: 600px",
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_s",
@@ -2630,10 +2659,12 @@ server <- function(input, output, session) {
           ),
           actionButton("whalerDiscard_s_reset", "Reset")
         )
+        )
       ),
       "Cetaceans" = fluidRow(
         #        column(
         #          width = 5,
+        wellPanel(style = "overflow-y:scroll; max-height: 600px",
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_ceta",
@@ -2780,10 +2811,12 @@ server <- function(input, output, session) {
           ),
           actionButton("whalerDiscard_ceta_reset", "Reset")
         )
+        )
       ),
       "Macrophytes (kelp)" = fluidRow(
         #        column(
         #          width = 5,
+        wellPanel(style = "overflow-y:scroll; max-height: 600px",
         wellPanel(
           sliderInput(
             "pelagicTrawlDiscard_kelp",
@@ -2929,6 +2962,7 @@ server <- function(input, output, session) {
             width = "100%"
           ),
           actionButton("whalerDiscard_kelp_reset", "Reset")
+        )
         )
       )
     )
