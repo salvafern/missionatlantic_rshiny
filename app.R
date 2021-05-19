@@ -29,7 +29,6 @@ ui <- navbarPage(
                title = "Introduction",
                tags$style(HTML(".irs-grid-text {font-size: 10pt;}")),
                tags$style(HTML(".sup {vertical-align: super; font-size: smaller;}")),
-
                fluidRow(
                   column(
                     6,
@@ -70,24 +69,56 @@ ui <- navbarPage(
                )
              ),
              tabPanel(
-               title = "Model Description",
+               title = "About StrathE2E",
+               fluidRow(
+                 column(
+                   7,
+                   HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">StrathE2E is a computer simulation model of marine ecosystems. A first version of the model was developed during an EU 6th Framework project (RECLAM, <a href='https://cordis.europa.eu/project/id/44133/reporting'>REsolving CLimAtic IMpacts on fish stocks, 2007-2009</a>). The prototype was further developed and elaborated during a succession of EU and UK nationally funded projects:</p>"),
+                   HTML("<ul><li>7th Framework <a href='https://cordis.europa.eu/project/id/264933/reporting'>EURO_BASIN (European Union Basin-scale Analysis, Synthesis and Integration, 2010-2014)</a>.</li></ul>"),
+                   HTML("<ul><li>UK Natural Environment Research Council <a href='https://www.marine-ecosystems.org.uk/Home'>MERP (Marine Ecosystems Research Programme, 2014-2019)</a>.</li></ul>"),
+                   HTML("<ul><li>Fisheries Innovation Scotland project FIS003 (<a href='https://fiscot.org/wp-content/uploads/2019/06/FIS003.pdf'>Modelling the whole-ecosystem impacts of trawling</a> , 2015).</li></ul>"),
+                   HTML("<ul><li>Horizon 2020 <a href='http://www.discardless.eu/'>DiscardLess (Strategies for the gradual elimination of discards in European fisheries</a>, 2015-2019).</li></ul>"),
+                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \">The culmination of this development effort was release of the open-access software package StrathE2E2 for the <a href='https://cran.r-project.org/web/packages/StrathE2E2/index.html'>R statistical programming environment</a> in 2020. You can download an open-access article about the package from <a href='https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13510'>here</a>.</p>"),
+                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \">This website is an interactive interface to the StrathE2E2 software package, built using <a href='https://shiny.rstudio.com/'>Rshiny</a>. Following a 4-step process you can select a model region, run the model and explore the results. Then, build your own scenario of fishing and environmental conditions, and discover how these affect the ecosystem</p>"),
+                   )
+               )
+             ),
+             tabPanel(
+               title = "Model Overview",
                fluidRow(
                  column(
                    12,
                   br(),
-                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \">The StrathE2E model has two parts - a model of the marine ecology, and a model of fishing fleets, which are inter-connected. To simplify the ecology, all the plants and animals in the sea are grouped together into what we call 'guilds' of species that have similar properties <a href='#diagram1'>(Diagram 1)</a>. These guilds range from microbes to whales. Likewise, the different types of fishing gears used in a region are grouped together into up to 12 different types.</p>"),
+                  img(src = "Temperate model joined.svg", width = '50%', style = "display: block; margin-left: auto; margin-right: auto;"),
+                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \">StrathE2E is a so-called end-to-end model – it aims to represent the entire interconnected marine ecosystem from physics and chemistry, through microbes and plankton to whales and fisheries in continental shelf regions. To make this feasible, we simplify the ecology - all the plants and animals in the sea are grouped together into what we call 'guilds' of species that have similar properties <a href='#diagram1'>(Diagram 1)</a>.</p>"),
                    p(
-                     "The region covered by each model is divided into a shallow inshore and a deeper offshore zone. The water column in the offshore zone is further divided into  an upper (surface) layer, and a lower (deep) layer. The seabed in each zone is divided into up to four different sediment habitat types e.g. muddy, sandy, gravel, rocky.",
+                     "The region covered by each model is divided into a shallow inshore and a deeper offshore zone. The water column in the offshore zone is further divided into an upper (surface) layer, and a lower (deep) layer. The seabed in each zone is divided into up to four different sediment habitat types e.g. muddy, sandy, gravel, rocky.",
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
-                  img(src = "Temperate model joined.svg", width = '50%', style = "display: block; margin-left: auto; margin-right: auto;"),
-                  br(),
                    p(
-                     "The models consists sets of mathematical equations which are solved by the computer programme to calculate at daily intervals, ",
+                     "Fisheries in StrathE2E are represented by a separate sub-model which is connected to the ecology part. In the sub-model, all of fishing gears used in a region are grouped together into up to 12 different types defined by their effectiveness at catching each of the ecology guilds, the spatial distribution of their activity, seabed abrasion rates, and discarding patterns.",
+                     style = "font-family: 'calibri'; font-si16pt"
+                   ),
+                  p(
+                    "Diagram 1. Ecological guilds or classes of dead and living material included in the StrathE2E model",
+                    style = "font-family: 'calibri'; font-si16pt"
+                  ),
+                  br(),
+                  img(src = "guilds.svg", width = '100%', style = "display: block; margin-left: auto; margin-right: auto;" ,id="diagram1")
+                 )
+                 )
+               ),
+             tabPanel(
+               title = "How the Model Works",
+               fluidRow(
+                 column(
+                   8,
+                   p(
+                     "StrathE2E is a set of interconnected mathematical equations which are solved by the computer programme to calculate at daily intervals:",
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
                    tags$ul(
-                     tags$li("The quantities of dissolved nutrients, detritus, the guilds of plants and animals in the sea.",style = "font-family: 'calibri'; font-si16pt"), 
+                     tags$li("The quantities of dissolved nutrients, detritus, the guilds of plants and animals in each of the spatial zones and layers.",style = "font-family: 'calibri'; font-si16pt"), 
                      tags$li("How much each of the guilds consumes as nutrient or food by preying on other guilds.",style = "font-family: 'calibri'; font-si16pt"), 
                      tags$li("How much nutrient is returned to the sea by excretion",style = "font-family: 'calibri'; font-si16pt"),
                      tags$li("How much nutrient and plankton is carried into and out of the model region, and between inshore and offshore zones, by water currents, and between inshore and offshore zones",style = "font-family: 'calibri'; font-si16pt"),
@@ -95,102 +126,30 @@ ui <- navbarPage(
                      tags$li("How much nutrient and sediment are stirred up from the seabed by fishing gears",style = "font-family: 'calibri'; font-si16pt"),
                      tags$li("How much of each guild is caught by the fishing gears, and what proportion is landed or discarded",style = "font-family: 'calibri'; font-si16pt")
                    ),
+                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \">The model tracks the changes in quantities of all the guilds and the flows between them in terms of nitrogen content. The units of the output quantities are milli-Moles (mM) of nitrogen per m<sup>2</sup> or per m<sup>3</sup>. Roughly, 1 mM nitrogen per m<sup>2</sup> is equivalent to 500 kg of live weight per km<sup>2</sup>, depending on the guilds. </p>"),
+                   p("The inputs to these calculations are:", style = "font-family: 'calibri'; font-si16pt"),
+                   p("1) environmental data to the ecology part of the model: temperature, sunlight intensity, water currents, mixing and waves, and external nutrient inputs from rivers and in rainfall; 2) fishing gear properties to the fishing fleet sub-model: selectivity patterns and activity rates of each of the fishing gears, and their distribution over different seabed sediment types, seabed abrasion rates, and discarding patterns.",style = "font-family: 'calibri'; font-si16pt"),
                    p(
-                     "All of these quantities are continually varying over time due to the changing temperature, sunlight intensity, water currents, mixing and waves, and external nutrient inputs from rivers and in rainfall over each yearly cycle. So these time-varying physical properties are key inputs to the model.",
+                     "The equations in the model also have many \"parameters\" – these are constants that set the reactivity of the connections between all the components of the model.",
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
-                     "Other key inputs to the model are the selectivity patterns and activity rates of the fishing gears, and their distribution over different seabed sediment types in inshore and offshore zones of the model region.",
+                     "The combination of spatial and seabed properties in the model setup, the parameters, and the environmental and fishery input data, are what makes the models for different regions different from one another.",
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
-                     "For each model region, we have assembled all the required input data and then rigorously tested and tuned the model parameters against databases of field measurements and monitoring data on e.g. fishery landings.",
+                     "The seabed sediment properties, environmental and fishing input data for a model region are gathered together from a range of sources including ocean circulation models, satellite observations, survey and monitoring databases, and research literature. Some of the parameter values can be set from experimental data, but others we have to estimate statistically so that model results agree as closely as possible to independent monitoring observations.",
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
-                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \">The model tracks the changes in quantities of all the guilds and the flows between them in terms of nitrogen content. The units of the outputs are milli-Moles (mM) of nitrogen per m<sup>2</sup> or per m<sup>3</sup>. Roughly, 1 mM nitrogen per m<sup>2</sup> is equivalent to 500 kg of live weight per km<sup>2</sup>, depending on the guilds."),
-                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \">You can download an open access article about the model from  <a href='https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13510'>here</a>.</p>"),
-                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \">If you want to download the model code then you can get it from <a href='https://cran.r-project.org/package=StrathE2E2'>here</a>. You will need to be familiar with the <a href='https://cran.r-project.org/'>R statistical programming environment </a> to install and use it.</p>"),
-                  p(
-                    "Diagram 1. Ecological guilds or classes of dead and living material included in the StrathE2E model",
-                    style = "font-family: 'calibri'; font-si16pt"
-                  ),
-                  br(),
-                  img(src = "guilds.svg", width = '100%', style = "display: block; margin-left: auto; margin-right: auto;" ,id="diagram1")
-                   # tags$table(border = 1, style = " margin-left: auto; margin-right: auto;font-family: 'calibri'", id="table1",
-                   #                     tags$tbody(
-                   #                       tags$tr(
-                   #                         tags$td(align = "center", strong("Categories in the model "),style = "font-family: 'calibri'"),
-                   #                         tags$td(align = "center", strong("Specific guilds"),style = "font-family: 'calibri'")
-                   #                       ),
-                   #                       tags$tr(
-                   #                         tags$td(align = "center", "Dissolved inorganic nutrients"),
-                   #                         tags$td(align = "center", tags$ul(
-                   #                           tags$li("Nitrate in the water column",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Nitrate in sediment porewaters",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Ammonia in the water column",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Ammonia in sediment porewaters",style = "font-family: 'calibri'; font-si16pt")
-                   #                         ))
-                   #                       ),
-                   #                       tags$tr(
-                   #                         tags$td(align = "center", "Dead organic material and bacteria"),
-                   #                         tags$td(align = "center", tags$ul(
-                   #                           tags$li("Suspended detritus and bacteria",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Labile (reactive) sediment detritus and bacteria",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Refractory (inert) sediment detritus ",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Macrophyte (kelp) debris",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Corpses",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Fishery discards",style = "font-family: 'calibri'; font-si16pt")
-                   #                         ))
-                   #                       ),
-                   #                       tags$tr(
-                   #                         tags$td(align = "center", "Primary producers"),
-                   #                         tags$td(align = "center", tags$ul(
-                   #                           tags$li("Phytoplankton (micro-algae)",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Macrophytes (kelp)",style = "font-family: 'calibri'; font-si16pt")
-                   #                         ))
-                   #                       ),
-                   #                       tags$tr(
-                   #                         tags$td(align = "center", "Zooplankton"),
-                   #                         tags$td(align = "center", tags$ul(
-                   #                           tags$li("Omnivorous zooplankton (e.g. copepods)",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Carnivorous zooplankton (e.g. krill)",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Larvae of planktivorous (plankton-eating) fish",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Larvae of demersal (other fish and benthos-eating) fish",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Larvae of suspension and deposit feeding benthos",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Larvae of carnivore and scavenge feeding benthos",style = "font-family: 'calibri'; font-si16pt")
-                   #                         ))
-                   #                       ),
-                   #                       tags$tr(
-                   #                         tags$td(align = "center", "Benthos (seabed living animals)"),
-                   #                         tags$td(align = "center", tags$ul(
-                   #                           tags$li("Suspension and deposit feeders",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Carnivore and scavenge feeders",style = "font-family: 'calibri'; font-si16pt")
-                   #                         ))
-                   #                       ),
-                   #                       tags$tr(
-                   #                         tags$td(align = "center", "Fish"),
-                   #                         tags$td(align = "center", tags$ul(
-                   #                           tags$li("Planktivorous (plankton-eating, e.g. herring, sardines)",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Migratory (e.g. mackerel)",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Demersal (other fish and benthos-eating, e.g. cod, haddock)",style = "font-family: 'calibri'; font-si16pt")
-                   #                         ))
-                   #                       ),
-                   #                       tags$tr(
-                   #                         tags$td(align = "center", "Upper trophic levels"),
-                   #                         tags$td(align = "center", tags$ul(
-                   #                           tags$li("Seabirds",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Pinnipeds (seals)",style = "font-family: 'calibri'; font-si16pt"), 
-                   #                           tags$li("Cetaceans (whales, dolphins)",style = "font-family: 'calibri'; font-si16pt")
-                   #                         ))
-                   #                       )
-                   #                     )
-                   #            )
+                   p(
+                     "Operationally, we use the model to simulate the average annual cycles of changes in everything in the model, for a decade-or-so period of years. We do this by inputting annual cycles of average monthly values of the environmental data, and running the model over and over with these input data until the annual cycles in the outputs are stable from one year to the next. We call this a \"steady state\" which represents the \"climatology\" of the system for the period of years covered by the inputs, and should match the average conditions in the sea for any given day of the year.",
+                     style = "font-family: 'calibri'; font-si16pt"
+                   )
                  )
-                 )
-               ),
+               )
+             ),
              tabPanel(
-               title = "Model Workflow",
-               #tags$head(tags$script(src="js/index.js")),
+               title = "How To Use This Website",
                fluidRow(
                  column(
                    6,
@@ -201,7 +160,7 @@ ui <- navbarPage(
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
-                     "Here you need to select a model region and time period from the list of implementations that we have provided. We will be adding to this over time as we develop new ones.",
+                     "Here you need to select a model region and time period from the list of pre-prepared implementations that we have provided. We will be adding to this over time as we develop new implementations",
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
                    p(
