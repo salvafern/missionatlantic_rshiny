@@ -246,6 +246,8 @@ ui <- navbarPage(
       )
       )
     ),
+    "----",
+    "Inputs",
     tabPanel(
       title = "Plot environmental inputs",
       sidebarLayout(
@@ -300,6 +302,8 @@ ui <- navbarPage(
         mainPanel(
           uiOutput("UiFdriver"))
       )),
+    "----",
+    "Outputs",
     tabPanel(
       title = "Plot ecological outputs",
       sidebarLayout(
