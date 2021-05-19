@@ -249,7 +249,10 @@ ui <- navbarPage(
             = list("North_Sea","Celtic_Sea"),
             selected = "North_Sea"
           ),
-          uiOutput("variant_dropdown"), textOutput("textSelectRegion"), width = 3
+          uiOutput("variant_dropdown"), 
+          textOutput("textSelectRegion"), 
+          uiOutput("textSpecificRegion"), 
+          width = 3
         ),
         #Main Panel: plot map here in the future
         mainPanel(
@@ -1090,6 +1093,18 @@ server <- function(input, output, session) {
   })
   
   output$textSelectRegion <- renderText(quoted = FALSE,"Blue areas in the map opposite represent the inshore zone of the model, orange offshore. D1, D2, D3, S1, S2, S3 refers to seabed habitats - D/S1 = mud, D/S2= sand, D/S3 = gravel. Rock is denoted by D/S0 or shown as a separate map of percentage of rock cover.")
+ 
+  output$textSpecificRegion <- renderUI(
+                                        if(is.null(input$selectedlocation)){
+                                          fluidRow(HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">Full documentation of the configuration and inputs for the North Sea model is provided <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/3.3.0/StrathE2E2_North_Sea_model.pdf'>here</a>. The model has been extensively validated against independent observational data"))}
+                                          else if(input$selectedlocation == "North_Sea"){
+                                            fluidRow(HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">Full documentation of the configuration and inputs for the North Sea model is provided <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/3.3.0/StrathE2E2_North_Sea_model.pdf'>here</a> The model has been extensively validated against independent observational data"))}
+                                          else if(input$selectedlocation == "Celtic_Sea"){
+                                            fluidRow(HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">Sources of data for inputs to the Celtic Sea model were the same as for the North Sea, which is documented <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/3.3.0/StrathE2E2_North_Sea_model.pdf'>here</a>"))}
+                                          else {
+                                            fluidRow(HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">Full documentation of the configuration and inputs for the North Sea model is provided <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/3.3.0/StrathE2E2_North_Sea_model.pdf'>here</a> The model has been extensively validated against independent observational data"))}
+                                        )
+    
   output$textEco <- renderUI(
                                if(is.null(input$outputEcoType) || is.null(input$Nutrient_Phytoplankton_Tab) ){# && is.null(input$Zooplankton_Tab) && is.null(input$Fish_Tab) && is.null(input$Benthos_Tab) && is.null(input$Predators_Tab) && is.null(input$Corpse_Discard_Tab) && is.null(input$Macrophyte_Tab)){
                                  fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Changes over the year in concentrations of organic detritus and associated bacteria suspended in the surface-offshore, surface-inshore and the deep-offshore layers/zones. Units: 1 milli-Mole of nitrogen per m<sup>3</sup> (1 mMN.m<sup>-3</sup>) is approximately equivalent to 0.16 grams of material per m<sup>3</sup>"))}
