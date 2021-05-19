@@ -42,7 +42,8 @@ createCatchPlotPerGear	<- function( model, results, dsa ) {
     theme(plot.title = element_text(size=16)) +
     theme(axis.title=element_text(size=14)) +
     xlab("Guild") + ylab("Catch") +
-    theme(panel.grid.minor.x = element_blank())
+    theme(panel.grid.minor.x = element_blank()) +
+    labs(fill = NULL)
   
   return(barplot)
   }
