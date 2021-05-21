@@ -90,6 +90,7 @@ ui <- navbarPage(
                    12,
                   br(),
                   img(src = "Temperate model joined.svg", width = '50%', style = "display: block; margin-left: auto; margin-right: auto;"),
+                  br(),
                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \">StrathE2E is a so-called end-to-end model – it aims to represent the entire interconnected marine ecosystem from physics and chemistry, through microbes and plankton to whales and fisheries in continental shelf regions. To make this feasible, we simplify the ecology - all the plants and animals in the sea are grouped together into what we call 'guilds' of species that have similar properties <a href='#diagram1'>(Diagram 1)</a>.</p>"),
                    p(
                      "The region covered by each model is divided into a shallow inshore and a deeper offshore zone. The water column in the offshore zone is further divided into an upper (surface) layer, and a lower (deep) layer. The seabed in each zone is divided into up to four different sediment habitat types e.g. muddy, sandy, gravel, rocky.",
@@ -104,7 +105,7 @@ ui <- navbarPage(
                     style = "font-family: 'calibri'; font-si16pt"
                   ),
                   br(),
-                  img(src = "guilds.svg", width = '100%', style = "display: block; margin-left: auto; margin-right: auto;" ,id="diagram1")
+                  img(src = "guilds2.svg", width = '100%', style = "display: block; margin-left: auto; margin-right: auto;" ,id="diagram1")
                  )
                  )
                ),
@@ -154,41 +155,43 @@ ui <- navbarPage(
                  column(
                    6,
                    h5("There are four stages to using this website:"),
-                   p(
-                     tags$b("1. Select region"),
-                    # tags$a("1. Select region", onclick="customHref('region')"),
-                     style = "font-family: 'calibri'; font-si16pt"
-                   ),
-                   p(
-                     "Here you need to select a model region and time period from the list of pre-prepared implementations that we have provided. We will be adding to this over time as we develop new implementations",
-                     style = "font-family: 'calibri'; font-si16pt"
-                   ),
-                   p(
-                     tags$b("2. Explore model"),
-                     #tags$a("2. Explore model", onclick="customHref('Explore model')"),
-                     style = "font-family: 'calibri'; font-si16pt"
-                   ),
-                   p(
-                     "Run the model in its 'out of the box' state - we call this a baseline run. This happens on our computer server and the results are returned to you to explore using a variety of different graph drawing tools, or download to analyse yourself if you wish.",
-                     style = "font-family: 'calibri'; font-si16pt"
-                   ),
-                   p(
-                     tags$b("3. Setup scenario"),
-                     style = "font-family: 'calibri'; font-si16pt"
-                   ),
-                   p(
-                     "Use slider-bars to configure a new set of inputs to the model in terms of variations from the baseline in temperature, nutrient inputs, fishing activity, abrasion of the seabed by trawling, and discarding of fishery catches.",
-                     style = "font-family: 'calibri'; font-si16pt"
-                   ),
-                   p(
-                     tags$b("4. Scenario results"),
-                     style = "font-family: 'calibri'; font-si16pt"
-                   ),
-                   p(
-                     "Run the scenario model again (this may take a few minutes) and compare the results with the baseline version.",
-                     style = "font-family: 'calibri'; font-si16pt"
-                   )
+                   img(src = "Workflow.svg", width = '150%'),#, style = "display: block; margin-left: auto; margin-right: auto;"),
                    
+                   # p(
+                   #   tags$b("1. Select region"),
+                   #  # tags$a("1. Select region", onclick="customHref('region')"),
+                   #   style = "font-family: 'calibri'; font-si16pt"
+                   # ),
+                   # p(
+                   #   "Here you need to select a model region and time period from the list of pre-prepared implementations that we have provided. We will be adding to this over time as we develop new implementations",
+                   #   style = "font-family: 'calibri'; font-si16pt"
+                   # ),
+                   # p(
+                   #   tags$b("2. Explore model"),
+                   #   #tags$a("2. Explore model", onclick="customHref('Explore model')"),
+                   #   style = "font-family: 'calibri'; font-si16pt"
+                   # ),
+                   # p(
+                   #   "Run the model in its 'out of the box' state - we call this a baseline run. This happens on our computer server and the results are returned to you to explore using a variety of different graph drawing tools, or download to analyse yourself if you wish.",
+                   #   style = "font-family: 'calibri'; font-si16pt"
+                   # ),
+                   # p(
+                   #   tags$b("3. Setup scenario"),
+                   #   style = "font-family: 'calibri'; font-si16pt"
+                   # ),
+                   # p(
+                   #   "Use slider-bars to configure a new set of inputs to the model in terms of variations from the baseline in temperature, nutrient inputs, fishing activity, abrasion of the seabed by trawling, and discarding of fishery catches.",
+                   #   style = "font-family: 'calibri'; font-si16pt"
+                   # ),
+                   # p(
+                   #   tags$b("4. Scenario results"),
+                   #   style = "font-family: 'calibri'; font-si16pt"
+                   # ),
+                   # p(
+                   #   "Run the scenario model again (this may take a few minutes) and compare the results with the baseline version.",
+                   #   style = "font-family: 'calibri'; font-si16pt"
+                   # )
+                   # 
                    )
                )
              ))
