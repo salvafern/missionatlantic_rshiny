@@ -24,11 +24,9 @@ ui <- navbarPage(
   theme = shinytheme("cerulean"), #"strathe2e.css", 
              tabPanel(
                title = "Home",
-             tabsetPanel(type = "pills",
-             tabPanel(
-               title = "Introduction",
                tags$style(HTML(".irs-grid-text {font-size: 10pt;}")),
                tags$style(HTML(".sup {vertical-align: super; font-size: smaller;}")),
+               tags$style(HTML('#runBaseline{background-color:red}')),
                fluidRow(
                   column(
                     6,
@@ -48,8 +46,7 @@ ui <- navbarPage(
                      p(
                        "Just follow the workflow  through the site - pick a geographic region from the ones we've configured (we'll be adding more over time), explore the results from a model run, then change the inputs and see how they affect the outputs.",
                        style = "font-family: 'calibri'; font-si16pt"
-                     ),
-                   tags$a(img(src = "Mission Atlantic Logo Col-01.png", width = '60%',style = "text-align: center; padding:20px"),href="https://missionatlantic.eu/")
+                     )
                   ),
                  column(
                    6,
@@ -57,17 +54,27 @@ ui <- navbarPage(
                    # h6(
                    #   "Text for pic here"
                    # )
+                 )),
+               fluidRow(
+                 HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:10px;color:blue \"><b>For enquiries please contact</b>: Mike Heath  &nbsp;&nbsp;&nbsp;&nbsp; <b>Email Address</b> m.heath@strath.ac.uk"),
+               ),
+               fluidRow(
+                 column(
+                   4,
+                   tags$a(img(src = "Mission Atlantic Logo Col-01.png", width = '60%',style = "text-align: center; padding:10px;10px;10px;10px;"),href="https://missionatlantic.eu/")
                  ),
                  column(
-                   9,
-                   img(src = "Mission Atlantic _EC_disclaimer.png", width = '80%')
+                   4,
+                   img(src = "Mission Atlantic _EC_disclaimer.png", width = '100%', style = "padding:25px;1px;")
                  ),
                   column(
-                    3,
-                    img(src = "strath_fullcolour.jpg", width = '45%')
-                  )                
+                    4,
+                    img(src = "strath_fullcolour.jpg", width = '45%',style = "padding:1px;1px;1px;30px;")
+                  ) 
                )
-             ),
+               ),
+          navbarMenu(
+                 "About",
              tabPanel(
                title = "About StrathE2E",
                fluidRow(
@@ -100,12 +107,12 @@ ui <- navbarPage(
                      "Fisheries in StrathE2E are represented by a separate sub-model which is connected to the ecology part. In the sub-model, all of fishing gears used in a region are grouped together into up to 12 different types defined by their effectiveness at catching each of the ecology guilds, the spatial distribution of their activity, seabed abrasion rates, and discarding patterns.",
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
-                  p(
-                    "Diagram 1. Ecological guilds or classes of dead and living material included in the StrathE2E model",
-                    style = "font-family: 'calibri'; font-si16pt"
-                  ),
+                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \"><b>Diagram 1:</b> <i>Ecological guilds or classes of dead and living material included in the StrathE2E model</i>"),
                   br(),
+                  column(
+                    9,
                   img(src = "guilds2.svg", width = '100%', style = "display: block; margin-left: auto; margin-right: auto;" ,id="diagram1")
+                  )
                  )
                  )
                ),
@@ -129,7 +136,8 @@ ui <- navbarPage(
                    ),
                    HTML("<p style = \"font-family: 'calibri'; font-si16pt \">The model tracks the changes in quantities of all the guilds and the flows between them in terms of nitrogen content. The units of the output quantities are milli-Moles (mM) of nitrogen per m<sup>2</sup> or per m<sup>3</sup>. Roughly, 1 mM nitrogen per m<sup>2</sup> is equivalent to 500 kg of live weight per km<sup>2</sup>, depending on the guilds. </p>"),
                    p("The inputs to these calculations are:", style = "font-family: 'calibri'; font-si16pt"),
-                   p("1) environmental data to the ecology part of the model: temperature, sunlight intensity, water currents, mixing and waves, and external nutrient inputs from rivers and in rainfall; 2) fishing gear properties to the fishing fleet sub-model: selectivity patterns and activity rates of each of the fishing gears, and their distribution over different seabed sediment types, seabed abrasion rates, and discarding patterns.",style = "font-family: 'calibri'; font-si16pt"),
+                   p("1) environmental data to the ecology part of the model: temperature, sunlight intensity, water currents, mixing and waves, and external nutrient inputs from rivers and in rainfall.",style = "font-family: 'calibri'; font-si16pt"),
+                   p("2) fishing gear properties to the fishing fleet sub-model: selectivity patterns and activity rates of each of the fishing gears, and their distribution over different seabed sediment types, seabed abrasion rates, and discarding patterns.",style = "font-family: 'calibri'; font-si16pt"),
                    p(
                      "The equations in the model also have many \"parameters\" – these are constants that set the reactivity of the connections between all the components of the model.",
                      style = "font-family: 'calibri'; font-si16pt"
@@ -156,47 +164,10 @@ ui <- navbarPage(
                    6,
                    h5("There are four stages to using this website:"),
                    img(src = "Workflow.svg", width = '150%'),#, style = "display: block; margin-left: auto; margin-right: auto;"),
-                   
-                   # p(
-                   #   tags$b("1. Select region"),
-                   #  # tags$a("1. Select region", onclick="customHref('region')"),
-                   #   style = "font-family: 'calibri'; font-si16pt"
-                   # ),
-                   # p(
-                   #   "Here you need to select a model region and time period from the list of pre-prepared implementations that we have provided. We will be adding to this over time as we develop new implementations",
-                   #   style = "font-family: 'calibri'; font-si16pt"
-                   # ),
-                   # p(
-                   #   tags$b("2. Explore model"),
-                   #   #tags$a("2. Explore model", onclick="customHref('Explore model')"),
-                   #   style = "font-family: 'calibri'; font-si16pt"
-                   # ),
-                   # p(
-                   #   "Run the model in its 'out of the box' state - we call this a baseline run. This happens on our computer server and the results are returned to you to explore using a variety of different graph drawing tools, or download to analyse yourself if you wish.",
-                   #   style = "font-family: 'calibri'; font-si16pt"
-                   # ),
-                   # p(
-                   #   tags$b("3. Setup scenario"),
-                   #   style = "font-family: 'calibri'; font-si16pt"
-                   # ),
-                   # p(
-                   #   "Use slider-bars to configure a new set of inputs to the model in terms of variations from the baseline in temperature, nutrient inputs, fishing activity, abrasion of the seabed by trawling, and discarding of fishery catches.",
-                   #   style = "font-family: 'calibri'; font-si16pt"
-                   # ),
-                   # p(
-                   #   tags$b("4. Scenario results"),
-                   #   style = "font-family: 'calibri'; font-si16pt"
-                   # ),
-                   # p(
-                   #   "Run the scenario model again (this may take a few minutes) and compare the results with the baseline version.",
-                   #   style = "font-family: 'calibri'; font-si16pt"
-                   # )
-                   # 
                    )
                )
-             ))
+             )
              ),
-            # ),
   navbarMenu(
     "Select Region",
     tabPanel(
@@ -212,14 +183,14 @@ ui <- navbarPage(
             selected = "North_Sea"
           ),
           uiOutput("variant_dropdown"), 
-          textOutput("textSelectRegion"), 
           uiOutput("textSpecificRegion"), 
           width = 3
         ),
         #Main Panel: plot map here in the future
         mainPanel(
-          uiOutput("model_map")
-          ,  width = 9
+          uiOutput("model_map"),  
+          textOutput("textSelectRegion"),
+          width = 9
         )
       )
     )), 
@@ -231,6 +202,8 @@ ui <- navbarPage(
         6,
         h3("Run Baseline"),
         actionButton("runBaseline", "Run Baseline Model"),
+        tags$br(),
+        tags$br(),
         uiOutput("textRunBaselineModel"),
       ),
       column(
@@ -245,6 +218,7 @@ ui <- navbarPage(
             disabled = "disabled"
           )
         ),
+        tags$br(),
         uiOutput("textRunBaselineFiles"),
       )
       )
@@ -1293,6 +1267,15 @@ server <- function(input, output, session) {
   })
   
   output$uiCatchGuild <- renderUI({
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
+      showModal(
+        modalDialog(
+          "Please choose a region, time period and run the model before exploring input data",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
     switch(
       input$outputCatchType,
       "Planktivorous fish" = fluidRow(plotOutput("ecoPlot_catch_guild_1")),
@@ -1311,6 +1294,7 @@ server <- function(input, output, session) {
   })
   
  # output$uiCatchGear <- renderUI({
+  
   catchGear <- reactive({
     gearType <- input$outputGearType
     if (is.null(input$outputGearType)) gearType <- c("Pelagic_Trawl+Seine")
@@ -1335,9 +1319,29 @@ server <- function(input, output, session) {
     )
   })
   
-  output$uiCatchGear <- renderUI({catchGear()}) 
+  output$uiCatchGear <- renderUI({
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
+      showModal(
+        modalDialog(
+          "Please choose a region, time period and run the model before exploring input data",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
+    catchGear()
+    }) 
 
   output$UiEdriver <- renderUI({
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
+      showModal(
+        modalDialog(
+          "Please choose a region, time period and run the model before exploring input data",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
     switch(
       input$edriverType,
       "Surface irradiance" = fluidRow(plotOutput("edriver_plot_1")),
@@ -1359,6 +1363,15 @@ server <- function(input, output, session) {
     )
   })
   output$UiFdriver <- renderUI({
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
+      showModal(
+        modalDialog(
+          "Please choose a region, time period and run the model before exploring input data",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
     switch(
       input$fdriverType,
       "Activity" = fluidRow(plotOutput("basePlot_fdriver_activity")),
@@ -1370,6 +1383,15 @@ server <- function(input, output, session) {
   })
 
   output$uiEco <- renderUI({
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
+      showModal(
+        modalDialog(
+          "Please choose a region, time period and run the model before exploring input data",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
     switch(
       input$outputEcoType,
       "Nutrient_Phytoplankton" =
@@ -4089,6 +4111,15 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$runBaseline, {
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant)){
+      showModal(
+        modalDialog(
+          "Please choose a region and time period before running model",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
     showModal(
       modalDialog(
         "Please wait whilst model runs baseline. Once completed you can explore plots on model exploration tab menu",
