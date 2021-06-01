@@ -26,11 +26,16 @@ ui <- navbarPage(
                title = "Home",
                tags$style(HTML(".irs-grid-text {font-size: 10pt;}")),
                tags$style(HTML(".sup {vertical-align: super; font-size: smaller;}")),
-               tags$style(HTML('#runBaseline{background-color:red}')),
+               #tags$style(HTML('#runBaseline{background-color: #008CBA;}')),
+               tags$style(HTML(".mytooltip {position: relative; display: inline-block;}")),
+               tags$style(HTML(".mytooltip .tooltiptext {visibility: hidden;width: 200px;background-color: #008CBA;color: #fff;text-align: center;border-radius: 6px;padding: 5px 0;position: absolute;z-index: 1;}")),
+               tags$style(HTML(".mytooltip:hover .tooltiptext {visibility: visible;}")),
+               tags$style(HTML(".mytooltip {text-decoration:underline; text-decoration-style: dotted;}")),
                fluidRow(
                   column(
                     6,
                     br(),
+                    #HTML("<p style = \"font-family: 'calibri'; font-si16pt \" class=\"mytooltip\">TEXT<span class=\"tooltiptext\">Tooltip text</span></p>"),
                     p(
                      "Our seas and oceans are being subjected to a wide range of pressures, from warming, fishing, and pollution by nutrients, plastic particles and litter. However, these pressures act together in complex ways. How can we work out the most effective strategies for alleviating their impacts on the sea while still being able to harvest the food that we need?",
                      style = "font-family: 'calibri'; font-si16pt"
@@ -56,7 +61,7 @@ ui <- navbarPage(
                    # )
                  )),
                fluidRow(
-                 HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:10px;color:blue \"><b>For enquiries please contact</b>: Mike Heath  &nbsp;&nbsp;&nbsp;&nbsp; <b>Email Address</b> m.heath@strath.ac.uk"),
+                 HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:10px;color:blue \"><b>For enquiries please contact</b>: Michael Heath  &nbsp;&nbsp;&nbsp;&nbsp; <b>Email Address</b> m.heath@strath.ac.uk"),
                ),
                fluidRow(
                  column(
@@ -85,7 +90,8 @@ ui <- navbarPage(
                    HTML("<ul><li>UK Natural Environment Research Council <a href='https://www.marine-ecosystems.org.uk/Home'>MERP (Marine Ecosystems Research Programme, 2014-2019)</a>.</li></ul>"),
                    HTML("<ul><li>Fisheries Innovation Scotland project FIS003 (<a href='https://fiscot.org/wp-content/uploads/2019/06/FIS003.pdf'>Modelling the whole-ecosystem impacts of trawling</a> , 2015).</li></ul>"),
                    HTML("<ul><li>Horizon 2020 <a href='http://www.discardless.eu/'>DiscardLess (Strategies for the gradual elimination of discards in European fisheries</a>, 2015-2019).</li></ul>"),
-                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \">The culmination of this development effort was release of the open-access software package StrathE2E2 for the <a href='https://cran.r-project.org/web/packages/StrathE2E2/index.html'>R statistical programming environment</a> in 2020. You can download an open-access article about the package from <a href='https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13510'>here</a>.</p>"),
+                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \">The culmination of this development effort was release of the open-access software package <a href='https://CRAN.R-project.org/package=StrathE2E2'>StrathE2E2</a> for the <a href='https://www.r-project.org/'>R statistical programming environment</a> in 2020. You can download an open-access article about the package from <a href='https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13510'>here</a>.</p>"),
+                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \">An inventory of publications about or using StrathE2E is available <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/publications/StrathE2E_Publications.pdf'>here</a>.</p>"),
                    HTML("<p style = \"font-family: 'calibri'; font-si16pt \">This website is an interactive interface to the StrathE2E2 software package, built using <a href='https://shiny.rstudio.com/'>Rshiny</a>. Following a 4-step process you can select a model region, run the model and explore the results. Then, build your own scenario of fishing and environmental conditions, and discover how these affect the ecosystem</p>"),
                    )
                )
@@ -103,10 +109,7 @@ ui <- navbarPage(
                      "The region covered by each model is divided into a shallow inshore and a deeper offshore zone. The water column in the offshore zone is further divided into an upper (surface) layer, and a lower (deep) layer. The seabed in each zone is divided into up to four different sediment habitat types e.g. muddy, sandy, gravel, rocky.",
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
-                   p(
-                     "Fisheries in StrathE2E are represented by a separate sub-model which is connected to the ecology part. In the sub-model, all of fishing gears used in a region are grouped together into up to 12 different types defined by their effectiveness at catching each of the ecology guilds, the spatial distribution of their activity, seabed abrasion rates, and discarding patterns.",
-                     style = "font-family: 'calibri'; font-si16pt"
-                   ),
+                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Fisheries in StrathE2E are represented by a separate sub-model which is connected to the ecology part. In the sub-model, all of fishing gears used in a region are grouped together into up to 12 different types defined by their effectiveness at catching each of the ecology guilds, the spatial distribution of their activity, <span class=\"mytooltip\">seabed abrasion<span class=\"tooltiptext\">“Seabed abrasion” refers to the scraping or ploughing effects of dragging fishing gear along the seabed. The disturbance re-suspends sediment, releases nutrients and causes mortality  of seabed animals.</span></span> rates, and <span class=\"mytooltip\">discarding<span class=\"tooltiptext\">“Discards” are the components of catch which are returned to the sea due to being of no commercial value, or legal restrictions on size or catch limits. In the model, all discards are assumed to be dead.</span></span> patterns.</p>"),
                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \"><b>Diagram 1:</b> <i>Ecological guilds or classes of dead and living material included in the StrathE2E model</i>"),
                   br(),
                   column(
@@ -125,19 +128,20 @@ ui <- navbarPage(
                      "StrathE2E is a set of interconnected mathematical equations which are solved by the computer programme to calculate at daily intervals:",
                      style = "font-family: 'calibri'; font-si16pt"
                    ),
+
                    tags$ul(
-                     tags$li("The quantities of dissolved nutrients, detritus, the guilds of plants and animals in each of the spatial zones and layers.",style = "font-family: 'calibri'; font-si16pt"), 
+                     HTML("<li style = \"font-family: 'calibri'; font-si16pt \">The quantities of <span class=\"mytooltip\">dissolved nutrients<span class=\"tooltiptext\">“Dissolved nutrients” refers are naturally occurring inorganic compounds such as nitrate and ammonia which are essential for the growth of algae.</span></span>, detritus, the guilds of plants and animals in each of the spatial zones and layers.</li>"),
                      tags$li("How much each of the guilds consumes as nutrient or food by preying on other guilds.",style = "font-family: 'calibri'; font-si16pt"), 
                      tags$li("How much nutrient is returned to the sea by excretion",style = "font-family: 'calibri'; font-si16pt"),
                      tags$li("How much nutrient and plankton is carried into and out of the model region, and between inshore and offshore zones, by water currents, and between inshore and offshore zones",style = "font-family: 'calibri'; font-si16pt"),
                      tags$li("The movements of fish, birds, seals and whales between inshore and offshore zones by active migration, motivated by the concentrations of their food.",style = "font-family: 'calibri'; font-si16pt"),
                      tags$li("How much nutrient and sediment are stirred up from the seabed by fishing gears",style = "font-family: 'calibri'; font-si16pt"),
-                     tags$li("How much of each guild is caught by the fishing gears, and what proportion is landed or discarded",style = "font-family: 'calibri'; font-si16pt")
+                     HTML("<li style = \"font-family: 'calibri'; font-si16pt \">How much of each guild is caught by the fishing gears, and what proportion is <span class=\"mytooltip\">landed<span class=\"tooltiptext\">“Landings” are the components of catch which is brought ashore to be sold</span></span> or <span class=\"mytooltip\">discarded<span class=\"tooltiptext\">“Discards” are the components of catch which are returned to the sea due to being of no commercial value, or legal restrictions on size or catch limits. In the model, all discards are assumed to be dead.</span></span></li>")
                    ),
                    HTML("<p style = \"font-family: 'calibri'; font-si16pt \">The model tracks the changes in quantities of all the guilds and the flows between them in terms of nitrogen content. The units of the output quantities are milli-Moles (mM) of nitrogen per m<sup>2</sup> or per m<sup>3</sup>. Roughly, 1 mM nitrogen per m<sup>2</sup> is equivalent to 500 kg of live weight per km<sup>2</sup>, depending on the guilds. </p>"),
                    p("The inputs to these calculations are:", style = "font-family: 'calibri'; font-si16pt"),
                    p("1) environmental data to the ecology part of the model: temperature, sunlight intensity, water currents, mixing and waves, and external nutrient inputs from rivers and in rainfall.",style = "font-family: 'calibri'; font-si16pt"),
-                   p("2) fishing gear properties to the fishing fleet sub-model: selectivity patterns and activity rates of each of the fishing gears, and their distribution over different seabed sediment types, seabed abrasion rates, and discarding patterns.",style = "font-family: 'calibri'; font-si16pt"),
+                   HTML("<p style = \"font-family: 'calibri'; font-si16pt \">2) fishing gear properties to the fishing fleet sub-model: <span class=\"mytooltip\">selectivity<span class=\"tooltiptext\">“Selectivity” refers to the efficiency with which a given gear catches each of the guilds in the ecology model.</span></span> patterns and activity rates of each of the fishing gears, and their distribution over different seabed sediment types, <span class=\"mytooltip\">seabed abrasion<span class=\"tooltiptext\">“Seabed abrasion” refers to the scraping or ploughing effects of dragging fishing gear along the seabed. The disturbance re-suspends sediment, releases nutrients and causes mortality  of seabed animals.</span></span> rates, and <span class=\"mytooltip\">discarding<span class=\"tooltiptext\">“Discards” are the components of catch which are returned to the sea due to being of no commercial value, or legal restrictions on size or catch limits. In the model, all discards are assumed to be dead.</span></span> patterns."),
                    p(
                      "The equations in the model also have many \"parameters\" – these are constants that set the reactivity of the connections between all the components of the model.",
                      style = "font-family: 'calibri'; font-si16pt"
@@ -156,18 +160,28 @@ ui <- navbarPage(
                    )
                  )
                )
-             ),
-             tabPanel(
-               title = "How To Use This Website",
-               fluidRow(
-                 column(
-                   6,
-                   h5("There are four stages to using this website:"),
-                   img(src = "Workflow.svg", width = '150%'),#, style = "display: block; margin-left: auto; margin-right: auto;"),
-                   )
-               )
              )
+             # tabPanel(
+             #   title = "How To Use This Website",
+             #   fluidRow(
+             #     column(
+             #       6,
+             #       h5("There are four stages to using this website:"),
+             #       img(src = "Workflow.svg", width = '150%'),#, style = "display: block; margin-left: auto; margin-right: auto;"),
+             #       )
+             #   )
+             # )
              ),
+  tabPanel(
+    title = "How To Use This Website",
+    fluidRow(
+      column(
+        6,
+        h5("There are four stages to using this website:"),
+        img(src = "Workflow.svg", width = '150%'),#, style = "display: block; margin-left: auto; margin-right: auto;"),
+      )
+    )
+  ),
   navbarMenu(
     "Select Region",
     tabPanel(
@@ -201,7 +215,7 @@ ui <- navbarPage(
       fluidRow(column(
         6,
         h3("Run Baseline"),
-        actionButton("runBaseline", "Run Baseline Model"),
+        actionButton("runBaseline", "Run Baseline Model",style="background-image: linear-gradient(#39a8e8, #39a8e8, 60%, #39a8e8);color: white;"),
         tags$br(),
         tags$br(),
         uiOutput("textRunBaselineModel"),
@@ -1270,7 +1284,7 @@ server <- function(input, output, session) {
     if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
       showModal(
         modalDialog(
-          "Please choose a region, time period and run the model before exploring input data",
+          "Please choose a region, time period and run the model before exploring output data",
           footer = NULL,
           easyClose = TRUE
         )
@@ -1323,7 +1337,7 @@ server <- function(input, output, session) {
     if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
       showModal(
         modalDialog(
-          "Please choose a region, time period and run the model before exploring input data",
+          "Please choose a region, time period and run the model before exploring output data",
           footer = NULL,
           easyClose = TRUE
         )
@@ -1386,7 +1400,7 @@ server <- function(input, output, session) {
     if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
       showModal(
         modalDialog(
-          "Please choose a region, time period and run the model before exploring input data",
+          "Please choose a region, time period and run the model before exploring output data",
           footer = NULL,
           easyClose = TRUE
         )
@@ -4132,7 +4146,7 @@ server <- function(input, output, session) {
     #View(model)
     uuid <- UUIDgenerate()
     
-    results_baseline <-
+    results_baseline <<-
       e2e_run(model, nyears = input$year, csv.output = TRUE)
     removeModal()
     resultDirBaseline <- toString(model$setup$resultsdir)
