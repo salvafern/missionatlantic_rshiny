@@ -20,7 +20,7 @@ source("createCatchPlotPerGear.R")
 source("createEDriversPlots.R")
 
 ui <- navbarPage(
-  "StrathE2E-online",
+  "StrathE2E-app",
   theme = shinytheme("cerulean"), #"strathe2e.css", 
              tabPanel(
                title = "Home",
@@ -34,6 +34,7 @@ ui <- navbarPage(
                fluidRow(
                   column(
                     6,
+                    h4("Marine Ecosystem Modelling Online"),
                     br(),
                     #HTML("<p style = \"font-family: 'calibri'; font-si16pt \" class=\"mytooltip\">TEXT<span class=\"tooltiptext\">Tooltip text</span></p>"),
                     p(
@@ -85,6 +86,7 @@ ui <- navbarPage(
                fluidRow(
                  column(
                    7,
+                   h4("About StrathE2E Model"),
                    HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">StrathE2E is a computer simulation model of marine ecosystems. A first version of the model was developed during an EU 6th Framework project (RECLAM, <a href='https://cordis.europa.eu/project/id/44133/reporting'>REsolving CLimAtic IMpacts on fish stocks, 2007-2009</a>). The prototype was further developed and elaborated during a succession of EU and UK nationally funded projects:</p>"),
                    HTML("<ul><li>7th Framework <a href='https://cordis.europa.eu/project/id/264933/reporting'>EURO_BASIN (European Union Basin-scale Analysis, Synthesis and Integration, 2010-2014)</a>.</li></ul>"),
                    HTML("<ul><li>UK Natural Environment Research Council <a href='https://www.marine-ecosystems.org.uk/Home'>MERP (Marine Ecosystems Research Programme, 2014-2019)</a>.</li></ul>"),
@@ -101,6 +103,7 @@ ui <- navbarPage(
                fluidRow(
                  column(
                    12,
+                  h4("Model Overview"),
                   br(),
                   img(src = "Temperate model joined.svg", width = '50%', style = "display: block; margin-left: auto; margin-right: auto;"),
                   br(),
@@ -114,7 +117,7 @@ ui <- navbarPage(
                   br(),
                   column(
                     9,
-                  img(src = "guilds2.svg", width = '100%', style = "display: block; margin-left: auto; margin-right: auto;" ,id="diagram1")
+                  img(src = "guilds2.svg", width = '75%', style = "display: block !important; margin: 0 auto !important; float:none !important;" ,id="diagram1")
                   )
                  )
                  )
@@ -124,6 +127,7 @@ ui <- navbarPage(
                fluidRow(
                  column(
                    8,
+                   h4("How the Model Works"),
                    p(
                      "StrathE2E is a set of interconnected mathematical equations which are solved by the computer programme to calculate at daily intervals:",
                      style = "font-family: 'calibri'; font-si16pt"
@@ -173,31 +177,34 @@ ui <- navbarPage(
              # )
              ),
   tabPanel(
-    title = "How To Use This Website",
+    title = "Using This Website",
     fluidRow(
       column(
         6,
-        h5("There are four stages to using this website:"),
+        h4("There are four stages to using this website:"),
         img(src = "Workflow.svg", width = '150%'),#, style = "display: block; margin-left: auto; margin-right: auto;"),
       )
     )
   ),
   navbarMenu(
-    "Select Region",
+    "Setup Model",
     tabPanel(
-      title = "Location",
+      title = "Select Region and Time Period",
       value="region",
       sidebarLayout(
         sidebarPanel(
           selectInput(
             "selectedlocation",
-            h4("Region"),
+            h4("Select Region and Time Period"),
             choices
             = list("North_Sea","Celtic_Sea"),
             selected = "North_Sea"
           ),
-          uiOutput("variant_dropdown"), 
+          uiOutput("variant_dropdown"),
           uiOutput("textSpecificRegion"), 
+          # h4("Run Model"),
+          # actionButton("runBaseline", "Run Model",style="background-image: linear-gradient(#39a8e8, #39a8e8, 60%, #39a8e8);color: white;"),
+          # uiOutput("textRunBaselineModel"),
           width = 3
         ),
         #Main Panel: plot map here in the future
@@ -207,40 +214,11 @@ ui <- navbarPage(
           width = 9
         )
       )
-    )), 
-  navbarMenu(
-    "Explore Model",
-    tabPanel(
-      title = "Run baseline model",
-      fluidRow(column(
-        6,
-        h3("Run Baseline"),
-        actionButton("runBaseline", "Run Baseline Model",style="background-image: linear-gradient(#39a8e8, #39a8e8, 60%, #39a8e8);color: white;"),
-        tags$br(),
-        tags$br(),
-        uiOutput("textRunBaselineModel"),
-      ),
-      column(
-        6,
-        h3("Baseline output"),
-        useShinyjs(),
-        div(
-          id = "dwnbutton_b",
-          downloadButton(
-            "downloadData_baseline1",
-            "Download output as csv files",
-            disabled = "disabled"
-          )
-        ),
-        tags$br(),
-        uiOutput("textRunBaselineFiles"),
-      )
-      )
     ),
     "----",
-    "Inputs",
+    "View Model Inputs",
     tabPanel(
-      title = "Plot environmental inputs",
+      title = "Environmental inputs",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -273,7 +251,7 @@ ui <- navbarPage(
       )
     ),
     tabPanel(
-      title = "Plot fishery inputs",
+      title = "Fishery inputs",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -294,9 +272,55 @@ ui <- navbarPage(
           uiOutput("UiFdriver"))
       )),
     "----",
-    "Outputs",
+    "Run Model",
     tabPanel(
-      title = "Plot ecological outputs",
+      title = "Run Model",
+      fluidRow(
+          column(
+          6,
+          h3("Run Baseline"),
+          actionButton("runBaseline", "Run Baseline Model",style="background-image: linear-gradient(#39a8e8, #39a8e8, 60%, #39a8e8);color: white;"),
+          tags$br(),
+          tags$br(),
+          uiOutput("textRunBaselineModel"),
+        )
+      )
+    )
+    ), 
+  navbarMenu(
+    "Model Results",
+    tabPanel(
+      title = "Download outputs",
+      fluidRow(
+      #   column(
+      #   6,
+      #   h3("Run Baseline"),
+      #   actionButton("runBaseline", "Run Baseline Model",style="background-image: linear-gradient(#39a8e8, #39a8e8, 60%, #39a8e8);color: white;"),
+      #   tags$br(),
+      #   tags$br(),
+      #   uiOutput("textRunBaselineModel"),
+      # ),
+      column(
+        6,
+        h3("Baseline output"),
+        useShinyjs(),
+        div(
+          id = "dwnbutton_b",
+          downloadButton(
+            "downloadData_baseline1",
+            "Download output as csv files",
+            disabled = "disabled"
+          )
+        ),
+        tags$br(),
+        uiOutput("textRunBaselineFiles"),
+      )
+      )
+    ),
+    "----",
+    "Plot Outputs",
+    tabPanel(
+      title = "Ecological outputs",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -313,7 +337,7 @@ ui <- navbarPage(
         )
     ),
     tabPanel(
-      title = "Plot catch per guild",
+      title = "Catch per guild",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -342,7 +366,7 @@ ui <- navbarPage(
       )
     ),
     tabPanel(
-      title = "Plot catch per gear",
+      title = "Catch per gear",
       sidebarLayout(
         sidebarPanel(
           uiOutput("gear_dropdown"),
@@ -355,6 +379,8 @@ ui <- navbarPage(
   ), 
   navbarMenu(
     "Setup Scenario ",
+    "----",
+    "Modify Inputs",
     tabPanel(
       title = "Temperature",
       fluidRow(column(
@@ -466,10 +492,9 @@ ui <- navbarPage(
         width = 3
       ), 
       mainPanel (uiOutput("ui")))
-    )
-  ),
-  navbarMenu(
-    "Scenario Results",
+    ),
+    "----",
+    "Run scenario",
     tabPanel(
       title = "Run Scenario",
       sliderInput(
@@ -481,12 +506,37 @@ ui <- navbarPage(
         width = "100%"
       ),
       fluidRow(
-      column(
-        6,
-        h3("Run Scenario"),
-        actionButton("runScenario", "Run Scenario Model"),
-        uiOutput("textRunScenarioModel"),
-      ),
+        column(
+          6,
+          h3("Run Scenario"),
+          actionButton("runScenario", "Run Scenario Model",style="background-image: linear-gradient(#39a8e8, #39a8e8, 60%, #39a8e8);color: white;"),
+          tags$br(),
+          tags$br(),
+          uiOutput("textRunScenarioModel"),
+        )
+      ))
+  ),
+  navbarMenu(
+    "Scenario Results",
+    tabPanel(
+      title = "Download Scenario Output",
+      # sliderInput(
+      #   "year",
+      #   "Year:",
+      #   min = 1,
+      #   max = 50,
+      #   value = 5,
+      #   width = "100%"
+      # ),
+      fluidRow(
+      # column(
+      #   6,
+      #   h3("Run Scenario"),
+      #   actionButton("runScenario", "Run Scenario Model",style="background-image: linear-gradient(#39a8e8, #39a8e8, 60%, #39a8e8);color: white;"),
+      #     tags$br(),
+      #     tags$br(),
+      #   uiOutput("textRunScenarioModel"),
+      # ),
       column(
         6,
         h3("Scenario output"),
@@ -499,9 +549,12 @@ ui <- navbarPage(
             disabled = "disabled"
           )
         ),
+          tags$br(),
         uiOutput("textRunScenarioFiles"),
       )
       )),
+    "----",
+    "Compare Baseline With Scenario",
     tabPanel(
       title = "Compare Biomasses",
       fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual averaged quantities of model components in the whole model region between your scenario model run and the baseline."),
@@ -509,6 +562,18 @@ ui <- navbarPage(
       fluidRow(column(
         9,
         plotOutput("e2e_compare_runs_bar_aam",height = "600px")
+      ),
+      column(
+        6,
+        useShinyjs(),
+        div(
+          id = "dwnbutton_bm",
+          downloadButton(
+            "downloadData_biomassComp",
+            "Download biomass comparison",
+            disabled = "disabled"
+          )
+        )
       ))
     ),
     tabPanel(
@@ -1060,7 +1125,7 @@ server <- function(input, output, session) {
     )
   })
   
-  output$textSelectRegion <- renderText(quoted = FALSE,"Blue areas in the map opposite represent the inshore zone of the model, orange offshore. D1, D2, D3, S1, S2, S3 refers to seabed habitats - D/S1 = mud, D/S2= sand, D/S3 = gravel. Rock is denoted by D/S0 or shown as a separate map of percentage of rock cover.")
+  output$textSelectRegion <- renderText(quoted = FALSE,"Blue areas in the map above represent the inshore zone of the model, orange offshore. D1, D2, D3, S1, S2, S3 refers to seabed habitats - D/S1 = mud, D/S2= sand, D/S3 = gravel. Rock is denoted by D/S0 or shown as a separate map of percentage of rock cover.")
  
   output$textSpecificRegion <- renderUI(
                                         if(is.null(input$selectedlocation)){
@@ -1248,11 +1313,22 @@ server <- function(input, output, session) {
   
   output$textCatchGear <- renderUI({fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Annual catches of each guild by the selected gear type, broken down by landings and discards. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}) 
   
-  output$textRunBaselineModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Run your selected  model  here in its 'out of the box' state - we call this a baseline run."),
+  output$textRunBaselineModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Run your selected  model  here in its 'out of the box' state"),
                                                     HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Running the baseline will take a few seconds on our computer server. The results are saved in memory for you to explore using our graph drawing tools, or you can download the output as .csv files to analyse yourself if you wish (e.g. read them into Excel)."),
                                                     HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Progress to the “Setup Scenario” tab to configure a new set of model inputs and then rerun the model and compare the results with your baseline run")))}) 
   
-  output$textRunBaselineFiles <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The following .csv files are available to download : WHOLEDOMAIN_model_anav_biomass-baseline, OFFSHORE_model_anav_biomass-baseline, INSHORE_model_anav_biomass-baseline, OFFSHORE_landingcomposition_by_gear-baseline, OFFSHORE_discardcomposition_by_gear-baseline, INSHORE_landingcomposition_by_gear-baseline, INSHORE_discardcomposition_by_gear-baseline where baseline is an identifier for your baseline data."),
+  output$textRunBaselineFiles <- renderUI({
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runBaseline == 0){
+      showModal(
+        modalDialog(
+          "Please choose a region, time period and run the model before exploring output data",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
+    
+    fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The following .csv files are available to download : WHOLEDOMAIN_model_anav_biomass-baseline, OFFSHORE_model_anav_biomass-baseline, INSHORE_model_anav_biomass-baseline, OFFSHORE_landingcomposition_by_gear-baseline, OFFSHORE_discardcomposition_by_gear-baseline, INSHORE_landingcomposition_by_gear-baseline, INSHORE_discardcomposition_by_gear-baseline where baseline is an identifier for your baseline data."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Data are scaled to represent the quantity per m<sup>2</sup> of the whole region for reach model."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">\"anav_biomass files\" contain annual average mass of each component of the model in the named zone. The files includes data on layer and zone thickness and area so that the mass data can be converted to concentrations."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">\"landingcomposition\" and \"discardcomposition\" files contain a matrix of landed and discarded quantity by living guild and gear type. Units: (milli-Moles of nitrogen per m<sup>2</sup> of whole model region per year).")))}) 
@@ -1281,7 +1357,7 @@ server <- function(input, output, session) {
   })
   
   output$uiCatchGuild <- renderUI({
-    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runBaseline == 0){
       showModal(
         modalDialog(
           "Please choose a region, time period and run the model before exploring output data",
@@ -1334,7 +1410,7 @@ server <- function(input, output, session) {
   })
   
   output$uiCatchGear <- renderUI({
-    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runBaseline == 0){
       showModal(
         modalDialog(
           "Please choose a region, time period and run the model before exploring output data",
@@ -1347,7 +1423,7 @@ server <- function(input, output, session) {
     }) 
 
   output$UiEdriver <- renderUI({
-    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant)){
       showModal(
         modalDialog(
           "Please choose a region, time period and run the model before exploring input data",
@@ -1356,6 +1432,149 @@ server <- function(input, output, session) {
         )
       )
     }
+    output$edriver_plot_1 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Surface irradiance"
+        )
+      })
+    
+    output$edriver_plot_2 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Susp.partic. matter"
+        )
+      })
+    
+    output$edriver_plot_3 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Temperature"
+        )
+      })
+    
+    output$edriver_plot_4 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Diffusivity gradient"
+        )
+      })
+    
+    output$edriver_plot_5 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "External Inflow"
+        )
+      })
+    
+    output$edriver_plot_6 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "River discharge"
+        )
+      })
+    
+    output$edriver_plot_7 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Wave height"
+        )
+      })
+    
+    output$edriver_plot_8 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Sediment disturbance"
+        )
+      })
+    
+    output$edriver_plot_9 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Boundary nitrate"
+        )
+      })
+    
+    output$edriver_plot_10 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Boundary ammonia"
+        )
+      })
+    
+    output$edriver_plot_11 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Boundary phytoplankton"
+        )
+      })
+    
+    output$edriver_plot_12 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Boundary detritus"
+        )
+      })
+    
+    output$edriver_plot_13 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "River nitrate"
+        )
+      })
+    
+    output$edriver_plot_14 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "River ammonia"
+        )
+      })
+    
+    output$edriver_plot_15 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Atmospheric nitrate"
+        )
+      })
+    
+    output$edriver_plot_16 <- 
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        createEDriversPlots(
+          model,
+          selection = "Atmospheric ammonia"
+        )
+      })
     switch(
       input$edriverType,
       "Surface irradiance" = fluidRow(plotOutput("edriver_plot_1")),
@@ -1377,7 +1596,7 @@ server <- function(input, output, session) {
     )
   })
   output$UiFdriver <- renderUI({
-    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant)){
       showModal(
         modalDialog(
           "Please choose a region, time period and run the model before exploring input data",
@@ -1386,6 +1605,35 @@ server <- function(input, output, session) {
         )
       )
     }
+    output$basePlot_fdriver_activity <-
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        e2e_plot_fdrivers(model, selection = "ACTIVITY")
+      })
+
+    output$basePlot_fdriver_abrasion <-
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        e2e_plot_fdrivers(model, selection = "ABRASION")
+      })
+
+    output$basePlot_fdriver_harvestr <-
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        e2e_plot_fdrivers(model, selection = "HARVESTR")
+      })
+
+    output$basePlot_fdriver_discards <-
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        e2e_plot_fdrivers(model, selection = "DISCARDS")
+      })
+
+    output$basePlot_fdriver_offal <-
+      renderPlot({
+        model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+        e2e_plot_fdrivers(model, selection = "OFFAL")
+      })
     switch(
       input$fdriverType,
       "Activity" = fluidRow(plotOutput("basePlot_fdriver_activity")),
@@ -1397,7 +1645,7 @@ server <- function(input, output, session) {
   })
 
   output$uiEco <- renderUI({
-    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || is.null(input$runBaseline)){
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runBaseline == 0){
       showModal(
         modalDialog(
           "Please choose a region, time period and run the model before exploring output data",
@@ -4698,158 +4946,180 @@ server <- function(input, output, session) {
         )
       })
     
-    output$edriver_plot_1 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Surface irradiance"
-        )
-      })
-    
-    output$edriver_plot_2 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Susp.partic. matter"
-        )
-      })
-    
-    output$edriver_plot_3 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Temperature"
-        )
-      })
-    
-    output$edriver_plot_4 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Diffusivity gradient"
-        )
-      })
-    
-    output$edriver_plot_5 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "External Inflow"
-        )
-      })
-    
-    output$edriver_plot_6 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "River discharge"
-        )
-      })
-    
-    output$edriver_plot_7 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Wave height"
-        )
-      })
-    
-    output$edriver_plot_8 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Sediment disturbance"
-        )
-      })
-    
-    output$edriver_plot_9 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Boundary nitrate"
-        )
-      })
-    
-    output$edriver_plot_10 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Boundary ammonia"
-        )
-      })
-    
-    output$edriver_plot_11 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Boundary phytoplankton"
-        )
-      })
-    
-    output$edriver_plot_12 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Boundary detritus"
-        )
-      })
-    
-    output$edriver_plot_13 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "River nitrate"
-        )
-      })
-    
-    output$edriver_plot_14 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "River ammonia"
-        )
-      })
-    
-    output$edriver_plot_15 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Atmospheric nitrate"
-        )
-      })
-    
-    output$edriver_plot_16 <- 
-      renderPlot({
-        createEDriversPlots(
-          model,
-          selection = "Atmospheric ammonia"
-        )
-      })
-    
-    output$basePlot_fdriver_activity <-
-      renderPlot({
-        e2e_plot_fdrivers(model, selection = "ACTIVITY")
-      })
-    
-    output$basePlot_fdriver_abrasion <-
-      renderPlot({
-        e2e_plot_fdrivers(model, selection = "ABRASION")
-      })
-    
-    output$basePlot_fdriver_harvestr <-
-      renderPlot({
-        e2e_plot_fdrivers(model, selection = "HARVESTR")
-      })
-    
-    output$basePlot_fdriver_discards <-
-      renderPlot({
-        e2e_plot_fdrivers(model, selection = "DISCARDS")
-      })
-    
-    output$basePlot_fdriver_offal <-
-      renderPlot({
-        e2e_plot_fdrivers(model, selection = "OFFAL")
-      })
+
+    # output$edriver_plot_1 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Surface irradiance"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_2 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Susp.partic. matter"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_3 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Temperature"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_4 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Diffusivity gradient"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_5 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "External Inflow"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_6 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "River discharge"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_7 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Wave height"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_8 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Sediment disturbance"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_9 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Boundary nitrate"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_10 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Boundary ammonia"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_11 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Boundary phytoplankton"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_12 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Boundary detritus"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_13 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "River nitrate"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_14 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "River ammonia"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_15 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Atmospheric nitrate"
+    #     )
+    #   })
+    # 
+    # output$edriver_plot_16 <- 
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     createEDriversPlots(
+    #       model,
+    #       selection = "Atmospheric ammonia"
+    #     )
+    #   })
+    # 
+    # output$basePlot_fdriver_activity <-
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     e2e_plot_fdrivers(model, selection = "ACTIVITY")
+    #   })
+    # 
+    # output$basePlot_fdriver_abrasion <-
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     e2e_plot_fdrivers(model, selection = "ABRASION")
+    #   })
+    # 
+    # output$basePlot_fdriver_harvestr <-
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     e2e_plot_fdrivers(model, selection = "HARVESTR")
+    #   })
+    # 
+    # output$basePlot_fdriver_discards <-
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     e2e_plot_fdrivers(model, selection = "DISCARDS")
+    #   })
+    # 
+    # output$basePlot_fdriver_offal <-
+    #   renderPlot({
+    #     model <- e2e_read(input$selectedlocation, input$selectedVariant,models.path="Models",model.ident = "baseline")
+    #     e2e_plot_fdrivers(model, selection = "OFFAL")
+    #   })
     
     # output$ecoPlot_catch_gear <-
     #   renderPlot({
@@ -5676,22 +5946,39 @@ server <- function(input, output, session) {
       e2e_run(scenario_model,
               nyears = input$year,
               csv.output = TRUE)
-    output$scenarioPlot <-
-      renderPlot({
-        e2e_plot_ts(scenario_model, results_scenario)
-      })
     
-    output$scenario_compare_obs <-
-      renderPlot({
-        e2e_compare_obs(
-          selection = "ANNUAL",
-          scenario_model,
-          ci.data = FALSE,
-          use.saved = FALSE,
-          use.example = FALSE,
-          results = results_scenario
-        )
-      })
+    # biomassPlot <- e2e_compare_runs_bar(
+    #   selection = "AAM",
+    #   model1 = model,
+    #   use.saved1 = FALSE,
+    #   results_baseline,
+    #   model2 = scenario_model,
+    #   use.saved2 = FALSE,
+    #   results_scenario,
+    #   log.pc = "PC",
+    #   zone = "W",
+    #   bpmin = (-50),
+    #   bpmax = (+50),
+    #   maintitle = ""
+    # )
+    
+    #ggsave("biomassComparison.pdf", biomassPlot)
+    # output$downloadData_biomassComp <- downloadHandler(
+    #   filename = function() {
+    #     "biomassComparison.pdf"
+    #   },
+    #   content = function(file) {
+    #     file.copy("biomassComparison.pdf", file, overwrite=TRUE)
+    #   }
+    # )
+    # 
+    # if (!is.null(model)) {
+    #   enable("downloadData_biomassComp")
+    #   runjs("$('#dwnbutton_bm').removeAttr('title');")
+    # } else {
+    #   disable("downloadData_biomassComp")
+    #   runjs("$('#dwnbutton_bm').attr('title', 'Data not available');")
+    # }
     
     output$e2e_compare_runs_bar_aam <-
       renderPlot({
@@ -5710,6 +5997,7 @@ server <- function(input, output, session) {
           maintitle = ""
         )
       })
+    
     
     results_baseline <-
       e2e_run(model, nyears = input$year, csv.output = TRUE)
