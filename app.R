@@ -565,9 +565,7 @@ ui <- navbarPage(
     "Compare scenario results with baseline",
     tabPanel(
       title = "Ecological",
-      fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual averaged quantities of model components in the whole model region between your scenario model run and the baseline."),
-                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows ecology guilds inhabiting the water column, the lower plot in and on the seabed"),
-                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green bars to the right indicate that the (bio)mass was higher in the scenario run than the baseline, and vice-versa for red bars to the left.")))),
+      uiOutput("textCompAAM"),
       fluidRow(column(
         9,
         plotOutput("e2e_compare_runs_bar_aam",height = "600px")
@@ -588,9 +586,7 @@ ui <- navbarPage(
     ),
     tabPanel(
       title = "Fishery catches",
-      fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual fishery landings and discards in the whole model region between your scenario model run and the baseline."),
-                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows fishery landings (the quantity of catch which is brought ashore), the lower plot shows the discards (unwanted catch which is returned to the sea and assumed to be dead in the model)."),
-                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green and black bars to the right indicate that the landings or discards were higher in the scenario run than the baseline, and vice-versa for red and grey bars to the left.")))),
+      uiOutput("textCompFishCatch"),
       fluidRow(
         column(
           9,
@@ -1328,6 +1324,38 @@ server <- function(input, output, session) {
                                                     #HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Running the baseline will take a few seconds on our computer server. The results are saved in memory for you to explore using our graph drawing tools, or you can download the output as .csv files to analyse yourself if you wish (e.g. read them into Excel)."),
                                                     #HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Progress to the “Setup Scenario” tab to configure a new set of model inputs and then rerun the model and compare the results with your baseline run")))}) 
   
+  
+  
+  output$textCompAAM <- renderUI({
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runScenario == 0){
+      showModal(
+        modalDialog(
+          "Please choose a region, time period and run the scenario before viewing comparison plots",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
+    fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual averaged quantities of model components in the whole model region between your scenario model run and the baseline."),
+                                         HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows ecology guilds inhabiting the water column, the lower plot in and on the seabed"),
+                                         HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green bars to the right indicate that the (bio)mass was higher in the scenario run than the baseline, and vice-versa for red bars to the left."))))})
+  
+  
+  output$textCompFishCatch <- renderUI({
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runScenario == 0){
+      showModal(
+        modalDialog(
+          "Please choose a region, time period and run the scenario before viewing comparison plots",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
+    fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual fishery landings and discards in the whole model region between your scenario model run and the baseline."),
+                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows fishery landings (the quantity of catch which is brought ashore), the lower plot shows the discards (unwanted catch which is returned to the sea and assumed to be dead in the model)."),
+                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green and black bars to the right indicate that the landings or discards were higher in the scenario run than the baseline, and vice-versa for red and grey bars to the left."))))}) 
+  
+  
   output$textRunBaselineFiles <- renderUI({
     if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runBaseline == 0){
       showModal(
@@ -1344,12 +1372,38 @@ server <- function(input, output, session) {
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">\"anav_biomass files\" contain annual average mass of each component of the model in the named zone. The files includes data on layer and zone thickness and area so that the mass data can be converted to concentrations."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">\"landingcomposition\" and \"discardcomposition\" files contain a matrix of landed and discarded quantity by living guild and gear type. Units: (milli-Moles of nitrogen per m<sup>2</sup> of whole model region per year).")))}) 
 
-  output$textRunScenarioFiles <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The following .csv files are available to download : WHOLEDOMAIN_model_anav_biomass-scenario, OFFSHORE_model_anav_biomass-scenario, INSHORE_model_anav_biomass-scenario, OFFSHORE_landingcomposition_by_gear-scenario, OFFSHORE_discardcomposition_by_gear-scenario, INSHORE_landingcomposition_by_gear-scenario, INSHORE_discardcomposition_by_gear-scenario where scenario is an identifier for your scenario data."),
+  output$textRunScenarioFiles <- renderUI({
+    
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runScenario == 0){
+      showModal(
+        modalDialog(
+          "Please choose a region, time period and run the scenario before exploring scenario output data",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
+    
+
+    fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The following .csv files are available to download : WHOLEDOMAIN_model_anav_biomass-scenario, OFFSHORE_model_anav_biomass-scenario, INSHORE_model_anav_biomass-scenario, OFFSHORE_landingcomposition_by_gear-scenario, OFFSHORE_discardcomposition_by_gear-scenario, INSHORE_landingcomposition_by_gear-scenario, INSHORE_discardcomposition_by_gear-scenario where scenario is an identifier for your scenario data."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Data are scaled to represent the quantity per m<sup>2</sup> of the whole region for reach model."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">\"anav_biomass files\" contain annual average mass of each component of the model in the named zone. The files includes data on layer and zone thickness and area so that the mass data can be converted to concentrations."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">\"landingcomposition\" and \"discardcomposition\" files contain a matrix of landed and discarded quantity by living guild and gear type. Units: (milli-Moles of nitrogen per m<sup>2</sup> of whole model region per year).")))}) 
   
-  output$textRunScenarioModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">As with the baseline model, your scenario model will be run over and over with repeating annual cycles of your new input data. The number of years required to reach a new “steady state”, where each successive year of output is the same as the previous, will depend on the extent of changes you made to the inputs. Typically, 40 years will be sufficient to reach a new steady state for an extensive set of changes to the inputs."),
+  output$textRunScenarioModel <- renderUI({
+    
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant)){
+      showModal(
+        modalDialog(
+          "Please also choose a region and time period in 'Setup Model' before running a scenario",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
+    
+    
+    fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">As with the baseline model, your scenario model will be run over and over with repeating annual cycles of your new input data. The number of years required to reach a new “steady state”, where each successive year of output is the same as the previous, will depend on the extent of changes you made to the inputs. Typically, 40 years will be sufficient to reach a new steady state for an extensive set of changes to the inputs."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Use the slider to select different numbers of years and see how your changes to the inputs impact the ecosystem over time. For a “quick look” run for the default setting of 5 years. Otherwise use the slider to select 40 years to be certain of reach the new steady state."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Expect the model run-time to be about 4 seconds per year."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">The results are saved in memory for you to compare with your baseline model run in the “Scenario Results” tab, or you can download the output as .csv files to analyse yourself if you wish (e.g. read them into Excel). ")))}) 
@@ -5155,6 +5209,15 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$runScenario, {
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant)){
+      showModal(
+        modalDialog(
+          "Please choose a region, time period and run the scenario before exploring scenario output data",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
     showModal(
       modalDialog(
         "Please wait whilst your scenario model runs.....once completed you can compare the results with the baseline model using options from the Scenario Results tab",
@@ -5993,6 +6056,16 @@ server <- function(input, output, session) {
     
     output$e2e_compare_runs_bar_aam <-
       renderPlot({
+        if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runScenario == 0){
+          showModal(
+            modalDialog(
+              "Please choose a region, time period and run the scenario before viewing comparison plots",
+              footer = NULL,
+              easyClose = TRUE
+            )
+          )
+        }
+
         e2e_compare_runs_bar(
           selection = "AAM",
           model1 = model,
