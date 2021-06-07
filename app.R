@@ -20,7 +20,7 @@ source("createCatchPlotPerGear.R")
 source("createEDriversPlots.R")
 
 ui <- navbarPage(
-  "StrathE2E-app",
+  "StrathE2E-App",
   theme = shinytheme("cerulean"), #"strathe2e.css", 
              tabPanel(
                title = "Home",
@@ -34,7 +34,7 @@ ui <- navbarPage(
                fluidRow(
                   column(
                     6,
-                    h4("Marine Ecosystem Modelling Online"),
+                    h3("Marine Ecosystem Modelling Tool"),
                     br(),
                     #HTML("<p style = \"font-family: 'calibri'; font-si16pt \" class=\"mytooltip\">TEXT<span class=\"tooltiptext\">Tooltip text</span></p>"),
                     p(
@@ -86,7 +86,7 @@ ui <- navbarPage(
                fluidRow(
                  column(
                    7,
-                   h4("About StrathE2E Model"),
+                   h3("Background to StrathE2E"),
                    HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">StrathE2E is a computer simulation model of marine ecosystems. A first version of the model was developed during an EU 6th Framework project (RECLAM, <a href='https://cordis.europa.eu/project/id/44133/reporting'>REsolving CLimAtic IMpacts on fish stocks, 2007-2009</a>). The prototype was further developed and elaborated during a succession of EU and UK nationally funded projects:</p>"),
                    HTML("<ul><li>7th Framework <a href='https://cordis.europa.eu/project/id/264933/reporting'>EURO_BASIN (European Union Basin-scale Analysis, Synthesis and Integration, 2010-2014)</a>.</li></ul>"),
                    HTML("<ul><li>UK Natural Environment Research Council <a href='https://www.marine-ecosystems.org.uk/Home'>MERP (Marine Ecosystems Research Programme, 2014-2019)</a>.</li></ul>"),
@@ -103,23 +103,34 @@ ui <- navbarPage(
                fluidRow(
                  column(
                    12,
-                  h4("Model Overview"),
+                  h3("StrathE2E - some details of what it includes"),
                   br(),
-                  img(src = "Temperate model joined.svg", width = '50%', style = "display: block; margin-left: auto; margin-right: auto;"),
+                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \">StrathE2E is a so-called end-to-end model – it aims to represent the entire interconnected marine ecosystem from physics and chemistry, through microbes and plankton to whales and fisheries in continental shelf regions. To make this feasible, we simplify the ecology - all the plants and animals in the sea are grouped together into what we call <a href='#diagram2'>'guilds'</a> of species that have similar properties.</p>"),
+                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \">The region covered by each model is divided into a shallow inshore and a deeper offshore zone. The water column in the offshore zone is further divided into an upper (surface) layer, and a lower (deep) layer. The seabed in each zone is divided into up to four different sediment habitat types e.g.muddy, sandy, gravel, rocky. See <a href='#diagram3'>spatial structure</a> diagram"),
+                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Fisheries in StrathE2E are represented by a separate sub-model which is <a href='#diagram1'>connected</a> to the ecology part. In the sub-model, all of fishing gears used in a region are grouped together into up to 12 different types defined by their effectiveness at catching each of the ecology guilds, the spatial distribution of their activity, <span class=\"mytooltip\">seabed abrasion<span class=\"tooltiptext\">“Seabed abrasion” refers to the scraping or ploughing effects of dragging fishing gear along the seabed. The disturbance re-suspends sediment, releases nutrients and causes mortality  of seabed animals.</span></span> rates, and <span class=\"mytooltip\">discarding<span class=\"tooltiptext\">“Discards” are the components of catch which are returned to the sea due to being of no commercial value, or legal restrictions on size or catch limits. In the model, all discards are assumed to be dead.</span></span> patterns.</p>"),
                   br(),
-                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \">StrathE2E is a so-called end-to-end model – it aims to represent the entire interconnected marine ecosystem from physics and chemistry, through microbes and plankton to whales and fisheries in continental shelf regions. To make this feasible, we simplify the ecology - all the plants and animals in the sea are grouped together into what we call 'guilds' of species that have similar properties <a href='#diagram1'>(Diagram 1)</a>.</p>"),
-                   p(
-                     "The region covered by each model is divided into a shallow inshore and a deeper offshore zone. The water column in the offshore zone is further divided into an upper (surface) layer, and a lower (deep) layer. The seabed in each zone is divided into up to four different sediment habitat types e.g. muddy, sandy, gravel, rocky.",
-                     style = "font-family: 'calibri'; font-si16pt"
-                   ),
-                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Fisheries in StrathE2E are represented by a separate sub-model which is connected to the ecology part. In the sub-model, all of fishing gears used in a region are grouped together into up to 12 different types defined by their effectiveness at catching each of the ecology guilds, the spatial distribution of their activity, <span class=\"mytooltip\">seabed abrasion<span class=\"tooltiptext\">“Seabed abrasion” refers to the scraping or ploughing effects of dragging fishing gear along the seabed. The disturbance re-suspends sediment, releases nutrients and causes mortality  of seabed animals.</span></span> rates, and <span class=\"mytooltip\">discarding<span class=\"tooltiptext\">“Discards” are the components of catch which are returned to the sea due to being of no commercial value, or legal restrictions on size or catch limits. In the model, all discards are assumed to be dead.</span></span> patterns.</p>"),
-                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \"><b>Diagram 1:</b> <i>Ecological guilds or classes of dead and living material included in the StrathE2E model</i>"),
                   br(),
-                  column(
-                    9,
-                  img(src = "guilds2.svg", width = '75%', style = "display: block !important; margin: 0 auto !important; float:none !important;" ,id="diagram1")
+                  img(src = "guilds3.svg", width = '75%', style = "display: block !important; margin: 0 auto !important; float:none !important;" ,id="diagram2"),
+                  br(),
+                  HTML("<p style = \"font-family: 'calibri'; font-si16pt; \"><b>Ecological guilds:</b> <i>Ecological guilds or classes of dead and living material included in the StrathE2E model</i>"),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  img(src = "schematic2.svg", width = '70%', style = "display: block; margin-left: auto; margin-right: auto;" ,id="diagram3"),
+                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \"><b>The spatial structure:</b> <i>Ocean volumes and seafloor habitats in the model. StrathE2E is built around a simplified spatial structure which represents shelf seas. The exact geographical extent of the volumes and habitats will vary for each implementation depending on local conditions. You can see the locations of the habitats and shore zones under the “Setup Model” tab for each model implementation. These spatial units are connected to each other and to boundaries as shown to the right. The volumes connected to each spatial component are highlighted in blue.</i>"),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  br(),
+                  img(src = "Temperate model joined2.svg", width = '50%', style = "display: block; margin-left: auto; margin-right: auto;",id="diagram1"),
+                  br(),
+                  HTML("<p style = \"font-family: 'calibri'; font-si16pt \"><b>The sub-models:</b> <i>StrathE2E comprises two parts – a model of the marine ecology, and a model of fishing fleets.</i>")
                   )
-                 )
                  )
                ),
              tabPanel(
@@ -127,7 +138,7 @@ ui <- navbarPage(
                fluidRow(
                  column(
                    8,
-                   h4("How the Model Works"),
+                   h3("StathE2E - some technical details"),
                    p(
                      "StrathE2E is a set of interconnected mathematical equations which are solved by the computer programme to calculate at daily intervals:",
                      style = "font-family: 'calibri'; font-si16pt"
@@ -171,25 +182,22 @@ ui <- navbarPage(
              #     column(
              #       6,
              #       h5("There are four stages to using this website:"),
-             #       img(src = "Workflow.svg", width = '150%'),#, style = "display: block; margin-left: auto; margin-right: auto;"),
+             #       img(src = "Workflow2.svg", width = '150%'),#, style = "display: block; margin-left: auto; margin-right: auto;"),
              #       )
              #   )
              # )
              ),
   tabPanel(
-    title = "Using This Website",
+    title = "How to...",
     fluidRow(
-      column(
-        6,
-        h4("There are four stages to using this website:"),
-        img(src = "Workflow.svg", width = '150%'),#, style = "display: block; margin-left: auto; margin-right: auto;"),
-      )
+        h3("Navigating this website to generate your results"),
+        img(src = "Workflow2.svg", width = '75%', style = "display: block; margin-left: auto; margin-right: auto;"),
     )
   ),
   navbarMenu(
     "Setup Model",
     tabPanel(
-      title = "Select Region and Time Period",
+      title = "Select model region & time period",
       value="region",
       sidebarLayout(
         sidebarPanel(
@@ -216,9 +224,9 @@ ui <- navbarPage(
       )
     ),
     "----",
-    "View Model Inputs",
+    "View Model Inputs:",
     tabPanel(
-      title = "Environmental inputs",
+      title = "Environmental",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -251,7 +259,7 @@ ui <- navbarPage(
       )
     ),
     tabPanel(
-      title = "Fishery inputs",
+      title = "Fishery",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -272,7 +280,7 @@ ui <- navbarPage(
           uiOutput("UiFdriver"))
       )),
     "----",
-    "Run Model",
+    #"Run Model",
     tabPanel(
       title = "Run Model",
       fluidRow(
@@ -302,7 +310,7 @@ ui <- navbarPage(
       # ),
       column(
         6,
-        h3("Baseline output"),
+        h3("Download output from the baseline run"),
         useShinyjs(),
         div(
           id = "dwnbutton_b",
@@ -318,9 +326,9 @@ ui <- navbarPage(
       )
     ),
     "----",
-    "Plot Outputs",
+    "Plot Outputs:",
     tabPanel(
-      title = "Ecological outputs",
+      title = "Ecological",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -380,7 +388,7 @@ ui <- navbarPage(
   navbarMenu(
     "Setup Scenario ",
     "----",
-    "Modify Inputs",
+    "Build your own scenario model by modifying the inputs:",
     tabPanel(
       title = "Temperature",
       fluidRow(column(
@@ -401,7 +409,7 @@ ui <- navbarPage(
                                   HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">0 (zero) represents no change from the baseline model temperatures."))))
     ),
     tabPanel(
-      title = "Nutrient Inputs",
+      title = "River and atmosphere nutrients",
       # fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Use the slider bars to rescale the atmospheric and river nutrient inputs by a constant factor throughout the year."),
       #                                      HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">1 represents no change from the baseline model inputs; 0.5 means that inputs are halved; 2 means that inputs are doubled."),
       #                                      HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Atmospheric inputs are deposited as dust or in rainfall, and originate from both natural processes (lightning and volcanic activity) and emissions from industry and burning of fossil fuels."),
@@ -466,10 +474,10 @@ ui <- navbarPage(
       title = "Fishing Activity",
       uiOutput("uiFishingActivity")
     ),
-    tabPanel(title = "Seabed Abrasion",
+    tabPanel(title = "Seabed abrasion rate per gear",
       uiOutput("uiSeabedAbrasian")),
     tabPanel(
-      title = "Guild Discard Per Gear",
+      title = "Guild discard rate per gear",
       sidebarLayout(sidebarPanel(
         selectInput(
           "selectedParameter",
@@ -494,9 +502,9 @@ ui <- navbarPage(
       mainPanel (uiOutput("ui")))
     ),
     "----",
-    "Run scenario",
+    #"Run scenario",
     tabPanel(
-      title = "Run Scenario",
+      title = "Run your scenario model",
       sliderInput(
         "year",
         "Year:",
@@ -519,7 +527,7 @@ ui <- navbarPage(
   navbarMenu(
     "Scenario Results",
     tabPanel(
-      title = "Download Scenario Output",
+      title = "Download your scenario outputs",
       # sliderInput(
       #   "year",
       #   "Year:",
@@ -554,31 +562,34 @@ ui <- navbarPage(
       )
       )),
     "----",
-    "Compare Baseline With Scenario",
+    "Compare scenario results with baseline",
     tabPanel(
-      title = "Compare Biomasses",
+      title = "Ecological",
       fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual averaged quantities of model components in the whole model region between your scenario model run and the baseline."),
+                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows ecology guilds inhabiting the water column, the lower plot in and on the seabed"),
                                            HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green bars to the right indicate that the (bio)mass was higher in the scenario run than the baseline, and vice-versa for red bars to the left.")))),
       fluidRow(column(
         9,
         plotOutput("e2e_compare_runs_bar_aam",height = "600px")
-      ),
-      column(
-        6,
-        useShinyjs(),
-        div(
-          id = "dwnbutton_bm",
-          downloadButton(
-            "downloadData_biomassComp",
-            "Download biomass comparison",
-            disabled = "disabled"
-          )
-        )
-      ))
+      )
+      # column(
+      #   6,
+      #   useShinyjs(),
+      #   div(
+      #     id = "dwnbutton_bm",
+      #     downloadButton(
+      #       "downloadData_biomassComp",
+      #       "Download biomass comparison",
+      #       disabled = "disabled"
+      #     )
+      #   )
+      # )
+      )
     ),
     tabPanel(
-      title = "Compare Fishery Catches",
+      title = "Fishery catches",
       fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual fishery landings and discards in the whole model region between your scenario model run and the baseline."),
+                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows fishery landings (the quantity of catch which is brought ashore), the lower plot shows the discards (unwanted catch which is returned to the sea and assumed to be dead in the model)."),
                                            HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green and black bars to the right indicate that the landings or discards were higher in the scenario run than the baseline, and vice-versa for red and grey bars to the left.")))),
       fluidRow(
         column(
@@ -1313,9 +1324,9 @@ server <- function(input, output, session) {
   
   output$textCatchGear <- renderUI({fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Annual catches of each guild by the selected gear type, broken down by landings and discards. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}) 
   
-  output$textRunBaselineModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Run your selected  model  here in its 'out of the box' state"),
-                                                    HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Running the baseline will take a few seconds on our computer server. The results are saved in memory for you to explore using our graph drawing tools, or you can download the output as .csv files to analyse yourself if you wish (e.g. read them into Excel)."),
-                                                    HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Progress to the “Setup Scenario” tab to configure a new set of model inputs and then rerun the model and compare the results with your baseline run")))}) 
+  output$textRunBaselineModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Each model is configured so that it outputs annual cycles of daily values of everything in the system,  averaged over the selected period of years. We do this by running the model over and over with repeating annual cycles of input data until the outputs are stable from one year to the next. We call this a \"steady state\" which represents the \"climatology\" of the system, and should match the average conditions in the sea for any given day of the year.")))})
+                                                    #HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Running the baseline will take a few seconds on our computer server. The results are saved in memory for you to explore using our graph drawing tools, or you can download the output as .csv files to analyse yourself if you wish (e.g. read them into Excel)."),
+                                                    #HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Progress to the “Setup Scenario” tab to configure a new set of model inputs and then rerun the model and compare the results with your baseline run")))}) 
   
   output$textRunBaselineFiles <- renderUI({
     if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runBaseline == 0){
@@ -1338,10 +1349,10 @@ server <- function(input, output, session) {
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">\"anav_biomass files\" contain annual average mass of each component of the model in the named zone. The files includes data on layer and zone thickness and area so that the mass data can be converted to concentrations."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">\"landingcomposition\" and \"discardcomposition\" files contain a matrix of landed and discarded quantity by living guild and gear type. Units: (milli-Moles of nitrogen per m<sup>2</sup> of whole model region per year).")))}) 
   
-  output$textRunScenarioModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Run your scenario  model  here."),
-                                                              HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Use the slider bar to select the number of years to run. Up to 40 years may be required to arrive at a new steady state depending on the changes you have made from the baseline. However the extent of changes within shorter period may also be of interest."),
-                                                              HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">The model will take about 2 sec per year to run on our server."),
-                                                              HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">The results are saved in memory for you to compare with your baseline model run, or you can download the output as .csv files to analyse yourself if you wish (e.g. read them into Excel).")))}) 
+  output$textRunScenarioModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">As with the baseline model, your scenario model will be run over and over with repeating annual cycles of your new input data. The number of years required to reach a new “steady state”, where each successive year of output is the same as the previous, will depend on the extent of changes you made to the inputs. Typically, 40 years will be sufficient to reach a new steady state for an extensive set of changes to the inputs."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Use the slider to select different numbers of years and see how your changes to the inputs impact the ecosystem over time. For a “quick look” run for the default setting of 5 years. Otherwise use the slider to select 40 years to be certain of reach the new steady state."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Expect the model run-time to be about 4 seconds per year."),
+                                                              HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">The results are saved in memory for you to compare with your baseline model run in the “Scenario Results” tab, or you can download the output as .csv files to analyse yourself if you wish (e.g. read them into Excel). ")))}) 
   
   output$textDiscardGuild <- renderUI({fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Use the slider bars to change the discard rate of each guild by each fishing gear."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Baseline discard rates are shown in blue boxes. Discard rate can be varied between 0 and 1."),
@@ -4384,7 +4395,7 @@ server <- function(input, output, session) {
     }
     showModal(
       modalDialog(
-        "Please wait whilst model runs baseline. Once completed you can explore plots on model exploration tab menu",
+        "Please wait whilst model runs baseline. Once completed you can explore outputs from the \"Model Results\" tab menu",
         footer = NULL
       )
     )
