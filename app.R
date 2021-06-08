@@ -284,6 +284,7 @@ ui <- navbarPage(
     tabPanel(
       title = "Run Model",
       fluidRow(
+        style='padding:10px;',
           column(
           6,
           h3("Run Baseline"),
@@ -300,6 +301,7 @@ ui <- navbarPage(
     tabPanel(
       title = "Download outputs",
       fluidRow(
+        style='padding:10px;',
       #   column(
       #   6,
       #   h3("Run Baseline"),
@@ -514,6 +516,7 @@ ui <- navbarPage(
         width = "100%"
       ),
       fluidRow(
+        style='padding:10px;',
         column(
           6,
           h3("Run Scenario"),
@@ -537,6 +540,7 @@ ui <- navbarPage(
       #   width = "100%"
       # ),
       fluidRow(
+        style='padding:10px;',
       # column(
       #   6,
       #   h3("Run Scenario"),
@@ -6021,20 +6025,6 @@ server <- function(input, output, session) {
               nyears = input$year,
               csv.output = TRUE)
     
-    # biomassPlot <- e2e_compare_runs_bar(
-    #   selection = "AAM",
-    #   model1 = model,
-    #   use.saved1 = FALSE,
-    #   results_baseline,
-    #   model2 = scenario_model,
-    #   use.saved2 = FALSE,
-    #   results_scenario,
-    #   log.pc = "PC",
-    #   zone = "W",
-    #   bpmin = (-50),
-    #   bpmax = (+50),
-    #   maintitle = ""
-    # )
     
     #ggsave("biomassComparison.pdf", biomassPlot)
     # output$downloadData_biomassComp <- downloadHandler(
