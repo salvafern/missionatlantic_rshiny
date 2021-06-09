@@ -572,20 +572,20 @@ ui <- navbarPage(
       uiOutput("textCompAAM"),
       fluidRow(column(
         9,
-        plotOutput("e2e_compare_runs_bar_aam",height = "600px")
+        plotOutput("e2e_compare_runs_bar_aam",width = "100%")
+      ),
+      column(
+        6,
+        useShinyjs(),
+        div(
+          id = "dwnbutton_bm",
+          downloadButton(
+            "downloadData_biomassComp",
+            "Download biomass comparison",
+            disabled = "disabled"
+          )
+        )
       )
-      # column(
-      #   6,
-      #   useShinyjs(),
-      #   div(
-      #     id = "dwnbutton_bm",
-      #     downloadButton(
-      #       "downloadData_biomassComp",
-      #       "Download biomass comparison",
-      #       disabled = "disabled"
-      #     )
-      #   )
-      # )
       )
     ),
     tabPanel(
@@ -594,7 +594,7 @@ ui <- navbarPage(
       fluidRow(
         column(
           9,
-          plotOutput("e2e_compare_runs_bar_catch",height = "600px")
+          plotOutput("e2e_compare_runs_bar_catch",width = 20, height = 30)
         )
       )
     )
@@ -672,6 +672,23 @@ ui <- navbarPage(
 )
 
 server <- function(input, output, session) {
+  
+  plotInput = function(model,results_baseline,scenario_model,results_scenario) {
+    e2e_compare_runs_bar(
+      selection = "AAM",
+      model1 = model,
+      use.saved1 = FALSE,
+      results_baseline,
+      model2 = scenario_model,
+      use.saved2 = FALSE,
+      results_scenario,
+      log.pc = "PC",
+      zone = "W",
+      bpmin = (-50),
+      bpmax = (+50),
+      maintitle = ""
+    )
+  }
   
   output$uiFishingActivity <- renderUI({
     # current chosen model on dropdown lists
@@ -6025,24 +6042,44 @@ server <- function(input, output, session) {
               nyears = input$year,
               csv.output = TRUE)
     
-    
-    #ggsave("biomassComparison.pdf", biomassPlot)
+    # biomassPlot <- e2e_compare_runs_bar(
+    #   selection = "AAM",
+    #   model1 = model,
+    #   use.saved1 = FALSE,
+    #   results_baseline,
+    #   model2 = scenario_model,
+    #   use.saved2 = FALSE,
+    #   results_scenario,
+    #   log.pc = "PC",
+    #   zone = "W",
+    #   bpmin = (-50),
+    #   bpmax = (+50),
+    #   maintitle = ""
+    # )
+    #ggsave( "biomassComparison.png", plot = plotInput(), device = device)
     # output$downloadData_biomassComp <- downloadHandler(
     #   filename = function() {
-    #     "biomassComparison.pdf"
+    #     "biomassComparison.png"
     #   },
     #   content = function(file) {
-    #     file.copy("biomassComparison.pdf", file, overwrite=TRUE)
+    #     file.copy("biomassComparison.png", file, overwrite=TRUE)
     #   }
     # )
-    # 
-    # if (!is.null(model)) {
-    #   enable("downloadData_biomassComp")
-    #   runjs("$('#dwnbutton_bm').removeAttr('title');")
-    # } else {
-    #   disable("downloadData_biomassComp")
-    #   runjs("$('#dwnbutton_bm').attr('title', 'Data not available');")
-    # }
+    
+    output$downloadData_biomassComp <- downloadHandler(
+      filename = function() { paste("biomassComparison.png", '.png', sep='') },
+      content = function(file) {
+        ggsave("biomassComparison.png", plot = plotInput(model,results_baseline,scenario_model,results_scenario), device = png)
+        file.copy("biomassComparison.png", file, overwrite=TRUE)
+      })
+
+    if (!is.null(scenario_model)) {
+      enable("downloadData_biomassComp")
+      runjs("$('#dwnbutton_bm').removeAttr('title');")
+    } else {
+      disable("downloadData_biomassComp")
+      runjs("$('#dwnbutton_bm').attr('title', 'Data not available');")
+    }
     
     output$e2e_compare_runs_bar_aam <-
       renderPlot({
