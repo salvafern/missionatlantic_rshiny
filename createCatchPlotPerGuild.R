@@ -74,8 +74,19 @@ createCatchPlotPerGuild	<- function( model, results, dsa ) {
   discard_data2plot_df$zone <- rownames(discard_data2plot_df)
   discard_data2plot_df$type <- c("discard")
   
-  landings_long <- gather(landings_data2plot_df, gear, catch, Pelagic_Trawl.Seine:Whaler, factor_key=TRUE)
-  discard_long <- gather(discard_data2plot_df, gear, catch, Pelagic_Trawl.Seine:Whaler, factor_key=TRUE)
+  if("Whaler"  %in%  gear_labels){
+    # print("In Whaler")
+    landings_long <- gather(landings_data2plot_df, gear, catch, Pelagic_Trawl.Seine:Whaler, factor_key=TRUE)
+    discard_long <- gather(discard_data2plot_df, gear, catch, Pelagic_Trawl.Seine:Whaler, factor_key=TRUE)
+  } else if("KelpHarvester" %in%  gear_labels){
+    # print("In KelpHarvester")
+    landings_long <- gather(landings_data2plot_df, gear, catch, Pelagic_Trawl.Seine:KelpHarvester, factor_key=TRUE)
+    discard_long <- gather(discard_data2plot_df, gear, catch, Pelagic_Trawl.Seine:KelpHarvester, factor_key=TRUE)
+  } else {
+    # print("In else Whaler")
+    landings_long <- gather(landings_data2plot_df, gear, catch, Pelagic_Trawl.Seine:Whaler, factor_key=TRUE)
+    discard_long <- gather(discard_data2plot_df, gear, catch, Pelagic_Trawl.Seine:Whaler, factor_key=TRUE)  
+  }
   
   combined <- rbind(landings_long, discard_long)
   combined$x <- factor(paste(combined$gear, combined$zone),levels = unique(paste(combined$gear, combined$zone)))
