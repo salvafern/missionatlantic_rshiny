@@ -13,23 +13,22 @@ source("createCatchPlotPerGuild.R")
 source("createCatchPlotPerGear.R")
 source("createEDriversPlots.R")
 
-#selectedLocation = "North_Sea"
-#selectedVariant = "1970-1999" #North_Sea
-#selectedVariant <- "2003-2013" #North_Sea
-
-#selectedLocation <- "Celtic_Sea"
-#selectedVariant <- "2003-2013" #Celtic_Sea
-
+selectedLocation = "Celtic_Sea"
+selectedVariant <- "2003-2013" 
 
 #model <- e2e_read(selectedlocation, selectedVariant,models.path="Models",model.ident = "baseline")
 
-model <- e2e_read("North_Sea", "1970-1999",models.path="Models",model.ident = "baseline")
+model <- e2e_read("Celtic_Sea", "2003-2013",models.path="Models",model.ident = "baseline")
 results_baseline <- e2e_run(model, nyears = 5, csv.output = TRUE)
-
+resultDirBaseline <- toString(model$setup$resultsdir)
 
 png(filename = paste0(selectedLocation, "_" ,selectedVariant, "_", "EnvironmentalInput","_","SurfaceIrradiance.png"))
 surfaceIrr <- createEDriversPlots(model,selection = "Surface irradiance")
 dev.off()
+
+# png(filename = file.path("EnvironmentalInput", paste0(selectedLocation, "_" ,selectedVariant,"_","SurfaceIrradiance.png")))
+# surfaceIrr <- createEDriversPlots(model,selection = "Surface irradiance")
+# dev.off()
 
 png(filename = paste0(selectedLocation, "_" ,selectedVariant, "_", "EnvironmentalInput","_","SuspParticMatter.png"))
 suspPart <- createEDriversPlots(model,selection = "Susp.partic. matter")
