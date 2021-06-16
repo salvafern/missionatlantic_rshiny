@@ -324,6 +324,21 @@ ui <- navbarPage(
         ),
         tags$br(),
         uiOutput("textRunBaselineFiles"),
+      ),
+      column(
+        6,
+        h3("Download plots from the baseline run"),
+        useShinyjs(),
+        div(
+          id = "dwnbutton_bp",
+          downloadButton(
+            "downloadData_baselinePlots",
+            "Download plots as png files",
+            disabled = "disabled"
+          )
+        ),
+        tags$br(),
+        uiOutput("textRunBaselinePlots")
       )
       )
     ),
@@ -1127,6 +1142,7 @@ server <- function(input, output, session) {
     selectedYears <- input$selectedVariant
     # current chosen model on dropdown lists
     model <- e2e_read(selectedModel, selectedYears, models.path="Models")
+    
     if(is.null(model)){
     gears = list(
       "Pelagic_Trawl+Seine",
@@ -1145,7 +1161,6 @@ server <- function(input, output, session) {
     else {
       gears = chooseGear()
     }
-   
     selectInput("outputGearType",
                 "Select Gear",
                 choices = gears,
@@ -1405,6 +1420,18 @@ server <- function(input, output, session) {
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">\"anav_biomass files\" contain annual average mass of each component of the model in the named zone. The files includes data on layer and zone thickness and area so that the mass data can be converted to concentrations."),
                                                               HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">\"landingcomposition\" and \"discardcomposition\" files contain a matrix of landed and discarded quantity by living guild and gear type. Units: (milli-Moles of nitrogen per m<sup>2</sup> of whole model region per year).")))}) 
 
+  output$textRunBaselinePlots <- renderUI({
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runBaseline == 0){
+      showModal(
+        modalDialog(
+          "Please choose a region, time period and run the model before exploring plots",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
+    fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">All of the available plots of input data and outputs from the baseline model run have been saved as .png files and gathered together here in a zip-file for you to download. The download contains a README file to help you locate the plot you need.")))}) 
+  
   output$textRunScenarioFiles <- renderUI({
     
     if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runScenario == 0){
@@ -4512,6 +4539,26 @@ server <- function(input, output, session) {
       disable("downloadData_baseline1")
       runjs("$('#dwnbutton_b').attr('title', 'Data not available');")
     }
+    
+    output$downloadData_baselinePlots <- downloadHandler(
+      filename = function() {
+        paste0("baselinePlots_", uuid, ".zip")
+      },
+      content = function(file) {
+        plotsPath = file.path(model$setup$model.path,"Plots")
+        print(plotsPath)
+        zip(zipfile=file, files=plotsPath)
+      },
+      contentType = "application/zip"
+    )
+    if (!is.null(model)) {
+      enable("downloadData_baselinePlots")
+      runjs("$('#dwnbutton_bp').removeAttr('title');")
+    } else{
+      disable("downloadData_baselinePlots")
+      runjs("$('#dwnbutton_bp').attr('title', 'Data not available');")
+    }
+    
     output$ecoPlot_nut_phyt_Detritus <-
       renderPlot({
         createEcoplots(
@@ -6056,9 +6103,9 @@ server <- function(input, output, session) {
     
     results_baseline <-
       e2e_run(model, nyears = input$year, csv.output = TRUE)
-    
+    biomassCompFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","biomassComparison.png")
     output$downloadData_biomassComp <- downloadHandler(
-      filename = "biomassComparison.png",
+      filename = biomassCompFilename,
       content = function(file) {
         png(filename = file)
         e2e_compare_runs_bar(
@@ -6113,9 +6160,9 @@ server <- function(input, output, session) {
           maintitle = ""
         )
       })
-    
+    catchCompFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","catchComparison.png")
     output$downloadData_catchComp <- downloadHandler(
-      filename = "catchComparison.png",
+      filename = catchCompFilename,
       content = function(file) {
         png(filename = file)
         e2e_compare_runs_bar(
