@@ -18,6 +18,8 @@ source("createEcoplots.R")
 source("createCatchPlotPerGuild.R")
 source("createCatchPlotPerGear.R")
 source("createEDriversPlots.R")
+source("e2e_compare_runs_bar_gg.R")
+source("compareTwoRunsAAM.R")
 
 ui <- navbarPage(
   "StrathE2E-App",
@@ -586,11 +588,8 @@ ui <- navbarPage(
       title = "Ecological",
       uiOutput("textCompAAM"),
       fluidRow(column(
-        9,
-        plotOutput("e2e_compare_runs_bar_aam",width = "600px")
-      ),
-      column(
         6,
+        plotOutput("e2e_compare_runs_bar_aam"),
         useShinyjs(),
         div(
           id = "dwnbutton_bm",
@@ -605,14 +604,11 @@ ui <- navbarPage(
     ),
     tabPanel(
       title = "Fishery catches",
-      uiOutput("textCompFishCatch"),
       fluidRow(
+        uiOutput("textCompFishCatch"),
         column(
-          9,
-          plotOutput("e2e_compare_runs_bar_catch",width = "600px")
-        ),
-        column(
-          6,
+          5,
+          plotOutput("e2e_compare_runs_bar_catch"),
           useShinyjs(),
           div(
             id = "dwnbutton_catch",
@@ -1384,9 +1380,9 @@ server <- function(input, output, session) {
         )
       )
     }
-    fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual averaged quantities of model components in the whole model region between your scenario model run and the baseline."),
+    column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual averaged quantities of model components in the whole model region between your scenario model run and the baseline."),
                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows ecology guilds inhabiting the water column, the lower plot in and on the seabed"),
-                                         HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green bars to the right indicate that the (bio)mass was higher in the scenario run than the baseline, and vice-versa for red bars to the left."))))})
+                                         HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green bars to the right indicate that the (bio)mass was higher in the scenario run than the baseline, and vice-versa for red bars to the left.")))})
   
   
   output$textCompFishCatch <- renderUI({
@@ -1399,9 +1395,9 @@ server <- function(input, output, session) {
         )
       )
     }
-    fluidRow(column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual fishery landings and discards in the whole model region between your scenario model run and the baseline."),
+    column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual fishery landings and discards in the whole model region between your scenario model run and the baseline."),
                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows fishery landings (the quantity of catch which is brought ashore), the lower plot shows the discards (unwanted catch which is returned to the sea and assumed to be dead in the model)."),
-                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green and black bars to the right indicate that the landings or discards were higher in the scenario run than the baseline, and vice-versa for red and grey bars to the left."))))}) 
+                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green and black bars to the right indicate that the landings or discards were higher in the scenario run than the baseline, and vice-versa for red and grey bars to the left.")))}) 
   
   
   output$textRunBaselineFiles <- renderUI({
@@ -6145,7 +6141,7 @@ server <- function(input, output, session) {
           )
         }
 
-        e2e_compare_runs_bar(
+        e2e_compare_runs_bar_gg(
           selection = "AAM",
           model1 = model,
           use.saved1 = FALSE,
