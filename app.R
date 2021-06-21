@@ -7,6 +7,8 @@ library(shinyjs)
 library(ggplot2)
 library(tidyr)
 library(uuid)
+library(ggpubr)
+theme_set(theme_pubr())
 #library(shinyAce)
 #library(sendmailR)
 
@@ -69,7 +71,7 @@ ui <- navbarPage(
                fluidRow(
                  column(
                    4,
-                   tags$a(img(src = "Mission Atlantic Logo Col-01.png", width = '60%',style = "text-align: center; padding:10px;10px;10px;10px;"),href="https://missionatlantic.eu/")
+                   tags$a(img(src = "Mission Atlantic Logo Col-01.png", width = '60%',style = "text-align: center; padding:10px;10px;10px;10px;"),href="https://missionatlantic.eu/", target="_blank")
                  ),
                  column(
                    4,
