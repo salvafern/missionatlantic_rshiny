@@ -5,24 +5,7 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
   elt <- StrathE2E2:::elt
   start_par = par()$mfrow
   on.exit(par(mfrow = start_par))
-  if ((zone %in% c("O", "I", "W")) == FALSE) {
-    stop("Retry with argument zone = O, I or W (upper case in double quotes)! \n")
-  }
-  if ((log.pc %in% c("LG", "PC")) == FALSE) {
-    stop("Retry with argument log.pc = LG or PC (upper case in double quotes)! \n")
-  }
-  if (bpmin > 0) {
-    stop("bpmin argument should be a negative value. Try again! \n")
-  }
-  if (bpmax < 0) {
-    stop("bpmax argument should be a positive value. Try again! \n")
-  }
-  if (log.pc == "LG" & (bpmin < (-2) | bpmax > 2) == TRUE) {
-    message("bpmin and/or bpmax arguments seem very large given log.pc = LG. Are you sure!")
-  }
-  if (log.pc == "PC" & (bpmin > (-1) | bpmax < 1) == TRUE) {
-    message("bpmin and/or bpmax arguments seem very small given log.pc = PC. Are you sure!")
-  }
+
   if (from.csv1 == FALSE) {
     print("Using baseline data held in memory from an existing model run")
     final.year.outputs1 <- elt(results1, "final.year.outputs")
@@ -213,19 +196,20 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
     xlabel <- "Log10 change in annual average mass"
   
   changewater2p_df <- data.frame(changewater2p[, 1])
+  names(changewater2p_df)[1] <- "x"
   changewater2p_df$y <- rownames(changewater2p)
-  
-  barplot <-  ggplot(data = changewater2p_df) +
-    geom_bar(stat = "identity") +
+  changewater2p_df$colour <- ifelse(changewater2p_df$x < 0, "negative","positive")
+  #View(changewater2p_df)
+
+  barplot <-  ggplot(data = changewater2p_df,aes(x = x, y = y)) +
+    geom_bar(stat = "identity",aes(fill = colour)) +
+    scale_fill_manual(values=c(negative="firebrick1",positive="green")) +
     ggtitle(maintitle) +
+    coord_cartesian(xlim=c(-50,50)) +
+    #xlim(-40,40) +
     xlab(xlabel) + #+ ylab("Catch") +
-    theme(panel.grid.minor.x = element_blank()) + 
-    coord_flip()
+    theme(panel.grid.minor.x = element_blank()) 
     
-  # barplot(changewater2p[, 1], horiz = TRUE, col = wcolvec,
-  #         names.arg = rownames(changewater2p), las = 1,
-  #         xlim = c(bpmin,bpmax), cex.axis = 0.9, cex.names = 0.75, main = maintitle,
-  #         cex.main = 0.9)
   for (zz in 1:length(overlabelwater)) {
     text(0.7 * bpmin, ((zz - 0.4) * 1.2), overlabelwater[zz], 
          cex = 0.7)
@@ -239,12 +223,8 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
     text(0.7 * bpmin, ((zz - 0.3) * 1.17), overlabelseabed[zz], 
          cex = 0.8)
   }
-  if (log.pc == "PC") 
-    mtext("Percent change in annual average mass", cex = 1, 
-          side = 1, line = 2)
-  if (log.pc == "LG") 
-    mtext("Log10 change in annual average mass", cex = 1, 
-          side = 1, line = 2)
   abline(v = 0)
   list(changewater = changewater, changeseabed = changeseabed)
+  
+  return(barplot)
 }
