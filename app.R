@@ -22,6 +22,7 @@ source("createCatchPlotPerGear.R")
 source("createEDriversPlots.R")
 source("e2e_compare_runs_bar_gg.R")
 source("compareTwoRunsAAM.R")
+source("compareTwoRunsCatch.R")
 
 ui <- navbarPage(
   "StrathE2E-App",
@@ -594,20 +595,10 @@ ui <- navbarPage(
       wellPanel(
         sliderInput(
           "axisMaxPos",
-          "Max of x axis scale:",
-          min = 40,
-          max = 300,
-          value = 40.0,
-          width = "100%"
-        )
-      ),
-      wellPanel(
-        sliderInput(
-          "axisMinPos",
-          "Min of x axis scale:",
+          "x axis scale range:",
           min = -300,
-          max = -40,
-          value = -40.0,
+          max = 300,
+          value = c(-40, 40),
           width = "100%"
         )
       )),
@@ -629,7 +620,18 @@ ui <- navbarPage(
     tabPanel(
       title = "Fishery catches",
       fluidRow(
+        column(5,
         uiOutput("textCompFishCatch"),
+        wellPanel(
+          sliderInput(
+            "axisMaxPosCatch",
+            "x axis scale range:",
+            min = -300,
+            max = 300,
+            value = c(-40, 40),
+            width = "100%"
+          )
+        )),
         column(
           5,
           plotOutput("e2e_compare_runs_bar_catch"),
@@ -725,7 +727,7 @@ server <- function(input, output, session) {
   results_scenario_reactive <- reactiveVal()
   scenario_model_reactive <- reactiveVal()
 
-  reactivePlot_e2e_compare_runs_bar_gg <- reactive({
+  reactivePlot_e2e_compare_runs_bar_aam <- reactive({
     e2e_compare_runs_bar_gg(
       selection = "AAM",
       model1 = model_reactive(),
@@ -736,8 +738,24 @@ server <- function(input, output, session) {
       results_scenario_reactive(),
       log.pc = "PC",
       zone = "W",
-      bpmin = input$axisMinPos,
-      bpmax = input$axisMaxPos,
+      bpmin = input$axisMaxPos[1],
+      bpmax = input$axisMaxPos[2],
+      maintitle = "")
+  })
+  
+  reactivePlot_e2e_compare_runs_bar_catch <- reactive({
+    e2e_compare_runs_bar_gg(
+      selection = "CATCH",
+      model1 = model_reactive(),
+      use.saved1 = FALSE,
+      results_baseline_reactive(),
+      model2 = scenario_model_reactive(),
+      use.saved2 = FALSE,
+      results_scenario_reactive(),
+      log.pc = "PC",
+      zone = "W",
+      bpmin = input$axisMaxPosCatch[1],
+      bpmax = input$axisMaxPosCatch[2],
       maintitle = "")
   })
   
@@ -1423,9 +1441,9 @@ server <- function(input, output, session) {
         )
       )
     }
-    column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual fishery landings and discards in the whole model region between your scenario model run and the baseline."),
+    wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual fishery landings and discards in the whole model region between your scenario model run and the baseline."),
                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows fishery landings (the quantity of catch which is brought ashore), the lower plot shows the discards (unwanted catch which is returned to the sea and assumed to be dead in the model)."),
-                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green and black bars to the right indicate that the landings or discards were higher in the scenario run than the baseline, and vice-versa for red and grey bars to the left.")))}) 
+                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green and black bars to the right indicate that the landings or discards were higher in the scenario run than the baseline, and vice-versa for red and grey bars to the left."))}) 
   
   
   output$textRunBaselineFiles <- renderUI({
@@ -6138,20 +6156,7 @@ server <- function(input, output, session) {
       filename = biomassCompFilename,
       content = function(file) {
         png(filename = file)
-        reactivePlot_e2e_compare_runs_bar_gg()
-        # e2e_compare_runs_bar_gg(
-        #   selection = "AAM",
-        #   model1 = model,
-        #   use.saved1 = FALSE,
-        #   results_baseline,
-        #   model2 = scenario_model,
-        #   use.saved2 = FALSE,
-        #   results_scenario,
-        #   log.pc = "PC",
-        #   zone = "W",
-        #   bpmin = input$axisMinPos,
-        #   bpmax = input$axisMaxPos,
-        #   maintitle = "")
+        reactivePlot_e2e_compare_runs_bar_aam()
         dev.off()
       }
     )
@@ -6175,9 +6180,16 @@ server <- function(input, output, session) {
             )
           )
         }
-        reactivePlot_e2e_compare_runs_bar_gg()
-        # e2e_compare_runs_bar_gg(
-        #   selection = "AAM",
+        reactivePlot_e2e_compare_runs_bar_aam()
+      })
+    catchCompFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","catchComparison.png")
+    output$downloadData_catchComp <- downloadHandler(
+      filename = catchCompFilename,
+      content = function(file) {
+        png(filename = file)
+        reactivePlot_e2e_compare_runs_bar_catch()
+        # e2e_compare_runs_bar(
+        #   selection = "CATCH",
         #   model1 = model,
         #   use.saved1 = FALSE,
         #   results_baseline,
@@ -6186,30 +6198,10 @@ server <- function(input, output, session) {
         #   results_scenario,
         #   log.pc = "PC",
         #   zone = "W",
-        #   bpmin = input$axisMinPos,
-        #   bpmax = input$axisMaxPos,
+        #   bpmin = (-50),
+        #   bpmax = (+50),
         #   maintitle = ""
-        # )
-      })
-    catchCompFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","catchComparison.png")
-    output$downloadData_catchComp <- downloadHandler(
-      filename = catchCompFilename,
-      content = function(file) {
-        png(filename = file)
-        e2e_compare_runs_bar(
-          selection = "CATCH",
-          model1 = model,
-          use.saved1 = FALSE,
-          results_baseline,
-          model2 = scenario_model,
-          use.saved2 = FALSE,
-          results_scenario,
-          log.pc = "PC",
-          zone = "W",
-          bpmin = (-50),
-          bpmax = (+50),
-          maintitle = ""
-        )
+        #)
         dev.off()
       }
     )
@@ -6224,20 +6216,21 @@ server <- function(input, output, session) {
     
     output$e2e_compare_runs_bar_catch <-
       renderPlot({
-        e2e_compare_runs_bar(
-          selection = "CATCH",
-          model1 = model,
-          use.saved1 = FALSE,
-          results_baseline,
-          model2 = scenario_model,
-          use.saved2 = FALSE,
-          results_scenario,
-          log.pc = "PC",
-          zone = "W",
-          bpmin = (-50),
-          bpmax = (+50),
-          maintitle = ""
-        )
+        reactivePlot_e2e_compare_runs_bar_catch()
+        # e2e_compare_runs_bar(
+        #   selection = "CATCH",
+        #   model1 = model,
+        #   use.saved1 = FALSE,
+        #   results_baseline,
+        #   model2 = scenario_model,
+        #   use.saved2 = FALSE,
+        #   results_scenario,
+        #   log.pc = "PC",
+        #   zone = "W",
+        #   bpmin = (-50),
+        #   bpmax = (+50),
+        #   maintitle = ""
+        # )
       })
     removeModal()
     uuid_s <- UUIDgenerate()

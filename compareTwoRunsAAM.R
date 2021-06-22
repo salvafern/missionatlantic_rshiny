@@ -3,8 +3,6 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
           bpmin = (-50), bpmax = (+50), maintitle = "") 
 {
   elt <- StrathE2E2:::elt
-  start_par = par()$mfrow
-  on.exit(par(mfrow = start_par))
 
   if (from.csv1 == FALSE) {
     print("Using baseline data held in memory from an existing model run")
@@ -184,12 +182,7 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
       }
     }
   }
-  wcolvec <- rep("green", length(changewater2p[, 1]))
-  wcolvec[which(changewater2p[, 1] < 0)] <- "red"
-  scolvec <- rep("green", length(changeseabed2p[, 1]))
-  scolvec[which(changeseabed2p[, 1] < 0)] <- "red"
-  #par(mfrow = c(2, 1))
-  #par(mar = c(1.5, 13, 2, 1))
+  
   if (log.pc == "PC") 
     xlabel <- "Percent change in annual average mass"
   if (log.pc == "LG") 
@@ -199,24 +192,22 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
   names(changewater2p_df)[1] <- "x"
   changewater2p_df$y <- rownames(changewater2p)
   changewater2p_df$colour <- ifelse(changewater2p_df$x < 0, "negative","positive")
-  #View(changewater2p_df)
 
   barplot_water <-  ggplot(data = changewater2p_df,aes(x = x, y = y)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
-    scale_fill_manual(values=c(negative="firebrick1",positive="green")) +
+    scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +
     ggtitle(maintitle) +
     coord_cartesian(xlim=c(bpmin,bpmax)) +
     theme(axis.text.y =element_text(size=8)) +
     xlab(xlabel) + 
     ylab("") +
-    theme(panel.grid.minor.x = element_blank()) 
+    theme(panel.grid.minor.x = element_blank()) +
+    theme(legend.position = "none")
     
   for (zz in 1:length(overlabelwater)) {
     text(0.7 * bpmin, ((zz - 0.4) * 1.2), overlabelwater[zz], 
          cex = 0.7)
   }
-  abline(v = 0)
-  par(mar = c(3.5, 13, 1, 1))
   
   changeseabed2p_df <- data.frame(changeseabed2p[, 1])
   names(changeseabed2p_df)[1] <- "x"
@@ -224,28 +215,19 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
   changeseabed2p_df$colour <- ifelse(changeseabed2p_df$x < 0, "negative","positive")
   barplot_seabed <-  ggplot(data = changeseabed2p_df,aes(x = x, y = y)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
-    scale_fill_manual(values=c(negative="firebrick1",positive="green")) +
+    scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +
     ggtitle(maintitle) +
     coord_cartesian(xlim=c(bpmin,bpmax)) +
     theme(axis.text.y =element_text(size=10)) +
-    #xlim(-40,40) +
     xlab(xlabel) + 
     ylab("") +
-    theme(panel.grid.minor.x = element_blank()) 
+    theme(panel.grid.minor.x = element_blank()) +
+    theme(legend.title = element_blank())
   
   figure <- ggarrange(barplot_water, barplot_seabed,
                       ncol = 1, nrow = 2,
-                      common.legend = TRUE, legend = "bottom",
+                      common.legend = FALSE,
                       align = c("v"))
-  # barplot(changeseabed2p[, 1], horiz = TRUE, col = scolvec, 
-  #         names.arg = rownames(changeseabed2p), las = 1, xlim = c(bpmin, 
-  #                                                                 bpmax), cex.axis = 0.8, cex.names = 0.75)
-  # for (zz in 1:length(overlabelseabed)) {
-  #   text(0.7 * bpmin, ((zz - 0.3) * 1.17), overlabelseabed[zz], 
-  #        cex = 0.8)
-  # }
-  # abline(v = 0)
-  # list(changewater = changewater, changeseabed = changeseabed)
   
   return(figure)
 }
