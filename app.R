@@ -588,8 +588,30 @@ ui <- navbarPage(
     "Compare scenario results with baseline",
     tabPanel(
       title = "Ecological",
+      fluidRow(
+      column(5,
       uiOutput("textCompAAM"),
-      fluidRow(column(
+      wellPanel(
+        sliderInput(
+          "axisMaxPos",
+          "Max of x axis scale:",
+          min = 40,
+          max = 300,
+          value = 40.0,
+          width = "100%"
+        )
+      ),
+      wellPanel(
+        sliderInput(
+          "axisMinPos",
+          "Min of x axis scale:",
+          min = -300,
+          max = -40,
+          value = -40.0,
+          width = "100%"
+        )
+      )),
+      column(
         6,
         plotOutput("e2e_compare_runs_bar_aam"),
         useShinyjs(),
@@ -698,22 +720,26 @@ ui <- navbarPage(
 
 server <- function(input, output, session) {
   
-  plotInput = function(model,results_baseline,scenario_model,results_scenario) {
-    e2e_compare_runs_bar(
+  model_reactive <- reactiveVal()
+  results_baseline_reactive <- reactiveVal()
+  results_scenario_reactive <- reactiveVal()
+  scenario_model_reactive <- reactiveVal()
+
+  reactivePlot_e2e_compare_runs_bar_gg <- reactive({
+    e2e_compare_runs_bar_gg(
       selection = "AAM",
-      model1 = model,
+      model1 = model_reactive(),
       use.saved1 = FALSE,
-      results_baseline,
-      model2 = scenario_model,
+      results_baseline_reactive(),
+      model2 = scenario_model_reactive(),
       use.saved2 = FALSE,
-      results_scenario,
+      results_scenario_reactive(),
       log.pc = "PC",
       zone = "W",
-      bpmin = (-50),
-      bpmax = (+50),
-      maintitle = ""
-    )
-  }
+      bpmin = input$axisMinPos,
+      bpmax = input$axisMaxPos,
+      maintitle = "")
+  })
   
   output$uiFishingActivity <- renderUI({
     # current chosen model on dropdown lists
@@ -1382,9 +1408,9 @@ server <- function(input, output, session) {
         )
       )
     }
-    column(width = 5, wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual averaged quantities of model components in the whole model region between your scenario model run and the baseline."),
+    wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual averaged quantities of model components in the whole model region between your scenario model run and the baseline."),
                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows ecology guilds inhabiting the water column, the lower plot in and on the seabed"),
-                                         HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green bars to the right indicate that the (bio)mass was higher in the scenario run than the baseline, and vice-versa for red bars to the left.")))})
+                                         HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green bars to the right indicate that the (bio)mass was higher in the scenario run than the baseline, and vice-versa for red bars to the left."))})
   
   
   output$textCompFishCatch <- renderUI({
@@ -6101,24 +6127,31 @@ server <- function(input, output, session) {
     
     results_baseline <-
       e2e_run(model, nyears = input$year, csv.output = TRUE)
+    
+    model_reactive(model)
+    results_baseline_reactive(results_baseline)
+    results_scenario_reactive(results_scenario)
+    scenario_model_reactive(scenario_model)
+    
     biomassCompFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","biomassComparison.png")
     output$downloadData_biomassComp <- downloadHandler(
       filename = biomassCompFilename,
       content = function(file) {
         png(filename = file)
-        e2e_compare_runs_bar(
-          selection = "AAM",
-          model1 = model,
-          use.saved1 = FALSE,
-          results_baseline,
-          model2 = scenario_model,
-          use.saved2 = FALSE,
-          results_scenario,
-          log.pc = "PC",
-          zone = "W",
-          bpmin = (-50),
-          bpmax = (+50),
-          maintitle = "")
+        reactivePlot_e2e_compare_runs_bar_gg()
+        # e2e_compare_runs_bar_gg(
+        #   selection = "AAM",
+        #   model1 = model,
+        #   use.saved1 = FALSE,
+        #   results_baseline,
+        #   model2 = scenario_model,
+        #   use.saved2 = FALSE,
+        #   results_scenario,
+        #   log.pc = "PC",
+        #   zone = "W",
+        #   bpmin = input$axisMinPos,
+        #   bpmax = input$axisMaxPos,
+        #   maintitle = "")
         dev.off()
       }
     )
@@ -6142,21 +6175,21 @@ server <- function(input, output, session) {
             )
           )
         }
-
-        e2e_compare_runs_bar_gg(
-          selection = "AAM",
-          model1 = model,
-          use.saved1 = FALSE,
-          results_baseline,
-          model2 = scenario_model,
-          use.saved2 = FALSE,
-          results_scenario,
-          log.pc = "PC",
-          zone = "W",
-          bpmin = (-50),
-          bpmax = (+50),
-          maintitle = ""
-        )
+        reactivePlot_e2e_compare_runs_bar_gg()
+        # e2e_compare_runs_bar_gg(
+        #   selection = "AAM",
+        #   model1 = model,
+        #   use.saved1 = FALSE,
+        #   results_baseline,
+        #   model2 = scenario_model,
+        #   use.saved2 = FALSE,
+        #   results_scenario,
+        #   log.pc = "PC",
+        #   zone = "W",
+        #   bpmin = input$axisMinPos,
+        #   bpmax = input$axisMaxPos,
+        #   maintitle = ""
+        # )
       })
     catchCompFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","catchComparison.png")
     output$downloadData_catchComp <- downloadHandler(

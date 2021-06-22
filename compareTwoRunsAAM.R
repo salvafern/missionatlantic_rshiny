@@ -205,7 +205,7 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(values=c(negative="firebrick1",positive="green")) +
     ggtitle(maintitle) +
-    coord_cartesian(xlim=c(-50,50)) +
+    coord_cartesian(xlim=c(bpmin,bpmax)) +
     theme(axis.text.y =element_text(size=8)) +
     xlab(xlabel) + 
     ylab("") +
@@ -226,7 +226,7 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(values=c(negative="firebrick1",positive="green")) +
     ggtitle(maintitle) +
-    coord_cartesian(xlim=c(-50,50)) +
+    coord_cartesian(xlim=c(bpmin,bpmax)) +
     theme(axis.text.y =element_text(size=10)) +
     #xlim(-40,40) +
     xlab(xlabel) + 
