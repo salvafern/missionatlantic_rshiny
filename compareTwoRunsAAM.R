@@ -201,13 +201,14 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
   changewater2p_df$colour <- ifelse(changewater2p_df$x < 0, "negative","positive")
   #View(changewater2p_df)
 
-  barplot <-  ggplot(data = changewater2p_df,aes(x = x, y = y)) +
+  barplot_water <-  ggplot(data = changewater2p_df,aes(x = x, y = y)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(values=c(negative="firebrick1",positive="green")) +
     ggtitle(maintitle) +
     coord_cartesian(xlim=c(-50,50)) +
-    #xlim(-40,40) +
-    xlab(xlabel) + #+ ylab("Catch") +
+    theme(axis.text.y =element_text(size=8)) +
+    xlab(xlabel) + 
+    ylab("") +
     theme(panel.grid.minor.x = element_blank()) 
     
   for (zz in 1:length(overlabelwater)) {
@@ -216,15 +217,35 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
   }
   abline(v = 0)
   par(mar = c(3.5, 13, 1, 1))
+  
+  changeseabed2p_df <- data.frame(changeseabed2p[, 1])
+  names(changeseabed2p_df)[1] <- "x"
+  changeseabed2p_df$y <- rownames(changeseabed2p)
+  changeseabed2p_df$colour <- ifelse(changeseabed2p_df$x < 0, "negative","positive")
+  barplot_seabed <-  ggplot(data = changeseabed2p_df,aes(x = x, y = y)) +
+    geom_bar(stat = "identity",aes(fill = colour)) +
+    scale_fill_manual(values=c(negative="firebrick1",positive="green")) +
+    ggtitle(maintitle) +
+    coord_cartesian(xlim=c(-50,50)) +
+    theme(axis.text.y =element_text(size=10)) +
+    #xlim(-40,40) +
+    xlab(xlabel) + 
+    ylab("") +
+    theme(panel.grid.minor.x = element_blank()) 
+  
+  figure <- ggarrange(barplot_water, barplot_seabed,
+                      ncol = 1, nrow = 2,
+                      common.legend = TRUE, legend = "bottom",
+                      align = c("v"))
   # barplot(changeseabed2p[, 1], horiz = TRUE, col = scolvec, 
   #         names.arg = rownames(changeseabed2p), las = 1, xlim = c(bpmin, 
   #                                                                 bpmax), cex.axis = 0.8, cex.names = 0.75)
-  for (zz in 1:length(overlabelseabed)) {
-    text(0.7 * bpmin, ((zz - 0.3) * 1.17), overlabelseabed[zz], 
-         cex = 0.8)
-  }
-  abline(v = 0)
-  list(changewater = changewater, changeseabed = changeseabed)
+  # for (zz in 1:length(overlabelseabed)) {
+  #   text(0.7 * bpmin, ((zz - 0.3) * 1.17), overlabelseabed[zz], 
+  #        cex = 0.8)
+  # }
+  # abline(v = 0)
+  # list(changewater = changewater, changeseabed = changeseabed)
   
-  return(barplot)
+  return(figure)
 }
