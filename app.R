@@ -6205,13 +6205,10 @@ server <- function(input, output, session) {
     scenario_model_reactive(scenario_model)
     
     biomassCompFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","biomassComparison.png")
-    biomassCompPlot <- reactivePlot_e2e_compare_runs_bar_aam_plot()
     output$downloadData_biomassComp <- downloadHandler(
       filename = biomassCompFilename,
       content = function(file) {
-        png(filename = file)
-        biomassCompPlot
-        dev.off()
+        ggsave(file, plot = reactivePlot_e2e_compare_runs_bar_aam_plot(), width = 12, height = 10, dpi = 600, units = "in", device = 'png')
       }
     )
     
@@ -6254,13 +6251,11 @@ server <- function(input, output, session) {
         reactivePlot_e2e_compare_runs_bar_aam_plot()
       })
     catchCompFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","catchComparison.png")
-    catchCompPlot <- reactivePlot_e2e_compare_runs_bar_catch_plot()
     output$downloadData_catchComp <- downloadHandler(
       filename = catchCompFilename,
       content = function(file) {
-        png(filename = file)
-        catchCompPlot
-        dev.off()
+        ggsave(file, plot = reactivePlot_e2e_compare_runs_bar_catch_plot(), width = 12, height = 10, dpi = 600, units = "in", device = 'png')
+        
       }
     )
     
