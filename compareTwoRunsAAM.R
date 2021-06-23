@@ -1,9 +1,8 @@
 compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 = NA, 
           from.csv2 = FALSE, results2, log.pc = "PC", zone = "W", 
-          bpmin = (-50), bpmax = (+50), maintitle = "") 
+          bpmin = (-50), bpmax = (+50), maintitle = "", outputType = "PLOT") 
 {
   elt <- StrathE2E2:::elt
-
   if (from.csv1 == FALSE) {
     print("Using baseline data held in memory from an existing model run")
     final.year.outputs1 <- elt(results1, "final.year.outputs")
@@ -187,12 +186,11 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
     xlabel <- "Percent change in annual average mass"
   if (log.pc == "LG") 
     xlabel <- "Log10 change in annual average mass"
-  
   changewater2p_df <- data.frame(changewater2p[, 1])
   names(changewater2p_df)[1] <- "x"
   changewater2p_df$y <- rownames(changewater2p)
   changewater2p_df$colour <- ifelse(changewater2p_df$x < 0, "negative","positive")
-
+  changewater2p_df["type"] <- "water"               
   barplot_water <-  ggplot(data = changewater2p_df,aes(x = x, y = y)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +
@@ -203,16 +201,11 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
     ylab("") +
     theme(panel.grid.minor.x = element_blank()) +
     theme(legend.position = "none")
-    
-  for (zz in 1:length(overlabelwater)) {
-    text(0.7 * bpmin, ((zz - 0.4) * 1.2), overlabelwater[zz], 
-         cex = 0.7)
-  }
-  
   changeseabed2p_df <- data.frame(changeseabed2p[, 1])
   names(changeseabed2p_df)[1] <- "x"
   changeseabed2p_df$y <- rownames(changeseabed2p)
   changeseabed2p_df$colour <- ifelse(changeseabed2p_df$x < 0, "negative","positive")
+  changeseabed2p_df["type"] <- "seabed"               
   barplot_seabed <-  ggplot(data = changeseabed2p_df,aes(x = x, y = y)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +
@@ -224,10 +217,16 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
     theme(panel.grid.minor.x = element_blank()) +
     theme(legend.title = element_blank())
   
+
+  dataJoined <- rbind(changewater2p_df,changeseabed2p_df)
   figure <- ggarrange(barplot_water, barplot_seabed,
                       ncol = 1, nrow = 2,
                       common.legend = FALSE,
                       align = c("v"))
   
-  return(figure)
+  if(outputType == "PLOT") {
+    return(figure)
+  } else {
+    return(dataJoined)
+  }
 }

@@ -36,7 +36,8 @@ ui <- navbarPage(
                tags$style(HTML(".mytooltip .tooltiptext {visibility: hidden;width: 200px;background-color: #008CBA;color: #fff;text-align: center;border-radius: 6px;padding: 5px 0;position: absolute;z-index: 1;}")),
                tags$style(HTML(".mytooltip:hover .tooltiptext {visibility: visible;}")),
                tags$style(HTML(".mytooltip {text-decoration:underline; text-decoration-style: dotted;}")),
-               fluidRow(
+               
+                fluidRow(
                   column(
                     6,
                     h3("Marine Ecosystem Modelling Tool"),
@@ -610,7 +611,15 @@ ui <- navbarPage(
           id = "dwnbutton_bm",
           downloadButton(
             "downloadData_biomassComp",
-            "Download biomass comparison",
+            "Download biomass comparison plot",
+            disabled = "disabled"
+          )
+        ),
+        div(
+          id = "dwnbutton_bmd",
+          downloadButton(
+            "downloadData_biomassCompData",
+            "Download biomass comparison data",
             disabled = "disabled"
           )
         )
@@ -640,7 +649,15 @@ ui <- navbarPage(
             id = "dwnbutton_catch",
             downloadButton(
               "downloadData_catchComp",
-              "Download catch comparison",
+              "Download catch comparison plot",
+              disabled = "disabled"
+            )
+          ),
+          div(
+            id = "dwnbutton_catchdata",
+            downloadButton(
+              "downloadData_catchCompData",
+              "Download catch comparison data",
               disabled = "disabled"
             )
           )
@@ -727,7 +744,7 @@ server <- function(input, output, session) {
   results_scenario_reactive <- reactiveVal()
   scenario_model_reactive <- reactiveVal()
 
-  reactivePlot_e2e_compare_runs_bar_aam <- reactive({
+  reactivePlot_e2e_compare_runs_bar_aam_plot <- reactive({
     e2e_compare_runs_bar_gg(
       selection = "AAM",
       model1 = model_reactive(),
@@ -740,11 +757,29 @@ server <- function(input, output, session) {
       zone = "W",
       bpmin = input$axisMaxPos[1],
       bpmax = input$axisMaxPos[2],
-      maintitle = "")
+      maintitle = "",
+      outputType = "PLOT")
   })
   
-  reactivePlot_e2e_compare_runs_bar_catch <- reactive({
-    e2e_compare_runs_bar_gg(
+  reactivePlot_e2e_compare_runs_bar_aam_data <- reactive({
+    aamData <- e2e_compare_runs_bar_gg(
+      selection = "AAM",
+      model1 = model_reactive(),
+      use.saved1 = FALSE,
+      results_baseline_reactive(),
+      model2 = scenario_model_reactive(),
+      use.saved2 = FALSE,
+      results_scenario_reactive(),
+      log.pc = "PC",
+      zone = "W",
+      bpmin = input$axisMaxPos[1],
+      bpmax = input$axisMaxPos[2],
+      maintitle = "",
+      outputType = "DATA")
+  })
+  
+  reactivePlot_e2e_compare_runs_bar_catch_plot <- reactive({
+     e2e_compare_runs_bar_gg(
       selection = "CATCH",
       model1 = model_reactive(),
       use.saved1 = FALSE,
@@ -756,7 +791,25 @@ server <- function(input, output, session) {
       zone = "W",
       bpmin = input$axisMaxPosCatch[1],
       bpmax = input$axisMaxPosCatch[2],
-      maintitle = "")
+      maintitle = "",
+      outputType = "PLOT")
+  })
+  
+  reactivePlot_e2e_compare_runs_bar_catch_data <- reactive({
+    catchData <- e2e_compare_runs_bar_gg(
+      selection = "CATCH",
+      model1 = model_reactive(),
+      use.saved1 = FALSE,
+      results_baseline_reactive(),
+      model2 = scenario_model_reactive(),
+      use.saved2 = FALSE,
+      results_scenario_reactive(),
+      log.pc = "PC",
+      zone = "W",
+      bpmin = input$axisMaxPosCatch[1],
+      bpmax = input$axisMaxPosCatch[2],
+      maintitle = "",
+      outputType = "DATA")
   })
   
   output$uiFishingActivity <- renderUI({
@@ -6152,12 +6205,22 @@ server <- function(input, output, session) {
     scenario_model_reactive(scenario_model)
     
     biomassCompFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","biomassComparison.png")
+    biomassCompPlot <- reactivePlot_e2e_compare_runs_bar_aam_plot()
     output$downloadData_biomassComp <- downloadHandler(
       filename = biomassCompFilename,
       content = function(file) {
         png(filename = file)
-        reactivePlot_e2e_compare_runs_bar_aam()
+        biomassCompPlot
         dev.off()
+      }
+    )
+    
+    biomassCompDataFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","biomassComparison.csv")
+    biomassData <- reactivePlot_e2e_compare_runs_bar_aam_data()
+    output$downloadData_biomassCompData <- downloadHandler(
+      filename = biomassCompDataFilename,
+      content = function(file) {
+        write.csv(biomassData, file, row.names = TRUE)
       }
     )
 
@@ -6167,6 +6230,14 @@ server <- function(input, output, session) {
     } else {
       disable("downloadData_biomassComp")
       runjs("$('#dwnbutton_bm').attr('title', 'Data not available');")
+    }
+    
+    if (!is.null(scenario_model)) {
+      enable("downloadData_biomassCompData")
+      runjs("$('#dwnbutton_bmd').removeAttr('title');")
+    } else {
+      disable("downloadData_biomassCompData")
+      runjs("$('#dwnbutton_bmd').attr('title', 'Data not available');")
     }
     
     output$e2e_compare_runs_bar_aam <-
@@ -6180,31 +6251,28 @@ server <- function(input, output, session) {
             )
           )
         }
-        reactivePlot_e2e_compare_runs_bar_aam()
+        reactivePlot_e2e_compare_runs_bar_aam_plot()
       })
     catchCompFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","catchComparison.png")
+    catchCompPlot <- reactivePlot_e2e_compare_runs_bar_catch_plot()
     output$downloadData_catchComp <- downloadHandler(
       filename = catchCompFilename,
       content = function(file) {
         png(filename = file)
-        reactivePlot_e2e_compare_runs_bar_catch()
-        # e2e_compare_runs_bar(
-        #   selection = "CATCH",
-        #   model1 = model,
-        #   use.saved1 = FALSE,
-        #   results_baseline,
-        #   model2 = scenario_model,
-        #   use.saved2 = FALSE,
-        #   results_scenario,
-        #   log.pc = "PC",
-        #   zone = "W",
-        #   bpmin = (-50),
-        #   bpmax = (+50),
-        #   maintitle = ""
-        #)
+        catchCompPlot
         dev.off()
       }
     )
+    
+    catchCompDataFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","catchComparison.csv")
+    catchCompData <- reactivePlot_e2e_compare_runs_bar_catch_data()
+    output$downloadData_catchCompData <- downloadHandler(
+      filename = catchCompDataFilename,
+      content = function(file) {
+        write.csv(catchCompData, file, row.names = TRUE)
+      }
+    )
+    
     
     if (!is.null(scenario_model)) {
       enable("downloadData_catchComp")
@@ -6214,23 +6282,17 @@ server <- function(input, output, session) {
       runjs("$('#dwnbutton_catch').attr('title', 'Data not available');")
     }
     
+    if (!is.null(scenario_model)) {
+      enable("downloadData_catchCompData")
+      runjs("$('#dwnbutton_catchdata').removeAttr('title');")
+    } else {
+      disable("downloadData_catchCompData")
+      runjs("$('#dwnbutton_catchdata').attr('title', 'Data not available');")
+    }
+    
     output$e2e_compare_runs_bar_catch <-
       renderPlot({
-        reactivePlot_e2e_compare_runs_bar_catch()
-        # e2e_compare_runs_bar(
-        #   selection = "CATCH",
-        #   model1 = model,
-        #   use.saved1 = FALSE,
-        #   results_baseline,
-        #   model2 = scenario_model,
-        #   use.saved2 = FALSE,
-        #   results_scenario,
-        #   log.pc = "PC",
-        #   zone = "W",
-        #   bpmin = (-50),
-        #   bpmax = (+50),
-        #   maintitle = ""
-        # )
+        reactivePlot_e2e_compare_runs_bar_catch_plot()
       })
     removeModal()
     uuid_s <- UUIDgenerate()

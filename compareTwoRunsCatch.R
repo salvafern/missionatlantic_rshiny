@@ -1,9 +1,9 @@
 compareTwoRunsCatch <- function (model1 = NA, from.csv1 = FALSE, results1, model2 = NA, 
           from.csv2 = FALSE, results2, log.pc = "PC", zone = "W", 
-          bpmin = (-50), bpmax = (+50), maintitle = "") 
+          bpmin = (-50), bpmax = (+50), maintitle = "", outputType = "PLOT") 
 {
   elt <- StrathE2E2:::elt
-
+  print("Got this far in compareTwoRunsCatch 1")
   if (from.csv1 == FALSE) {
     print("Using baseline data held in memory from an existing model run")
     final.year.outputs1 <- elt(results1, "final.year.outputs")
@@ -242,6 +242,7 @@ compareTwoRunsCatch <- function (model1 = NA, from.csv1 = FALSE, results1, model
   names(changeland2p_df)[1] <- "x"
   changeland2p_df$y <- rownames(changeland2p)
   changeland2p_df$colour <- ifelse(changeland2p_df$x < 0, "negative","positive")
+  changeland2p_df["type"] <- "landing"               
   
   if (log.pc == "PC") 
     xlabel <- "Percent change in landings & discards"
@@ -263,6 +264,7 @@ compareTwoRunsCatch <- function (model1 = NA, from.csv1 = FALSE, results1, model
   names(changedisc2p_df)[1] <- "x"
   changedisc2p_df$y <- rownames(changedisc2p)
   changedisc2p_df$colour <- ifelse(changedisc2p_df$x < 0, "negative","positive")
+  changedisc2p_df["type"] <- "discard"               
   
   barplot_disc <-  ggplot(data = changedisc2p_df,aes(x = x, y = y)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
@@ -275,11 +277,21 @@ compareTwoRunsCatch <- function (model1 = NA, from.csv1 = FALSE, results1, model
     theme(panel.grid.minor.x = element_blank()) +
     theme(legend.title = element_blank())
   
+  print("Got this far in compareTwoRunsCatch 3")
+  
+  dataJoined <- rbind(changedisc2p_df,changeland2p_df)
+  
   figure <- ggarrange(barplot_land, barplot_disc,
                       ncol = 1, nrow = 2,
                       common.legend = FALSE,
                       align = c("v"))
   
-  return(figure)
+  #figure <- subplot(barplot_land, barplot_disc, nrows = 2, shareX = TRUE, titleX = FALSE)
+  
+  if(outputType == "PLOT") {
+    return(figure)
+  } else {
+    return(dataJoined)
+  }
 
 }
