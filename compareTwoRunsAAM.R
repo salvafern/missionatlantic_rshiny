@@ -189,8 +189,9 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
   changewater2p_df <- data.frame(changewater2p[, 1])
   names(changewater2p_df)[1] <- "x"
   changewater2p_df$y <- rownames(changewater2p)
-  changewater2p_df$colour <- ifelse(changewater2p_df$x < 0, "negative","positive")
-  changewater2p_df["type"] <- "water"               
+  changewater2p_df$colour <- ifelse(changewater2p_df$x <= 0, "negative","positive")
+  changewater2p_df["type"] <- "water"   
+  changewater2p_df <- changewater2p_df[complete.cases(changewater2p_df), ]
   barplot_water <-  ggplot(data = changewater2p_df,aes(x = x, y = y)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +
@@ -204,8 +205,9 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
   changeseabed2p_df <- data.frame(changeseabed2p[, 1])
   names(changeseabed2p_df)[1] <- "x"
   changeseabed2p_df$y <- rownames(changeseabed2p)
-  changeseabed2p_df$colour <- ifelse(changeseabed2p_df$x < 0, "negative","positive")
-  changeseabed2p_df["type"] <- "seabed"               
+  changeseabed2p_df$colour <- ifelse(changeseabed2p_df$x <= 0, "negative","positive")
+  changeseabed2p_df["type"] <- "seabed"  
+  changeseabed2p_df <- changeseabed2p_df[complete.cases(changeseabed2p_df), ]
   barplot_seabed <-  ggplot(data = changeseabed2p_df,aes(x = x, y = y)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +

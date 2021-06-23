@@ -3,7 +3,6 @@ compareTwoRunsCatch <- function (model1 = NA, from.csv1 = FALSE, results1, model
           bpmin = (-50), bpmax = (+50), maintitle = "", outputType = "PLOT") 
 {
   elt <- StrathE2E2:::elt
-  print("Got this far in compareTwoRunsCatch 1")
   if (from.csv1 == FALSE) {
     print("Using baseline data held in memory from an existing model run")
     final.year.outputs1 <- elt(results1, "final.year.outputs")
@@ -249,6 +248,7 @@ compareTwoRunsCatch <- function (model1 = NA, from.csv1 = FALSE, results1, model
   if (log.pc == "LG") 
     xlabel <- "Log10 change in landings & discards"
   
+  changeland2p_df <- changeland2p_df[complete.cases(changeland2p_df), ]
   barplot_land <-  ggplot(data = changeland2p_df,aes(x = x, y = y)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +
@@ -265,7 +265,8 @@ compareTwoRunsCatch <- function (model1 = NA, from.csv1 = FALSE, results1, model
   changedisc2p_df$y <- rownames(changedisc2p)
   changedisc2p_df$colour <- ifelse(changedisc2p_df$x < 0, "negative","positive")
   changedisc2p_df["type"] <- "discard"               
-  
+  changedisc2p_df <- changedisc2p_df[complete.cases(changedisc2p_df), ]
+
   barplot_disc <-  ggplot(data = changedisc2p_df,aes(x = x, y = y)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +
@@ -276,8 +277,6 @@ compareTwoRunsCatch <- function (model1 = NA, from.csv1 = FALSE, results1, model
     ylab("") +
     theme(panel.grid.minor.x = element_blank()) +
     theme(legend.title = element_blank())
-  
-  print("Got this far in compareTwoRunsCatch 3")
   
   dataJoined <- rbind(changedisc2p_df,changeland2p_df)
   
