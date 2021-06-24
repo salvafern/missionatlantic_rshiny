@@ -6213,10 +6213,10 @@ server <- function(input, output, session) {
     )
     
     biomassCompDataFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","biomassComparison.csv")
-    biomassData <- reactivePlot_e2e_compare_runs_bar_aam_data()
     output$downloadData_biomassCompData <- downloadHandler(
       filename = biomassCompDataFilename,
       content = function(file) {
+        biomassData <- reactivePlot_e2e_compare_runs_bar_aam_data()
         write.csv(biomassData, file, row.names = TRUE)
       }
     )
@@ -6255,19 +6255,17 @@ server <- function(input, output, session) {
       filename = catchCompFilename,
       content = function(file) {
         ggsave(file, plot = reactivePlot_e2e_compare_runs_bar_catch_plot(), width = 12, height = 10, dpi = 600, units = "in", device = 'png')
-        
       }
     )
     
     catchCompDataFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","catchComparison.csv")
-    catchCompData <- reactivePlot_e2e_compare_runs_bar_catch_data()
     output$downloadData_catchCompData <- downloadHandler(
       filename = catchCompDataFilename,
       content = function(file) {
+        catchCompData <- reactivePlot_e2e_compare_runs_bar_catch_data()
         write.csv(catchCompData, file, row.names = TRUE)
       }
     )
-    
     
     if (!is.null(scenario_model)) {
       enable("downloadData_catchComp")
@@ -6287,6 +6285,15 @@ server <- function(input, output, session) {
     
     output$e2e_compare_runs_bar_catch <-
       renderPlot({
+        if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runScenario == 0){
+          showModal(
+            modalDialog(
+              "Please choose a region, time period and run the scenario before viewing comparison plots",
+              footer = NULL,
+              easyClose = TRUE
+            )
+          )
+        }
         reactivePlot_e2e_compare_runs_bar_catch_plot()
       })
     removeModal()
