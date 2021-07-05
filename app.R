@@ -2,6 +2,7 @@ library(shiny)
 library(StrathE2E2)
 library(shinythemes)
 library(shinycssloaders)
+library(shinydashboard)
 library(dplyr)
 library(shinyjs)
 library(ggplot2)
@@ -524,6 +525,18 @@ ui <- navbarPage(
       ), 
       mainPanel (uiOutput("ui")))
     ),
+    tabPanel(
+      title = "Gear activity distribution per habitat",
+      h4("Gears"),
+      sidebarLayout(
+        sidebarPanel(
+          uiOutput("gear_forhabitat_dropdown"),
+          uiOutput("textCatchPerHabitatGear"),
+          width = 3
+        ),
+      mainPanel (uiOutput("uiGearHabDist"))
+      )
+  ),
     "----",
     #"Run scenario",
     tabPanel(
@@ -1263,6 +1276,37 @@ server <- function(input, output, session) {
     )
   })
   
+  output$gear_forhabitat_dropdown <- renderUI({
+    selectedModel <- input$selectedlocation
+    selectedYears <- input$selectedVariant
+    # current chosen model on dropdown lists
+    model <- e2e_read(selectedModel, selectedYears, models.path="Models")
+    
+    if(is.null(model)){
+      gears = list(
+        "Pelagic_Trawl+Seine",
+        "Sandeel+sprat_trawl(Otter30-70mm+TR3)",
+        "Longline_mackerel",
+        "Beam_Trawl_BT1+BT2",
+        "Demersal_Seine",
+        "Demersal_Otter_Trawl_TR1",
+        "Gill_Nets+Longline_demersal",
+        "Beam_Trawl_shrimp",
+        "Nephrops_Trawl_TR2",
+        "Creels",
+        "Mollusc_Dredge",
+        "Whaler"
+      )}
+    else {
+      gears = chooseGear()
+    }
+    selectInput("selectedGearForHabitatDist",
+                "Select Gear",
+                choices = gears,
+                selected = "Pelagic_Trawl+Seine"
+    )
+  })
+  
   output$variant_dropdown <- renderUI({
     # current chosen model on dropdown lost
     modelChosen <- input$selectedlocation
@@ -1462,6 +1506,9 @@ server <- function(input, output, session) {
   
   
   output$textCatchGear <- renderUI({fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Annual catches of each guild by the selected gear type, broken down by landings and discards. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}) 
+  
+  output$textCatchPerHabitatGear <- renderUI({fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Text to go here"))}) 
+  
   
   output$textRunBaselineModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Each model is configured so that it outputs annual cycles of daily values of everything in the system,  averaged over the selected period of years. We do this by running the model over and over with repeating annual cycles of input data until the outputs are stable from one year to the next. We call this a \"steady state\" which represents the \"climatology\" of the system, and should match the average conditions in the sea for any given day of the year.")))})
                                                     #HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Running the baseline will take a few seconds on our computer server. The results are saved in memory for you to explore using our graph drawing tools, or you can download the output as .csv files to analyse yourself if you wish (e.g. read them into Excel)."),
@@ -1939,6 +1986,52 @@ server <- function(input, output, session) {
                              tabPanel("Inshore macrophyte debris", value = "inshoreMacDebris", plotOutput("ecoPlot_macrophyte_inshoreDeb")),
                              id = "Macrophyte_Tab"
         ))
+    )
+  })
+  
+  output$uiGearHabDist <- renderUI({
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+     pelInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[1]
+    # pelInFineDefault <- model$data$fleet.model$gear_labels[1][2]
+    # pelInMedDefault <- model$data$fleet.model$gear_habitat_activity[1][3]
+    # pelInCoarseDefault <- model$data$fleet.model$gear_habitat_activity[1][4]
+    # pelOffRockDefault <- model$data$fleet.model$gear_habitat_activity[1][5]
+    # pelOffFineDefault <- model$data$fleet.model$gear_habitat_activity[1][6]
+    # pelOffMedDefault <- model$data$fleet.model$gear_habitat_activity[1][7]
+    # pelOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity[1][8]
+
+    switch(
+      input$selectedGearForHabitatDist,
+      "Pelagic_Trawl+Seine" = fluidRow(  box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                             splitLayout(
+                                               numericInput("pelInRock", "Inshore rock",pelInRockDefault),
+                                               numericInput("pelInFine", "Inshore fine",0.0),
+                                               numericInput("pelInMed", "Inshore medium",0.0),
+                                               numericInput("pelInCoarse", "Inshore coarse",0.0),
+                                               numericInput("pelOffRock", "Offshore rock",0.0),
+                                               numericInput("pelOffFine", "Offshore fine",0.0),
+                                               numericInput("pelOffMed", "Offshore medium",0.0),
+                                               numericInput("pelOffRock", "Offshore coarse",0.0)
+                                             )
+      ))
+      # "Sandeel+sprat_trawl(Otter30-70mm+TR3)" = fluidRow(  box(width = 12, title = "A Box in a Fluid Row I want to Split", 
+      #                                                          splitLayout(
+      #                                                            textInput("inputD", "The first input"),
+      #                                                            textInput("inputE", "The second input"),
+      #                                                            textInput("inputF", "The third input")
+      #                                                          )
+      # )),
+      # "Longline_mackerel" = fluidRow(),
+      # "Beam_Trawl_BT1+BT2" = fluidRow(),
+      # "Demeral_Seine" = fluidRow(),
+      # "Demersal_Otter_Trawl_TR1" = fluidRow(),
+      # "Gill_Nets+Longline_demersal" = fluidRow(),
+      # "Beam_Trawl_shrimp" = fluidRow(),
+      # "Nephrops_Trawl_TR2" = fluidRow(),
+      # "Creels" = fluidRow(),
+      # "Mollusc_Dredge" = fluidRow(),
+      # "Whaler" = fluidRow(),
+      # "KelpHarvester" = fluidRow()
     )
   })
   
@@ -5409,6 +5502,7 @@ server <- function(input, output, session) {
       results_baseline <- e2e_run(model, nyears = input$year, csv.output = TRUE)
     #}
     scenario_model <- model
+    View(scenario_model)
     #print("Got this far 1")
     # Temperature
     if (!is.null(input$temperature))
