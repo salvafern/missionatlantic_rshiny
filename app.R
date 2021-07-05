@@ -1991,47 +1991,325 @@ server <- function(input, output, session) {
   
   output$uiGearHabDist <- renderUI({
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-     pelInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[1]
-    # pelInFineDefault <- model$data$fleet.model$gear_labels[1][2]
-    # pelInMedDefault <- model$data$fleet.model$gear_habitat_activity[1][3]
-    # pelInCoarseDefault <- model$data$fleet.model$gear_habitat_activity[1][4]
-    # pelOffRockDefault <- model$data$fleet.model$gear_habitat_activity[1][5]
-    # pelOffFineDefault <- model$data$fleet.model$gear_habitat_activity[1][6]
-    # pelOffMedDefault <- model$data$fleet.model$gear_habitat_activity[1][7]
-    # pelOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity[1][8]
-
+    pelInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[1]
+    pelInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[1]
+    pelInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[1]
+    pelInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[1]
+    pelOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[1]
+    pelOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[1]
+    pelOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[1]
+    pelOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[1]
+    
+    sandeelInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[2]
+    sandeelInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[2]
+    sandeelInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[2]
+    sandeelInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[2]
+    sandeelOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[2]
+    sandeelOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[2]
+    sandeelOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[2]
+    sandeelOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[2]
+    
+    otterInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[2]
+    otterInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[2]
+    otterInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[2]
+    otterInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[2]
+    otterOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[2]
+    otterOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[2]
+    otterOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[2]
+    otterOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[2]
+    
+    lonMackInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[3]
+    lonMackInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[3]
+    lonMackInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[3]
+    lonMackInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[3]
+    lonMackOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[3]
+    lonMackOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[3]
+    lonMackOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[3]
+    lonMackOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[3]
+    
+    beamTrawlInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[4]
+    beamTrawlInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[4]
+    beamTrawlInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[4]
+    beamTrawlInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[4]
+    beamTrawlOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[4]
+    beamTrawlOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[4]
+    beamTrawlOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[4]
+    beamTrawlOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[4]
+    
+    demSeineInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[5]
+    demSeineInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[5]
+    demSeineInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[5]
+    demSeineInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[5]
+    demSeineOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[5]
+    demSeineOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[5]
+    demSeineOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[5]
+    demSeineOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[5]
+    
+    demOtterInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[6]
+    demOtterInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[6]
+    demOtterInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[6]
+    demOtterInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[6]
+    demOtterOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[6]
+    demOtterOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[6]
+    demOtterOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[6]
+    demOtterOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[6]
+    
+    gillNetInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[7]
+    gillNetInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[7]
+    gillNetInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[7]
+    gillNetInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[7]
+    gillNetOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[7]
+    gillNetOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[7]
+    gillNetOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[7]
+    gillNetOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[7]
+    
+    beamShrimpInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[8]
+    beamShrimpInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[8]
+    beamShrimpInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[8]
+    beamShrimpInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[8]
+    beamShrimpOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[8]
+    beamShrimpOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[8]
+    beamShrimpOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[8]
+    beamShrimpOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[8]
+    
+    nephropsTR2InRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[9]
+    nephropsTR2InFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[9]
+    nephropsTR2InMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[9]
+    nephropsTR2InCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[9]
+    nephropsTR2OffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[9]
+    nephropsTR2OffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[9]
+    nephropsTR2OffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[9]
+    nephropsTR2OffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[9]
+    
+    nephropsTR3InRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[9]
+    nephropsTR3InFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[9]
+    nephropsTR3InMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[9]
+    nephropsTR3InCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[9]
+    nephropsTR3OffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[9]
+    nephropsTR3OffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[9]
+    nephropsTR3OffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[9]
+    nephropsTR3OffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[9]
+    
+    creelsInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[10]
+    creelsInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[10]
+    creelsInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[10]
+    creelsInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[10]
+    creelsOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[10]
+    creelsOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[10]
+    creelsOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[10]
+    creelsOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[10]
+    
+    molluscInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[11]
+    molluscInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[11]
+    molluscInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[11]
+    molluscInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[11]
+    molluscOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[11]
+    molluscOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[11]
+    molluscOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[11]
+    molluscOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[11]
+    
+    whalerInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[12]
+    whalerInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[12]
+    whalerInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[12]
+    whalerInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[12]
+    whalerOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[12]
+    whalerOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[12]
+    whalerOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[12]
+    whalerOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[12]
+    
+    kelpInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[12]
+    kelpInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[12]
+    kelpInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[12]
+    kelpInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[12]
+    kelpOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[12]
+    kelpOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[12]
+    kelpOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[12]
+    kelpOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[12]
+    
     switch(
       input$selectedGearForHabitatDist,
       "Pelagic_Trawl+Seine" = fluidRow(  box(width = 12, title = "Habitats", style = "font-size:9px;",
                                              splitLayout(
                                                numericInput("pelInRock", "Inshore rock",pelInRockDefault),
-                                               numericInput("pelInFine", "Inshore fine",0.0),
-                                               numericInput("pelInMed", "Inshore medium",0.0),
-                                               numericInput("pelInCoarse", "Inshore coarse",0.0),
-                                               numericInput("pelOffRock", "Offshore rock",0.0),
-                                               numericInput("pelOffFine", "Offshore fine",0.0),
-                                               numericInput("pelOffMed", "Offshore medium",0.0),
-                                               numericInput("pelOffRock", "Offshore coarse",0.0)
+                                               numericInput("pelInFine", "Inshore fine",pelInFineDefault),
+                                               numericInput("pelInMed", "Inshore medium",pelInMedDefault),
+                                               numericInput("pelInCoarse", "Inshore coarse",pelInCoarseDefault),
+                                               numericInput("pelOffRock", "Offshore rock",pelOffRockDefault),
+                                               numericInput("pelOffFine", "Offshore fine",pelOffFineDefault),
+                                               numericInput("pelOffMed", "Offshore medium",pelOffMedDefault),
+                                               numericInput("pelOffRock", "Offshore coarse",pelOffRockDefault)
                                              )
+      )),
+      "Sandeel+sprat_trawl(Otter30-70mm+TR3)" = fluidRow( box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                                              splitLayout(
+                                                                numericInput("sandeelInRock", "Inshore rock",sandeelInRockDefault),
+                                                                numericInput("sandeelInFine", "Inshore fine",sandeelInFineDefault),
+                                                                numericInput("sandeelInMed", "Inshore medium",sandeelInMedDefault),
+                                                                numericInput("sandeelInCoarse", "Inshore coarse",sandeelInCoarseDefault),
+                                                                numericInput("sandeelOffRock", "Offshore rock",sandeelOffRockDefault),
+                                                                numericInput("sandeelOffFine", "Offshore fine",sandeelOffFineDefault),
+                                                                numericInput("sandeelOffMed", "Offshore medium",sandeelOffMedDefault),
+                                                                numericInput("sandeelOffRock", "Offshore coarse",sandeelOffRockDefault)
+                                                              )
+      )),
+      "Otter30-70mm+TR3(sandeel+sprat)" = fluidRow( box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                                              splitLayout(
+                                                                numericInput("otterInRock", "Inshore rock",otterInRockDefault),
+                                                                numericInput("otterInFine", "Inshore fine",otterInFineDefault),
+                                                                numericInput("otterInMed", "Inshore medium",otterInMedDefault),
+                                                                numericInput("otterInCoarse", "Inshore coarse",otterInCoarseDefault),
+                                                                numericInput("otterOffRock", "Offshore rock",otterOffRockDefault),
+                                                                numericInput("otterOffFine", "Offshore fine",otterOffFineDefault),
+                                                                numericInput("otterOffMed", "Offshore medium",otterOffMedDefault),
+                                                                numericInput("otterOffRock", "Offshore coarse",otterOffRockDefault)
+                                                              )
+      )),     
+      
+      
+      "Longline_mackerel" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                         splitLayout(
+                                           numericInput("lonMackInRock", "Inshore rock",lonMackInRockDefault),
+                                           numericInput("lonMackInFine", "Inshore fine",lonMackInFineDefault),
+                                           numericInput("lonMackInMed", "Inshore medium",lonMackInMedDefault),
+                                           numericInput("lonMackInCoarse", "Inshore coarse",lonMackInCoarseDefault),
+                                           numericInput("lonMackOffRock", "Offshore rock",lonMackOffRockDefault),
+                                           numericInput("lonMackOffFine", "Offshore fine",lonMackOffFineDefault),
+                                           numericInput("lonMackOffMed", "Offshore medium",lonMackOffMedDefault),
+                                           numericInput("lonMackOffRock", "Offshore coarse",lonMackOffRockDefault)
+                                         )
+      )),
+      "Beam_Trawl_BT1+BT2" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                          splitLayout(
+                                            numericInput("beamTrawlInRock", "Inshore rock",beamTrawlInRockDefault),
+                                            numericInput("beamTrawlInFine", "Inshore fine",beamTrawlInFineDefault),
+                                            numericInput("beamTrawlInMed", "Inshore medium",beamTrawlInMedDefault),
+                                            numericInput("beamTrawlInCoarse", "Inshore coarse",beamTrawlInCoarseDefault),
+                                            numericInput("beamTrawlOffRock", "Offshore rock",beamTrawlOffRockDefault),
+                                            numericInput("beamTrawlOffFine", "Offshore fine",beamTrawlOffFineDefault),
+                                            numericInput("beamTrawlOffMed", "Offshore medium",beamTrawlOffMedDefault),
+                                            numericInput("beamTrawlOffRock", "Offshore coarse",beamTrawlOffRockDefault)
+                                          )
+      )),
+      "Demersal_Seine" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                     splitLayout(
+                                       numericInput("demSeineInRock", "Inshore rock",demSeineInRockDefault),
+                                       numericInput("demSeineInFine", "Inshore fine",demSeineInFineDefault),
+                                       numericInput("demSeineInMed", "Inshore medium",demSeineInMedDefault),
+                                       numericInput("demSeineInCoarse", "Inshore coarse",demSeineInCoarseDefault),
+                                       numericInput("demSeineOffRock", "Offshore rock",demSeineOffRockDefault),
+                                       numericInput("demSeineOffFine", "Offshore fine",demSeineOffFineDefault),
+                                       numericInput("demSeineOffMed", "Offshore medium",demSeineOffMedDefault),
+                                       numericInput("demSeineOffRock", "Offshore coarse",demSeineOffRockDefault)
+                                     )
+      )),
+      "Demersal_Otter_Trawl_TR1" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                                splitLayout(
+                                                  numericInput("demOtterInRock", "Inshore rock",demOtterInRockDefault),
+                                                  numericInput("demOtterInFine", "Inshore fine",demOtterInFineDefault),
+                                                  numericInput("demOtterInMed", "Inshore medium",demOtterInMedDefault),
+                                                  numericInput("demOtterInCoarse", "Inshore coarse",demOtterInCoarseDefault),
+                                                  numericInput("demOtterOffRock", "Offshore rock",demOtterOffRockDefault),
+                                                  numericInput("demOtterOffFine", "Offshore fine",demOtterOffFineDefault),
+                                                  numericInput("demOtterOffMed", "Offshore medium",demOtterOffMedDefault),
+                                                  numericInput("demOtterOffRock", "Offshore coarse",demOtterOffRockDefault)
+                                                )
+      )),
+      "Gill_Nets+Longline_demersal" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                                   splitLayout(
+                                                     numericInput("gillNetInRock", "Inshore rock",gillNetInRockDefault),
+                                                     numericInput("gillNetInFine", "Inshore fine",gillNetInFineDefault),
+                                                     numericInput("gillNetInMed", "Inshore medium",gillNetInMedDefault),
+                                                     numericInput("gillNetInCoarse", "Inshore coarse",gillNetInCoarseDefault),
+                                                     numericInput("gillNetOffRock", "Offshore rock",gillNetOffRockDefault),
+                                                     numericInput("gillNetOffFine", "Offshore fine",gillNetOffFineDefault),
+                                                     numericInput("gillNetOffMed", "Offshore medium",gillNetOffMedDefault),
+                                                     numericInput("gillNetOffRock", "Offshore coarse",gillNetOffRockDefault)
+                                                   )
+      )),
+      "Beam_Trawl_shrimp" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                         splitLayout(
+                                           numericInput("beamShrimpInRock", "Inshore rock",beamShrimpInRockDefault),
+                                           numericInput("beamShrimpInFine", "Inshore fine",beamShrimpInFineDefault),
+                                           numericInput("beamShrimpInMed", "Inshore medium",beamShrimpInMedDefault),
+                                           numericInput("beamShrimpInCoarse", "Inshore coarse",beamShrimpInCoarseDefault),
+                                           numericInput("beamShrimpOffRock", "Offshore rock",beamShrimpOffRockDefault),
+                                           numericInput("beamShrimpOffFine", "Offshore fine",beamShrimpOffFineDefault),
+                                           numericInput("beamShrimpOffMed", "Offshore medium",beamShrimpOffMedDefault),
+                                           numericInput("beamShrimpOffRock", "Offshore coarse",beamShrimpOffRockDefault)
+                                         )
+      )),
+      "Nephrops_Trawl_TR2" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                          splitLayout(
+                                            numericInput("nephropsTR2InRock", "Inshore rock",nephropsTR2InRockDefault),
+                                            numericInput("nephropsTR2InFine", "Inshore fine",nephropsTR2InFineDefault),
+                                            numericInput("nephropsTR2InMed", "Inshore medium",nephropsTR2InMedDefault),
+                                            numericInput("nephropsTR2InCoarse", "Inshore coarse",nephropsTR2InCoarseDefault),
+                                            numericInput("nephropsTR2OffRock", "Offshore rock",nephropsTR2OffRockDefault),
+                                            numericInput("nephropsTR2OffFine", "Offshore fine",nephropsTR2OffFineDefault),
+                                            numericInput("nephropsTR2OffMed", "Offshore medium",nephropsTR2OffMedDefault),
+                                            numericInput("nephropsTR2OffRock", "Offshore coarse",nephropsTR2OffRockDefault)
+                                          )
+      )),
+      "Nephrops_Trawl_TR3" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                          splitLayout(
+                                            numericInput("creelsInRock", "Inshore rock",nephropsTR3InRockDefault),
+                                            numericInput("nephropsTR3InFine", "Inshore fine",nephropsTR3InFineDefault),
+                                            numericInput("nephropsTR3InMed", "Inshore medium",nephropsTR3InMedDefault),
+                                            numericInput("nephropsTR3InCoarse", "Inshore coarse",nephropsTR3InCoarseDefault),
+                                            numericInput("nephropsTR3OffRock", "Offshore rock",nephropsTR3OffRockDefault),
+                                            numericInput("nephropsTR3OffFine", "Offshore fine",nephropsTR3OffFineDefault),
+                                            numericInput("nephropsTR3OffMed", "Offshore medium",nephropsTR3OffMedDefault),
+                                            numericInput("nephropsTR3OffRock", "Offshore coarse",nephropsTR3OffRockDefault)
+                                          )
+      )),
+      "Creels" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                              splitLayout(
+                                numericInput("creelsInRock", "Inshore rock",creelsInRockDefault),
+                                numericInput("creelsInFine", "Inshore fine",creelsInFineDefault),
+                                numericInput("creelsInMed", "Inshore medium",creelsInMedDefault),
+                                numericInput("creelsInCoarse", "Inshore coarse",creelsInCoarseDefault),
+                                numericInput("creelsOffRock", "Offshore rock",creelsOffRockDefault),
+                                numericInput("creelsOffFine", "Offshore fine",creelsOffFineDefault),
+                                numericInput("creelsOffMed", "Offshore medium",creelsOffMedDefault),
+                                numericInput("creelsOffRock", "Offshore coarse",creelsOffRockDefault)
+                              )
+      )),
+      "Mollusc_Dredge" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                      splitLayout(
+                                        numericInput("molluscInRock", "Inshore rock",molluscInRockDefault),
+                                        numericInput("molluscInFine", "Inshore fine",molluscInFineDefault),
+                                        numericInput("molluscInMed", "Inshore medium",molluscInMedDefault),
+                                        numericInput("molluscInCoarse", "Inshore coarse",molluscInCoarseDefault),
+                                        numericInput("molluscOffRock", "Offshore rock",molluscOffRockDefault),
+                                        numericInput("molluscOffFine", "Offshore fine",molluscOffFineDefault),
+                                        numericInput("molluscOffMed", "Offshore medium",molluscOffMedDefault),
+                                        numericInput("molluscOffRock", "Offshore coarse",molluscOffRockDefault)
+                                      )
+      )),
+      "Whaler" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                              splitLayout(
+                                numericInput("whalerInRock", "Inshore rock",whalerInRockDefault),
+                                numericInput("whalerInFine", "Inshore fine",whalerInFineDefault),
+                                numericInput("whalerInMed", "Inshore medium",whalerInMedDefault),
+                                numericInput("whalerInCoarse", "Inshore coarse",whalerInCoarseDefault),
+                                numericInput("whalerOffRock", "Offshore rock",whalerOffRockDefault),
+                                numericInput("whalerOffFine", "Offshore fine",whalerOffFineDefault),
+                                numericInput("whalerOffMed", "Offshore medium",whalerOffMedDefault),
+                                numericInput("whalerOffRock", "Offshore coarse",whalerOffRockDefault)
+                              )
+      )),
+      "KelpHarvester" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
+                                     splitLayout(
+                                       numericInput("kelpInRock", "Inshore rock",kelpInRockDefault),
+                                       numericInput("kelpInFine", "Inshore fine",kelpInFineDefault),
+                                       numericInput("kelpInMed", "Inshore medium",kelpInMedDefault),
+                                       numericInput("kelpInCoarse", "Inshore coarse",kelpInCoarseDefault),
+                                       numericInput("kelpOffRock", "Offshore rock",kelpOffRockDefault),
+                                       numericInput("kelpOffFine", "Offshore fine",kelpOffFineDefault),
+                                       numericInput("kelpOffMed", "Offshore medium",kelpOffMedDefault),
+                                       numericInput("kelpOffRock", "Offshore coarse",kelpOffRockDefault)
+                                     )
       ))
-      # "Sandeel+sprat_trawl(Otter30-70mm+TR3)" = fluidRow(  box(width = 12, title = "A Box in a Fluid Row I want to Split", 
-      #                                                          splitLayout(
-      #                                                            textInput("inputD", "The first input"),
-      #                                                            textInput("inputE", "The second input"),
-      #                                                            textInput("inputF", "The third input")
-      #                                                          )
-      # )),
-      # "Longline_mackerel" = fluidRow(),
-      # "Beam_Trawl_BT1+BT2" = fluidRow(),
-      # "Demeral_Seine" = fluidRow(),
-      # "Demersal_Otter_Trawl_TR1" = fluidRow(),
-      # "Gill_Nets+Longline_demersal" = fluidRow(),
-      # "Beam_Trawl_shrimp" = fluidRow(),
-      # "Nephrops_Trawl_TR2" = fluidRow(),
-      # "Creels" = fluidRow(),
-      # "Mollusc_Dredge" = fluidRow(),
-      # "Whaler" = fluidRow(),
-      # "KelpHarvester" = fluidRow()
     )
   })
   
