@@ -183,44 +183,65 @@ compareTwoRunsAAM <- function (model1 = NA, from.csv1 = FALSE, results1, model2 
   }
   
   if (log.pc == "PC") 
-    xlabel <- "Percent change in annual average mass"
+    xlabelwater <- "Percent change in annual average mass in water column"
   if (log.pc == "LG") 
-    xlabel <- "Log10 change in annual average mass"
+    xlabelwater <- "Log10 change in annual average mass in water column"
   changewater2p_df <- data.frame(changewater2p[, 1])
   names(changewater2p_df)[1] <- "x"
   changewater2p_df$y <- rownames(changewater2p)
   changewater2p_df$colour <- ifelse(changewater2p_df$x <= 0, "negative","positive")
-  changewater2p_df["type"] <- "water"   
-  changewater2p_df <- changewater2p_df[complete.cases(changewater2p_df), ]
-  barplot_water <-  ggplot(data = changewater2p_df,aes(x = x, y = y)) +
+  changewater2p_df["type"] <- "waterColumn" 
+  changewater2p_df$x[is.na(changewater2p_df$x)] = 0
+  #changewater2p_df <- changewater2p_df[complete.cases(changewater2p_df), ]
+  levels_order <- factor(changewater2p_df$y, level = c("Suspended bacteria & detritus", 
+           "Water column ammonia", "Water column nitrate", "Macrophytes", 
+           "Phytoplankton", "Benthic susp/dep feeder larvae", "Omnivorous zooplankton", 
+           "Benthic carn/scav feeder larvae", "Carnivorous zooplankton", 
+           "Plantiv. fish adults+larvae", "Migratory fish", "Demersal fish adults+larvae", 
+           "Birds", "Pinnipeds", "Cetaceans"))
+  barplot_water <-  ggplot(data = changewater2p_df,aes(x = x, y = levels_order)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +
     ggtitle(maintitle) +
     coord_cartesian(xlim=c(bpmin,bpmax)) +
     theme(axis.text.y =element_text(size=8)) +
-    xlab(xlabel) + 
+    xlab(xlabelwater) + 
     ylab("") +
     theme(panel.grid.minor.x = element_blank()) +
     theme(legend.position = "none")
+  
+  if (log.pc == "PC") 
+    xlabelseabed <- "Percent change in annual average mass in/on seabed"
+  if (log.pc == "LG") 
+    xlabelseabed <- "Log10 change in annual average mass in/on seabed"
   changeseabed2p_df <- data.frame(changeseabed2p[, 1])
   names(changeseabed2p_df)[1] <- "x"
   changeseabed2p_df$y <- rownames(changeseabed2p)
   changeseabed2p_df$colour <- ifelse(changeseabed2p_df$x <= 0, "negative","positive")
   changeseabed2p_df["type"] <- "seabed"  
-  changeseabed2p_df <- changeseabed2p_df[complete.cases(changeseabed2p_df), ]
-  barplot_seabed <-  ggplot(data = changeseabed2p_df,aes(x = x, y = y)) +
+  changeseabed2p_df$x[is.na(changeseabed2p_df$x)] = 0
+  #changeseabed2p_df <- changeseabed2p_df[complete.cases(changeseabed2p_df), ]
+  levels_order_seabed <- factor(changeseabed2p_df$y, level = c("Fishery discards & offal", 
+                                                       "Corpses", "Sediment bacteria & detritus", "Macrophyte debris", 
+                                                       "Porewater ammonia", "Porewater nitrate", "Benthic susp/dep feeders", 
+                                                       "Benthic carn/scav feeders"))
+  barplot_seabed <-  ggplot(data = changeseabed2p_df,aes(x = x, y = levels_order_seabed)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +
     ggtitle(maintitle) +
     coord_cartesian(xlim=c(bpmin,bpmax)) +
     theme(axis.text.y =element_text(size=10)) +
-    xlab(xlabel) + 
+    xlab(xlabelseabed) + 
     ylab("") +
     theme(panel.grid.minor.x = element_blank()) +
     theme(legend.title = element_blank())
   
 
   dataJoined <- rbind(changewater2p_df,changeseabed2p_df)
+  names(dataJoined)[names(dataJoined) == "x"] <- "percentage_change"
+  names(dataJoined)[names(dataJoined) == "y"] <- "guild"
+  dataJoined = subset(dataJoined, select = -c(colour) )
+
   figure <- ggarrange(barplot_water, barplot_seabed,
                       ncol = 1, nrow = 2,
                       common.legend = FALSE,

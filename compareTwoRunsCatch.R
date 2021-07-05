@@ -157,12 +157,12 @@ compareTwoRunsCatch <- function (model1 = NA, from.csv1 = FALSE, results1, model
                               "Carn/scav feeding benthos", "Pelagic invertebrates", 
                               "Planktivorous fish", "Migratory fish", "Non-quota demersal fish", 
                               "Quota-limited demersal fish", "Birds", "Pinnipeds", 
-                              "LANDINGS            Cetaceans")
+                              "Cetaceans")
   rownames(baselinedisc) <- c("Macrophytes", "Susp/dep feeding benthos", 
                               "Carn/scav feeding benthos", "Pelagic invertebrates", 
                               "Planktivorous fish", "Migratory fish", "Non-quota demersal fish", 
                               "Quota-limited demersal fish", "Birds", "Pinnipeds", 
-                              "DISCARDS            Cetaceans")
+                              "Cetaceans")
   rownames(baselinedisc) <- rownames(baselinedisc)
   rownames(scenarioland) <- rownames(baselineland)
   rownames(scenariodisc) <- rownames(baselinedisc)
@@ -230,12 +230,6 @@ compareTwoRunsCatch <- function (model1 = NA, from.csv1 = FALSE, results1, model
       }
     }
   }
-  wcolvec <- rep("green", length(changeland2p[, 1]))
-  wcolvec[which(changeland2p[, 1] < 0)] <- "red"
-  scolvec <- rep("black", length(changedisc2p[, 1]))
-  scolvec[which(changedisc2p[, 1] < 0)] <- "grey"
-  par(mfrow = c(2, 1))
-  par(mar = c(1.5, 13, 2, 1))
   
   changeland2p_df <- data.frame(changeland2p[, 1])
   names(changeland2p_df)[1] <- "x"
@@ -244,48 +238,66 @@ compareTwoRunsCatch <- function (model1 = NA, from.csv1 = FALSE, results1, model
   changeland2p_df["type"] <- "landing"               
   
   if (log.pc == "PC") 
-    xlabel <- "Percent change in landings & discards"
+    xlabelland <- "Percent change in landings"
   if (log.pc == "LG") 
-    xlabel <- "Log10 change in landings & discards"
+    xlabelland <- "Log10 change in landings"
   
-  changeland2p_df <- changeland2p_df[complete.cases(changeland2p_df), ]
-  barplot_land <-  ggplot(data = changeland2p_df,aes(x = x, y = y)) +
+  changeland2p_df$x[is.na(changeland2p_df$x)] = 0
+  #changeland2p_df <- changeland2p_df[complete.cases(changeland2p_df), ]
+  levels_order <- factor(changeland2p_df$y, level = c("Macrophytes", "Susp/dep feeding benthos", 
+                                                      "Carn/scav feeding benthos", "Pelagic invertebrates", 
+                                                      "Planktivorous fish", "Migratory fish", "Non-quota demersal fish", 
+                                                      "Quota-limited demersal fish", "Birds", "Pinnipeds", 
+                                                      "Cetaceans"))
+  barplot_land <-  ggplot(data = changeland2p_df,aes(x = x, y = levels_order)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
     scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +
     ggtitle(maintitle) +
     coord_cartesian(xlim=c(bpmin,bpmax)) +
     theme(axis.text.y =element_text(size=8)) +
-    xlab(xlabel) + 
+    xlab(xlabelland) + 
     ylab("") +
     theme(panel.grid.minor.x = element_blank()) +
-    theme(legend.position = "none")
+    theme(legend.title = element_blank())
+  
+  if (log.pc == "PC") 
+    xlabeldisc <- "Percent change in discards"
+  if (log.pc == "LG") 
+    xlabeldisc <- "Log10 change in discards"
   
   changedisc2p_df <- data.frame(changedisc2p[, 1])
   names(changedisc2p_df)[1] <- "x"
   changedisc2p_df$y <- rownames(changedisc2p)
   changedisc2p_df$colour <- ifelse(changedisc2p_df$x < 0, "negative","positive")
-  changedisc2p_df["type"] <- "discard"               
-  changedisc2p_df <- changedisc2p_df[complete.cases(changedisc2p_df), ]
+  changedisc2p_df["type"] <- "discard"    
+  changedisc2p_df$x[is.na(changedisc2p_df$x)] = 0
+  #changedisc2p_df <- changedisc2p_df[complete.cases(changedisc2p_df), ]
+  levels_order_2 <- factor(changedisc2p_df$y, level = c("Macrophytes", "Susp/dep feeding benthos", 
+                                                      "Carn/scav feeding benthos", "Pelagic invertebrates", 
+                                                      "Planktivorous fish", "Migratory fish", "Non-quota demersal fish", 
+                                                      "Quota-limited demersal fish", "Birds", "Pinnipeds", 
+                                                      "Cetaceans"))
 
-  barplot_disc <-  ggplot(data = changedisc2p_df,aes(x = x, y = y)) +
+  barplot_disc <-  ggplot(data = changedisc2p_df,aes(x = x, y = levels_order_2)) +
     geom_bar(stat = "identity",aes(fill = colour)) +
-    scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="firebrick1",positive="green")) +
+    scale_fill_manual(labels = c("Less than baseline", "More than baseline"), values=c(negative="grey",positive="black")) +
     ggtitle(maintitle) +
     coord_cartesian(xlim=c(bpmin,bpmax)) +
     theme(axis.text.y =element_text(size=8)) +
-    xlab(xlabel) + 
+    xlab(xlabeldisc) + 
     ylab("") +
     theme(panel.grid.minor.x = element_blank()) +
     theme(legend.title = element_blank())
   
   dataJoined <- rbind(changedisc2p_df,changeland2p_df)
+  names(dataJoined)[names(dataJoined) == "x"] <- "percentage_change"
+  names(dataJoined)[names(dataJoined) == "y"] <- "guild"
+  dataJoined = subset(dataJoined, select = -c(colour) )
   
   figure <- ggarrange(barplot_land, barplot_disc,
                       ncol = 1, nrow = 2,
                       common.legend = FALSE,
                       align = c("v"))
-  
-  #figure <- subplot(barplot_land, barplot_disc, nrows = 2, shareX = TRUE, titleX = FALSE)
   
   if(outputType == "PLOT") {
     return(figure)

@@ -762,7 +762,7 @@ server <- function(input, output, session) {
   })
   
   reactivePlot_e2e_compare_runs_bar_aam_data <- reactive({
-    aamData <- e2e_compare_runs_bar_gg(
+     e2e_compare_runs_bar_gg(
       selection = "AAM",
       model1 = model_reactive(),
       use.saved1 = FALSE,
@@ -796,7 +796,7 @@ server <- function(input, output, session) {
   })
   
   reactivePlot_e2e_compare_runs_bar_catch_data <- reactive({
-    catchData <- e2e_compare_runs_bar_gg(
+    e2e_compare_runs_bar_gg(
       selection = "CATCH",
       model1 = model_reactive(),
       use.saved1 = FALSE,
@@ -1481,7 +1481,8 @@ server <- function(input, output, session) {
     }
     wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual averaged quantities of model components in the whole model region between your scenario model run and the baseline."),
                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows ecology guilds inhabiting the water column, the lower plot in and on the seabed"),
-                                         HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green bars to the right indicate that the (bio)mass was higher in the scenario run than the baseline, and vice-versa for red bars to the left."))})
+                                         HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green bars to the right indicate that the (bio)mass was higher in the scenario run than the baseline, and vice-versa for red bars to the left."),
+                                         HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">You can adjust the axis limits for the tornado plot using the slider bar below. The plot will default to ±40% but you may want to alter these to accommodate the output from your scenario or to standardize the graphs for different scenarios, To access the numeric values for each bar in the graphs, use the “Download data” button."))})
   
   
   output$textCompFishCatch <- renderUI({
@@ -1496,8 +1497,8 @@ server <- function(input, output, session) {
     }
     wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">‘Tornado’ bar-plot of the differences in annual fishery landings and discards in the whole model region between your scenario model run and the baseline."),
                                           HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">The upper plot shows fishery landings (the quantity of catch which is brought ashore), the lower plot shows the discards (unwanted catch which is returned to the sea and assumed to be dead in the model)."),
-                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green and black bars to the right indicate that the landings or discards were higher in the scenario run than the baseline, and vice-versa for red and grey bars to the left."))}) 
-  
+                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">Green and black bars to the right indicate that the landings or discards were higher in the scenario run than the baseline, and vice-versa for red and grey bars to the left."),
+                                          HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px  \">You can adjust the axis limits for the tornado plot using the slider bar below. The plot will default to ±40% but you may want to alter these to accommodate the output from your scenario or to standardize the graphs for different scenarios, To access the numeric values for each bar in the graphs, use the “Download data” button."))})
   
   output$textRunBaselineFiles <- renderUI({
     if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runBaseline == 0){
@@ -6216,8 +6217,7 @@ server <- function(input, output, session) {
     output$downloadData_biomassCompData <- downloadHandler(
       filename = biomassCompDataFilename,
       content = function(file) {
-        biomassData <- reactivePlot_e2e_compare_runs_bar_aam_data()
-        write.csv(biomassData, file, row.names = TRUE)
+        write.csv(reactivePlot_e2e_compare_runs_bar_aam_data(), file, row.names = TRUE)
       }
     )
 
@@ -6237,19 +6237,6 @@ server <- function(input, output, session) {
       runjs("$('#dwnbutton_bmd').attr('title', 'Data not available');")
     }
     
-    output$e2e_compare_runs_bar_aam <-
-      renderPlot({
-        if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runScenario == 0){
-          showModal(
-            modalDialog(
-              "Please choose a region, time period and run the scenario before viewing comparison plots",
-              footer = NULL,
-              easyClose = TRUE
-            )
-          )
-        }
-        reactivePlot_e2e_compare_runs_bar_aam_plot()
-      })
     catchCompFilename <- paste0(input$selectedlocation, "_" ,input$selectedVariant, "_","catchComparison.png")
     output$downloadData_catchComp <- downloadHandler(
       filename = catchCompFilename,
@@ -6262,8 +6249,7 @@ server <- function(input, output, session) {
     output$downloadData_catchCompData <- downloadHandler(
       filename = catchCompDataFilename,
       content = function(file) {
-        catchCompData <- reactivePlot_e2e_compare_runs_bar_catch_data()
-        write.csv(catchCompData, file, row.names = TRUE)
+        write.csv(reactivePlot_e2e_compare_runs_bar_catch_data(), file, row.names = TRUE)
       }
     )
     
@@ -6283,6 +6269,21 @@ server <- function(input, output, session) {
       runjs("$('#dwnbutton_catchdata').attr('title', 'Data not available');")
     }
     
+    
+    output$e2e_compare_runs_bar_aam <-
+      renderPlot({
+        if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runScenario == 0){
+          showModal(
+            modalDialog(
+              "Please choose a region, time period and run the scenario before viewing comparison plots",
+              footer = NULL,
+              easyClose = TRUE
+            )
+          )
+        }
+        reactivePlot_e2e_compare_runs_bar_aam_plot()
+      })
+    
     output$e2e_compare_runs_bar_catch <-
       renderPlot({
         if (is.null(input$selectedlocation) || is.null(input$selectedVariant) || input$runScenario == 0){
@@ -6296,6 +6297,7 @@ server <- function(input, output, session) {
         }
         reactivePlot_e2e_compare_runs_bar_catch_plot()
       })
+    
     removeModal()
     uuid_s <- UUIDgenerate()
     resultDirScenario <- toString(scenario_model$setup$resultsdir)
