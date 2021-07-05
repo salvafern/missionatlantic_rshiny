@@ -5780,7 +5780,7 @@ server <- function(input, output, session) {
       results_baseline <- e2e_run(model, nyears = input$year, csv.output = TRUE)
     #}
     scenario_model <- model
-    View(scenario_model)
+    #View(scenario_model)
     #print("Got this far 1")
     # Temperature
     if (!is.null(input$temperature))
@@ -6563,6 +6563,278 @@ server <- function(input, output, session) {
     if (!is.null(input$whalerDiscard_kelp))
       scenario_model$data$fleet.model$gear_group_discard$kelp[12] <-
       input$whalerDiscard_kelp
+    
+    # Start of gear distribution per habitat
+    if (!is.null(input$pelInRock))
+      scenario_model$data$fleet.model$gear_habitat_activity$s0[1] <-
+      input$pelInRock
+    
+    if (!is.null(input$pelInFine))
+      scenario_model$data$fleet.model$gear_habitat_activity$s1[1] <- input$pelInFine
+    
+    if (!is.null(input$pelInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[1] <- input$pelInMed
+    
+    if (!is.null(input$pelInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[1] <- input$pelInMed
+    
+    if (!is.null(input$pelOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[1] <- input$pelOffRock
+    
+    if (!is.null(input$pelOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[1] <- input$pelOffFine
+    
+    if (!is.null(input$pelOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[1] <- input$pelOffMed
+    
+    if (!is.null(input$pelOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[1] <- input$pelOffCoarse
+    
+    if (!is.null(input$sandeelInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[2] <- input$sandeelInRock
+    
+    if (!is.null(input$sandeelInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[2] <- input$sandeelInFine
+    
+    if (!is.null(input$sandeelInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[2] <- input$sandeelInMed
+    
+    if (!is.null(input$sandeelInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[2] <- input$sandeelInCoarse
+    
+    if (!is.null(input$sandeelOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[2] <- input$sandeelOffRock
+    
+    if (!is.null(input$sandeelOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[2] <- input$sandeelOffFine
+    
+    if (!is.null(input$sandeelOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[2] <- input$sandeelOffMed
+    
+    if (!is.null(input$sandeelOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[2] <- input$sandeelOffCoarse
+    
+    if (!is.null(input$otterInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[2] <- input$otterInRock
+    
+    if (!is.null(input$otterInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[2] <- input$otterInFine
+    
+    if (!is.null(input$otterInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[2] <- input$otterInMed
+    
+    if (!is.null(input$otterInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[2] <- input$otterInCoarse
+    
+    if (!is.null(input$otterOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[2] <- input$otterOffRock
+    
+    if (!is.null(input$otterOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[2] <- input$otterOffFine
+    
+    if (!is.null(input$otterOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[2] <- input$otterOffMed
+    
+    if (!is.null(input$otterOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[2] <- input$otterOffCoarse
+    
+    if (!is.null(input$lonMackInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[3] <- input$lonMackInRock
+    
+    if (!is.null(input$lonMackInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[3] <- input$lonMackInFine
+    
+    if (!is.null(input$lonMackInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[3] <- input$lonMackInMed
+    
+    if (!is.null(input$lonMackInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[3] <- input$lonMackInCoarse
+    
+    if (!is.null(input$lonMackOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[3] <- input$lonMackOffRock
+    
+    if (!is.null(input$lonMackOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[3] <- input$lonMackOffFine
+    
+    if (!is.null(input$lonMackOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[3] <- input$lonMackOffMed
+    
+    if (!is.null(input$lonMackOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[3] <- input$lonMackOffCoarse
+    
+    if (!is.null(input$beamTrawlInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[4] <- input$beamTrawlInRock
+    
+    if (!is.null(input$beamTrawlInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[4] <- input$beamTrawlInFine
+    
+    if (!is.null(input$beamTrawlInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[4] <- input$beamTrawlInMed
+    
+    if (!is.null(input$beamTrawlInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[4] <- input$beamTrawlInCoarse
+    
+    if (!is.null(input$beamTrawlOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[4] <- input$beamTrawlOffRock
+    
+    if (!is.null(input$beamTrawlOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[4] <- input$beamTrawlOffFine
+    
+    if (!is.null(input$beamTrawlOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[4] <- input$beamTrawlOffMed
+    
+    if (!is.null(input$beamTrawlOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[4] <- input$beamTrawlOffCoarse
+    
+    if (!is.null(input$demSeineInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[5] <- input$demSeineInRock
+    
+    if (!is.null(input$demSeineInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[5] <- input$demSeineInFine
+    
+    if (!is.null(input$demSeineInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[5] <- input$demSeineInMed
+    
+    if (!is.null(input$demSeineInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[5] <- input$demSeineInCoarse
+    
+    if (!is.null(input$demSeineOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[5] <- input$demSeineOffRock
+    
+    if (!is.null(input$demSeineOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[5] <- input$demSeineOffFine
+    
+    if (!is.null(input$demSeineOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[5] <- input$demSeineOffMed
+    
+    if (!is.null(input$demSeineOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[5] <- input$demSeineOffCoarse
+    
+    if (!is.null(input$demOtterInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[6] <- input$demOtterInRock
+    
+    if (!is.null(input$demOtterInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[6] <- input$demOtterInFine
+    
+    if (!is.null(input$demOtterInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[6] <- input$demOtterInMed
+    
+    if (!is.null(input$demOtterInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[6] <- input$demOtterInCoarse
+    
+    if (!is.null(input$demOtterOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[6] <- input$demOtterOffRock
+    
+    if (!is.null(input$demOtterOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[6] <- input$demOtterOffFine
+    
+    if (!is.null(input$demOtterOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[6] <- input$demOtterOffMed
+    
+    if (!is.null(input$demOtterOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[6] <- input$demOtterOffCoarse
+    
+    if (!is.null(input$gillNetInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[7] <- input$gillNetInRock
+    
+    if (!is.null(input$gillNetInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[7] <- input$gillNetInFine
+    
+    if (!is.null(input$gillNetInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[7] <- input$gillNetInMed
+    
+    if (!is.null(input$gillNetInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[7] <- input$gillNetInCoarse
+    
+    if (!is.null(input$gillNetOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[7] <- input$gillNetOffRock
+    
+    if (!is.null(input$gillNetOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[7] <- input$gillNetOffFine
+    
+    if (!is.null(input$gillNetOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[7] <- input$gillNetOffMed
+    
+    if (!is.null(input$gillNetOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[7] <- input$gillNetOffCoarse
+    
+    if (!is.null(input$beamShrimpInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[8] <- input$beamShrimpInRock
+    
+    if (!is.null(input$beamShrimpInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[8] <- input$beamShrimpInFine
+    
+    if (!is.null(input$beamShrimpInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[8] <- input$beamShrimpInMed
+    
+    if (!is.null(input$beamShrimpInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[8] <- input$beamShrimpInCoarse
+    
+    if (!is.null(input$beamShrimpOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[8] <- input$beamShrimpOffRock
+    
+    if (!is.null(input$beamShrimpOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[8] <- input$beamShrimpOffFine
+    
+    if (!is.null(input$beamShrimpOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[8] <- input$beamShrimpOffMed
+    
+    if (!is.null(input$beamShrimpOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[8] <- input$beamShrimpOffCoarse
+    
+    nephropsTR2InRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[9]
+    nephropsTR2InFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[9]
+    nephropsTR2InMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[9]
+    nephropsTR2InCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[9]
+    nephropsTR2OffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[9]
+    nephropsTR2OffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[9]
+    nephropsTR2OffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[9]
+    nephropsTR2OffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[9]
+    
+    nephropsTR3InRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[9]
+    nephropsTR3InFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[9]
+    nephropsTR3InMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[9]
+    nephropsTR3InCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[9]
+    nephropsTR3OffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[9]
+    nephropsTR3OffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[9]
+    nephropsTR3OffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[9]
+    nephropsTR3OffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[9]
+    
+    creelsInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[10]
+    creelsInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[10]
+    creelsInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[10]
+    creelsInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[10]
+    creelsOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[10]
+    creelsOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[10]
+    creelsOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[10]
+    creelsOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[10]
+    
+    molluscInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[11]
+    molluscInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[11]
+    molluscInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[11]
+    molluscInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[11]
+    molluscOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[11]
+    molluscOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[11]
+    molluscOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[11]
+    molluscOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[11]
+    
+    whalerInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[12]
+    whalerInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[12]
+    whalerInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[12]
+    whalerInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[12]
+    whalerOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[12]
+    whalerOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[12]
+    whalerOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[12]
+    whalerOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[12]
+    
+    kelpInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[12]
+    kelpInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[12]
+    kelpInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[12]
+    kelpInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[12]
+    kelpOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[12]
+    kelpOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[12]
+    kelpOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[12]
+    kelpOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[12]
     #print("Got this far 15")
     results_scenario <-
       e2e_run(scenario_model,
