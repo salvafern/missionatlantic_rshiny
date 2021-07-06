@@ -825,6 +825,12 @@ server <- function(input, output, session) {
       outputType = "DATA")
   })
   
+  
+  output$totalPelGearPerHab <- renderUI({ 
+    total <- as.numeric(input$pelInRock) + as.numeric(input$pelInFine) + as.numeric(input$pelInMed) + as.numeric(input$pelInCoarse) + as.numeric(input$pelOffRock) + as.numeric(input$pelOffFine) + as.numeric(input$pelOffMed) + as.numeric(input$pelOffCoarse)
+    numericInput("totalPel", "Total",total)
+    })
+  
   output$uiFishingActivity <- renderUI({
     # current chosen model on dropdown lists
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -2125,7 +2131,7 @@ server <- function(input, output, session) {
     kelpOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[12]
     kelpOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[12]
     kelpOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[12]
-    
+
     switch(
       input$selectedGearForHabitatDist,
       "Pelagic_Trawl+Seine" = fluidRow(  box(width = 12, title = "Habitats", style = "font-size:9px;",
@@ -2137,7 +2143,8 @@ server <- function(input, output, session) {
                                                numericInput("pelOffRock", "Offshore rock",pelOffRockDefault),
                                                numericInput("pelOffFine", "Offshore fine",pelOffFineDefault),
                                                numericInput("pelOffMed", "Offshore medium",pelOffMedDefault),
-                                               numericInput("pelOffRock", "Offshore coarse",pelOffRockDefault)
+                                               numericInput("pelOffCoarse", "Offshore coarse",pelOffCoarseDefault),
+                                               uiOutput("totalPelGearPerHab")
                                              )
       )),
       "Sandeel+sprat_trawl(Otter30-70mm+TR3)" = fluidRow( box(width = 12, title = "Habitats", style = "font-size:9px;",
@@ -6576,7 +6583,7 @@ server <- function(input, output, session) {
     scenario_model$data$fleet.model$gear_habitat_activity$s2[1] <- input$pelInMed
     
     if (!is.null(input$pelInCoarse))
-    scenario_model$data$fleet.model$gear_habitat_activity$s3[1] <- input$pelInMed
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[1] <- input$pelInCoarse
     
     if (!is.null(input$pelOffRock))
     scenario_model$data$fleet.model$gear_habitat_activity$d0[1] <- input$pelOffRock
@@ -6782,59 +6789,149 @@ server <- function(input, output, session) {
     if (!is.null(input$beamShrimpOffCoarse))
     scenario_model$data$fleet.model$gear_habitat_activity$d3[8] <- input$beamShrimpOffCoarse
     
-    nephropsTR2InRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[9]
-    nephropsTR2InFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[9]
-    nephropsTR2InMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[9]
-    nephropsTR2InCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[9]
-    nephropsTR2OffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[9]
-    nephropsTR2OffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[9]
-    nephropsTR2OffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[9]
-    nephropsTR2OffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[9]
+    if (!is.null(input$nephropsTR2InRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[9] <- input$nephropsTR2InRock
     
-    nephropsTR3InRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[9]
-    nephropsTR3InFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[9]
-    nephropsTR3InMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[9]
-    nephropsTR3InCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[9]
-    nephropsTR3OffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[9]
-    nephropsTR3OffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[9]
-    nephropsTR3OffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[9]
-    nephropsTR3OffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[9]
+    if (!is.null(input$nephropsTR2InFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[9] <- input$nephropsTR2InFine
     
-    creelsInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[10]
-    creelsInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[10]
-    creelsInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[10]
-    creelsInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[10]
-    creelsOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[10]
-    creelsOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[10]
-    creelsOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[10]
-    creelsOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[10]
+    if (!is.null(input$nephropsTR2InMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[9] <- input$nephropsTR2InMed
     
-    molluscInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[11]
-    molluscInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[11]
-    molluscInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[11]
-    molluscInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[11]
-    molluscOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[11]
-    molluscOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[11]
-    molluscOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[11]
-    molluscOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[11]
+    if (!is.null(input$nephropsTR2InCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[9] <- input$nephropsTR2InCoarse
     
-    whalerInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[12]
-    whalerInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[12]
-    whalerInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[12]
-    whalerInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[12]
-    whalerOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[12]
-    whalerOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[12]
-    whalerOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[12]
-    whalerOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[12]
+    if (!is.null(input$nephropsTR2OffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[9] <- input$nephropsTR2OffRock
     
-    kelpInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[12]
-    kelpInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[12]
-    kelpInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[12]
-    kelpInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[12]
-    kelpOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[12]
-    kelpOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[12]
-    kelpOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[12]
-    kelpOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[12]
+    if (!is.null(input$nephropsTR2OffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[9] <- input$nephropsTR2OffFine
+    
+    if (!is.null(input$nephropsTR2OffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[9] <- input$nephropsTR2OffMed
+    
+    if (!is.null(input$nephropsTR2OffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[9] <- input$nephropsTR2OffCoarse
+    
+    if (!is.null(input$nephropsTR3InRock))
+      scenario_model$data$fleet.model$gear_habitat_activity$s0[9] <- input$nephropsTR3InRock
+    
+    if (!is.null(input$nephropsTR3InFine))
+      scenario_model$data$fleet.model$gear_habitat_activity$s1[9] <- input$nephropsTR3InFine
+    
+    if (!is.null(input$nephropsTR3InMed))
+      scenario_model$data$fleet.model$gear_habitat_activity$s2[9] <- input$nephropsTR3InMed
+    
+    if (!is.null(input$nephropsTR3InCoarse))
+      scenario_model$data$fleet.model$gear_habitat_activity$s3[9] <- input$nephropsTR3InCoarse
+    
+    if (!is.null(input$nephropsTR3OffRock))
+      scenario_model$data$fleet.model$gear_habitat_activity$d0[9] <- input$nephropsTR3OffRock
+    
+    if (!is.null(input$nephropsTR3OffFine))
+      scenario_model$data$fleet.model$gear_habitat_activity$d1[9] <- input$nephropsTR3OffFine
+    
+    if (!is.null(input$nephropsTR3OffMed))
+      scenario_model$data$fleet.model$gear_habitat_activity$d3[9] <- input$nephropsTR3OffMed
+    
+    if (!is.null(input$nephropsTR3OffCoarse))
+      scenario_model$data$fleet.model$gear_habitat_activity$d3[9] <- input$nephropsTR3OffCoarse
+    
+    if (!is.null(input$creelsInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[10] <- input$creelsInRock
+    
+    if (!is.null(input$creelsInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[10] <- input$creelsInFine
+    
+    if (!is.null(input$creelsInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[10] <- input$creelsInMed
+    
+    if (!is.null(input$creelsInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[10] <- input$creelsInCoarse
+    
+    if (!is.null(input$creelsOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[10] <- input$creelsOffRock
+    
+    if (!is.null(input$creelsOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[10] <- input$creelsOffFine
+    
+    if (!is.null(input$creelsOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[10] <- input$creelsOffMed
+    
+    if (!is.null(input$creelsOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[10] <- input$creelsOffCoarse
+    
+    if (!is.null(input$molluscInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[11] <- input$molluscInRock
+    
+    if (!is.null(input$molluscInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[11] <- input$molluscInFine
+    
+    if (!is.null(input$molluscInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[11] <- input$molluscInMed
+    
+    if (!is.null(input$molluscInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[11] <- input$molluscInCoarse
+    
+    if (!is.null(input$molluscOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[11] <- input$molluscOffRock
+    
+    if (!is.null(input$molluscOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[11] <- input$molluscOffFine
+    
+    if (!is.null(input$molluscOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[11] <- input$molluscOffMed
+    
+    if (!is.null(input$molluscOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[11] <- input$molluscOffCoarse
+    
+    if (!is.null(input$whalerInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[12] <- input$whalerInRock
+    
+    if (!is.null(input$whalerInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[12] <- input$whalerInFine
+    
+    if (!is.null(input$whalerInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[12] <- input$whalerInMed
+    
+    if (!is.null(input$whalerInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[12] <- input$whalerInCoarse
+    
+    if (!is.null(input$whalerOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[12] <- input$whalerOffRock
+    
+    if (!is.null(input$whalerOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[12] <- input$whalerOffFine
+    
+    if (!is.null(input$whalerOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[12] <- input$whalerOffMed
+    
+    if (!is.null(input$whalerOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[12] <- input$whalerOffCoarse
+    
+    if (!is.null(input$kelpInRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$s0[12] <- input$kelpInRock
+    
+    if (!is.null(input$kelpInFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$s1[12] <- input$kelpInFine
+    
+    if (!is.null(input$kelpInMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[12] <- input$kelpInMed
+    
+    if (!is.null(input$kelpInCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[12] <- input$kelpInCoarse
+    
+    if (!is.null(input$kelpOffRock))
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[12] <- input$kelpOffRock
+    
+    if (!is.null(input$kelpOffFine))
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[12] <- input$kelpOffFine
+    
+    if (!is.null(input$kelpOffMed))
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[12] <- input$kelpOffMed
+    
+    if (!is.null(input$kelpOffCoarse))
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[12] <- input$kelpOffCoarse
     #print("Got this far 15")
     results_scenario <-
       e2e_run(scenario_model,
