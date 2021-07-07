@@ -25,6 +25,17 @@ source("e2e_compare_runs_bar_gg.R")
 source("compareTwoRunsAAM.R")
 source("compareTwoRunsCatch.R")
 
+jsCode <- '
+shinyjs.backgroundCol = function(params) {
+var defaultParams = {
+id : null,
+col : "red"
+};
+params = shinyjs.getParams(params, defaultParams);
+var el = $("#" + params.id);
+el.css("background-color", params.col);
+}'
+
 ui <- navbarPage(
   "StrathE2E-App",
   theme = shinytheme("cerulean"), #"strathe2e.css", 
@@ -827,30 +838,65 @@ server <- function(input, output, session) {
   
   ## NEED TO ADD SOMETHING LIKE THIS TO VALIDATE EACH NUMERIC INPUT ENTRY - to KEEP WITHIN RANGE
   # observeEvent(input$current, { 
-  #   updateNumericInput(session,"current", value = ({ if(!(is.numeric(input$current))){40}
+  #   updateNumericInput(session,"current", value = ({ if(!(is.numeric(input$current))){0}
   #     else if(!(is.null(input$current) || is.na(input$current))){
-  #       if(input$current < 40){
-  #         40 
-  #       }else if(input$current > 80){
-  #         80
+  #       if(input$current < 0){
+  #         0 
+  #       }else if(input$current > 100){
+  #         100
   #       } else{
   #         return (isolate(input$current))
   #       } 
   #     } 
-  #     else{40}
+  #     else{0}
   #   })
   #   )
   # })
   
   output$totalPelGearPerHab <- renderUI({ 
     total <- as.numeric(input$pelInRock) + as.numeric(input$pelInFine) + as.numeric(input$pelInMed) + as.numeric(input$pelInCoarse) + as.numeric(input$pelOffRock) + as.numeric(input$pelOffFine) + as.numeric(input$pelOffMed) + as.numeric(input$pelOffCoarse)
-    numericInput("totalPel", "Total",total,width = '15%')
+    print(total)
+    numericInput("totalPel", "Total",total,width = '50%')
     })
+  
+  observeEvent(input$totalPel,{
+    if (input$totalPel != 100)  {
+      js$backgroundCol("totalPel","red")
+    } else {
+      js$backgroundCol("totalPel","white")
+    }
+    updateNumericInput(session, "totalPel", value = input$totalPel)
+    disable("totalPel")
+  })
     
     output$totalSandeelGearPerHab <- renderUI({ 
-      totalSE <- as.numeric(input$sandeelInRock) + as.numeric(input$sandeelInFine) + as.numeric(input$sandeelInMed) + as.numeric(input$sandeelInCoarse) + as.numeric(input$sandeelOffRock) + as.numeric(input$sandeelOffFine) + as.numeric(input$sandeelOffMed) + as.numeric(input$sandeelOffCoarse)
+      if(is.na(input$sandeelInRock)){
+        totalSE <- 0
+      } else {
+        #totalSE <- as.numeric(input$sandeelInRock) + as.numeric(input$sandeelInFine) + as.numeric(input$sandeelInMed) + as.numeric(input$sandeelInCoarse) + as.numeric(input$sandeelOffRock) + as.numeric(input$sandeelOffFine) + as.numeric(input$sandeelOffMed) + as.numeric(input$sandeelOffCoarse)
+        totalSE <- input$sandeelInRock + input$sandeelInFine + input$sandeelInMed + input$sandeelInCoarse + input$sandeelOffRock + input$sandeelOffFine + input$sandeelOffMed + input$sandeelOffCoarse
+      }
+      print(input$sandeelInRock)
+      print(input$sandeelInFine)
+      print(input$sandeelInMed)
+      print(input$sandeelInCoarse)
+      print(input$sandeelOffRock)
+      print(input$sandeelOffFine)
+      print(input$sandeelOffMed)
+      print(input$sandeelOffCoarse)
+      print(totalSE)
       numericInput("totalSandeel", "Total",totalSE)
     })   
+    
+    observeEvent(input$totalSandeel,{
+      # if (input$totalSandeel != 100)  {
+      #   js$backgroundCol("totalSandeel","red")
+      # } else {
+      #   js$backgroundCol("totalSandeel","white")
+      # }
+      updateNumericInput(session, "totalSandeel", value = input$totalSandeel)
+      disable("totalSandeel")
+    })
     
     output$totalOtterGearPerHab <- renderUI({ 
       totalOt <- as.numeric(input$otterInRock) + as.numeric(input$otterInFine) + as.numeric(input$otterInMed) + as.numeric(input$otterInCoarse) + as.numeric(input$otterOffRock) + as.numeric(input$otterOffFine) + as.numeric(input$otterOffMed) + as.numeric(input$otterOffCoarse)
@@ -2241,6 +2287,8 @@ server <- function(input, output, session) {
                                                numericInput("pelOffCoarse", "Offshore coarse",pelOffCoarseDefault,min = 0, max = 100, step = 1,width = '45%')
                                              ),
                                              splitLayout(
+                                               useShinyjs(),
+                                               extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                uiOutput("totalPelGearPerHab")
                                              )
       )),
@@ -2258,6 +2306,8 @@ server <- function(input, output, session) {
                                                                 numericInput("sandeelOffRock", "Offshore coarse",sandeelOffRockDefault, min = 0, max = 100, step = 1)
                                                                 ),
                                                                 splitLayout(
+                                                                  useShinyjs(),
+                                                                  extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                                 uiOutput("totalSandeelGearPerHab")
                                                               )
       )),
