@@ -854,7 +854,7 @@ server <- function(input, output, session) {
   # })
   
   output$totalPelGearPerHab <- renderUI({ 
-    total <- as.numeric(input$pelInRock) + as.numeric(input$pelInFine) + as.numeric(input$pelInMed) + as.numeric(input$pelInCoarse) + as.numeric(input$pelOffRock) + as.numeric(input$pelOffFine) + as.numeric(input$pelOffMed) + as.numeric(input$pelOffCoarse)
+    total <- sum(as.numeric(input$pelInRock), as.numeric(input$pelInFine) , as.numeric(input$pelInMed) , as.numeric(input$pelInCoarse) , as.numeric(input$pelOffRock) , as.numeric(input$pelOffFine) , as.numeric(input$pelOffMed) , as.numeric(input$pelOffCoarse))
     print(total)
     numericInput("totalPel", "Total",total,width = '50%')
     })
@@ -873,99 +873,89 @@ server <- function(input, output, session) {
       if(is.na(input$sandeelInRock)){
         totalSE <- 0
       } else {
-        #totalSE <- as.numeric(input$sandeelInRock) + as.numeric(input$sandeelInFine) + as.numeric(input$sandeelInMed) + as.numeric(input$sandeelInCoarse) + as.numeric(input$sandeelOffRock) + as.numeric(input$sandeelOffFine) + as.numeric(input$sandeelOffMed) + as.numeric(input$sandeelOffCoarse)
-        totalSE <- input$sandeelInRock + input$sandeelInFine + input$sandeelInMed + input$sandeelInCoarse + input$sandeelOffRock + input$sandeelOffFine + input$sandeelOffMed + input$sandeelOffCoarse
+        totalSE <- sum(as.numeric(input$sandeelInRock) , as.numeric(input$sandeelInFine) , as.numeric(input$sandeelInMed) , as.numeric(input$sandeelInCoarse) , as.numeric(input$sandeelOffRock) , as.numeric(input$sandeelOffFine) , as.numeric(input$sandeelOffMed) , as.numeric(input$sandeelOffCoarse))
       }
-      print(input$sandeelInRock)
-      print(input$sandeelInFine)
-      print(input$sandeelInMed)
-      print(input$sandeelInCoarse)
-      print(input$sandeelOffRock)
-      print(input$sandeelOffFine)
-      print(input$sandeelOffMed)
-      print(input$sandeelOffCoarse)
-      print(totalSE)
       numericInput("totalSandeel", "Total",totalSE)
     })   
     
     observeEvent(input$totalSandeel,{
-      # if (input$totalSandeel != 100)  {
-      #   js$backgroundCol("totalSandeel","red")
-      # } else {
-      #   js$backgroundCol("totalSandeel","white")
-      # }
+      if (input$totalSandeel != 100)  {
+        js$backgroundCol("totalSandeel","red")
+      } else {
+        js$backgroundCol("totalSandeel","white")
+      }
       updateNumericInput(session, "totalSandeel", value = input$totalSandeel)
       disable("totalSandeel")
     })
     
     output$totalOtterGearPerHab <- renderUI({ 
-      totalOt <- as.numeric(input$otterInRock) + as.numeric(input$otterInFine) + as.numeric(input$otterInMed) + as.numeric(input$otterInCoarse) + as.numeric(input$otterOffRock) + as.numeric(input$otterOffFine) + as.numeric(input$otterOffMed) + as.numeric(input$otterOffCoarse)
+      totalOt <- sum(as.numeric(input$otterInRock) , as.numeric(input$otterInFine) , as.numeric(input$otterInMed) , as.numeric(input$otterInCoarse) , as.numeric(input$otterOffRock) , as.numeric(input$otterOffFine) , as.numeric(input$otterOffMed) , as.numeric(input$otterOffCoarse))
       numericInput("totalOtter", "Total",totalOt)
     })  
     
     output$totalLonMackGearPerHab <- renderUI({ 
-      totalLM <- as.numeric(input$lonMackInRock) + as.numeric(input$lonMackInFine) + as.numeric(input$lonMackInMed) + as.numeric(input$lonMackInCoarse) + as.numeric(input$lonMackOffRock) + as.numeric(input$lonMackOffFine) + as.numeric(input$lonMackOffMed) + as.numeric(input$lonMackOffCoarse)
+      totalLM <- sum(as.numeric(input$lonMackInRock) , as.numeric(input$lonMackInFine) , as.numeric(input$lonMackInMed) , as.numeric(input$lonMackInCoarse) , as.numeric(input$lonMackOffRock) , as.numeric(input$lonMackOffFine) , as.numeric(input$lonMackOffMed) , as.numeric(input$lonMackOffCoarse))
       numericInput("totalLonMack", "Total",totalLM)
     })
     
     output$totalBeamTrawlGearPerHab <- renderUI({ 
-      total <- as.numeric(input$beamTrawlInRock) + as.numeric(input$beamTrawlInFine) + as.numeric(input$beamTrawlInMed) + as.numeric(input$beamTrawlInCoarse) + as.numeric(input$beamTrawlOffRock) + as.numeric(input$beamTrawlOffFine) + as.numeric(input$beamTrawlOffMed) + as.numeric(input$beamTrawlOffCoarse)
+      total <- sum(as.numeric(input$beamTrawlInRock) , as.numeric(input$beamTrawlInFine) , as.numeric(input$beamTrawlInMed) , as.numeric(input$beamTrawlInCoarse) , as.numeric(input$beamTrawlOffRock) , as.numeric(input$beamTrawlOffFine) , as.numeric(input$beamTrawlOffMed) , as.numeric(input$beamTrawlOffCoarse))
       numericInput("totalBeamTrawl", "Total",total)
     })
     
     output$totalDemSeineGearPerHab <- renderUI({ 
-      totalDS <- as.numeric(input$demSeineInRock) + as.numeric(input$demSeineInFine) + as.numeric(input$demSeineInMed) + as.numeric(input$demSeineInCoarse) + as.numeric(input$demSeineOffRock) + as.numeric(input$demSeineOffFine) + as.numeric(input$demSeineOffMed) + as.numeric(input$demSeineOffCoarse)
+      totalDS <- sum(as.numeric(input$demSeineInRock) , as.numeric(input$demSeineInFine) , as.numeric(input$demSeineInMed) , as.numeric(input$demSeineInCoarse) , as.numeric(input$demSeineOffRock) , as.numeric(input$demSeineOffFine) , as.numeric(input$demSeineOffMed) , as.numeric(input$demSeineOffCoarse))
       numericInput("totalDemSeine", "Total",totalDS)
     })
     
     output$totalDemOtterGearPerHab <- renderUI({ 
-      totalDO <- as.numeric(input$demOtterInRock) + as.numeric(input$demOtterInFine) + as.numeric(input$demOtterInMed) + as.numeric(input$demOtterInCoarse) + as.numeric(input$demOtterOffRock) + as.numeric(input$demOtterOffFine) + as.numeric(input$demOtterOffMed) + as.numeric(input$demOtterOffCoarse)
+      totalDO <- sum(as.numeric(input$demOtterInRock) , as.numeric(input$demOtterInFine) , as.numeric(input$demOtterInMed) , as.numeric(input$demOtterInCoarse) , as.numeric(input$demOtterOffRock) , as.numeric(input$demOtterOffFine) , as.numeric(input$demOtterOffMed) , as.numeric(input$demOtterOffCoarse))
       numericInput("totalDemOtter", "Total",totalDO)
     })
     
     
     output$totalGillNetGearPerHab <- renderUI({ 
-      totalGN <- as.numeric(input$gillNetInRock) + as.numeric(input$gillNetInFine) + as.numeric(input$gillNetInMed) + as.numeric(input$gillNetInCoarse) + as.numeric(input$gillNetOffRock) + as.numeric(input$gillNetOffFine) + as.numeric(input$gillNetOffMed) + as.numeric(input$gillNetOffCoarse)
+      totalGN <- sum(as.numeric(input$gillNetInRock) , as.numeric(input$gillNetInFine) , as.numeric(input$gillNetInMed) , as.numeric(input$gillNetInCoarse) , as.numeric(input$gillNetOffRock) , as.numeric(input$gillNetOffFine) , as.numeric(input$gillNetOffMed) , as.numeric(input$gillNetOffCoarse))
       numericInput("totalGillNet", "Total",totalGN)
     })
     
     
     output$totalBeamShrimpGearPerHab <- renderUI({ 
-      totalBS <- as.numeric(input$beamShrimpInRock) + as.numeric(input$beamShrimpInFine) + as.numeric(input$beamShrimpInMed) + as.numeric(input$beamShrimpInCoarse) + as.numeric(input$beamShrimpOffRock) + as.numeric(input$beamShrimpOffFine) + as.numeric(input$beamShrimpOffMed) + as.numeric(input$beamShrimpOffCoarse)
+      totalBS <- sum(as.numeric(input$beamShrimpInRock) , as.numeric(input$beamShrimpInFine) , as.numeric(input$beamShrimpInMed) , as.numeric(input$beamShrimpInCoarse) , as.numeric(input$beamShrimpOffRock) , as.numeric(input$beamShrimpOffFine) , as.numeric(input$beamShrimpOffMed) , as.numeric(input$beamShrimpOffCoarse))
       numericInput("totalBeamShrimp", "Total",totalBS)
     })
     
     
     output$totalNephropsTR2GearPerHab <- renderUI({ 
-      totalN2 <- as.numeric(input$nephropsTR2InRock) + as.numeric(input$nephropsTR2InFine) + as.numeric(input$nephropsTR2InMed) + as.numeric(input$nephropsTR2InCoarse) + as.numeric(input$nephropsTR2OffRock) + as.numeric(input$nephropsTR2OffFine) + as.numeric(input$nephropsTR2OffMed) + as.numeric(input$nephropsTR2OffCoarse)
+      totalN2 <- sum(as.numeric(input$nephropsTR2InRock) , as.numeric(input$nephropsTR2InFine) , as.numeric(input$nephropsTR2InMed) , as.numeric(input$nephropsTR2InCoarse) , as.numeric(input$nephropsTR2OffRock) , as.numeric(input$nephropsTR2OffFine) , as.numeric(input$nephropsTR2OffMed) , as.numeric(input$nephropsTR2OffCoarse))
       numericInput("totalNephropsTR2", "Total",totalN2)
     })
     
     output$totalNephropsTR3GearPerHab <- renderUI({ 
-      totalN3 <- as.numeric(input$nephropsTR3InRock) + as.numeric(input$nephropsTR3InFine) + as.numeric(input$nephropsTR3InMed) + as.numeric(input$nephropsTR3InCoarse) + as.numeric(input$nephropsTR3OffRock) + as.numeric(input$nephropsTR3OffFine) + as.numeric(input$nephropsTR3OffMed) + as.numeric(input$nephropsTR3OffCoarse)
+      totalN3 <- sum(as.numeric(input$nephropsTR3InRock) , as.numeric(input$nephropsTR3InFine) , as.numeric(input$nephropsTR3InMed) , as.numeric(input$nephropsTR3InCoarse) , as.numeric(input$nephropsTR3OffRock) , as.numeric(input$nephropsTR3OffFine) , as.numeric(input$nephropsTR3OffMed) , as.numeric(input$nephropsTR3OffCoarse))
       numericInput("totalNephropsTR3", "Total",totalN3)
     })
     
 
     output$totalCreelsGearPerHab <- renderUI({ 
-      totalCr <- as.numeric(input$creelsInRock) + as.numeric(input$creelsInFine) + as.numeric(input$creelsInMed) + as.numeric(input$creelsInCoarse) + as.numeric(input$creelsOffRock) + as.numeric(input$creelsOffFine) + as.numeric(input$creelsOffMed) + as.numeric(input$creelsOffCoarse)
+      totalCr <- sum(as.numeric(input$creelsInRock) , as.numeric(input$creelsInFine) , as.numeric(input$creelsInMed) , as.numeric(input$creelsInCoarse) , as.numeric(input$creelsOffRock) , as.numeric(input$creelsOffFine) , as.numeric(input$creelsOffMed) , as.numeric(input$creelsOffCoarse))
       numericInput("totalCreels", "Total",totalCr)
     })
     
     
     output$totalMolluscGearPerHab <- renderUI({ 
-      totalM <- as.numeric(input$molluscInRock) + as.numeric(input$molluscInFine) + as.numeric(input$molluscInMed) + as.numeric(input$molluscInCoarse) + as.numeric(input$molluscOffRock) + as.numeric(input$molluscOffFine) + as.numeric(input$molluscOffMed) + as.numeric(input$molluscOffCoarse)
+      totalM <- sum(as.numeric(input$molluscInRock) , as.numeric(input$molluscInFine) , as.numeric(input$molluscInMed) , as.numeric(input$molluscInCoarse) , as.numeric(input$molluscOffRock) , as.numeric(input$molluscOffFine) , as.numeric(input$molluscOffMed) , as.numeric(input$molluscOffCoarse))
       numericInput("totalMollusc", "Total",totalM)
     })
     
     
     output$totalWhalerGearPerHab <- renderUI({ 
-      totalW <- as.numeric(input$whalerInRock) + as.numeric(input$whalerInFine) + as.numeric(input$whalerInMed) + as.numeric(input$whalerInCoarse) + as.numeric(input$whalerOffRock) + as.numeric(input$whalerOffFine) + as.numeric(input$whalerOffMed) + as.numeric(input$whalerOffCoarse)
+      totalW <- sum(as.numeric(input$whalerInRock) , as.numeric(input$whalerInFine) , as.numeric(input$whalerInMed) , as.numeric(input$whalerInCoarse) , as.numeric(input$whalerOffRock) , as.numeric(input$whalerOffFine) , as.numeric(input$whalerOffMed) , as.numeric(input$whalerOffCoarse))
       numericInput("totalWhaler", "Total",totalW)
     })
     
     output$totalKelpGearPerHab <- renderUI({ 
-      totalK <- as.numeric(input$kelpInRock) + as.numeric(input$kelpInFine) + as.numeric(input$kelpInMed) + as.numeric(input$kelpInCoarse) + as.numeric(input$kelpOffRock) + as.numeric(input$kelpOffFine) + as.numeric(input$kelpOffMed) + as.numeric(input$kelpOffCoarse)
+      totalK <- sum(as.numeric(input$kelpInRock) , as.numeric(input$kelpInFine) , as.numeric(input$kelpInMed) , as.numeric(input$kelpInCoarse) , as.numeric(input$kelpOffRock) , as.numeric(input$kelpOffFine) , as.numeric(input$kelpOffMed) , as.numeric(input$kelpOffCoarse))
       numericInput("totalKelp", "Total",totalK)
     })
     
@@ -2303,7 +2293,7 @@ server <- function(input, output, session) {
                                                                 numericInput("sandeelOffRock", "Offshore rock",sandeelOffRockDefault ,min = 0, max = 100, step = 1),
                                                                 numericInput("sandeelOffFine", "Offshore fine",sandeelOffFineDefault, min = 0, max = 100, step = 1),
                                                                 numericInput("sandeelOffMed", "Offshore medium",sandeelOffMedDefault, min = 0, max = 100, step = 1),
-                                                                numericInput("sandeelOffRock", "Offshore coarse",sandeelOffRockDefault, min = 0, max = 100, step = 1)
+                                                                numericInput("sandeelOffCoarse", "Offshore coarse",sandeelOffCoarseDefault, min = 0, max = 100, step = 1)
                                                                 ),
                                                                 splitLayout(
                                                                   useShinyjs(),
@@ -2322,7 +2312,7 @@ server <- function(input, output, session) {
                                                                 numericInput("otterOffRock", "Offshore rock",otterOffRockDefault,min = 0, max = 100,step =1),
                                                                 numericInput("otterOffFine", "Offshore fine",otterOffFineDefault,min = 0, max = 100,step = 1),
                                                                 numericInput("otterOffMed", "Offshore medium",otterOffMedDefault,min = 0, max = 100,step = 1),
-                                                                numericInput("otterOffRock", "Offshore coarse",otterOffRockDefault,min = 0, max = 100,step = 1)
+                                                                numericInput("otterOffCoarse", "Offshore coarse",otterOffCoarseDefault,min = 0, max = 100,step = 1)
                                                         ),
                                                         splitLayout(
                                                                 uiOutput("totalOtterGearPerHab")
@@ -2341,7 +2331,7 @@ server <- function(input, output, session) {
                                            numericInput("lonMackOffRock", "Offshore rock",lonMackOffRockDefault,min = 0, max = 100,step = 1),
                                            numericInput("lonMackOffFine", "Offshore fine",lonMackOffFineDefault,min = 0, max = 100,step = 1),
                                            numericInput("lonMackOffMed", "Offshore medium",lonMackOffMedDefault,min = 0, max = 100,step = 1),
-                                           numericInput("lonMackOffRock", "Offshore coarse",lonMackOffRockDefault,min = 0, max = 100,step = 1)
+                                           numericInput("lonMackOffCoarse", "Offshore coarse",lonMackOffCoarseDefault,min = 0, max = 100,step = 1)
                                          ),
                                          splitLayout(
                                            uiOutput("totalLonMackGearPerHab")
@@ -2358,7 +2348,7 @@ server <- function(input, output, session) {
                                             numericInput("beamTrawlOffRock", "Offshore rock",beamTrawlOffRockDefault,min = 0, max = 100,step = 1),
                                             numericInput("beamTrawlOffFine", "Offshore fine",beamTrawlOffFineDefault,min = 0, max = 100,step = 1),
                                             numericInput("beamTrawlOffMed", "Offshore medium",beamTrawlOffMedDefault,min = 0, max = 100,step = 1),
-                                            numericInput("beamTrawlOffRock", "Offshore coarse",beamTrawlOffRockDefault,min = 0, max = 100,step = 1)
+                                            numericInput("beamTrawlOffCoarse", "Offshore coarse",beamTrawlOffCoarseDefault,min = 0, max = 100,step = 1)
                                           ),
                                           splitLayout(
                                             uiOutput("totalBeamTrawlGearPerHab")
@@ -2375,7 +2365,7 @@ server <- function(input, output, session) {
                                        numericInput("demSeineOffRock", "Offshore rock",demSeineOffRockDefault,min = 0, max = 100,step = 1),
                                        numericInput("demSeineOffFine", "Offshore fine",demSeineOffFineDefault,min = 0, max = 100,step = 1),
                                        numericInput("demSeineOffMed", "Offshore medium",demSeineOffMedDefault,min = 0, max = 100,step = 1),
-                                       numericInput("demSeineOffRock", "Offshore coarse",demSeineOffRockDefault,min = 0, max = 100,step = 1)
+                                       numericInput("demSeineOffCoarse", "Offshore coarse",demSeineOffCoarseDefault,min = 0, max = 100,step = 1)
                                      ),
                                      splitLayout(
                                        uiOutput("totalDemSeineGearPerHab")
@@ -2392,7 +2382,7 @@ server <- function(input, output, session) {
                                                   numericInput("demOtterOffRock", "Offshore rock",demOtterOffRockDefault,min = 0, max = 100,step = 1),
                                                   numericInput("demOtterOffFine", "Offshore fine",demOtterOffFineDefault,min = 0, max = 100,step = 1),
                                                   numericInput("demOtterOffMed", "Offshore medium",demOtterOffMedDefault,min = 0, max = 100,step = 1),
-                                                  numericInput("demOtterOffRock", "Offshore coarse",demOtterOffRockDefault,min = 0, max = 100,step = 1)
+                                                  numericInput("demOtterOffCoarse", "Offshore coarse",demOtterOffCoarseDefault,min = 0, max = 100,step = 1)
                                                 ),
                                                 splitLayout(
                                                   uiOutput("totalDemOtterGearPerHab")
@@ -2409,7 +2399,7 @@ server <- function(input, output, session) {
                                                      numericInput("gillNetOffRock", "Offshore rock",gillNetOffRockDefault,min = 0, max = 100,step = 1),
                                                      numericInput("gillNetOffFine", "Offshore fine",gillNetOffFineDefault,min = 0, max = 100,step = 1),
                                                      numericInput("gillNetOffMed", "Offshore medium",gillNetOffMedDefault,min = 0, max = 100,step = 1),
-                                                     numericInput("gillNetOffRock", "Offshore coarse",gillNetOffRockDefault,min = 0, max = 100,step = 1)
+                                                     numericInput("gillNetOffCoarse", "Offshore coarse",gillNetOffCoarseDefault,min = 0, max = 100,step = 1)
                                                    ),
                                                    splitLayout(
                                                      uiOutput("totalGillNetGearPerHab")
@@ -2426,7 +2416,7 @@ server <- function(input, output, session) {
                                            numericInput("beamShrimpOffRock", "Offshore rock",beamShrimpOffRockDefault,min = 0, max = 100,step = 1),
                                            numericInput("beamShrimpOffFine", "Offshore fine",beamShrimpOffFineDefault,min = 0, max = 100,step = 1),
                                            numericInput("beamShrimpOffMed", "Offshore medium",beamShrimpOffMedDefault,min = 0, max = 100,step = 1),
-                                           numericInput("beamShrimpOffRock", "Offshore coarse",beamShrimpOffRockDefault,min = 0, max = 100,step = 1)
+                                           numericInput("beamShrimpOffCoarse", "Offshore coarse",beamShrimpOffCoarseDefault,min = 0, max = 100,step = 1)
                                          ),
                                          splitLayout(
                                            uiOutput("totalBeamShrimpGearPerHab")
@@ -2443,7 +2433,7 @@ server <- function(input, output, session) {
                                             numericInput("nephropsTR2OffRock", "Offshore rock",nephropsTR2OffRockDefault,min = 0, max = 100,step = 1),
                                             numericInput("nephropsTR2OffFine", "Offshore fine",nephropsTR2OffFineDefault,min = 0, max = 100,step = 1),
                                             numericInput("nephropsTR2OffMed", "Offshore medium",nephropsTR2OffMedDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR2OffRock", "Offshore coarse",nephropsTR2OffRockDefault,min = 0, max = 100,step = 1)
+                                            numericInput("nephropsTR2OffCoarse", "Offshore coarse",nephropsTR2OffCoarseDefault,min = 0, max = 100,step = 1)
                                           ),
                                           splitLayout(
                                             uiOutput("totalNephropsTR2GearPerHab")
@@ -2460,7 +2450,7 @@ server <- function(input, output, session) {
                                             numericInput("nephropsTR3OffRock", "Offshore rock",nephropsTR3OffRockDefault,min = 0, max = 100,step = 1),
                                             numericInput("nephropsTR3OffFine", "Offshore fine",nephropsTR3OffFineDefault,min = 0, max = 100,step = 1),
                                             numericInput("nephropsTR3OffMed", "Offshore medium",nephropsTR3OffMedDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR3OffRock", "Offshore coarse",nephropsTR3OffRockDefault,min = 0, max = 100,step = 1)
+                                            numericInput("nephropsTR3OffCoarse", "Offshore coarse",nephropsTR3OffCoarseDefault,min = 0, max = 100,step = 1)
                                           ),
                                           splitLayout(
                                             uiOutput("totalNephropsTR3GearPerHab")
@@ -2477,7 +2467,7 @@ server <- function(input, output, session) {
                                 numericInput("creelsOffRock", "Offshore rock",creelsOffRockDefault,min = 0, max = 100,step = 1),
                                 numericInput("creelsOffFine", "Offshore fine",creelsOffFineDefault,min = 0, max = 100,step = 1),
                                 numericInput("creelsOffMed", "Offshore medium",creelsOffMedDefault,min = 0, max = 100,step = 1),
-                                numericInput("creelsOffRock", "Offshore coarse",creelsOffRockDefault,min = 0, max = 100,step = 1)
+                                numericInput("creelsOffCoarse", "Offshore coarse",creelsOffCoarseDefault,min = 0, max = 100,step = 1)
                               ),
                               splitLayout(
                                 uiOutput("totalCreelsGearPerHab")
@@ -2494,7 +2484,7 @@ server <- function(input, output, session) {
                                         numericInput("molluscOffRock", "Offshore rock",molluscOffRockDefault,min = 0, max = 100,step = 1),
                                         numericInput("molluscOffFine", "Offshore fine",molluscOffFineDefault,min = 0, max = 100,step = 1),
                                         numericInput("molluscOffMed", "Offshore medium",molluscOffMedDefault,min = 0, max = 100,step = 1),
-                                        numericInput("molluscOffRock", "Offshore coarse",molluscOffRockDefault,min = 0, max = 100,step = 1)
+                                        numericInput("molluscOffCoarse", "Offshore coarse",molluscOffCoarseDefault,min = 0, max = 100,step = 1)
                                       ),
                                       splitLayout(
                                         uiOutput("totalMolluscGearPerHab")
@@ -2511,7 +2501,7 @@ server <- function(input, output, session) {
                                 numericInput("whalerOffRock", "Offshore rock",whalerOffRockDefault,min = 0, max = 100,step = 1),
                                 numericInput("whalerOffFine", "Offshore fine",whalerOffFineDefault,min = 0, max = 100,step = 1),
                                 numericInput("whalerOffMed", "Offshore medium",whalerOffMedDefault,min = 0, max = 100,step = 1),
-                                numericInput("whalerOffRock", "Offshore coarse",whalerOffRockDefault,min = 0, max = 100,step = 1)
+                                numericInput("whalerOffCoarse", "Offshore coarse",whalerOffCoarseDefault,min = 0, max = 100,step = 1)
                               ),
                               splitLayout(
                                 uiOutput("totalWhalerGearPerHab")
@@ -2528,7 +2518,7 @@ server <- function(input, output, session) {
                                        numericInput("kelpOffRock", "Offshore rock",kelpOffRockDefault,min = 0, max = 100,step = 1),
                                        numericInput("kelpOffFine", "Offshore fine",kelpOffFineDefault,min = 0, max = 100,step = 1),
                                        numericInput("kelpOffMed", "Offshore medium",kelpOffMedDefault,min = 0, max = 100,step = 1),
-                                       numericInput("kelpOffRock", "Offshore coarse",kelpOffRockDefault,min = 0, max = 100,step = 1)
+                                       numericInput("kelpOffCoarse", "Offshore coarse",kelpOffCoarseDefault,min = 0, max = 100,step = 1)
                                      ),
                                      splitLayout(
                                        uiOutput("totalKelpGearPerHab")
