@@ -855,8 +855,7 @@ server <- function(input, output, session) {
   
   output$totalPelGearPerHab <- renderUI({ 
     total <- sum(as.numeric(input$pelInRock), as.numeric(input$pelInFine) , as.numeric(input$pelInMed) , as.numeric(input$pelInCoarse) , as.numeric(input$pelOffRock) , as.numeric(input$pelOffFine) , as.numeric(input$pelOffMed) , as.numeric(input$pelOffCoarse))
-    print(total)
-    numericInput("totalPel", "Total",total,width = '50%')
+    numericInput("totalPel", "Total %",total,width = '50%')
     })
   
   observeEvent(input$totalPel,{
@@ -875,7 +874,7 @@ server <- function(input, output, session) {
       } else {
         totalSE <- sum(as.numeric(input$sandeelInRock) , as.numeric(input$sandeelInFine) , as.numeric(input$sandeelInMed) , as.numeric(input$sandeelInCoarse) , as.numeric(input$sandeelOffRock) , as.numeric(input$sandeelOffFine) , as.numeric(input$sandeelOffMed) , as.numeric(input$sandeelOffCoarse))
       }
-      numericInput("totalSandeel", "Total",totalSE)
+      numericInput("totalSandeel", "Total %",totalSE)
     })   
     
     observeEvent(input$totalSandeel,{
@@ -890,73 +889,205 @@ server <- function(input, output, session) {
     
     output$totalOtterGearPerHab <- renderUI({ 
       totalOt <- sum(as.numeric(input$otterInRock) , as.numeric(input$otterInFine) , as.numeric(input$otterInMed) , as.numeric(input$otterInCoarse) , as.numeric(input$otterOffRock) , as.numeric(input$otterOffFine) , as.numeric(input$otterOffMed) , as.numeric(input$otterOffCoarse))
-      numericInput("totalOtter", "Total",totalOt)
+      numericInput("totalOtter", "Total %",totalOt)
     })  
+    
+    observeEvent(input$totalOtter,{
+      if (input$totalOtter != 100)  {
+        js$backgroundCol("totalSandeel","red")
+      } else {
+        js$backgroundCol("totalSandeel","white")
+      }
+      updateNumericInput(session, "totalOtter", value = input$totalOtter)
+      disable("totalOtter")
+    })
     
     output$totalLonMackGearPerHab <- renderUI({ 
       totalLM <- sum(as.numeric(input$lonMackInRock) , as.numeric(input$lonMackInFine) , as.numeric(input$lonMackInMed) , as.numeric(input$lonMackInCoarse) , as.numeric(input$lonMackOffRock) , as.numeric(input$lonMackOffFine) , as.numeric(input$lonMackOffMed) , as.numeric(input$lonMackOffCoarse))
-      numericInput("totalLonMack", "Total",totalLM)
+      numericInput("totalLonMack", "Total %",totalLM)
+    })
+    
+    observeEvent(input$totalLonMack,{
+      if (input$totalLonMack != 100)  {
+        js$backgroundCol("totalLonMack","red")
+      } else {
+        js$backgroundCol("totalLonMack","white")
+      }
+      updateNumericInput(session, "totalLonMack", value = input$totalLonMack)
+      disable("totalLonMack")
+    })
+    
+    observeEvent(input$totalBeamTrawl,{
+      if (input$totalBeamTrawl != 100)  {
+        js$backgroundCol("totalBeamTrawl","red")
+      } else {
+        js$backgroundCol("totalBeamTrawl","white")
+      }
+      updateNumericInput(session, "totalBeamTrawl", value = input$totalBeamTrawl)
+      disable("totalBeamTrawl")
     })
     
     output$totalBeamTrawlGearPerHab <- renderUI({ 
       total <- sum(as.numeric(input$beamTrawlInRock) , as.numeric(input$beamTrawlInFine) , as.numeric(input$beamTrawlInMed) , as.numeric(input$beamTrawlInCoarse) , as.numeric(input$beamTrawlOffRock) , as.numeric(input$beamTrawlOffFine) , as.numeric(input$beamTrawlOffMed) , as.numeric(input$beamTrawlOffCoarse))
-      numericInput("totalBeamTrawl", "Total",total)
+      numericInput("totalBeamTrawl", "Total %",total)
+    })
+    
+    observeEvent(input$totalDemSeine,{
+      if (input$totalDemSeine != 100)  {
+        js$backgroundCol("totalDemSeine","red")
+      } else {
+        js$backgroundCol("totalDemSeine","white")
+      }
+      updateNumericInput(session, "totalDemSeine", value = input$totalDemSeine)
+      disable("totalDemSeine")
     })
     
     output$totalDemSeineGearPerHab <- renderUI({ 
       totalDS <- sum(as.numeric(input$demSeineInRock) , as.numeric(input$demSeineInFine) , as.numeric(input$demSeineInMed) , as.numeric(input$demSeineInCoarse) , as.numeric(input$demSeineOffRock) , as.numeric(input$demSeineOffFine) , as.numeric(input$demSeineOffMed) , as.numeric(input$demSeineOffCoarse))
-      numericInput("totalDemSeine", "Total",totalDS)
+      numericInput("totalDemSeine", "Total %",totalDS)
+    })
+    
+    observeEvent(input$totalDemOtter,{
+      if (input$totalDemOtter != 100)  {
+        js$backgroundCol("totalDemOtter","red")
+      } else {
+        js$backgroundCol("totalDemOtter","white")
+      }
+      updateNumericInput(session, "totalDemOtter", value = input$totalDemOtter)
+      disable("totalDemOtter")
     })
     
     output$totalDemOtterGearPerHab <- renderUI({ 
       totalDO <- sum(as.numeric(input$demOtterInRock) , as.numeric(input$demOtterInFine) , as.numeric(input$demOtterInMed) , as.numeric(input$demOtterInCoarse) , as.numeric(input$demOtterOffRock) , as.numeric(input$demOtterOffFine) , as.numeric(input$demOtterOffMed) , as.numeric(input$demOtterOffCoarse))
-      numericInput("totalDemOtter", "Total",totalDO)
+      numericInput("totalDemOtter", "Total %",totalDO)
+    })
+    
+    observeEvent(input$totalGillNet,{
+      if (input$totalGillNet != 100)  {
+        js$backgroundCol("totalGillNet","red")
+      } else {
+        js$backgroundCol("totalGillNet","white")
+      }
+      updateNumericInput(session, "totalGillNet", value = input$totalGillNet)
+      disable("totalGillNet")
     })
     
     
     output$totalGillNetGearPerHab <- renderUI({ 
       totalGN <- sum(as.numeric(input$gillNetInRock) , as.numeric(input$gillNetInFine) , as.numeric(input$gillNetInMed) , as.numeric(input$gillNetInCoarse) , as.numeric(input$gillNetOffRock) , as.numeric(input$gillNetOffFine) , as.numeric(input$gillNetOffMed) , as.numeric(input$gillNetOffCoarse))
-      numericInput("totalGillNet", "Total",totalGN)
+      numericInput("totalGillNet", "Total %",totalGN)
+    })
+    
+    observeEvent(input$totalBeamShrimp,{
+      if (input$totalBeamShrimp != 100)  {
+        js$backgroundCol("totalBeamShrimp","red")
+      } else {
+        js$backgroundCol("totalBeamShrimp","white")
+      }
+      updateNumericInput(session, "totalBeamShrimp", value = input$totalBeamShrimp)
+      disable("totalBeamShrimp")
     })
     
     
     output$totalBeamShrimpGearPerHab <- renderUI({ 
       totalBS <- sum(as.numeric(input$beamShrimpInRock) , as.numeric(input$beamShrimpInFine) , as.numeric(input$beamShrimpInMed) , as.numeric(input$beamShrimpInCoarse) , as.numeric(input$beamShrimpOffRock) , as.numeric(input$beamShrimpOffFine) , as.numeric(input$beamShrimpOffMed) , as.numeric(input$beamShrimpOffCoarse))
-      numericInput("totalBeamShrimp", "Total",totalBS)
+      numericInput("totalBeamShrimp", "Total %",totalBS)
+    })
+    
+    observeEvent(input$totalNephropsTR2,{
+      if (input$totalNephropsTR2 != 100)  {
+        js$backgroundCol("totalNephropsTR2","red")
+      } else {
+        js$backgroundCol("totalNephropsTR2","white")
+      }
+      updateNumericInput(session, "totalNephropsTR2", value = input$totalNephropsTR2)
+      disable("totalNephropsTR2")
     })
     
     
     output$totalNephropsTR2GearPerHab <- renderUI({ 
       totalN2 <- sum(as.numeric(input$nephropsTR2InRock) , as.numeric(input$nephropsTR2InFine) , as.numeric(input$nephropsTR2InMed) , as.numeric(input$nephropsTR2InCoarse) , as.numeric(input$nephropsTR2OffRock) , as.numeric(input$nephropsTR2OffFine) , as.numeric(input$nephropsTR2OffMed) , as.numeric(input$nephropsTR2OffCoarse))
-      numericInput("totalNephropsTR2", "Total",totalN2)
+      numericInput("totalNephropsTR2", "Total %",totalN2)
+    })
+    
+    
+    observeEvent(input$totalNephropsTR3,{
+      if (input$totalNephropsTR3 != 100)  {
+        js$backgroundCol("totalNephropsTR3","red")
+      } else {
+        js$backgroundCol("totalNephropsTR3","white")
+      }
+      updateNumericInput(session, "totalNephropsTR3", value = input$totalNephropsTR3)
+      disable("totalNephropsTR3")
     })
     
     output$totalNephropsTR3GearPerHab <- renderUI({ 
       totalN3 <- sum(as.numeric(input$nephropsTR3InRock) , as.numeric(input$nephropsTR3InFine) , as.numeric(input$nephropsTR3InMed) , as.numeric(input$nephropsTR3InCoarse) , as.numeric(input$nephropsTR3OffRock) , as.numeric(input$nephropsTR3OffFine) , as.numeric(input$nephropsTR3OffMed) , as.numeric(input$nephropsTR3OffCoarse))
-      numericInput("totalNephropsTR3", "Total",totalN3)
+      numericInput("totalNephropsTR3", "Total %",totalN3)
+    })
+    
+    
+    observeEvent(input$totalCreels,{
+      if (input$totalCreels != 100)  {
+        js$backgroundCol("totalCreels","red")
+      } else {
+        js$backgroundCol("totalCreels","white")
+      }
+      updateNumericInput(session, "totalCreels", value = input$totalCreels)
+      disable("totalCreels")
     })
     
 
     output$totalCreelsGearPerHab <- renderUI({ 
       totalCr <- sum(as.numeric(input$creelsInRock) , as.numeric(input$creelsInFine) , as.numeric(input$creelsInMed) , as.numeric(input$creelsInCoarse) , as.numeric(input$creelsOffRock) , as.numeric(input$creelsOffFine) , as.numeric(input$creelsOffMed) , as.numeric(input$creelsOffCoarse))
-      numericInput("totalCreels", "Total",totalCr)
+      numericInput("totalCreels", "Total %",totalCr)
+    })
+    
+    observeEvent(input$totalMollusc,{
+      if (input$totalMollusc != 100)  {
+        js$backgroundCol("totalMollusc","red")
+      } else {
+        js$backgroundCol("totalMollusc","white")
+      }
+      updateNumericInput(session, "totalMollusc", value = input$totalMollusc)
+      disable("totalMollusc")
     })
     
     
     output$totalMolluscGearPerHab <- renderUI({ 
       totalM <- sum(as.numeric(input$molluscInRock) , as.numeric(input$molluscInFine) , as.numeric(input$molluscInMed) , as.numeric(input$molluscInCoarse) , as.numeric(input$molluscOffRock) , as.numeric(input$molluscOffFine) , as.numeric(input$molluscOffMed) , as.numeric(input$molluscOffCoarse))
-      numericInput("totalMollusc", "Total",totalM)
+      numericInput("totalMollusc", "Total %",totalM)
+    })
+    
+    observeEvent(input$totalWhaler,{
+      if (input$totalWhaler != 100)  {
+        js$backgroundCol("totalWhaler","red")
+      } else {
+        js$backgroundCol("totalWhaler","white")
+      }
+      updateNumericInput(session, "totalWhaler", value = input$totalWhaler)
+      disable("totalWhaler")
     })
     
     
     output$totalWhalerGearPerHab <- renderUI({ 
       totalW <- sum(as.numeric(input$whalerInRock) , as.numeric(input$whalerInFine) , as.numeric(input$whalerInMed) , as.numeric(input$whalerInCoarse) , as.numeric(input$whalerOffRock) , as.numeric(input$whalerOffFine) , as.numeric(input$whalerOffMed) , as.numeric(input$whalerOffCoarse))
-      numericInput("totalWhaler", "Total",totalW)
+      numericInput("totalWhaler", "Total %",totalW)
+    })
+    
+    observeEvent(input$totalKelp,{
+      if (input$totalKelp != 100)  {
+        js$backgroundCol("totalKelp","red")
+      } else {
+        js$backgroundCol("totalKelp","white")
+      }
+      updateNumericInput(session, "totalKelp", value = input$totalKelp)
+      disable("totalKelp")
     })
     
     output$totalKelpGearPerHab <- renderUI({ 
       totalK <- sum(as.numeric(input$kelpInRock) , as.numeric(input$kelpInFine) , as.numeric(input$kelpInMed) , as.numeric(input$kelpInCoarse) , as.numeric(input$kelpOffRock) , as.numeric(input$kelpOffFine) , as.numeric(input$kelpOffMed) , as.numeric(input$kelpOffCoarse))
-      numericInput("totalKelp", "Total",totalK)
+      numericInput("totalKelp", "Total %",totalK)
     })
     
   
@@ -2265,16 +2396,16 @@ server <- function(input, output, session) {
       input$selectedGearForHabitatDist,
       "Pelagic_Trawl+Seine" = fluidRow(  box(width = 12, title = "Habitats", style = "font-size:9px;",
                                              splitLayout(
-                                               numericInput("pelInRock", "Inshore rock",pelInRockDefault,min = 0, max = 100, step = 1, width = '45%'),
-                                               numericInput("pelInFine", "Inshore fine",pelInFineDefault,min = 0, max = 100, step = 1,width = '45%'),
-                                               numericInput("pelInMed", "Inshore medium",pelInMedDefault,min = 0, max = 100, step = 1,width = '45%'),
-                                               numericInput("pelInCoarse", "Inshore coarse",pelInCoarseDefault,min = 0, max = 100, step = 1,width = '45%')
+                                               numericInput("pelInRock", "Inshore rock",pelInRockDefault,min = 0, max = 100, step = 0.01, width = '45%'),
+                                               numericInput("pelInFine", "Inshore fine",pelInFineDefault,min = 0, max = 100, step = 0.01,width = '45%'),
+                                               numericInput("pelInMed", "Inshore medium",pelInMedDefault,min = 0, max = 100, step = 0.01,width = '45%'),
+                                               numericInput("pelInCoarse", "Inshore coarse",pelInCoarseDefault,min = 0, max = 100, step = 0.01,width = '45%')
                                              ),
                                              splitLayout(
-                                               numericInput("pelOffRock", "Offshore rock",pelOffRockDefault,min = 0, max = 100, step = 1,width = '45%'),
-                                               numericInput("pelOffFine", "Offshore fine",pelOffFineDefault,min = 0, max = 100, step = 1,width = '45%'),
-                                               numericInput("pelOffMed", "Offshore medium",pelOffMedDefault,min = 0, max = 100, step = 1,width = '45%'),
-                                               numericInput("pelOffCoarse", "Offshore coarse",pelOffCoarseDefault,min = 0, max = 100, step = 1,width = '45%')
+                                               numericInput("pelOffRock", "Offshore rock",pelOffRockDefault,min = 0, max = 100, step = 0.01,width = '45%'),
+                                               numericInput("pelOffFine", "Offshore fine",pelOffFineDefault,min = 0, max = 100, step = 0.01,width = '45%'),
+                                               numericInput("pelOffMed", "Offshore medium",pelOffMedDefault,min = 0, max = 100, step = 0.01,width = '45%'),
+                                               numericInput("pelOffCoarse", "Offshore coarse",pelOffCoarseDefault,min = 0, max = 100, step = 0.01,width = '45%')
                                              ),
                                              splitLayout(
                                                useShinyjs(),
@@ -2315,6 +2446,8 @@ server <- function(input, output, session) {
                                                                 numericInput("otterOffCoarse", "Offshore coarse",otterOffCoarseDefault,min = 0, max = 100,step = 1)
                                                         ),
                                                         splitLayout(
+                                                          useShinyjs(),
+                                                          extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                                 uiOutput("totalOtterGearPerHab")
                                                               )
       )),     
@@ -2334,6 +2467,8 @@ server <- function(input, output, session) {
                                            numericInput("lonMackOffCoarse", "Offshore coarse",lonMackOffCoarseDefault,min = 0, max = 100,step = 1)
                                          ),
                                          splitLayout(
+                                           useShinyjs(),
+                                           extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                            uiOutput("totalLonMackGearPerHab")
                                          )
       )),
@@ -2351,6 +2486,8 @@ server <- function(input, output, session) {
                                             numericInput("beamTrawlOffCoarse", "Offshore coarse",beamTrawlOffCoarseDefault,min = 0, max = 100,step = 1)
                                           ),
                                           splitLayout(
+                                            useShinyjs(),
+                                            extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                             uiOutput("totalBeamTrawlGearPerHab")
                                           )
       )),
@@ -2368,6 +2505,8 @@ server <- function(input, output, session) {
                                        numericInput("demSeineOffCoarse", "Offshore coarse",demSeineOffCoarseDefault,min = 0, max = 100,step = 1)
                                      ),
                                      splitLayout(
+                                       useShinyjs(),
+                                       extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                        uiOutput("totalDemSeineGearPerHab")
                                      )
       )),
@@ -2385,6 +2524,8 @@ server <- function(input, output, session) {
                                                   numericInput("demOtterOffCoarse", "Offshore coarse",demOtterOffCoarseDefault,min = 0, max = 100,step = 1)
                                                 ),
                                                 splitLayout(
+                                                  useShinyjs(),
+                                                  extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                   uiOutput("totalDemOtterGearPerHab")
                                                 )
       )),
@@ -2402,6 +2543,8 @@ server <- function(input, output, session) {
                                                      numericInput("gillNetOffCoarse", "Offshore coarse",gillNetOffCoarseDefault,min = 0, max = 100,step = 1)
                                                    ),
                                                    splitLayout(
+                                                     useShinyjs(),
+                                                     extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                      uiOutput("totalGillNetGearPerHab")
                                                    )
       )),
@@ -2419,6 +2562,8 @@ server <- function(input, output, session) {
                                            numericInput("beamShrimpOffCoarse", "Offshore coarse",beamShrimpOffCoarseDefault,min = 0, max = 100,step = 1)
                                          ),
                                          splitLayout(
+                                           useShinyjs(),
+                                           extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                            uiOutput("totalBeamShrimpGearPerHab")
                                          )
       )),
@@ -2436,6 +2581,8 @@ server <- function(input, output, session) {
                                             numericInput("nephropsTR2OffCoarse", "Offshore coarse",nephropsTR2OffCoarseDefault,min = 0, max = 100,step = 1)
                                           ),
                                           splitLayout(
+                                            useShinyjs(),
+                                            extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                             uiOutput("totalNephropsTR2GearPerHab")
                                           )
       )),
@@ -2453,6 +2600,8 @@ server <- function(input, output, session) {
                                             numericInput("nephropsTR3OffCoarse", "Offshore coarse",nephropsTR3OffCoarseDefault,min = 0, max = 100,step = 1)
                                           ),
                                           splitLayout(
+                                            useShinyjs(),
+                                            extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                             uiOutput("totalNephropsTR3GearPerHab")
                                           )
       )),
@@ -2470,6 +2619,8 @@ server <- function(input, output, session) {
                                 numericInput("creelsOffCoarse", "Offshore coarse",creelsOffCoarseDefault,min = 0, max = 100,step = 1)
                               ),
                               splitLayout(
+                                useShinyjs(),
+                                extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                 uiOutput("totalCreelsGearPerHab")
                               )
       )),
@@ -2487,6 +2638,8 @@ server <- function(input, output, session) {
                                         numericInput("molluscOffCoarse", "Offshore coarse",molluscOffCoarseDefault,min = 0, max = 100,step = 1)
                                       ),
                                       splitLayout(
+                                        useShinyjs(),
+                                        extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                         uiOutput("totalMolluscGearPerHab")
                                       )
       )),
@@ -2504,6 +2657,8 @@ server <- function(input, output, session) {
                                 numericInput("whalerOffCoarse", "Offshore coarse",whalerOffCoarseDefault,min = 0, max = 100,step = 1)
                               ),
                               splitLayout(
+                                useShinyjs(),
+                                extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                 uiOutput("totalWhalerGearPerHab")
                               )
       )),
@@ -2521,6 +2676,8 @@ server <- function(input, output, session) {
                                        numericInput("kelpOffCoarse", "Offshore coarse",kelpOffCoarseDefault,min = 0, max = 100,step = 1)
                                      ),
                                      splitLayout(
+                                       useShinyjs(),
+                                       extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                        uiOutput("totalKelpGearPerHab")
                                      )
       ))
