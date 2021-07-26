@@ -867,6 +867,18 @@ server <- function(input, output, session) {
     updateNumericInput(session, "totalPel", value = input$totalPel)
     disable("totalPel")
   })
+  
+  observeEvent(input$pelGearPerHab_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    updateNumericInput(session, "pelInRock", value = model$data$fleet.model$gear_habitat_activity$s0[1] * 100)
+    updateNumericInput(session, "pelInFine", value = model$data$fleet.model$gear_habitat_activity$s1[1] * 100)
+    updateNumericInput(session, "pelInMed", value = model$data$fleet.model$gear_habitat_activity$s2[1] * 100)
+    updateNumericInput(session, "pelInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[1] * 100)
+    updateNumericInput(session, "pelOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[1] * 100)
+    updateNumericInput(session, "pelOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[1] * 100)
+    updateNumericInput(session, "pelOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[1] * 100)
+    updateNumericInput(session, "pelOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[1] * 100)
+  })
     
     output$totalSandeelGearPerHab <- renderUI({ 
       if(is.na(input$sandeelInRock)){
@@ -887,6 +899,20 @@ server <- function(input, output, session) {
       disable("totalSandeel")
     })
     
+    observeEvent(input$sandeelGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "sandeelInRock", value = model$data$fleet.model$gear_habitat_activity$s0[2] * 100)
+      updateNumericInput(session, "sandeelInFine", value = model$data$fleet.model$gear_habitat_activity$s1[2] * 100)
+      updateNumericInput(session, "sandeelInMed", value = model$data$fleet.model$gear_habitat_activity$s2[2] * 100)
+      updateNumericInput(session, "sandeelInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[2] * 100)
+      updateNumericInput(session, "sandeelOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[2] * 100)
+      updateNumericInput(session, "sandeelOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[2] * 100)
+      updateNumericInput(session, "sandeelOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[2] * 100)
+      updateNumericInput(session, "sandeelOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[2] * 100)
+    })
+    
+    
+    
     output$totalOtterGearPerHab <- renderUI({ 
       totalOt <- sum(as.numeric(input$otterInRock) , as.numeric(input$otterInFine) , as.numeric(input$otterInMed) , as.numeric(input$otterInCoarse) , as.numeric(input$otterOffRock) , as.numeric(input$otterOffFine) , as.numeric(input$otterOffMed) , as.numeric(input$otterOffCoarse))
       numericInput("totalOtter", "Total %",totalOt)
@@ -902,6 +928,19 @@ server <- function(input, output, session) {
       disable("totalOtter")
     })
     
+    observeEvent(input$otterGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "otterInRock", value = model$data$fleet.model$gear_habitat_activity$s0[2] * 100)
+      updateNumericInput(session, "otterInFine", value = model$data$fleet.model$gear_habitat_activity$s1[2] * 100)
+      updateNumericInput(session, "otterInMed", value = model$data$fleet.model$gear_habitat_activity$s2[2] * 100)
+      updateNumericInput(session, "otterInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[2] * 100)
+      updateNumericInput(session, "otterOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[2] * 100)
+      updateNumericInput(session, "otterOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[2] * 100)
+      updateNumericInput(session, "otterOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[2] * 100)
+      updateNumericInput(session, "otterOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[2] * 100)
+    })
+    
+    
     output$totalLonMackGearPerHab <- renderUI({ 
       totalLM <- sum(as.numeric(input$lonMackInRock) , as.numeric(input$lonMackInFine) , as.numeric(input$lonMackInMed) , as.numeric(input$lonMackInCoarse) , as.numeric(input$lonMackOffRock) , as.numeric(input$lonMackOffFine) , as.numeric(input$lonMackOffMed) , as.numeric(input$lonMackOffCoarse))
       numericInput("totalLonMack", "Total %",totalLM)
@@ -915,6 +954,18 @@ server <- function(input, output, session) {
       }
       updateNumericInput(session, "totalLonMack", value = input$totalLonMack)
       disable("totalLonMack")
+    })
+    
+    observeEvent(input$lonMackGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "lonMackInRock", value = model$data$fleet.model$gear_habitat_activity$s0[3] * 100)
+      updateNumericInput(session, "lonMackInFine", value = model$data$fleet.model$gear_habitat_activity$s1[3] * 100)
+      updateNumericInput(session, "lonMackInMed", value = model$data$fleet.model$gear_habitat_activity$s2[3] * 100)
+      updateNumericInput(session, "lonMackInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[3] * 100)
+      updateNumericInput(session, "lonMackOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[3] * 100)
+      updateNumericInput(session, "lonMackOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[3] * 100)
+      updateNumericInput(session, "lonMackOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[3] * 100)
+      updateNumericInput(session, "lonMackOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[3] * 100)
     })
     
     observeEvent(input$totalBeamTrawl,{
@@ -932,6 +983,18 @@ server <- function(input, output, session) {
       numericInput("totalBeamTrawl", "Total %",total)
     })
     
+    observeEvent(input$beamTrawlGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "beamTrawlInRock", value = model$data$fleet.model$gear_habitat_activity$s0[4] * 100)
+      updateNumericInput(session, "beamTrawlInFine", value = model$data$fleet.model$gear_habitat_activity$s1[4] * 100)
+      updateNumericInput(session, "beamTrawlInMed", value = model$data$fleet.model$gear_habitat_activity$s2[4] * 100)
+      updateNumericInput(session, "beamTrawlInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[4] * 100)
+      updateNumericInput(session, "beamTrawlOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[4] * 100)
+      updateNumericInput(session, "beamTrawlOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[4] * 100)
+      updateNumericInput(session, "beamTrawlOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[4] * 100)
+      updateNumericInput(session, "beamTrawlOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[4] * 100)
+    })
+    
     observeEvent(input$totalDemSeine,{
       if (input$totalDemSeine != 100)  {
         js$backgroundCol("totalDemSeine","red")
@@ -947,6 +1010,18 @@ server <- function(input, output, session) {
       numericInput("totalDemSeine", "Total %",totalDS)
     })
     
+    observeEvent(input$demSeineGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "demSeineInRock", value = model$data$fleet.model$gear_habitat_activity$s0[5] * 100)
+      updateNumericInput(session, "demSeineInFine", value = model$data$fleet.model$gear_habitat_activity$s1[5] * 100)
+      updateNumericInput(session, "demSeineInMed", value = model$data$fleet.model$gear_habitat_activity$s2[5] * 100)
+      updateNumericInput(session, "demSeineInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[5] * 100)
+      updateNumericInput(session, "demSeineOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[5] * 100)
+      updateNumericInput(session, "demSeineOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[5] * 100)
+      updateNumericInput(session, "demSeineOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[5] * 100)
+      updateNumericInput(session, "demSeineOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[5] * 100)
+    })
+    
     observeEvent(input$totalDemOtter,{
       if (input$totalDemOtter != 100)  {
         js$backgroundCol("totalDemOtter","red")
@@ -960,6 +1035,18 @@ server <- function(input, output, session) {
     output$totalDemOtterGearPerHab <- renderUI({ 
       totalDO <- sum(as.numeric(input$demOtterInRock) , as.numeric(input$demOtterInFine) , as.numeric(input$demOtterInMed) , as.numeric(input$demOtterInCoarse) , as.numeric(input$demOtterOffRock) , as.numeric(input$demOtterOffFine) , as.numeric(input$demOtterOffMed) , as.numeric(input$demOtterOffCoarse))
       numericInput("totalDemOtter", "Total %",totalDO)
+    })
+    
+    observeEvent(input$demOtterGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "demOtterInRock", value = model$data$fleet.model$gear_habitat_activity$s0[6] * 100)
+      updateNumericInput(session, "demOtterInFine", value = model$data$fleet.model$gear_habitat_activity$s1[6] * 100)
+      updateNumericInput(session, "demOtterInMed", value = model$data$fleet.model$gear_habitat_activity$s2[6] * 100)
+      updateNumericInput(session, "demOtterInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[6] * 100)
+      updateNumericInput(session, "demOtterOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[6] * 100)
+      updateNumericInput(session, "demOtterOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[6] * 100)
+      updateNumericInput(session, "demOtterOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[6] * 100)
+      updateNumericInput(session, "demOtterOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[6] * 100)
     })
     
     observeEvent(input$totalGillNet,{
@@ -978,6 +1065,18 @@ server <- function(input, output, session) {
       numericInput("totalGillNet", "Total %",totalGN)
     })
     
+    observeEvent(input$gillNetGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "gillNetInRock", value = model$data$fleet.model$gear_habitat_activity$s0[7] * 100)
+      updateNumericInput(session, "gillNetInFine", value = model$data$fleet.model$gear_habitat_activity$s1[7] * 100)
+      updateNumericInput(session, "gillNetInMed", value = model$data$fleet.model$gear_habitat_activity$s2[7] * 100)
+      updateNumericInput(session, "gillNetInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[7] * 100)
+      updateNumericInput(session, "gillNetOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[7] * 100)
+      updateNumericInput(session, "gillNetOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[7] * 100)
+      updateNumericInput(session, "gillNetOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[7] * 100)
+      updateNumericInput(session, "gillNetOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[7] * 100)
+    })
+    
     observeEvent(input$totalBeamShrimp,{
       if (input$totalBeamShrimp != 100)  {
         js$backgroundCol("totalBeamShrimp","red")
@@ -992,6 +1091,18 @@ server <- function(input, output, session) {
     output$totalBeamShrimpGearPerHab <- renderUI({ 
       totalBS <- sum(as.numeric(input$beamShrimpInRock) , as.numeric(input$beamShrimpInFine) , as.numeric(input$beamShrimpInMed) , as.numeric(input$beamShrimpInCoarse) , as.numeric(input$beamShrimpOffRock) , as.numeric(input$beamShrimpOffFine) , as.numeric(input$beamShrimpOffMed) , as.numeric(input$beamShrimpOffCoarse))
       numericInput("totalBeamShrimp", "Total %",totalBS)
+    })
+    
+    observeEvent(input$beamShrimpGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "beamShrimpInRock", value = model$data$fleet.model$gear_habitat_activity$s0[8] * 100)
+      updateNumericInput(session, "beamShrimpInFine", value = model$data$fleet.model$gear_habitat_activity$s1[8] * 100)
+      updateNumericInput(session, "beamShrimpInMed", value = model$data$fleet.model$gear_habitat_activity$s2[8] * 100)
+      updateNumericInput(session, "beamShrimpInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[8] * 100)
+      updateNumericInput(session, "beamShrimpOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[8] * 100)
+      updateNumericInput(session, "beamShrimpOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[8] * 100)
+      updateNumericInput(session, "beamShrimpOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[8] * 100)
+      updateNumericInput(session, "beamShrimpOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[8] * 100)
     })
     
     observeEvent(input$totalNephropsTR2,{
@@ -1010,6 +1121,18 @@ server <- function(input, output, session) {
       numericInput("totalNephropsTR2", "Total %",totalN2)
     })
     
+    observeEvent(input$nephropsTR2GearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "nephropsTR2InRock", value = model$data$fleet.model$gear_habitat_activity$s0[9] * 100)
+      updateNumericInput(session, "nephropsTR2InFine", value = model$data$fleet.model$gear_habitat_activity$s1[9] * 100)
+      updateNumericInput(session, "nephropsTR2InMed", value = model$data$fleet.model$gear_habitat_activity$s2[9] * 100)
+      updateNumericInput(session, "nephropsTR2InCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[9] * 100)
+      updateNumericInput(session, "nephropsTR2OffRock", value = model$data$fleet.model$gear_habitat_activity$d0[9] * 100)
+      updateNumericInput(session, "nephropsTR2OffFine", value = model$data$fleet.model$gear_habitat_activity$d1[9] * 100)
+      updateNumericInput(session, "nephropsTR2OffMed", value = model$data$fleet.model$gear_habitat_activity$d2[9] * 100)
+      updateNumericInput(session, "nephropsTR2OffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[9] * 100)
+    })
+    
     
     observeEvent(input$totalNephropsTR3,{
       if (input$totalNephropsTR3 != 100)  {
@@ -1024,6 +1147,18 @@ server <- function(input, output, session) {
     output$totalNephropsTR3GearPerHab <- renderUI({ 
       totalN3 <- sum(as.numeric(input$nephropsTR3InRock) , as.numeric(input$nephropsTR3InFine) , as.numeric(input$nephropsTR3InMed) , as.numeric(input$nephropsTR3InCoarse) , as.numeric(input$nephropsTR3OffRock) , as.numeric(input$nephropsTR3OffFine) , as.numeric(input$nephropsTR3OffMed) , as.numeric(input$nephropsTR3OffCoarse))
       numericInput("totalNephropsTR3", "Total %",totalN3)
+    })
+    
+    observeEvent(input$nephropsTR3GearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "nephropsTR3InRock", value = model$data$fleet.model$gear_habitat_activity$s0[9] * 100)
+      updateNumericInput(session, "nephropsTR3InFine", value = model$data$fleet.model$gear_habitat_activity$s1[9] * 100)
+      updateNumericInput(session, "nephropsTR3InMed", value = model$data$fleet.model$gear_habitat_activity$s2[9] * 100)
+      updateNumericInput(session, "nephropsTR3InCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[9] * 100)
+      updateNumericInput(session, "nephropsTR3OffRock", value = model$data$fleet.model$gear_habitat_activity$d0[9] * 100)
+      updateNumericInput(session, "nephropsTR3OffFine", value = model$data$fleet.model$gear_habitat_activity$d1[9] * 100)
+      updateNumericInput(session, "nephropsTR3OffMed", value = model$data$fleet.model$gear_habitat_activity$d2[9] * 100)
+      updateNumericInput(session, "nephropsTR3OffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[9] * 100)
     })
     
     
@@ -1043,6 +1178,18 @@ server <- function(input, output, session) {
       numericInput("totalCreels", "Total %",totalCr)
     })
     
+    observeEvent(input$creelsGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "creelsInRock", value = model$data$fleet.model$gear_habitat_activity$s0[10] * 100)
+      updateNumericInput(session, "creelsInFine", value = model$data$fleet.model$gear_habitat_activity$s1[10] * 100)
+      updateNumericInput(session, "creelsInMed", value = model$data$fleet.model$gear_habitat_activity$s2[10] * 100)
+      updateNumericInput(session, "creelsInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[10] * 100)
+      updateNumericInput(session, "creelsOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[10] * 100)
+      updateNumericInput(session, "creelsOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[10] * 100)
+      updateNumericInput(session, "creelsOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[10] * 100)
+      updateNumericInput(session, "creelsOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[10] * 100)
+    })
+    
     observeEvent(input$totalMollusc,{
       if (input$totalMollusc != 100)  {
         js$backgroundCol("totalMollusc","red")
@@ -1057,6 +1204,18 @@ server <- function(input, output, session) {
     output$totalMolluscGearPerHab <- renderUI({ 
       totalM <- sum(as.numeric(input$molluscInRock) , as.numeric(input$molluscInFine) , as.numeric(input$molluscInMed) , as.numeric(input$molluscInCoarse) , as.numeric(input$molluscOffRock) , as.numeric(input$molluscOffFine) , as.numeric(input$molluscOffMed) , as.numeric(input$molluscOffCoarse))
       numericInput("totalMollusc", "Total %",totalM)
+    })
+    
+    observeEvent(input$molluscGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "molluscInRock", value = model$data$fleet.model$gear_habitat_activity$s0[11] * 100)
+      updateNumericInput(session, "molluscInFine", value = model$data$fleet.model$gear_habitat_activity$s1[11] * 100)
+      updateNumericInput(session, "molluscInMed", value = model$data$fleet.model$gear_habitat_activity$s2[11] * 100)
+      updateNumericInput(session, "molluscInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[11] * 100)
+      updateNumericInput(session, "molluscOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[11] * 100)
+      updateNumericInput(session, "molluscOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[11] * 100)
+      updateNumericInput(session, "molluscOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[11] * 100)
+      updateNumericInput(session, "molluscOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[11] * 100)
     })
     
     observeEvent(input$totalWhaler,{
@@ -1075,6 +1234,18 @@ server <- function(input, output, session) {
       numericInput("totalWhaler", "Total %",totalW)
     })
     
+    observeEvent(input$whalerGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "whalerInRock", value = model$data$fleet.model$gear_habitat_activity$s0[12] * 100)
+      updateNumericInput(session, "whalerInFine", value = model$data$fleet.model$gear_habitat_activity$s1[12] * 100)
+      updateNumericInput(session, "whalerInMed", value = model$data$fleet.model$gear_habitat_activity$s2[12] * 100)
+      updateNumericInput(session, "whalerInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[12] * 100)
+      updateNumericInput(session, "whalerOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[12] * 100)
+      updateNumericInput(session, "whalerOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[12] * 100)
+      updateNumericInput(session, "whalerOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[12] * 100)
+      updateNumericInput(session, "whalerOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[12] * 100)
+    })
+    
     observeEvent(input$totalKelp,{
       if (input$totalKelp != 100)  {
         js$backgroundCol("totalKelp","red")
@@ -1088,6 +1259,18 @@ server <- function(input, output, session) {
     output$totalKelpGearPerHab <- renderUI({ 
       totalK <- sum(as.numeric(input$kelpInRock) , as.numeric(input$kelpInFine) , as.numeric(input$kelpInMed) , as.numeric(input$kelpInCoarse) , as.numeric(input$kelpOffRock) , as.numeric(input$kelpOffFine) , as.numeric(input$kelpOffMed) , as.numeric(input$kelpOffCoarse))
       numericInput("totalKelp", "Total %",totalK)
+    })
+    
+    observeEvent(input$kelpGearPerHab_reset, {
+      model <- e2e_read(input$selectedlocation, input$selectedVariant)
+      updateNumericInput(session, "kelpInRock", value = model$data$fleet.model$gear_habitat_activity$s0[12] * 100)
+      updateNumericInput(session, "kelpInFine", value = model$data$fleet.model$gear_habitat_activity$s1[12] * 100)
+      updateNumericInput(session, "kelpInMed", value = model$data$fleet.model$gear_habitat_activity$s2[12] * 100)
+      updateNumericInput(session, "kelpInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[12] * 100)
+      updateNumericInput(session, "kelpOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[12] * 100)
+      updateNumericInput(session, "kelpOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[12] * 100)
+      updateNumericInput(session, "kelpOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[12] * 100)
+      updateNumericInput(session, "kelpOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[12] * 100)
     })
     
   
@@ -2411,7 +2594,8 @@ server <- function(input, output, session) {
                                                useShinyjs(),
                                                extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                uiOutput("totalPelGearPerHab")
-                                             )
+                                             ),
+                                             splitLayout(actionButton("pelGearPerHab_reset", "Reset"))
       )),
       "Sandeel+sprat_trawl(Otter30-70mm+TR3)" = fluidRow( box(width = 12, title = "Habitats", style = "font-size:9px;",
                                                               splitLayout(
@@ -2430,7 +2614,8 @@ server <- function(input, output, session) {
                                                                   useShinyjs(),
                                                                   extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                                 uiOutput("totalSandeelGearPerHab")
-                                                              )
+                                                              ),
+                                                              splitLayout(actionButton("sandeelGearPerHab_reset", "Reset"))
       )),
       "Otter30-70mm+TR3(sandeel+sprat)" = fluidRow( box(width = 12, title = "Habitats", style = "font-size:9px;",
                                                               splitLayout(
@@ -2449,7 +2634,9 @@ server <- function(input, output, session) {
                                                           useShinyjs(),
                                                           extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                                 uiOutput("totalOtterGearPerHab")
-                                                              )
+                                                              ),
+                                                        splitLayout(actionButton("otterGearPerHab_reset", "Reset"))
+                                                        
       )),     
       
       
@@ -2470,7 +2657,8 @@ server <- function(input, output, session) {
                                            useShinyjs(),
                                            extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                            uiOutput("totalLonMackGearPerHab")
-                                         )
+                                         ),
+                                         splitLayout(actionButton("lonMackGearPerHab_reset", "Reset"))
       )),
       "Beam_Trawl_BT1+BT2" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                           splitLayout(
@@ -2489,7 +2677,8 @@ server <- function(input, output, session) {
                                             useShinyjs(),
                                             extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                             uiOutput("totalBeamTrawlGearPerHab")
-                                          )
+                                          ),
+                                          splitLayout(actionButton("beamTrawlGearPerHab_reset", "Reset"))
       )),
       "Demersal_Seine" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                      splitLayout(
@@ -2508,7 +2697,9 @@ server <- function(input, output, session) {
                                        useShinyjs(),
                                        extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                        uiOutput("totalDemSeineGearPerHab")
-                                     )
+                                     ),
+                                     splitLayout(actionButton("demSeineGearPerHab_reset", "Reset"))
+                                     
       )),
       "Demersal_Otter_Trawl_TR1" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                                 splitLayout(
@@ -2527,7 +2718,9 @@ server <- function(input, output, session) {
                                                   useShinyjs(),
                                                   extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                   uiOutput("totalDemOtterGearPerHab")
-                                                )
+                                                ),
+                                                splitLayout(actionButton("demOtterGearPerHab_reset", "Reset"))
+                                                
       )),
       "Gill_Nets+Longline_demersal" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                                    splitLayout(
@@ -2546,7 +2739,8 @@ server <- function(input, output, session) {
                                                      useShinyjs(),
                                                      extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                      uiOutput("totalGillNetGearPerHab")
-                                                   )
+                                                   ),
+                                                   splitLayout(actionButton("gillNetGearPerHab_reset", "Reset"))
       )),
       "Beam_Trawl_shrimp" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                          splitLayout(
@@ -2565,7 +2759,9 @@ server <- function(input, output, session) {
                                            useShinyjs(),
                                            extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                            uiOutput("totalBeamShrimpGearPerHab")
-                                         )
+                                         ),
+                                         splitLayout(actionButton("beamShrimpGearPerHab_reset", "Reset"))
+                                         
       )),
       "Nephrops_Trawl_TR2" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                           splitLayout(
@@ -2584,7 +2780,9 @@ server <- function(input, output, session) {
                                             useShinyjs(),
                                             extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                             uiOutput("totalNephropsTR2GearPerHab")
-                                          )
+                                          ),
+                                          splitLayout(actionButton("nephropsTR2GearPerHab_reset", "Reset"))
+                                          
       )),
       "Nephrops_Trawl_TR3" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                           splitLayout(
@@ -2603,7 +2801,9 @@ server <- function(input, output, session) {
                                             useShinyjs(),
                                             extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                             uiOutput("totalNephropsTR3GearPerHab")
-                                          )
+                                          ),
+                                          splitLayout(actionButton("nephropsTR3GearPerHab_reset", "Reset"))
+                                          
       )),
       "Creels" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                               splitLayout(
@@ -2622,7 +2822,9 @@ server <- function(input, output, session) {
                                 useShinyjs(),
                                 extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                 uiOutput("totalCreelsGearPerHab")
-                              )
+                              ),
+                              splitLayout(actionButton("creelsGearPerHab_reset", "Reset"))
+                              
       )),
       "Mollusc_Dredge" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                       splitLayout(
@@ -2641,7 +2843,9 @@ server <- function(input, output, session) {
                                         useShinyjs(),
                                         extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                         uiOutput("totalMolluscGearPerHab")
-                                      )
+                                      ),
+                                      splitLayout(actionButton("molluscGearPerHab_reset", "Reset"))
+                                      
       )),
       "Whaler" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                               splitLayout(
@@ -2660,7 +2864,9 @@ server <- function(input, output, session) {
                                 useShinyjs(),
                                 extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                 uiOutput("totalWhalerGearPerHab")
-                              )
+                              ),
+                              splitLayout(actionButton("whalerGearPerHab_reset", "Reset"))
+                              
       )),
       "KelpHarvester" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                      splitLayout(
@@ -2679,7 +2885,8 @@ server <- function(input, output, session) {
                                        useShinyjs(),
                                        extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                        uiOutput("totalKelpGearPerHab")
-                                     )
+                                     ),
+                                     splitLayout(actionButton("kelpGearPerHab_reset", "Reset"))
       ))
     )
   })
