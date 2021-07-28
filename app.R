@@ -48,6 +48,7 @@ ui <- navbarPage(
                tags$style(HTML(".mytooltip .tooltiptext {visibility: hidden;width: 200px;background-color: #008CBA;color: #fff;text-align: center;border-radius: 6px;padding: 5px 0;position: absolute;z-index: 1;}")),
                tags$style(HTML(".mytooltip:hover .tooltiptext {visibility: visible;}")),
                tags$style(HTML(".mytooltip {text-decoration:underline; text-decoration-style: dotted;}")),
+               tags$style(HTML("input[type=number] {-moz-appearance:textfield;} input[type=number]::{-moz-appearance:textfield;} input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0;}")),
                
                 fluidRow(
                   column(
@@ -761,6 +762,19 @@ ui <- navbarPage(
   )
 )
 
+notGreatherThan100 <- function(input) {
+  if(!(is.numeric(input))){0}
+       else if(!(is.null(input) || is.na(input))){
+         if(input < 0){
+           0 
+         }else if(input > 100){
+           100
+         } else{
+           return (isolate(input))
+         } 
+       } else{0}
+}
+
 server <- function(input, output, session) {
   
   model_reactive <- reactiveVal()
@@ -854,18 +868,43 @@ server <- function(input, output, session) {
   # })
   
   output$totalPelGearPerHab <- renderUI({ 
-    total <- sum(as.numeric(input$pelInRock), as.numeric(input$pelInFine) , as.numeric(input$pelInMed) , as.numeric(input$pelInCoarse) , as.numeric(input$pelOffRock) , as.numeric(input$pelOffFine) , as.numeric(input$pelOffMed) , as.numeric(input$pelOffCoarse))
-    numericInput("totalPel", "Total %",total,width = '50%')
+    total <- round(sum(as.numeric(input$pelInRock), as.numeric(input$pelInFine) , as.numeric(input$pelInMed) , as.numeric(input$pelInCoarse) , as.numeric(input$pelOffRock) , as.numeric(input$pelOffFine) , as.numeric(input$pelOffMed) , as.numeric(input$pelOffCoarse)), digits =3)
+     numericInput("totalPel", "Total %",total,width = '50%')
     })
   
   observeEvent(input$totalPel,{
-    if (input$totalPel != 100)  {
+    if ( is.na(input$totalPel) || input$totalPel != 100)  {
       js$backgroundCol("totalPel","red")
     } else {
       js$backgroundCol("totalPel","white")
     }
     updateNumericInput(session, "totalPel", value = input$totalPel)
     disable("totalPel")
+  })
+  
+  observeEvent(input$pelInRock,{
+    updateNumericInput(session,"pelInRock", value = notGreatherThan100(input$pelInRock))
+  })
+  observeEvent(input$pelInFine,{
+    updateNumericInput(session,"pelInFine", value = notGreatherThan100(input$pelInFine))
+  })
+  observeEvent(input$pelInMed,{
+    updateNumericInput(session,"pelInMed", value = notGreatherThan100(input$pelInMed))
+  })
+  observeEvent(input$pelInCoarse,{
+    updateNumericInput(session,"pelInCoarse", value = notGreatherThan100(input$pelInCoarse))
+  })
+  observeEvent(input$pelOffRock,{
+    updateNumericInput(session,"pelOffRock", value = notGreatherThan100(input$pelOffRock))
+  })
+  observeEvent(input$pelOffFine,{
+    updateNumericInput(session,"pelOffFine", value = notGreatherThan100(input$pelOffFine))
+  })
+  observeEvent(input$pelOffMed,{
+    updateNumericInput(session,"pelOffMed", value = notGreatherThan100(input$pelOffMed))
+  })
+  observeEvent(input$pelOffCoarse,{
+    updateNumericInput(session,"pelOffCoarse", value = notGreatherThan100(input$pelOffCoarse))
   })
   
   observeEvent(input$pelGearPerHab_reset, {
@@ -884,19 +923,44 @@ server <- function(input, output, session) {
       if(is.na(input$sandeelInRock)){
         totalSE <- 0
       } else {
-        totalSE <- sum(as.numeric(input$sandeelInRock) , as.numeric(input$sandeelInFine) , as.numeric(input$sandeelInMed) , as.numeric(input$sandeelInCoarse) , as.numeric(input$sandeelOffRock) , as.numeric(input$sandeelOffFine) , as.numeric(input$sandeelOffMed) , as.numeric(input$sandeelOffCoarse))
+        totalSE <- round(sum(as.numeric(input$sandeelInRock) , as.numeric(input$sandeelInFine) , as.numeric(input$sandeelInMed) , as.numeric(input$sandeelInCoarse) , as.numeric(input$sandeelOffRock) , as.numeric(input$sandeelOffFine) , as.numeric(input$sandeelOffMed) , as.numeric(input$sandeelOffCoarse)), digits =3)
       }
-      numericInput("totalSandeel", "Total %",totalSE)
+      numericInput("totalSandeel", "Total %",totalSE,width = '50%')
     })   
     
     observeEvent(input$totalSandeel,{
-      if (input$totalSandeel != 100)  {
+      if (is.na(input$totalSandeel) || input$totalSandeel != 100)  {
         js$backgroundCol("totalSandeel","red")
       } else {
         js$backgroundCol("totalSandeel","white")
       }
       updateNumericInput(session, "totalSandeel", value = input$totalSandeel)
       disable("totalSandeel")
+    })
+    
+    observeEvent(input$sandeelInRock,{
+      updateNumericInput(session,"sandeelInRock", value = notGreatherThan100(input$sandeelInRock))
+    })
+    observeEvent(input$sandeelInFine,{
+      updateNumericInput(session,"sandeelInFine", value = notGreatherThan100(input$sandeelInFine))
+    })
+    observeEvent(input$sandeelInMed,{
+      updateNumericInput(session,"sandeelInMed", value = notGreatherThan100(input$sandeelInMed))
+    })
+    observeEvent(input$sandeelInCoarse,{
+      updateNumericInput(session,"sandeelInCoarse", value = notGreatherThan100(input$sandeelInCoarse))
+    })
+    observeEvent(input$sandeelOffRock,{
+      updateNumericInput(session,"sandeelOffRock", value = notGreatherThan100(input$sandeelOffRock))
+    })
+    observeEvent(input$sandeelOffFine,{
+      updateNumericInput(session,"sandeelOffFine", value = notGreatherThan100(input$sandeelOffFine))
+    })
+    observeEvent(input$sandeelOffMed,{
+      updateNumericInput(session,"sandeelOffMed", value = notGreatherThan100(input$sandeelOffMed))
+    })
+    observeEvent(input$sandeelOffCoarse,{
+      updateNumericInput(session,"sandeelOffCoarse", value = notGreatherThan100(input$sandeelOffCoarse))
     })
     
     observeEvent(input$sandeelGearPerHab_reset, {
@@ -914,18 +978,43 @@ server <- function(input, output, session) {
     
     
     output$totalOtterGearPerHab <- renderUI({ 
-      totalOt <- sum(as.numeric(input$otterInRock) , as.numeric(input$otterInFine) , as.numeric(input$otterInMed) , as.numeric(input$otterInCoarse) , as.numeric(input$otterOffRock) , as.numeric(input$otterOffFine) , as.numeric(input$otterOffMed) , as.numeric(input$otterOffCoarse))
-      numericInput("totalOtter", "Total %",totalOt)
+      totalOt <- round(sum(as.numeric(input$otterInRock) , as.numeric(input$otterInFine) , as.numeric(input$otterInMed) , as.numeric(input$otterInCoarse) , as.numeric(input$otterOffRock) , as.numeric(input$otterOffFine) , as.numeric(input$otterOffMed) , as.numeric(input$otterOffCoarse)), digits =3)
+      numericInput("totalOtter", "Total %",totalOt,width = '50%')
     })  
     
     observeEvent(input$totalOtter,{
-      if (input$totalOtter != 100)  {
+      if (is.na(input$totalOtter) || input$totalOtter != 100)  {
         js$backgroundCol("totalSandeel","red")
       } else {
         js$backgroundCol("totalSandeel","white")
       }
       updateNumericInput(session, "totalOtter", value = input$totalOtter)
       disable("totalOtter")
+    })
+    
+    observeEvent(input$otterInRock,{
+      updateNumericInput(session,"otterInRock", value = notGreatherThan100(input$otterInRock))
+    })
+    observeEvent(input$otterInFine,{
+      updateNumericInput(session,"otterInFine", value = notGreatherThan100(input$otterInFine))
+    })
+    observeEvent(input$otterInMed,{
+      updateNumericInput(session,"otterInMed", value = notGreatherThan100(input$otterInMed))
+    })
+    observeEvent(input$otterInCoarse,{
+      updateNumericInput(session,"otterInCoarse", value = notGreatherThan100(input$otterInCoarse))
+    })
+    observeEvent(input$otterOffRock,{
+      updateNumericInput(session,"otterOffRock", value = notGreatherThan100(input$otterOffRock))
+    })
+    observeEvent(input$otterOffFine,{
+      updateNumericInput(session,"otterOffFine", value = notGreatherThan100(input$otterOffFine))
+    })
+    observeEvent(input$otterOffMed,{
+      updateNumericInput(session,"otterOffMed", value = notGreatherThan100(input$otterOffMed))
+    })
+    observeEvent(input$otterOffCoarse,{
+      updateNumericInput(session,"otterOffCoarse", value = notGreatherThan100(input$otterOffCoarse))
     })
     
     observeEvent(input$otterGearPerHab_reset, {
@@ -942,18 +1031,43 @@ server <- function(input, output, session) {
     
     
     output$totalLonMackGearPerHab <- renderUI({ 
-      totalLM <- sum(as.numeric(input$lonMackInRock) , as.numeric(input$lonMackInFine) , as.numeric(input$lonMackInMed) , as.numeric(input$lonMackInCoarse) , as.numeric(input$lonMackOffRock) , as.numeric(input$lonMackOffFine) , as.numeric(input$lonMackOffMed) , as.numeric(input$lonMackOffCoarse))
-      numericInput("totalLonMack", "Total %",totalLM)
+      totalLM <- round(sum(as.numeric(input$lonMackInRock) , as.numeric(input$lonMackInFine) , as.numeric(input$lonMackInMed) , as.numeric(input$lonMackInCoarse) , as.numeric(input$lonMackOffRock) , as.numeric(input$lonMackOffFine) , as.numeric(input$lonMackOffMed) , as.numeric(input$lonMackOffCoarse)), digits =3)
+      numericInput("totalLonMack", "Total %",totalLM,width = '50%')
     })
     
     observeEvent(input$totalLonMack,{
-      if (input$totalLonMack != 100)  {
+      if (is.na(input$totalLonMack) || input$totalLonMack != 100)  {
         js$backgroundCol("totalLonMack","red")
       } else {
         js$backgroundCol("totalLonMack","white")
       }
       updateNumericInput(session, "totalLonMack", value = input$totalLonMack)
       disable("totalLonMack")
+    })
+    
+    observeEvent(input$lonMackInRock,{
+      updateNumericInput(session,"lonMackInRock", value = notGreatherThan100(input$lonMackInRock))
+    })
+    observeEvent(input$lonMackInFine,{
+      updateNumericInput(session,"lonMackInFine", value = notGreatherThan100(input$lonMackInFine))
+    })
+    observeEvent(input$lonMackInMed,{
+      updateNumericInput(session,"lonMackInMed", value = notGreatherThan100(input$lonMackInMed))
+    })
+    observeEvent(input$lonMackInCoarse,{
+      updateNumericInput(session,"lonMackInCoarse", value = notGreatherThan100(input$lonMackInCoarse))
+    })
+    observeEvent(input$lonMackOffRock,{
+      updateNumericInput(session,"lonMackOffRock", value = notGreatherThan100(input$lonMackOffRock))
+    })
+    observeEvent(input$lonMackOffFine,{
+      updateNumericInput(session,"lonMackOffFine", value = notGreatherThan100(input$lonMackOffFine))
+    })
+    observeEvent(input$lonMackOffMed,{
+      updateNumericInput(session,"lonMackOffMed", value = notGreatherThan100(input$lonMackOffMed))
+    })
+    observeEvent(input$lonMackOffCoarse,{
+      updateNumericInput(session,"lonMackOffCoarse", value = notGreatherThan100(input$lonMackOffCoarse))
     })
     
     observeEvent(input$lonMackGearPerHab_reset, {
@@ -969,7 +1083,7 @@ server <- function(input, output, session) {
     })
     
     observeEvent(input$totalBeamTrawl,{
-      if (input$totalBeamTrawl != 100)  {
+      if (is.na(input$totalBeamTrawl) || input$totalBeamTrawl != 100)  {
         js$backgroundCol("totalBeamTrawl","red")
       } else {
         js$backgroundCol("totalBeamTrawl","white")
@@ -979,8 +1093,33 @@ server <- function(input, output, session) {
     })
     
     output$totalBeamTrawlGearPerHab <- renderUI({ 
-      total <- sum(as.numeric(input$beamTrawlInRock) , as.numeric(input$beamTrawlInFine) , as.numeric(input$beamTrawlInMed) , as.numeric(input$beamTrawlInCoarse) , as.numeric(input$beamTrawlOffRock) , as.numeric(input$beamTrawlOffFine) , as.numeric(input$beamTrawlOffMed) , as.numeric(input$beamTrawlOffCoarse))
-      numericInput("totalBeamTrawl", "Total %",total)
+      total <- round(sum(as.numeric(input$beamTrawlInRock) , as.numeric(input$beamTrawlInFine) , as.numeric(input$beamTrawlInMed) , as.numeric(input$beamTrawlInCoarse) , as.numeric(input$beamTrawlOffRock) , as.numeric(input$beamTrawlOffFine) , as.numeric(input$beamTrawlOffMed) , as.numeric(input$beamTrawlOffCoarse)), digits =3)
+      numericInput("totalBeamTrawl", "Total %",total,width = '50%')
+    })
+    
+    observeEvent(input$beamTrawlInRock,{
+      updateNumericInput(session,"beamTrawlInRock", value = notGreatherThan100(input$beamTrawlInRock))
+    })
+    observeEvent(input$beamTrawlInFine,{
+      updateNumericInput(session,"beamTrawlInFine", value = notGreatherThan100(input$beamTrawlInFine))
+    })
+    observeEvent(input$beamTrawlInMed,{
+      updateNumericInput(session,"beamTrawlInMed", value = notGreatherThan100(input$beamTrawlInMed))
+    })
+    observeEvent(input$beamTrawlInCoarse,{
+      updateNumericInput(session,"beamTrawlInCoarse", value = notGreatherThan100(input$beamTrawlInCoarse))
+    })
+    observeEvent(input$beamTrawlOffRock,{
+      updateNumericInput(session,"beamTrawlOffRock", value = notGreatherThan100(input$beamTrawlOffRock))
+    })
+    observeEvent(input$beamTrawlOffFine,{
+      updateNumericInput(session,"beamTrawlOffFine", value = notGreatherThan100(input$beamTrawlOffFine))
+    })
+    observeEvent(input$beamTrawlOffMed,{
+      updateNumericInput(session,"beamTrawlOffMed", value = notGreatherThan100(input$beamTrawlOffMed))
+    })
+    observeEvent(input$beamTrawlOffCoarse,{
+      updateNumericInput(session,"beamTrawlOffCoarse", value = notGreatherThan100(input$beamTrawlOffCoarse))
     })
     
     observeEvent(input$beamTrawlGearPerHab_reset, {
@@ -996,7 +1135,7 @@ server <- function(input, output, session) {
     })
     
     observeEvent(input$totalDemSeine,{
-      if (input$totalDemSeine != 100)  {
+      if (is.na(input$totalDemSeine) || input$totalDemSeine != 100)  {
         js$backgroundCol("totalDemSeine","red")
       } else {
         js$backgroundCol("totalDemSeine","white")
@@ -1006,8 +1145,33 @@ server <- function(input, output, session) {
     })
     
     output$totalDemSeineGearPerHab <- renderUI({ 
-      totalDS <- sum(as.numeric(input$demSeineInRock) , as.numeric(input$demSeineInFine) , as.numeric(input$demSeineInMed) , as.numeric(input$demSeineInCoarse) , as.numeric(input$demSeineOffRock) , as.numeric(input$demSeineOffFine) , as.numeric(input$demSeineOffMed) , as.numeric(input$demSeineOffCoarse))
-      numericInput("totalDemSeine", "Total %",totalDS)
+      totalDS <- round(sum(as.numeric(input$demSeineInRock) , as.numeric(input$demSeineInFine) , as.numeric(input$demSeineInMed) , as.numeric(input$demSeineInCoarse) , as.numeric(input$demSeineOffRock) , as.numeric(input$demSeineOffFine) , as.numeric(input$demSeineOffMed) , as.numeric(input$demSeineOffCoarse)), digits =3)
+      numericInput("totalDemSeine", "Total %",totalDS,width = '50%')
+    })
+    
+    observeEvent(input$demSeineInRock,{
+      updateNumericInput(session,"demSeineInRock", value = notGreatherThan100(input$demSeineInRock))
+    })
+    observeEvent(input$demSeineInFine,{
+      updateNumericInput(session,"demSeineInFine", value = notGreatherThan100(input$demSeineInFine))
+    })
+    observeEvent(input$demSeineInMed,{
+      updateNumericInput(session,"demSeineInMed", value = notGreatherThan100(input$demSeineInMed))
+    })
+    observeEvent(input$demSeineInCoarse,{
+      updateNumericInput(session,"demSeineInCoarse", value = notGreatherThan100(input$demSeineInCoarse))
+    })
+    observeEvent(input$demSeineOffRock,{
+      updateNumericInput(session,"demSeineOffRock", value = notGreatherThan100(input$demSeineOffRock))
+    })
+    observeEvent(input$demSeineOffFine,{
+      updateNumericInput(session,"demSeineOffFine", value = notGreatherThan100(input$demSeineOffFine))
+    })
+    observeEvent(input$demSeineOffMed,{
+      updateNumericInput(session,"demSeineOffMed", value = notGreatherThan100(input$demSeineOffMed))
+    })
+    observeEvent(input$demSeineOffCoarse,{
+      updateNumericInput(session,"demSeineOffCoarse", value = notGreatherThan100(input$demSeineOffCoarse))
     })
     
     observeEvent(input$demSeineGearPerHab_reset, {
@@ -1023,7 +1187,7 @@ server <- function(input, output, session) {
     })
     
     observeEvent(input$totalDemOtter,{
-      if (input$totalDemOtter != 100)  {
+      if (is.na(input$totalDemOtter) || input$totalDemOtter != 100)  {
         js$backgroundCol("totalDemOtter","red")
       } else {
         js$backgroundCol("totalDemOtter","white")
@@ -1033,8 +1197,33 @@ server <- function(input, output, session) {
     })
     
     output$totalDemOtterGearPerHab <- renderUI({ 
-      totalDO <- sum(as.numeric(input$demOtterInRock) , as.numeric(input$demOtterInFine) , as.numeric(input$demOtterInMed) , as.numeric(input$demOtterInCoarse) , as.numeric(input$demOtterOffRock) , as.numeric(input$demOtterOffFine) , as.numeric(input$demOtterOffMed) , as.numeric(input$demOtterOffCoarse))
-      numericInput("totalDemOtter", "Total %",totalDO)
+      totalDO <- round(sum(as.numeric(input$demOtterInRock) , as.numeric(input$demOtterInFine) , as.numeric(input$demOtterInMed) , as.numeric(input$demOtterInCoarse) , as.numeric(input$demOtterOffRock) , as.numeric(input$demOtterOffFine) , as.numeric(input$demOtterOffMed) , as.numeric(input$demOtterOffCoarse)), digits =3)
+      numericInput("totalDemOtter", "Total %",totalDO,width = '50%')
+    })
+    
+    observeEvent(input$demOtterInRock,{
+      updateNumericInput(session,"demOtterInRock", value = notGreatherThan100(input$demOtterInRock))
+    })
+    observeEvent(input$demOtterInFine,{
+      updateNumericInput(session,"demOtterInFine", value = notGreatherThan100(input$demOtterInFine))
+    })
+    observeEvent(input$demOtterInMed,{
+      updateNumericInput(session,"demOtterInMed", value = notGreatherThan100(input$demOtterInMed))
+    })
+    observeEvent(input$demOtterInCoarse,{
+      updateNumericInput(session,"demOtterInCoarse", value = notGreatherThan100(input$demOtterInCoarse))
+    })
+    observeEvent(input$demOtterOffRock,{
+      updateNumericInput(session,"demOtterOffRock", value = notGreatherThan100(input$demOtterOffRock))
+    })
+    observeEvent(input$demOtterOffFine,{
+      updateNumericInput(session,"demOtterOffFine", value = notGreatherThan100(input$demOtterOffFine))
+    })
+    observeEvent(input$demOtterOffMed,{
+      updateNumericInput(session,"demOtterOffMed", value = notGreatherThan100(input$demOtterOffMed))
+    })
+    observeEvent(input$demOtterOffCoarse,{
+      updateNumericInput(session,"demOtterOffCoarse", value = notGreatherThan100(input$demOtterOffCoarse))
     })
     
     observeEvent(input$demOtterGearPerHab_reset, {
@@ -1050,7 +1239,7 @@ server <- function(input, output, session) {
     })
     
     observeEvent(input$totalGillNet,{
-      if (input$totalGillNet != 100)  {
+      if (is.na(input$totalGillNet) ||  input$totalGillNet != 100)  {
         js$backgroundCol("totalGillNet","red")
       } else {
         js$backgroundCol("totalGillNet","white")
@@ -1061,8 +1250,33 @@ server <- function(input, output, session) {
     
     
     output$totalGillNetGearPerHab <- renderUI({ 
-      totalGN <- sum(as.numeric(input$gillNetInRock) , as.numeric(input$gillNetInFine) , as.numeric(input$gillNetInMed) , as.numeric(input$gillNetInCoarse) , as.numeric(input$gillNetOffRock) , as.numeric(input$gillNetOffFine) , as.numeric(input$gillNetOffMed) , as.numeric(input$gillNetOffCoarse))
-      numericInput("totalGillNet", "Total %",totalGN)
+      totalGN <- round(sum(as.numeric(input$gillNetInRock) , as.numeric(input$gillNetInFine) , as.numeric(input$gillNetInMed) , as.numeric(input$gillNetInCoarse) , as.numeric(input$gillNetOffRock) , as.numeric(input$gillNetOffFine) , as.numeric(input$gillNetOffMed) , as.numeric(input$gillNetOffCoarse)), digits =3)
+      numericInput("totalGillNet", "Total %",totalGN,width = '50%')
+    })
+    
+    observeEvent(input$gillNetInRock,{
+      updateNumericInput(session,"gillNetInRock", value = notGreatherThan100(input$gillNetInRock))
+    })
+    observeEvent(input$gillNetInFine,{
+      updateNumericInput(session,"gillNetInFine", value = notGreatherThan100(input$gillNetInFine))
+    })
+    observeEvent(input$gillNetInMed,{
+      updateNumericInput(session,"gillNetInMed", value = notGreatherThan100(input$gillNetInMed))
+    })
+    observeEvent(input$gillNetInCoarse,{
+      updateNumericInput(session,"gillNetInCoarse", value = notGreatherThan100(input$gillNetInCoarse))
+    })
+    observeEvent(input$gillNetOffRock,{
+      updateNumericInput(session,"gillNetOffRock", value = notGreatherThan100(input$gillNetOffRock))
+    })
+    observeEvent(input$gillNetOffFine,{
+      updateNumericInput(session,"gillNetOffFine", value = notGreatherThan100(input$gillNetOffFine))
+    })
+    observeEvent(input$gillNetOffMed,{
+      updateNumericInput(session,"gillNetOffMed", value = notGreatherThan100(input$gillNetOffMed))
+    })
+    observeEvent(input$gillNetOffCoarse,{
+      updateNumericInput(session,"gillNetOffCoarse", value = notGreatherThan100(input$gillNetOffCoarse))
     })
     
     observeEvent(input$gillNetGearPerHab_reset, {
@@ -1078,7 +1292,7 @@ server <- function(input, output, session) {
     })
     
     observeEvent(input$totalBeamShrimp,{
-      if (input$totalBeamShrimp != 100)  {
+      if (is.na(input$totalBeamShrimp) || input$totalBeamShrimp != 100)  {
         js$backgroundCol("totalBeamShrimp","red")
       } else {
         js$backgroundCol("totalBeamShrimp","white")
@@ -1089,8 +1303,33 @@ server <- function(input, output, session) {
     
     
     output$totalBeamShrimpGearPerHab <- renderUI({ 
-      totalBS <- sum(as.numeric(input$beamShrimpInRock) , as.numeric(input$beamShrimpInFine) , as.numeric(input$beamShrimpInMed) , as.numeric(input$beamShrimpInCoarse) , as.numeric(input$beamShrimpOffRock) , as.numeric(input$beamShrimpOffFine) , as.numeric(input$beamShrimpOffMed) , as.numeric(input$beamShrimpOffCoarse))
-      numericInput("totalBeamShrimp", "Total %",totalBS)
+      totalBS <- round(sum(as.numeric(input$beamShrimpInRock) , as.numeric(input$beamShrimpInFine) , as.numeric(input$beamShrimpInMed) , as.numeric(input$beamShrimpInCoarse) , as.numeric(input$beamShrimpOffRock) , as.numeric(input$beamShrimpOffFine) , as.numeric(input$beamShrimpOffMed) , as.numeric(input$beamShrimpOffCoarse)), digits =3)
+      numericInput("totalBeamShrimp", "Total %",totalBS,width = '50%')
+    })
+    
+    observeEvent(input$beamShrimpInRock,{
+      updateNumericInput(session,"beamShrimpInRock", value = notGreatherThan100(input$beamShrimpInRock))
+    })
+    observeEvent(input$beamShrimpInFine,{
+      updateNumericInput(session,"beamShrimpInFine", value = notGreatherThan100(input$beamShrimpInFine))
+    })
+    observeEvent(input$beamShrimpInMed,{
+      updateNumericInput(session,"beamShrimpInMed", value = notGreatherThan100(input$beamShrimpInMed))
+    })
+    observeEvent(input$beamShrimpInCoarse,{
+      updateNumericInput(session,"beamShrimpInCoarse", value = notGreatherThan100(input$beamShrimpInCoarse))
+    })
+    observeEvent(input$beamShrimpOffRock,{
+      updateNumericInput(session,"beamShrimpOffRock", value = notGreatherThan100(input$beamShrimpOffRock))
+    })
+    observeEvent(input$beamShrimpOffFine,{
+      updateNumericInput(session,"beamShrimpOffFine", value = notGreatherThan100(input$beamShrimpOffFine))
+    })
+    observeEvent(input$beamShrimpOffMed,{
+      updateNumericInput(session,"beamShrimpOffMed", value = notGreatherThan100(input$beamShrimpOffMed))
+    })
+    observeEvent(input$beamShrimpOffCoarse,{
+      updateNumericInput(session,"beamShrimpOffCoarse", value = notGreatherThan100(input$beamShrimpOffCoarse))
     })
     
     observeEvent(input$beamShrimpGearPerHab_reset, {
@@ -1106,7 +1345,7 @@ server <- function(input, output, session) {
     })
     
     observeEvent(input$totalNephropsTR2,{
-      if (input$totalNephropsTR2 != 100)  {
+      if (is.na(input$totalNephropsTR2) || input$totalNephropsTR2 != 100)  {
         js$backgroundCol("totalNephropsTR2","red")
       } else {
         js$backgroundCol("totalNephropsTR2","white")
@@ -1117,9 +1356,35 @@ server <- function(input, output, session) {
     
     
     output$totalNephropsTR2GearPerHab <- renderUI({ 
-      totalN2 <- sum(as.numeric(input$nephropsTR2InRock) , as.numeric(input$nephropsTR2InFine) , as.numeric(input$nephropsTR2InMed) , as.numeric(input$nephropsTR2InCoarse) , as.numeric(input$nephropsTR2OffRock) , as.numeric(input$nephropsTR2OffFine) , as.numeric(input$nephropsTR2OffMed) , as.numeric(input$nephropsTR2OffCoarse))
-      numericInput("totalNephropsTR2", "Total %",totalN2)
+      totalN2 <- round(sum(as.numeric(input$nephropsTR2InRock) , as.numeric(input$nephropsTR2InFine) , as.numeric(input$nephropsTR2InMed) , as.numeric(input$nephropsTR2InCoarse) , as.numeric(input$nephropsTR2OffRock) , as.numeric(input$nephropsTR2OffFine) , as.numeric(input$nephropsTR2OffMed) , as.numeric(input$nephropsTR2OffCoarse)), digits =3)
+      numericInput("totalNephropsTR2", "Total %",totalN2,width = '50%')
     })
+    
+    observeEvent(input$nephropsTR2InRock,{
+      updateNumericInput(session,"nephropsTR2InRock", value = notGreatherThan100(input$nephropsTR2InRock))
+    })
+    observeEvent(input$nephropsTR2InFine,{
+      updateNumericInput(session,"nephropsTR2InFine", value = notGreatherThan100(input$nephropsTR2InFine))
+    })
+    observeEvent(input$nephropsTR2InMed,{
+      updateNumericInput(session,"nephropsTR2InMed", value = notGreatherThan100(input$nephropsTR2InMed))
+    })
+    observeEvent(input$nephropsTR2InCoarse,{
+      updateNumericInput(session,"nephropsTR2InCoarse", value = notGreatherThan100(input$nephropsTR2InCoarse))
+    })
+    observeEvent(input$nephropsTR2OffRock,{
+      updateNumericInput(session,"nephropsTR2OffRock", value = notGreatherThan100(input$nephropsTR2OffRock))
+    })
+    observeEvent(input$nephropsTR2OffFine,{
+      updateNumericInput(session,"nephropsTR2OffFine", value = notGreatherThan100(input$nephropsTR2OffFine))
+    })
+    observeEvent(input$nephropsTR2OffMed,{
+      updateNumericInput(session,"nephropsTR2OffMed", value = notGreatherThan100(input$nephropsTR2OffMed))
+    })
+    observeEvent(input$nephropsTR2OffCoarse,{
+      updateNumericInput(session,"nephropsTR2OffCoarse", value = notGreatherThan100(input$nephropsTR2OffCoarse))
+    })
+    
     
     observeEvent(input$nephropsTR2GearPerHab_reset, {
       model <- e2e_read(input$selectedlocation, input$selectedVariant)
@@ -1135,7 +1400,7 @@ server <- function(input, output, session) {
     
     
     observeEvent(input$totalNephropsTR3,{
-      if (input$totalNephropsTR3 != 100)  {
+      if (is.na(input$totalNephropsTR3) || input$totalNephropsTR3 != 100)  {
         js$backgroundCol("totalNephropsTR3","red")
       } else {
         js$backgroundCol("totalNephropsTR3","white")
@@ -1145,8 +1410,33 @@ server <- function(input, output, session) {
     })
     
     output$totalNephropsTR3GearPerHab <- renderUI({ 
-      totalN3 <- sum(as.numeric(input$nephropsTR3InRock) , as.numeric(input$nephropsTR3InFine) , as.numeric(input$nephropsTR3InMed) , as.numeric(input$nephropsTR3InCoarse) , as.numeric(input$nephropsTR3OffRock) , as.numeric(input$nephropsTR3OffFine) , as.numeric(input$nephropsTR3OffMed) , as.numeric(input$nephropsTR3OffCoarse))
-      numericInput("totalNephropsTR3", "Total %",totalN3)
+      totalN3 <- round(sum(as.numeric(input$nephropsTR3InRock) , as.numeric(input$nephropsTR3InFine) , as.numeric(input$nephropsTR3InMed) , as.numeric(input$nephropsTR3InCoarse) , as.numeric(input$nephropsTR3OffRock) , as.numeric(input$nephropsTR3OffFine) , as.numeric(input$nephropsTR3OffMed) , as.numeric(input$nephropsTR3OffCoarse)), digits =3)
+      numericInput("totalNephropsTR3", "Total %",totalN3,width = '50%')
+    })
+    
+    observeEvent(input$nephropsTR3InRock,{
+      updateNumericInput(session,"nephropsTR3InRock", value = notGreatherThan100(input$nephropsTR3InRock))
+    })
+    observeEvent(input$nephropsTR3InFine,{
+      updateNumericInput(session,"nephropsTR3InFine", value = notGreatherThan100(input$nephropsTR3InFine))
+    })
+    observeEvent(input$nephropsTR3InMed,{
+      updateNumericInput(session,"nephropsTR3InMed", value = notGreatherThan100(input$nephropsTR3InMed))
+    })
+    observeEvent(input$nephropsTR3InCoarse,{
+      updateNumericInput(session,"nephropsTR3InCoarse", value = notGreatherThan100(input$nephropsTR3InCoarse))
+    })
+    observeEvent(input$nephropsTR3OffRock,{
+      updateNumericInput(session,"nephropsTR3OffRock", value = notGreatherThan100(input$nephropsTR3OffRock))
+    })
+    observeEvent(input$nephropsTR3OffFine,{
+      updateNumericInput(session,"nephropsTR3OffFine", value = notGreatherThan100(input$nephropsTR3OffFine))
+    })
+    observeEvent(input$nephropsTR3OffMed,{
+      updateNumericInput(session,"nephropsTR3OffMed", value = notGreatherThan100(input$nephropsTR3OffMed))
+    })
+    observeEvent(input$nephropsTR3OffCoarse,{
+      updateNumericInput(session,"nephropsTR3OffCoarse", value = notGreatherThan100(input$nephropsTR3OffCoarse))
     })
     
     observeEvent(input$nephropsTR3GearPerHab_reset, {
@@ -1163,7 +1453,7 @@ server <- function(input, output, session) {
     
     
     observeEvent(input$totalCreels,{
-      if (input$totalCreels != 100)  {
+      if (is.na(input$totalCreels) ||  input$totalCreels != 100)  {
         js$backgroundCol("totalCreels","red")
       } else {
         js$backgroundCol("totalCreels","white")
@@ -1174,8 +1464,33 @@ server <- function(input, output, session) {
     
 
     output$totalCreelsGearPerHab <- renderUI({ 
-      totalCr <- sum(as.numeric(input$creelsInRock) , as.numeric(input$creelsInFine) , as.numeric(input$creelsInMed) , as.numeric(input$creelsInCoarse) , as.numeric(input$creelsOffRock) , as.numeric(input$creelsOffFine) , as.numeric(input$creelsOffMed) , as.numeric(input$creelsOffCoarse))
-      numericInput("totalCreels", "Total %",totalCr)
+      totalCr <- round(sum(as.numeric(input$creelsInRock) , as.numeric(input$creelsInFine) , as.numeric(input$creelsInMed) , as.numeric(input$creelsInCoarse) , as.numeric(input$creelsOffRock) , as.numeric(input$creelsOffFine) , as.numeric(input$creelsOffMed) , as.numeric(input$creelsOffCoarse)), digits =3)
+      numericInput("totalCreels", "Total %",totalCr,width = '50%')
+    })
+    
+    observeEvent(input$creelsInRock,{
+      updateNumericInput(session,"creelsInRock", value = notGreatherThan100(input$creelsInRock))
+    })
+    observeEvent(input$creelsInFine,{
+      updateNumericInput(session,"creelsInFine", value = notGreatherThan100(input$creelsInFine))
+    })
+    observeEvent(input$creelsInMed,{
+      updateNumericInput(session,"creelsInMed", value = notGreatherThan100(input$creelsInMed))
+    })
+    observeEvent(input$creelsInCoarse,{
+      updateNumericInput(session,"creelsInCoarse", value = notGreatherThan100(input$creelsInCoarse))
+    })
+    observeEvent(input$creelsOffRock,{
+      updateNumericInput(session,"creelsOffRock", value = notGreatherThan100(input$creelsOffRock))
+    })
+    observeEvent(input$creelsOffFine,{
+      updateNumericInput(session,"creelsOffFine", value = notGreatherThan100(input$creelsOffFine))
+    })
+    observeEvent(input$creelsOffMed,{
+      updateNumericInput(session,"creelsOffMed", value = notGreatherThan100(input$creelsOffMed))
+    })
+    observeEvent(input$creelsOffCoarse,{
+      updateNumericInput(session,"creelsOffCoarse", value = notGreatherThan100(input$creelsOffCoarse))
     })
     
     observeEvent(input$creelsGearPerHab_reset, {
@@ -1191,7 +1506,7 @@ server <- function(input, output, session) {
     })
     
     observeEvent(input$totalMollusc,{
-      if (input$totalMollusc != 100)  {
+      if (is.na(input$totalMollusc) || input$totalMollusc != 100)  {
         js$backgroundCol("totalMollusc","red")
       } else {
         js$backgroundCol("totalMollusc","white")
@@ -1202,8 +1517,33 @@ server <- function(input, output, session) {
     
     
     output$totalMolluscGearPerHab <- renderUI({ 
-      totalM <- sum(as.numeric(input$molluscInRock) , as.numeric(input$molluscInFine) , as.numeric(input$molluscInMed) , as.numeric(input$molluscInCoarse) , as.numeric(input$molluscOffRock) , as.numeric(input$molluscOffFine) , as.numeric(input$molluscOffMed) , as.numeric(input$molluscOffCoarse))
-      numericInput("totalMollusc", "Total %",totalM)
+      totalM <- round(sum(as.numeric(input$molluscInRock) , as.numeric(input$molluscInFine) , as.numeric(input$molluscInMed) , as.numeric(input$molluscInCoarse) , as.numeric(input$molluscOffRock) , as.numeric(input$molluscOffFine) , as.numeric(input$molluscOffMed) , as.numeric(input$molluscOffCoarse)), digits =3)
+      numericInput("totalMollusc", "Total %",totalM,width = '50%')
+    })
+    
+    observeEvent(input$molluscInRock,{
+      updateNumericInput(session,"molluscInRock", value = notGreatherThan100(input$molluscInRock))
+    })
+    observeEvent(input$molluscInFine,{
+      updateNumericInput(session,"molluscInFine", value = notGreatherThan100(input$molluscInFine))
+    })
+    observeEvent(input$molluscInMed,{
+      updateNumericInput(session,"molluscInMed", value = notGreatherThan100(input$molluscInMed))
+    })
+    observeEvent(input$molluscInCoarse,{
+      updateNumericInput(session,"molluscInCoarse", value = notGreatherThan100(input$molluscInCoarse))
+    })
+    observeEvent(input$molluscOffRock,{
+      updateNumericInput(session,"molluscOffRock", value = notGreatherThan100(input$molluscOffRock))
+    })
+    observeEvent(input$molluscOffFine,{
+      updateNumericInput(session,"molluscOffFine", value = notGreatherThan100(input$molluscOffFine))
+    })
+    observeEvent(input$molluscOffMed,{
+      updateNumericInput(session,"molluscOffMed", value = notGreatherThan100(input$molluscOffMed))
+    })
+    observeEvent(input$molluscOffCoarse,{
+      updateNumericInput(session,"molluscOffCoarse", value = notGreatherThan100(input$molluscOffCoarse))
     })
     
     observeEvent(input$molluscGearPerHab_reset, {
@@ -1219,7 +1559,7 @@ server <- function(input, output, session) {
     })
     
     observeEvent(input$totalWhaler,{
-      if (input$totalWhaler != 100)  {
+      if (is.na(input$totalWhaler) || input$totalWhaler != 100)  {
         js$backgroundCol("totalWhaler","red")
       } else {
         js$backgroundCol("totalWhaler","white")
@@ -1230,8 +1570,33 @@ server <- function(input, output, session) {
     
     
     output$totalWhalerGearPerHab <- renderUI({ 
-      totalW <- sum(as.numeric(input$whalerInRock) , as.numeric(input$whalerInFine) , as.numeric(input$whalerInMed) , as.numeric(input$whalerInCoarse) , as.numeric(input$whalerOffRock) , as.numeric(input$whalerOffFine) , as.numeric(input$whalerOffMed) , as.numeric(input$whalerOffCoarse))
-      numericInput("totalWhaler", "Total %",totalW)
+      totalW <- round(sum(as.numeric(input$whalerInRock) , as.numeric(input$whalerInFine) , as.numeric(input$whalerInMed) , as.numeric(input$whalerInCoarse) , as.numeric(input$whalerOffRock) , as.numeric(input$whalerOffFine) , as.numeric(input$whalerOffMed) , as.numeric(input$whalerOffCoarse)), digits =3)
+      numericInput("totalWhaler", "Total %",totalW,width = '50%')
+    })
+    
+    observeEvent(input$whalerInRock,{
+      updateNumericInput(session,"whalerInRock", value = notGreatherThan100(input$whalerInRock))
+    })
+    observeEvent(input$whalerInFine,{
+      updateNumericInput(session,"whalerInFine", value = notGreatherThan100(input$whalerInFine))
+    })
+    observeEvent(input$whalerInMed,{
+      updateNumericInput(session,"whalerInMed", value = notGreatherThan100(input$whalerInMed))
+    })
+    observeEvent(input$whalerInCoarse,{
+      updateNumericInput(session,"whalerInCoarse", value = notGreatherThan100(input$whalerInCoarse))
+    })
+    observeEvent(input$whalerOffRock,{
+      updateNumericInput(session,"whalerOffRock", value = notGreatherThan100(input$whalerOffRock))
+    })
+    observeEvent(input$whalerOffFine,{
+      updateNumericInput(session,"whalerOffFine", value = notGreatherThan100(input$whalerOffFine))
+    })
+    observeEvent(input$whalerOffMed,{
+      updateNumericInput(session,"whalerOffMed", value = notGreatherThan100(input$whalerOffMed))
+    })
+    observeEvent(input$whalerOffCoarse,{
+      updateNumericInput(session,"whalerOffCoarse", value = notGreatherThan100(input$whalerOffCoarse))
     })
     
     observeEvent(input$whalerGearPerHab_reset, {
@@ -1247,7 +1612,7 @@ server <- function(input, output, session) {
     })
     
     observeEvent(input$totalKelp,{
-      if (input$totalKelp != 100)  {
+      if (is.na(input$totalKelp) || input$totalKelp != 100)  {
         js$backgroundCol("totalKelp","red")
       } else {
         js$backgroundCol("totalKelp","white")
@@ -1257,8 +1622,33 @@ server <- function(input, output, session) {
     })
     
     output$totalKelpGearPerHab <- renderUI({ 
-      totalK <- sum(as.numeric(input$kelpInRock) , as.numeric(input$kelpInFine) , as.numeric(input$kelpInMed) , as.numeric(input$kelpInCoarse) , as.numeric(input$kelpOffRock) , as.numeric(input$kelpOffFine) , as.numeric(input$kelpOffMed) , as.numeric(input$kelpOffCoarse))
-      numericInput("totalKelp", "Total %",totalK)
+      totalK <- round(sum(as.numeric(input$kelpInRock) , as.numeric(input$kelpInFine) , as.numeric(input$kelpInMed) , as.numeric(input$kelpInCoarse) , as.numeric(input$kelpOffRock) , as.numeric(input$kelpOffFine) , as.numeric(input$kelpOffMed) , as.numeric(input$kelpOffCoarse)), digits =3)
+      numericInput("totalKelp", "Total %",totalK,width = '50%')
+    })
+    
+    observeEvent(input$kelpInRock,{
+      updateNumericInput(session,"kelpInRock", value = notGreatherThan100(input$kelpInRock))
+    })
+    observeEvent(input$kelpInFine,{
+      updateNumericInput(session,"kelpInFine", value = notGreatherThan100(input$kelpInFine))
+    })
+    observeEvent(input$kelpInMed,{
+      updateNumericInput(session,"kelpInMed", value = notGreatherThan100(input$kelpInMed))
+    })
+    observeEvent(input$kelpInCoarse,{
+      updateNumericInput(session,"kelpInCoarse", value = notGreatherThan100(input$kelpInCoarse))
+    })
+    observeEvent(input$kelpOffRock,{
+      updateNumericInput(session,"kelpOffRock", value = notGreatherThan100(input$kelpOffRock))
+    })
+    observeEvent(input$kelpOffFine,{
+      updateNumericInput(session,"kelpOffFine", value = notGreatherThan100(input$kelpOffFine))
+    })
+    observeEvent(input$kelpOffMed,{
+      updateNumericInput(session,"kelpOffMed", value = notGreatherThan100(input$kelpOffMed))
+    })
+    observeEvent(input$kelpOffCoarse,{
+      updateNumericInput(session,"kelpOffCoarse", value = notGreatherThan100(input$kelpOffCoarse))
     })
     
     observeEvent(input$kelpGearPerHab_reset, {
@@ -2579,16 +2969,16 @@ server <- function(input, output, session) {
       input$selectedGearForHabitatDist,
       "Pelagic_Trawl+Seine" = fluidRow(  box(width = 12, title = "Habitats", style = "font-size:9px;",
                                              splitLayout(
-                                               numericInput("pelInRock", "Inshore rock",pelInRockDefault,min = 0, max = 100, step = 0.01, width = '45%'),
-                                               numericInput("pelInFine", "Inshore fine",pelInFineDefault,min = 0, max = 100, step = 0.01,width = '45%'),
-                                               numericInput("pelInMed", "Inshore medium",pelInMedDefault,min = 0, max = 100, step = 0.01,width = '45%'),
-                                               numericInput("pelInCoarse", "Inshore coarse",pelInCoarseDefault,min = 0, max = 100, step = 0.01,width = '45%')
+                                               numericInput("pelInRock", "Inshore rock",pelInRockDefault,min = 0, max = 100, step = 0.01, width = '65%'),
+                                               numericInput("pelInFine", "Inshore fine",pelInFineDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               numericInput("pelInMed", "Inshore medium",pelInMedDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               numericInput("pelInCoarse", "Inshore coarse",pelInCoarseDefault,min = 0, max = 100, step = 0.01,width = '65%')
                                              ),
                                              splitLayout(
-                                               numericInput("pelOffRock", "Offshore rock",pelOffRockDefault,min = 0, max = 100, step = 0.01,width = '45%'),
-                                               numericInput("pelOffFine", "Offshore fine",pelOffFineDefault,min = 0, max = 100, step = 0.01,width = '45%'),
-                                               numericInput("pelOffMed", "Offshore medium",pelOffMedDefault,min = 0, max = 100, step = 0.01,width = '45%'),
-                                               numericInput("pelOffCoarse", "Offshore coarse",pelOffCoarseDefault,min = 0, max = 100, step = 0.01,width = '45%')
+                                               numericInput("pelOffRock", "Offshore rock",pelOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               numericInput("pelOffFine", "Offshore fine",pelOffFineDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               numericInput("pelOffMed", "Offshore medium",pelOffMedDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               numericInput("pelOffCoarse", "Offshore coarse",pelOffCoarseDefault,min = 0, max = 100, step = 0.01,width = '65%')
                                              ),
                                              splitLayout(
                                                useShinyjs(),
@@ -2599,16 +2989,16 @@ server <- function(input, output, session) {
       )),
       "Sandeel+sprat_trawl(Otter30-70mm+TR3)" = fluidRow( box(width = 12, title = "Habitats", style = "font-size:9px;",
                                                               splitLayout(
-                                                                numericInput("sandeelInRock", "Inshore rock",sandeelInRockDefault, min = 0, max = 100, step = 1),
-                                                                numericInput("sandeelInFine", "Inshore fine",sandeelInFineDefault, min = 0, max = 100, step = 1),
-                                                                numericInput("sandeelInMed", "Inshore medium",sandeelInMedDefault, min = 0, max = 100, step = 1),
-                                                                numericInput("sandeelInCoarse", "Inshore coarse",sandeelInCoarseDefault, min = 0, max = 100, step = 1)
+                                                                numericInput("sandeelInRock", "Inshore rock",sandeelInRockDefault, min = 0, max = 100, step = 1, width = '65%'),
+                                                                numericInput("sandeelInFine", "Inshore fine",sandeelInFineDefault, min = 0, max = 100, step = 1, width = '65%'),
+                                                                numericInput("sandeelInMed", "Inshore medium",sandeelInMedDefault, min = 0, max = 100, step = 1, width = '65%'),
+                                                                numericInput("sandeelInCoarse", "Inshore coarse",sandeelInCoarseDefault, min = 0, max = 100, step = 1, width = '65%')
                                                               ),
                                                                 splitLayout(
-                                                                numericInput("sandeelOffRock", "Offshore rock",sandeelOffRockDefault ,min = 0, max = 100, step = 1),
-                                                                numericInput("sandeelOffFine", "Offshore fine",sandeelOffFineDefault, min = 0, max = 100, step = 1),
-                                                                numericInput("sandeelOffMed", "Offshore medium",sandeelOffMedDefault, min = 0, max = 100, step = 1),
-                                                                numericInput("sandeelOffCoarse", "Offshore coarse",sandeelOffCoarseDefault, min = 0, max = 100, step = 1)
+                                                                numericInput("sandeelOffRock", "Offshore rock",sandeelOffRockDefault ,min = 0, max = 100, step = 1, width = '65%'),
+                                                                numericInput("sandeelOffFine", "Offshore fine",sandeelOffFineDefault, min = 0, max = 100, step = 1, width = '65%'),
+                                                                numericInput("sandeelOffMed", "Offshore medium",sandeelOffMedDefault, min = 0, max = 100, step = 1, width = '65%'),
+                                                                numericInput("sandeelOffCoarse", "Offshore coarse",sandeelOffCoarseDefault, min = 0, max = 100, step = 1, width = '65%')
                                                                 ),
                                                                 splitLayout(
                                                                   useShinyjs(),
@@ -2619,16 +3009,16 @@ server <- function(input, output, session) {
       )),
       "Otter30-70mm+TR3(sandeel+sprat)" = fluidRow( box(width = 12, title = "Habitats", style = "font-size:9px;",
                                                               splitLayout(
-                                                                numericInput("otterInRock", "Inshore rock",otterInRockDefault,min = 0, max = 100,step = 1),
-                                                                numericInput("otterInFine", "Inshore fine",otterInFineDefault,min = 0, max = 100,step = 1),
-                                                                numericInput("otterInMed", "Inshore medium",otterInMedDefault,min = 0, max = 100,step = 1),
-                                                                numericInput("otterInCoarse", "Inshore coarse",otterInCoarseDefault,min = 0, max = 100,step = 1)
+                                                                numericInput("otterInRock", "Inshore rock",otterInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                                numericInput("otterInFine", "Inshore fine",otterInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                                numericInput("otterInMed", "Inshore medium",otterInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                                numericInput("otterInCoarse", "Inshore coarse",otterInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                               ),
                                                         splitLayout(
-                                                                numericInput("otterOffRock", "Offshore rock",otterOffRockDefault,min = 0, max = 100,step =1),
-                                                                numericInput("otterOffFine", "Offshore fine",otterOffFineDefault,min = 0, max = 100,step = 1),
-                                                                numericInput("otterOffMed", "Offshore medium",otterOffMedDefault,min = 0, max = 100,step = 1),
-                                                                numericInput("otterOffCoarse", "Offshore coarse",otterOffCoarseDefault,min = 0, max = 100,step = 1)
+                                                                numericInput("otterOffRock", "Offshore rock",otterOffRockDefault,min = 0, max = 100,step =1, width = '65%'),
+                                                                numericInput("otterOffFine", "Offshore fine",otterOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                                numericInput("otterOffMed", "Offshore medium",otterOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                                numericInput("otterOffCoarse", "Offshore coarse",otterOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                         ),
                                                         splitLayout(
                                                           useShinyjs(),
@@ -2642,16 +3032,16 @@ server <- function(input, output, session) {
       
       "Longline_mackerel" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                          splitLayout(
-                                           numericInput("lonMackInRock", "Inshore rock",lonMackInRockDefault,min = 0, max = 100,step = 1),
-                                           numericInput("lonMackInFine", "Inshore fine",lonMackInFineDefault,min = 0, max = 100,step = 1),
-                                           numericInput("lonMackInMed", "Inshore medium",lonMackInMedDefault,min = 0, max = 100,step = 1),
-                                           numericInput("lonMackInCoarse", "Inshore coarse",lonMackInCoarseDefault,min = 0, max = 100,step = 1)
+                                           numericInput("lonMackInRock", "Inshore rock",lonMackInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("lonMackInFine", "Inshore fine",lonMackInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("lonMackInMed", "Inshore medium",lonMackInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("lonMackInCoarse", "Inshore coarse",lonMackInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                          ),
                                          splitLayout(
-                                           numericInput("lonMackOffRock", "Offshore rock",lonMackOffRockDefault,min = 0, max = 100,step = 1),
-                                           numericInput("lonMackOffFine", "Offshore fine",lonMackOffFineDefault,min = 0, max = 100,step = 1),
-                                           numericInput("lonMackOffMed", "Offshore medium",lonMackOffMedDefault,min = 0, max = 100,step = 1),
-                                           numericInput("lonMackOffCoarse", "Offshore coarse",lonMackOffCoarseDefault,min = 0, max = 100,step = 1)
+                                           numericInput("lonMackOffRock", "Offshore rock",lonMackOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("lonMackOffFine", "Offshore fine",lonMackOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("lonMackOffMed", "Offshore medium",lonMackOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("lonMackOffCoarse", "Offshore coarse",lonMackOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                          ),
                                          splitLayout(
                                            useShinyjs(),
@@ -2662,16 +3052,16 @@ server <- function(input, output, session) {
       )),
       "Beam_Trawl_BT1+BT2" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                           splitLayout(
-                                            numericInput("beamTrawlInRock", "Inshore rock",beamTrawlInRockDefault,min = 0, max = 100,step = 1),
-                                            numericInput("beamTrawlInFine", "Inshore fine",beamTrawlInFineDefault,min = 0, max = 100,step = 1),
-                                            numericInput("beamTrawlInMed", "Inshore medium",beamTrawlInMedDefault,min = 0, max = 100,step = 1),
-                                            numericInput("beamTrawlInCoarse", "Inshore coarse",beamTrawlInCoarseDefault,min = 0, max = 100,step = 1)
+                                            numericInput("beamTrawlInRock", "Inshore rock",beamTrawlInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("beamTrawlInFine", "Inshore fine",beamTrawlInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("beamTrawlInMed", "Inshore medium",beamTrawlInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("beamTrawlInCoarse", "Inshore coarse",beamTrawlInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
                                           splitLayout(
-                                            numericInput("beamTrawlOffRock", "Offshore rock",beamTrawlOffRockDefault,min = 0, max = 100,step = 1),
-                                            numericInput("beamTrawlOffFine", "Offshore fine",beamTrawlOffFineDefault,min = 0, max = 100,step = 1),
-                                            numericInput("beamTrawlOffMed", "Offshore medium",beamTrawlOffMedDefault,min = 0, max = 100,step = 1),
-                                            numericInput("beamTrawlOffCoarse", "Offshore coarse",beamTrawlOffCoarseDefault,min = 0, max = 100,step = 1)
+                                            numericInput("beamTrawlOffRock", "Offshore rock",beamTrawlOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("beamTrawlOffFine", "Offshore fine",beamTrawlOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("beamTrawlOffMed", "Offshore medium",beamTrawlOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("beamTrawlOffCoarse", "Offshore coarse",beamTrawlOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
                                           splitLayout(
                                             useShinyjs(),
@@ -2682,16 +3072,16 @@ server <- function(input, output, session) {
       )),
       "Demersal_Seine" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                      splitLayout(
-                                       numericInput("demSeineInRock", "Inshore rock",demSeineInRockDefault,min = 0, max = 100,step = 1),
-                                       numericInput("demSeineInFine", "Inshore fine",demSeineInFineDefault,min = 0, max = 100,step = 1),
-                                       numericInput("demSeineInMed", "Inshore medium",demSeineInMedDefault,min = 0, max = 100,step = 1),
-                                       numericInput("demSeineInCoarse", "Inshore coarse",demSeineInCoarseDefault,min = 0, max = 100,step = 1)
+                                       numericInput("demSeineInRock", "Inshore rock",demSeineInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("demSeineInFine", "Inshore fine",demSeineInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("demSeineInMed", "Inshore medium",demSeineInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("demSeineInCoarse", "Inshore coarse",demSeineInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                      ),
                                      splitLayout(
-                                       numericInput("demSeineOffRock", "Offshore rock",demSeineOffRockDefault,min = 0, max = 100,step = 1),
-                                       numericInput("demSeineOffFine", "Offshore fine",demSeineOffFineDefault,min = 0, max = 100,step = 1),
-                                       numericInput("demSeineOffMed", "Offshore medium",demSeineOffMedDefault,min = 0, max = 100,step = 1),
-                                       numericInput("demSeineOffCoarse", "Offshore coarse",demSeineOffCoarseDefault,min = 0, max = 100,step = 1)
+                                       numericInput("demSeineOffRock", "Offshore rock",demSeineOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("demSeineOffFine", "Offshore fine",demSeineOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("demSeineOffMed", "Offshore medium",demSeineOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("demSeineOffCoarse", "Offshore coarse",demSeineOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                      ),
                                      splitLayout(
                                        useShinyjs(),
@@ -2703,16 +3093,16 @@ server <- function(input, output, session) {
       )),
       "Demersal_Otter_Trawl_TR1" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                                 splitLayout(
-                                                  numericInput("demOtterInRock", "Inshore rock",demOtterInRockDefault,min = 0, max = 100,step = 1),
-                                                  numericInput("demOtterInFine", "Inshore fine",demOtterInFineDefault,min = 0, max = 100,step = 1),
-                                                  numericInput("demOtterInMed", "Inshore medium",demOtterInMedDefault,min = 0, max = 100,step = 1),
-                                                  numericInput("demOtterInCoarse", "Inshore coarse",demOtterInCoarseDefault,min = 0, max = 100,step = 1)
+                                                  numericInput("demOtterInRock", "Inshore rock",demOtterInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                  numericInput("demOtterInFine", "Inshore fine",demOtterInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                  numericInput("demOtterInMed", "Inshore medium",demOtterInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                  numericInput("demOtterInCoarse", "Inshore coarse",demOtterInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                 ),
                                                 splitLayout(
-                                                  numericInput("demOtterOffRock", "Offshore rock",demOtterOffRockDefault,min = 0, max = 100,step = 1),
-                                                  numericInput("demOtterOffFine", "Offshore fine",demOtterOffFineDefault,min = 0, max = 100,step = 1),
-                                                  numericInput("demOtterOffMed", "Offshore medium",demOtterOffMedDefault,min = 0, max = 100,step = 1),
-                                                  numericInput("demOtterOffCoarse", "Offshore coarse",demOtterOffCoarseDefault,min = 0, max = 100,step = 1)
+                                                  numericInput("demOtterOffRock", "Offshore rock",demOtterOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                  numericInput("demOtterOffFine", "Offshore fine",demOtterOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                  numericInput("demOtterOffMed", "Offshore medium",demOtterOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                  numericInput("demOtterOffCoarse", "Offshore coarse",demOtterOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                 ),
                                                 splitLayout(
                                                   useShinyjs(),
@@ -2724,16 +3114,16 @@ server <- function(input, output, session) {
       )),
       "Gill_Nets+Longline_demersal" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                                    splitLayout(
-                                                     numericInput("gillNetInRock", "Inshore rock",gillNetInRockDefault,min = 0, max = 100,step = 1),
-                                                     numericInput("gillNetInFine", "Inshore fine",gillNetInFineDefault,min = 0, max = 100,step = 1),
-                                                     numericInput("gillNetInMed", "Inshore medium",gillNetInMedDefault,min = 0, max = 100,step = 1),
-                                                     numericInput("gillNetInCoarse", "Inshore coarse",gillNetInCoarseDefault,min = 0, max = 100,step = 1)
+                                                     numericInput("gillNetInRock", "Inshore rock",gillNetInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                     numericInput("gillNetInFine", "Inshore fine",gillNetInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                     numericInput("gillNetInMed", "Inshore medium",gillNetInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                     numericInput("gillNetInCoarse", "Inshore coarse",gillNetInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                    ),
                                                    splitLayout(
-                                                     numericInput("gillNetOffRock", "Offshore rock",gillNetOffRockDefault,min = 0, max = 100,step = 1),
-                                                     numericInput("gillNetOffFine", "Offshore fine",gillNetOffFineDefault,min = 0, max = 100,step = 1),
-                                                     numericInput("gillNetOffMed", "Offshore medium",gillNetOffMedDefault,min = 0, max = 100,step = 1),
-                                                     numericInput("gillNetOffCoarse", "Offshore coarse",gillNetOffCoarseDefault,min = 0, max = 100,step = 1)
+                                                     numericInput("gillNetOffRock", "Offshore rock",gillNetOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                     numericInput("gillNetOffFine", "Offshore fine",gillNetOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                     numericInput("gillNetOffMed", "Offshore medium",gillNetOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                                     numericInput("gillNetOffCoarse", "Offshore coarse",gillNetOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                    ),
                                                    splitLayout(
                                                      useShinyjs(),
@@ -2744,16 +3134,16 @@ server <- function(input, output, session) {
       )),
       "Beam_Trawl_shrimp" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                          splitLayout(
-                                           numericInput("beamShrimpInRock", "Inshore rock",beamShrimpInRockDefault,min = 0, max = 100,step = 1),
-                                           numericInput("beamShrimpInFine", "Inshore fine",beamShrimpInFineDefault,min = 0, max = 100,step = 1),
-                                           numericInput("beamShrimpInMed", "Inshore medium",beamShrimpInMedDefault,min = 0, max = 100,step = 1),
-                                           numericInput("beamShrimpInCoarse", "Inshore coarse",beamShrimpInCoarseDefault,min = 0, max = 100,step = 1)
+                                           numericInput("beamShrimpInRock", "Inshore rock",beamShrimpInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("beamShrimpInFine", "Inshore fine",beamShrimpInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("beamShrimpInMed", "Inshore medium",beamShrimpInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("beamShrimpInCoarse", "Inshore coarse",beamShrimpInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                          ),
                                          splitLayout(
-                                           numericInput("beamShrimpOffRock", "Offshore rock",beamShrimpOffRockDefault,min = 0, max = 100,step = 1),
-                                           numericInput("beamShrimpOffFine", "Offshore fine",beamShrimpOffFineDefault,min = 0, max = 100,step = 1),
-                                           numericInput("beamShrimpOffMed", "Offshore medium",beamShrimpOffMedDefault,min = 0, max = 100,step = 1),
-                                           numericInput("beamShrimpOffCoarse", "Offshore coarse",beamShrimpOffCoarseDefault,min = 0, max = 100,step = 1)
+                                           numericInput("beamShrimpOffRock", "Offshore rock",beamShrimpOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("beamShrimpOffFine", "Offshore fine",beamShrimpOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("beamShrimpOffMed", "Offshore medium",beamShrimpOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                           numericInput("beamShrimpOffCoarse", "Offshore coarse",beamShrimpOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                          ),
                                          splitLayout(
                                            useShinyjs(),
@@ -2765,16 +3155,16 @@ server <- function(input, output, session) {
       )),
       "Nephrops_Trawl_TR2" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                           splitLayout(
-                                            numericInput("nephropsTR2InRock", "Inshore rock",nephropsTR2InRockDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR2InFine", "Inshore fine",nephropsTR2InFineDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR2InMed", "Inshore medium",nephropsTR2InMedDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR2InCoarse", "Inshore coarse",nephropsTR2InCoarseDefault,min = 0, max = 100,step = 1)
+                                            numericInput("nephropsTR2InRock", "Inshore rock",nephropsTR2InRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR2InFine", "Inshore fine",nephropsTR2InFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR2InMed", "Inshore medium",nephropsTR2InMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR2InCoarse", "Inshore coarse",nephropsTR2InCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
                                           splitLayout(
-                                            numericInput("nephropsTR2OffRock", "Offshore rock",nephropsTR2OffRockDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR2OffFine", "Offshore fine",nephropsTR2OffFineDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR2OffMed", "Offshore medium",nephropsTR2OffMedDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR2OffCoarse", "Offshore coarse",nephropsTR2OffCoarseDefault,min = 0, max = 100,step = 1)
+                                            numericInput("nephropsTR2OffRock", "Offshore rock",nephropsTR2OffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR2OffFine", "Offshore fine",nephropsTR2OffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR2OffMed", "Offshore medium",nephropsTR2OffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR2OffCoarse", "Offshore coarse",nephropsTR2OffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
                                           splitLayout(
                                             useShinyjs(),
@@ -2786,16 +3176,16 @@ server <- function(input, output, session) {
       )),
       "Nephrops_Trawl_TR3" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                           splitLayout(
-                                            numericInput("nephropsTR3InRock", "Inshore rock",nephropsTR3InRockDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR3InFine", "Inshore fine",nephropsTR3InFineDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR3InMed", "Inshore medium",nephropsTR3InMedDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR3InCoarse", "Inshore coarse",nephropsTR3InCoarseDefault,min = 0, max = 100,step = 1)
+                                            numericInput("nephropsTR3InRock", "Inshore rock",nephropsTR3InRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR3InFine", "Inshore fine",nephropsTR3InFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR3InMed", "Inshore medium",nephropsTR3InMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR3InCoarse", "Inshore coarse",nephropsTR3InCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
                                           splitLayout(
-                                            numericInput("nephropsTR3OffRock", "Offshore rock",nephropsTR3OffRockDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR3OffFine", "Offshore fine",nephropsTR3OffFineDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR3OffMed", "Offshore medium",nephropsTR3OffMedDefault,min = 0, max = 100,step = 1),
-                                            numericInput("nephropsTR3OffCoarse", "Offshore coarse",nephropsTR3OffCoarseDefault,min = 0, max = 100,step = 1)
+                                            numericInput("nephropsTR3OffRock", "Offshore rock",nephropsTR3OffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR3OffFine", "Offshore fine",nephropsTR3OffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR3OffMed", "Offshore medium",nephropsTR3OffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                            numericInput("nephropsTR3OffCoarse", "Offshore coarse",nephropsTR3OffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
                                           splitLayout(
                                             useShinyjs(),
@@ -2807,16 +3197,16 @@ server <- function(input, output, session) {
       )),
       "Creels" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                               splitLayout(
-                                numericInput("creelsInRock", "Inshore rock",creelsInRockDefault,min = 0, max = 100,step = 1),
-                                numericInput("creelsInFine", "Inshore fine",creelsInFineDefault,min = 0, max = 100,step = 1),
-                                numericInput("creelsInMed", "Inshore medium",creelsInMedDefault,min = 0, max = 100,step = 1),
-                                numericInput("creelsInCoarse", "Inshore coarse",creelsInCoarseDefault,min = 0, max = 100,step = 1)
+                                numericInput("creelsInRock", "Inshore rock",creelsInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("creelsInFine", "Inshore fine",creelsInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("creelsInMed", "Inshore medium",creelsInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("creelsInCoarse", "Inshore coarse",creelsInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                               ),
                               splitLayout(
-                                numericInput("creelsOffRock", "Offshore rock",creelsOffRockDefault,min = 0, max = 100,step = 1),
-                                numericInput("creelsOffFine", "Offshore fine",creelsOffFineDefault,min = 0, max = 100,step = 1),
-                                numericInput("creelsOffMed", "Offshore medium",creelsOffMedDefault,min = 0, max = 100,step = 1),
-                                numericInput("creelsOffCoarse", "Offshore coarse",creelsOffCoarseDefault,min = 0, max = 100,step = 1)
+                                numericInput("creelsOffRock", "Offshore rock",creelsOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("creelsOffFine", "Offshore fine",creelsOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("creelsOffMed", "Offshore medium",creelsOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("creelsOffCoarse", "Offshore coarse",creelsOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                               ),
                               splitLayout(
                                 useShinyjs(),
@@ -2828,16 +3218,16 @@ server <- function(input, output, session) {
       )),
       "Mollusc_Dredge" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                       splitLayout(
-                                        numericInput("molluscInRock", "Inshore rock",molluscInRockDefault,min = 0, max = 100,step = 1),
-                                        numericInput("molluscInFine", "Inshore fine",molluscInFineDefault,min = 0, max = 100,step = 1),
-                                        numericInput("molluscInMed", "Inshore medium",molluscInMedDefault,min = 0, max = 100,step = 1),
-                                        numericInput("molluscInCoarse", "Inshore coarse",molluscInCoarseDefault,min = 0, max = 100,step = 1)
+                                        numericInput("molluscInRock", "Inshore rock",molluscInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                        numericInput("molluscInFine", "Inshore fine",molluscInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                        numericInput("molluscInMed", "Inshore medium",molluscInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                        numericInput("molluscInCoarse", "Inshore coarse",molluscInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                       ),
                                       splitLayout(
-                                        numericInput("molluscOffRock", "Offshore rock",molluscOffRockDefault,min = 0, max = 100,step = 1),
-                                        numericInput("molluscOffFine", "Offshore fine",molluscOffFineDefault,min = 0, max = 100,step = 1),
-                                        numericInput("molluscOffMed", "Offshore medium",molluscOffMedDefault,min = 0, max = 100,step = 1),
-                                        numericInput("molluscOffCoarse", "Offshore coarse",molluscOffCoarseDefault,min = 0, max = 100,step = 1)
+                                        numericInput("molluscOffRock", "Offshore rock",molluscOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                        numericInput("molluscOffFine", "Offshore fine",molluscOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                        numericInput("molluscOffMed", "Offshore medium",molluscOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                        numericInput("molluscOffCoarse", "Offshore coarse",molluscOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                       ),
                                       splitLayout(
                                         useShinyjs(),
@@ -2849,16 +3239,16 @@ server <- function(input, output, session) {
       )),
       "Whaler" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                               splitLayout(
-                                numericInput("whalerInRock", "Inshore rock",whalerInRockDefault,min = 0, max = 100,step = 1),
-                                numericInput("whalerInFine", "Inshore fine",whalerInFineDefault,min = 0, max = 100,step = 1),
-                                numericInput("whalerInMed", "Inshore medium",whalerInMedDefault,min = 0, max = 100,step = 1),
-                                numericInput("whalerInCoarse", "Inshore coarse",whalerInCoarseDefault,min = 0, max = 100,step = 1)
+                                numericInput("whalerInRock", "Inshore rock",whalerInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("whalerInFine", "Inshore fine",whalerInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("whalerInMed", "Inshore medium",whalerInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("whalerInCoarse", "Inshore coarse",whalerInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                               ),
                               splitLayout(
-                                numericInput("whalerOffRock", "Offshore rock",whalerOffRockDefault,min = 0, max = 100,step = 1),
-                                numericInput("whalerOffFine", "Offshore fine",whalerOffFineDefault,min = 0, max = 100,step = 1),
-                                numericInput("whalerOffMed", "Offshore medium",whalerOffMedDefault,min = 0, max = 100,step = 1),
-                                numericInput("whalerOffCoarse", "Offshore coarse",whalerOffCoarseDefault,min = 0, max = 100,step = 1)
+                                numericInput("whalerOffRock", "Offshore rock",whalerOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("whalerOffFine", "Offshore fine",whalerOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("whalerOffMed", "Offshore medium",whalerOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                numericInput("whalerOffCoarse", "Offshore coarse",whalerOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                               ),
                               splitLayout(
                                 useShinyjs(),
@@ -2870,16 +3260,16 @@ server <- function(input, output, session) {
       )),
       "KelpHarvester" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
                                      splitLayout(
-                                       numericInput("kelpInRock", "Inshore rock",kelpInRockDefault,min = 0, max = 100,step = 1),
-                                       numericInput("kelpInFine", "Inshore fine",kelpInFineDefault,min = 0, max = 100,step = 1),
-                                       numericInput("kelpInMed", "Inshore medium",kelpInMedDefault,min = 0, max = 100,step = 1),
-                                       numericInput("kelpInCoarse", "Inshore coarse",kelpInCoarseDefault,min = 0, max = 100,step = 1)
+                                       numericInput("kelpInRock", "Inshore rock",kelpInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("kelpInFine", "Inshore fine",kelpInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("kelpInMed", "Inshore medium",kelpInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("kelpInCoarse", "Inshore coarse",kelpInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                      ),
                                      splitLayout(
-                                       numericInput("kelpOffRock", "Offshore rock",kelpOffRockDefault,min = 0, max = 100,step = 1),
-                                       numericInput("kelpOffFine", "Offshore fine",kelpOffFineDefault,min = 0, max = 100,step = 1),
-                                       numericInput("kelpOffMed", "Offshore medium",kelpOffMedDefault,min = 0, max = 100,step = 1),
-                                       numericInput("kelpOffCoarse", "Offshore coarse",kelpOffCoarseDefault,min = 0, max = 100,step = 1)
+                                       numericInput("kelpOffRock", "Offshore rock",kelpOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("kelpOffFine", "Offshore fine",kelpOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("kelpOffMed", "Offshore medium",kelpOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
+                                       numericInput("kelpOffCoarse", "Offshore coarse",kelpOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                      ),
                                      splitLayout(
                                        useShinyjs(),
