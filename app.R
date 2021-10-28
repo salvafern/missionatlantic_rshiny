@@ -850,73 +850,97 @@ server <- function(input, output, session) {
       outputType = "DATA")
   })
   
-  ## NEED TO ADD SOMETHING LIKE THIS TO VALIDATE EACH NUMERIC INPUT ENTRY - to KEEP WITHIN RANGE
-  # observeEvent(input$current, { 
-  #   updateNumericInput(session,"current", value = ({ if(!(is.numeric(input$current))){0}
-  #     else if(!(is.null(input$current) || is.na(input$current))){
-  #       if(input$current < 0){
-  #         0 
-  #       }else if(input$current > 100){
-  #         100
-  #       } else{
-  #         return (isolate(input$current))
-  #       } 
-  #     } 
-  #     else{0}
-  #   })
-  #   )
-  # })
-  
-  output$totalPelGearPerHab <- renderUI({ 
-    total <- round(sum(as.numeric(input$pelInRock), as.numeric(input$pelInFine) , as.numeric(input$pelInMed) , as.numeric(input$pelInCoarse) , as.numeric(input$pelOffRock) , as.numeric(input$pelOffFine) , as.numeric(input$pelOffMed) , as.numeric(input$pelOffCoarse)), digits =3)
-     numericInput("totalPel", "Total %",total,width = '50%')
+  output$totalPercentageInPel <- renderUI({ 
+    totalIn <- round(sum(as.numeric(input$percentagePelInRock), as.numeric(input$percentagePelInFine) , as.numeric(input$percentagePelInMed) , as.numeric(input$percentagePelInCoarse)), digits =3)
+     numericInput("totalPelIn", "Total Inshore %",totalIn,width = '50%')
     })
   
-  observeEvent(input$totalPel,{
-    if ( is.na(input$totalPel) || input$totalPel != 100)  {
-      js$backgroundCol("totalPel","red")
-    } else {
-      js$backgroundCol("totalPel","white")
-    }
-    updateNumericInput(session, "totalPel", value = input$totalPel)
-    disable("totalPel")
+  output$totalPercentageOffPel <- renderUI({ 
+    totalOff <- round(sum(as.numeric(input$percentagePelOffRock), as.numeric(input$percentagePelOffFine) , as.numeric(input$percentagePelOffMed) , as.numeric(input$percentagePelOffCoarse)), digits =3)
+    numericInput("totalPelOff", "Total Offshore %",totalOff,width = '50%')
   })
   
-  observeEvent(input$pelInRock,{
-    updateNumericInput(session,"pelInRock", value = notGreatherThan100(input$pelInRock))
+  observeEvent(input$totalPelIn,{
+    if ( is.na(input$totalPelIn) || input$totalPelIn != 100)  {
+      js$backgroundCol("totalPelIn","red")
+    } else {
+      js$backgroundCol("totalPelIn","white")
+    }
+    updateNumericInput(session, "totalPelIn", value = input$totalPelIn)
+    disable("totalPelIn")
   })
-  observeEvent(input$pelInFine,{
-    updateNumericInput(session,"pelInFine", value = notGreatherThan100(input$pelInFine))
+  
+  observeEvent(input$totalPelOff,{
+    if ( is.na(input$totalPelOff) || input$totalPelOff != 100)  {
+      js$backgroundCol("totalPelOff","red")
+    } else {
+      js$backgroundCol("totalPelOff","white")
+    }
+    updateNumericInput(session, "totalPelOff", value = input$totalPelOff)
+    disable("totalPelOff")
   })
-  observeEvent(input$pelInMed,{
-    updateNumericInput(session,"pelInMed", value = notGreatherThan100(input$pelInMed))
+  
+  observeEvent(input$percentagePelInRock,{
+    updateNumericInput(session,"percentagePelInRock", value = notGreatherThan100(input$percentagePelInRock))
   })
-  observeEvent(input$pelInCoarse,{
-    updateNumericInput(session,"pelInCoarse", value = notGreatherThan100(input$pelInCoarse))
+  observeEvent(input$percentagePelInFine,{
+    updateNumericInput(session,"percentagePelInFine", value = notGreatherThan100(input$percentagePelInFine))
   })
-  observeEvent(input$pelOffRock,{
-    updateNumericInput(session,"pelOffRock", value = notGreatherThan100(input$pelOffRock))
+  observeEvent(input$percentagePelInMed,{
+    updateNumericInput(session,"percentagePelInMed", value = notGreatherThan100(input$percentagePelInMed))
   })
-  observeEvent(input$pelOffFine,{
-    updateNumericInput(session,"pelOffFine", value = notGreatherThan100(input$pelOffFine))
+  observeEvent(input$percentagePelInCoarse,{
+    updateNumericInput(session,"percentagePelInCoarse", value = notGreatherThan100(input$percentagePelInCoarse))
   })
-  observeEvent(input$pelOffMed,{
-    updateNumericInput(session,"pelOffMed", value = notGreatherThan100(input$pelOffMed))
+  observeEvent(input$percentagePelOffRock,{
+    updateNumericInput(session,"percentagePelOffRock", value = notGreatherThan100(input$percentagePelOffRock))
   })
-  observeEvent(input$pelOffCoarse,{
-    updateNumericInput(session,"pelOffCoarse", value = notGreatherThan100(input$pelOffCoarse))
+  observeEvent(input$percentagePelOffFine,{
+    updateNumericInput(session,"percentagePelOffFine", value = notGreatherThan100(input$percentagePelOffFine))
+  })
+  observeEvent(input$percentagePelOffMed,{
+    updateNumericInput(session,"percentagePelOffMed", value = notGreatherThan100(input$percentagePelOffMed))
+  })
+  observeEvent(input$percentagePelOffCoarse,{
+    updateNumericInput(session,"percentagePelOffCoarse", value = notGreatherThan100(input$percentagePelOffCoarse))
   })
   
   observeEvent(input$pelGearPerHab_reset, {
     model <- e2e_read(input$selectedlocation, input$selectedVariant)
-    updateNumericInput(session, "pelInRock", value = model$data$fleet.model$gear_habitat_activity$s0[1] * 100)
-    updateNumericInput(session, "pelInFine", value = model$data$fleet.model$gear_habitat_activity$s1[1] * 100)
-    updateNumericInput(session, "pelInMed", value = model$data$fleet.model$gear_habitat_activity$s2[1] * 100)
-    updateNumericInput(session, "pelInCoarse", value = model$data$fleet.model$gear_habitat_activity$s3[1] * 100)
-    updateNumericInput(session, "pelOffRock", value = model$data$fleet.model$gear_habitat_activity$d0[1] * 100)
-    updateNumericInput(session, "pelOffFine", value = model$data$fleet.model$gear_habitat_activity$d1[1] * 100)
-    updateNumericInput(session, "pelOffMed", value = model$data$fleet.model$gear_habitat_activity$d2[1] * 100)
-    updateNumericInput(session, "pelOffCoarse", value = model$data$fleet.model$gear_habitat_activity$d3[1] * 100)
+    pelInRock <- model$data$fleet.model$gear_habitat_activity$s0[1] 
+    pelInFine <- model$data$fleet.model$gear_habitat_activity$s1[1] 
+    pelInMed <- model$data$fleet.model$gear_habitat_activity$s2[1] 
+    pelInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[1]
+    pelOffRock <- model$data$fleet.model$gear_habitat_activity$d0[1] 
+    pelOffFine <- model$data$fleet.model$gear_habitat_activity$d1[1] 
+    pelOffMed <- model$data$fleet.model$gear_habitat_activity$d2[1] 
+    pelOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[1] 
+    # Getting Total Inshore/Offshore here
+    totalInPel <- pelInRock + pelInFine + pelInMed + pelInCoarse
+    totalOffPel <- pelOffRock + pelOffFine + pelOffMed + pelOffCoarse
+    totalOverallPel <- totalInPel + totalOffPel
+    percentageInPelDefault <- pelInRock/totalOverallPel * 100
+    percentageOutPelDefault <- 100 - percentageInPelDefault
+    # Now getting percentages Inshore
+    percentagePelInRockDefault <- pelInRock/totalInPel * 100
+    percentagePelInFineDefault <- pelInFine/totalInPel * 100
+    percentagePelInMedDefault <- pelInMed/totalInPel * 100
+    percentagePelInCoarseDefault <- pelInCoarse/totalInPel * 100
+    # Now getting percentages Offshore
+    percentagePelOffRockDefault <- pelOffRock/totalOffPel * 100
+    percentagePelOffFineDefault <- pelOffFine/totalOffPel * 100
+    percentagePelOffMedDefault <- pelOffMed/totalOffPel * 100
+    percentagePelOffCoarseDefault <- pelOffCoarse/totalOffPel * 100
+    updateNumericInput(session, "inshorePercentage", value = percentageInPelDefault)
+    updateNumericInput(session, "offshorePercentage", value = percentageOutPelDefault)
+    updateNumericInput(session, "percentagePelInRock", value = percentagePelInRockDefault)
+    updateNumericInput(session, "percentagePelInFine", value = percentagePelInFineDefault)
+    updateNumericInput(session, "percentagePelInMed", value = percentagePelInMedDefault)
+    updateNumericInput(session, "percentagePelInCoarse", value = percentagePelInCoarseDefault)
+    updateNumericInput(session, "percentagePelOffRock", value = percentagePelOffRockDefault)
+    updateNumericInput(session, "percentagePelOffFine", value = percentagePelOffFineDefault)
+    updateNumericInput(session, "percentagePelOffMed", value = percentagePelOffMedDefault)
+    updateNumericInput(session, "percentagePelOffCoarse", value = percentagePelOffCoarseDefault)
   })
     
     output$totalSandeelGearPerHab <- renderUI({ 
@@ -2830,14 +2854,34 @@ server <- function(input, output, session) {
   
   output$uiGearHabDist <- renderUI({
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    pelInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[1] * 100
-    pelInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[1] * 100
-    pelInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[1] * 100
-    pelInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[1] * 100
-    pelOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[1] * 100
-    pelOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[1] * 100
-    pelOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[1] * 100
-    pelOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[1] * 100
+    
+    pelInRock <- model$data$fleet.model$gear_habitat_activity$s0[1] 
+    pelInFine <- model$data$fleet.model$gear_habitat_activity$s1[1] 
+    pelInMed <- model$data$fleet.model$gear_habitat_activity$s2[1] 
+    pelInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[1]
+    pelOffRock <- model$data$fleet.model$gear_habitat_activity$d0[1] 
+    pelOffFine <- model$data$fleet.model$gear_habitat_activity$d1[1] 
+    pelOffMed <- model$data$fleet.model$gear_habitat_activity$d2[1] 
+    pelOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[1] 
+    # Getting Total Inshore/Offshore here
+    totalInPel <- pelInRock + pelInFine + pelInMed + pelInCoarse
+    totalOffPel <- pelOffRock + pelOffFine + pelOffMed + pelOffCoarse
+    totalOverallPel <- totalInPel + totalOffPel
+    percentageInPelDefault <- pelInRock/totalOverallPel * 100
+    percentageOutPelDefault <- 100 - percentageInPelDefault
+    # Now getting percentages Inshore
+    percentagePelInRockDefault <- pelInRock/totalInPel * 100
+    percentagePelInFineDefault <- pelInFine/totalInPel * 100
+    percentagePelInMedDefault <- pelInMed/totalInPel * 100
+    percentagePelInCoarseDefault <- pelInCoarse/totalInPel * 100
+    totalPercentageInPelDefault <- percentagePelInRockDefault + percentagePelInFineDefault + percentagePelInMedDefault + percentagePelInCoarseDefault
+    # Now getting percentages Offshore
+    percentagePelOffRockDefault <- pelOffRock/totalOffPel * 100
+    percentagePelOffFineDefault <- pelOffFine/totalOffPel * 100
+    percentagePelOffMedDefault <- pelOffMed/totalOffPel * 100
+    percentagePelOffCoarseDefault <- pelOffCoarse/totalOffPel * 100
+    totalPercentageOffPelDefault <- percentagePelOffRockDefault + percentagePelOffFineDefault + percentagePelOffMedDefault + percentagePelOffCoarseDefault
+
     
     sandeelInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[2] * 100
     sandeelInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[2] * 100
@@ -2967,316 +3011,336 @@ server <- function(input, output, session) {
 
     switch(
       input$selectedGearForHabitatDist,
-      "Pelagic_Trawl+Seine" = fluidRow(  box(width = 12, title = "Habitats", style = "font-size:9px;",
+      "Pelagic_Trawl+Seine" = fluidRow(  box(width = 10, title = "", style = "font-size:9px;",
+                                             #(1) New proportions go here in a splitlayout on its own => 2 Boxes
+                                             #(2) Then a split layout of two vertical layouts => 8 boxes + 2 boxes for totals
+                                             #(3) Reset button maybe to right of (2) - i.e. in same splitlayout?
+                                             wellPanel(
+                                             h5("Inshore-Offshore Split"),
+                                             splitLayout( cellWidths = c("50%", "50%"),
+                                               numericInput("inshorePercentage", "InShore %",percentageInPelDefault,min = 0, max = 100, step = 0.01, width = '40%'),
+                                               numericInput("offShorePercentage", "Offshore %",percentageOutPelDefault,min = 0, max = 100, step = 0.01,width = '40%')
+                                             )),
                                              splitLayout(
-                                               numericInput("pelInRock", "Inshore rock",pelInRockDefault,min = 0, max = 100, step = 0.01, width = '65%'),
-                                               numericInput("pelInFine", "Inshore fine",pelInFineDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                               numericInput("pelInMed", "Inshore medium",pelInMedDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                               numericInput("pelInCoarse", "Inshore coarse",pelInCoarseDefault,min = 0, max = 100, step = 0.01,width = '65%')
+                                             wellPanel(
+                                             verticalLayout(
+                                               h5("Inshore Habitat Split"),
+                                               numericInput("percentagePelInRock", "Inshore rock %",percentagePelInRockDefault,min = 0, max = 100, step = 0.01, width = '65%'),
+                                               numericInput("percentagePelInFine", "Inshore fine %",percentagePelInFineDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               numericInput("percentagePelInMed", "Inshore medium %",percentagePelInMedDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               numericInput("percentagePelInCoarse", "Inshore coarse %",percentagePelInCoarseDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               verticalLayout(
+                                                 useShinyjs(),
+                                                 extendShinyjs(text = jsCode,functions = c("backgroundCol")),
+                                                 uiOutput("totalPercentageInPel")
+                                               )
+                                             )),
+                                             wellPanel(
+                                             h5("Offshore Habitat Split"),
+                                             verticalLayout(
+                                               numericInput("percentagePelOffRock", "Offshore rock %",percentagePelOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               numericInput("percentagePelOffFine", "Offshore fine %",percentagePelOffFineDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               numericInput("percentagePelOffMed", "Offshore medium %",percentagePelOffMedDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               numericInput("percentagePelOffCoarse", "Offshore coarse %",percentagePelOffCoarseDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               verticalLayout(
+                                                 useShinyjs(),
+                                                 extendShinyjs(text = jsCode,functions = c("backgroundCol")),
+                                                 uiOutput("totalPercentageOffPel")
+                                               )
+                                             )),
+                                             actionButton("pelGearPerHab_reset", "Reset")
                                              ),
-                                             splitLayout(
-                                               numericInput("pelOffRock", "Offshore rock",pelOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                               numericInput("pelOffFine", "Offshore fine",pelOffFineDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                               numericInput("pelOffMed", "Offshore medium",pelOffMedDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                               numericInput("pelOffCoarse", "Offshore coarse",pelOffCoarseDefault,min = 0, max = 100, step = 0.01,width = '65%')
-                                             ),
-                                             splitLayout(
-                                               useShinyjs(),
-                                               extendShinyjs(text = jsCode,functions = c("backgroundCol")),
-                                               uiOutput("totalPelGearPerHab")
-                                             ),
-                                             splitLayout(actionButton("pelGearPerHab_reset", "Reset"))
       )),
       "Sandeel+sprat_trawl(Otter30-70mm+TR3)" = fluidRow( box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                                              splitLayout(
+                                                              verticalLayout(
                                                                 numericInput("sandeelInRock", "Inshore rock",sandeelInRockDefault, min = 0, max = 100, step = 1, width = '65%'),
                                                                 numericInput("sandeelInFine", "Inshore fine",sandeelInFineDefault, min = 0, max = 100, step = 1, width = '65%'),
                                                                 numericInput("sandeelInMed", "Inshore medium",sandeelInMedDefault, min = 0, max = 100, step = 1, width = '65%'),
                                                                 numericInput("sandeelInCoarse", "Inshore coarse",sandeelInCoarseDefault, min = 0, max = 100, step = 1, width = '65%')
                                                               ),
-                                                                splitLayout(
+                                                                verticalLayout(
                                                                 numericInput("sandeelOffRock", "Offshore rock",sandeelOffRockDefault ,min = 0, max = 100, step = 1, width = '65%'),
                                                                 numericInput("sandeelOffFine", "Offshore fine",sandeelOffFineDefault, min = 0, max = 100, step = 1, width = '65%'),
                                                                 numericInput("sandeelOffMed", "Offshore medium",sandeelOffMedDefault, min = 0, max = 100, step = 1, width = '65%'),
                                                                 numericInput("sandeelOffCoarse", "Offshore coarse",sandeelOffCoarseDefault, min = 0, max = 100, step = 1, width = '65%')
                                                                 ),
-                                                                splitLayout(
+                                                                verticalLayout(
                                                                   useShinyjs(),
                                                                   extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                                 uiOutput("totalSandeelGearPerHab")
                                                               ),
-                                                              splitLayout(actionButton("sandeelGearPerHab_reset", "Reset"))
+                                                              verticalLayout(actionButton("sandeelGearPerHab_reset", "Reset"))
       )),
       "Otter30-70mm+TR3(sandeel+sprat)" = fluidRow( box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                                              splitLayout(
+                                                              verticalLayout(
                                                                 numericInput("otterInRock", "Inshore rock",otterInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                                 numericInput("otterInFine", "Inshore fine",otterInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                                 numericInput("otterInMed", "Inshore medium",otterInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                                 numericInput("otterInCoarse", "Inshore coarse",otterInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                               ),
-                                                        splitLayout(
+                                                        verticalLayout(
                                                                 numericInput("otterOffRock", "Offshore rock",otterOffRockDefault,min = 0, max = 100,step =1, width = '65%'),
                                                                 numericInput("otterOffFine", "Offshore fine",otterOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                                 numericInput("otterOffMed", "Offshore medium",otterOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                                 numericInput("otterOffCoarse", "Offshore coarse",otterOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                         ),
-                                                        splitLayout(
+                                                        verticalLayout(
                                                           useShinyjs(),
                                                           extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                                 uiOutput("totalOtterGearPerHab")
                                                               ),
-                                                        splitLayout(actionButton("otterGearPerHab_reset", "Reset"))
+                                                        verticalLayout(actionButton("otterGearPerHab_reset", "Reset"))
                                                         
       )),     
       
       
       "Longline_mackerel" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                         splitLayout(
+                                         verticalLayout(
                                            numericInput("lonMackInRock", "Inshore rock",lonMackInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("lonMackInFine", "Inshore fine",lonMackInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("lonMackInMed", "Inshore medium",lonMackInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("lonMackInCoarse", "Inshore coarse",lonMackInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                          ),
-                                         splitLayout(
+                                         verticalLayout(
                                            numericInput("lonMackOffRock", "Offshore rock",lonMackOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("lonMackOffFine", "Offshore fine",lonMackOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("lonMackOffMed", "Offshore medium",lonMackOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("lonMackOffCoarse", "Offshore coarse",lonMackOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                          ),
-                                         splitLayout(
+                                         verticalLayout(
                                            useShinyjs(),
                                            extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                            uiOutput("totalLonMackGearPerHab")
                                          ),
-                                         splitLayout(actionButton("lonMackGearPerHab_reset", "Reset"))
+                                         verticalLayout(actionButton("lonMackGearPerHab_reset", "Reset"))
       )),
       "Beam_Trawl_BT1+BT2" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                          splitLayout(
+                                          verticalLayout(
                                             numericInput("beamTrawlInRock", "Inshore rock",beamTrawlInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("beamTrawlInFine", "Inshore fine",beamTrawlInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("beamTrawlInMed", "Inshore medium",beamTrawlInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("beamTrawlInCoarse", "Inshore coarse",beamTrawlInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
-                                          splitLayout(
+                                          verticalLayout(
                                             numericInput("beamTrawlOffRock", "Offshore rock",beamTrawlOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("beamTrawlOffFine", "Offshore fine",beamTrawlOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("beamTrawlOffMed", "Offshore medium",beamTrawlOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("beamTrawlOffCoarse", "Offshore coarse",beamTrawlOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
-                                          splitLayout(
+                                          verticalLayout(
                                             useShinyjs(),
                                             extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                             uiOutput("totalBeamTrawlGearPerHab")
                                           ),
-                                          splitLayout(actionButton("beamTrawlGearPerHab_reset", "Reset"))
+                                          verticalLayout(actionButton("beamTrawlGearPerHab_reset", "Reset"))
       )),
       "Demersal_Seine" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                     splitLayout(
+                                     verticalLayout(
                                        numericInput("demSeineInRock", "Inshore rock",demSeineInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("demSeineInFine", "Inshore fine",demSeineInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("demSeineInMed", "Inshore medium",demSeineInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("demSeineInCoarse", "Inshore coarse",demSeineInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                      ),
-                                     splitLayout(
+                                     verticalLayout(
                                        numericInput("demSeineOffRock", "Offshore rock",demSeineOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("demSeineOffFine", "Offshore fine",demSeineOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("demSeineOffMed", "Offshore medium",demSeineOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("demSeineOffCoarse", "Offshore coarse",demSeineOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                      ),
-                                     splitLayout(
+                                     verticalLayout(
                                        useShinyjs(),
                                        extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                        uiOutput("totalDemSeineGearPerHab")
                                      ),
-                                     splitLayout(actionButton("demSeineGearPerHab_reset", "Reset"))
+                                     verticalLayout(actionButton("demSeineGearPerHab_reset", "Reset"))
                                      
       )),
       "Demersal_Otter_Trawl_TR1" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                                splitLayout(
+                                                verticalLayout(
                                                   numericInput("demOtterInRock", "Inshore rock",demOtterInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                   numericInput("demOtterInFine", "Inshore fine",demOtterInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                   numericInput("demOtterInMed", "Inshore medium",demOtterInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                   numericInput("demOtterInCoarse", "Inshore coarse",demOtterInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                 ),
-                                                splitLayout(
+                                                verticalLayout(
                                                   numericInput("demOtterOffRock", "Offshore rock",demOtterOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                   numericInput("demOtterOffFine", "Offshore fine",demOtterOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                   numericInput("demOtterOffMed", "Offshore medium",demOtterOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                   numericInput("demOtterOffCoarse", "Offshore coarse",demOtterOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                 ),
-                                                splitLayout(
+                                                verticalLayout(
                                                   useShinyjs(),
                                                   extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                   uiOutput("totalDemOtterGearPerHab")
                                                 ),
-                                                splitLayout(actionButton("demOtterGearPerHab_reset", "Reset"))
+                                                verticalLayout(actionButton("demOtterGearPerHab_reset", "Reset"))
                                                 
       )),
       "Gill_Nets+Longline_demersal" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                                   splitLayout(
+                                                   verticalLayout(
                                                      numericInput("gillNetInRock", "Inshore rock",gillNetInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                      numericInput("gillNetInFine", "Inshore fine",gillNetInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                      numericInput("gillNetInMed", "Inshore medium",gillNetInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                      numericInput("gillNetInCoarse", "Inshore coarse",gillNetInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                    ),
-                                                   splitLayout(
+                                                   verticalLayout(
                                                      numericInput("gillNetOffRock", "Offshore rock",gillNetOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                      numericInput("gillNetOffFine", "Offshore fine",gillNetOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                      numericInput("gillNetOffMed", "Offshore medium",gillNetOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                                      numericInput("gillNetOffCoarse", "Offshore coarse",gillNetOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                                    ),
-                                                   splitLayout(
+                                                   verticalLayout(
                                                      useShinyjs(),
                                                      extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                                      uiOutput("totalGillNetGearPerHab")
                                                    ),
-                                                   splitLayout(actionButton("gillNetGearPerHab_reset", "Reset"))
+                                                   verticalLayout(actionButton("gillNetGearPerHab_reset", "Reset"))
       )),
       "Beam_Trawl_shrimp" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                         splitLayout(
+                                         verticalLayout(
                                            numericInput("beamShrimpInRock", "Inshore rock",beamShrimpInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("beamShrimpInFine", "Inshore fine",beamShrimpInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("beamShrimpInMed", "Inshore medium",beamShrimpInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("beamShrimpInCoarse", "Inshore coarse",beamShrimpInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                          ),
-                                         splitLayout(
+                                         verticalLayout(
                                            numericInput("beamShrimpOffRock", "Offshore rock",beamShrimpOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("beamShrimpOffFine", "Offshore fine",beamShrimpOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("beamShrimpOffMed", "Offshore medium",beamShrimpOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                            numericInput("beamShrimpOffCoarse", "Offshore coarse",beamShrimpOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                          ),
-                                         splitLayout(
+                                         verticalLayout(
                                            useShinyjs(),
                                            extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                            uiOutput("totalBeamShrimpGearPerHab")
                                          ),
-                                         splitLayout(actionButton("beamShrimpGearPerHab_reset", "Reset"))
+                                         verticalLayout(actionButton("beamShrimpGearPerHab_reset", "Reset"))
                                          
       )),
       "Nephrops_Trawl_TR2" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                          splitLayout(
+                                          verticalLayout(
                                             numericInput("nephropsTR2InRock", "Inshore rock",nephropsTR2InRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR2InFine", "Inshore fine",nephropsTR2InFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR2InMed", "Inshore medium",nephropsTR2InMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR2InCoarse", "Inshore coarse",nephropsTR2InCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
-                                          splitLayout(
+                                          verticalLayout(
                                             numericInput("nephropsTR2OffRock", "Offshore rock",nephropsTR2OffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR2OffFine", "Offshore fine",nephropsTR2OffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR2OffMed", "Offshore medium",nephropsTR2OffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR2OffCoarse", "Offshore coarse",nephropsTR2OffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
-                                          splitLayout(
+                                          verticalLayout(
                                             useShinyjs(),
                                             extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                             uiOutput("totalNephropsTR2GearPerHab")
                                           ),
-                                          splitLayout(actionButton("nephropsTR2GearPerHab_reset", "Reset"))
+                                          verticalLayout(actionButton("nephropsTR2GearPerHab_reset", "Reset"))
                                           
       )),
       "Nephrops_Trawl_TR3" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                          splitLayout(
+                                          verticalLayout(
                                             numericInput("nephropsTR3InRock", "Inshore rock",nephropsTR3InRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR3InFine", "Inshore fine",nephropsTR3InFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR3InMed", "Inshore medium",nephropsTR3InMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR3InCoarse", "Inshore coarse",nephropsTR3InCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
-                                          splitLayout(
+                                          verticalLayout(
                                             numericInput("nephropsTR3OffRock", "Offshore rock",nephropsTR3OffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR3OffFine", "Offshore fine",nephropsTR3OffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR3OffMed", "Offshore medium",nephropsTR3OffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                             numericInput("nephropsTR3OffCoarse", "Offshore coarse",nephropsTR3OffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                           ),
-                                          splitLayout(
+                                          verticalLayout(
                                             useShinyjs(),
                                             extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                             uiOutput("totalNephropsTR3GearPerHab")
                                           ),
-                                          splitLayout(actionButton("nephropsTR3GearPerHab_reset", "Reset"))
+                                          verticalLayout(actionButton("nephropsTR3GearPerHab_reset", "Reset"))
                                           
       )),
       "Creels" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                              splitLayout(
+                              verticalLayout(
                                 numericInput("creelsInRock", "Inshore rock",creelsInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("creelsInFine", "Inshore fine",creelsInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("creelsInMed", "Inshore medium",creelsInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("creelsInCoarse", "Inshore coarse",creelsInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                               ),
-                              splitLayout(
+                              verticalLayout(
                                 numericInput("creelsOffRock", "Offshore rock",creelsOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("creelsOffFine", "Offshore fine",creelsOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("creelsOffMed", "Offshore medium",creelsOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("creelsOffCoarse", "Offshore coarse",creelsOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                               ),
-                              splitLayout(
+                              verticalLayout(
                                 useShinyjs(),
                                 extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                 uiOutput("totalCreelsGearPerHab")
                               ),
-                              splitLayout(actionButton("creelsGearPerHab_reset", "Reset"))
+                              verticalLayout(actionButton("creelsGearPerHab_reset", "Reset"))
                               
       )),
       "Mollusc_Dredge" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                      splitLayout(
+                                      verticalLayout(
                                         numericInput("molluscInRock", "Inshore rock",molluscInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                         numericInput("molluscInFine", "Inshore fine",molluscInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                         numericInput("molluscInMed", "Inshore medium",molluscInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                         numericInput("molluscInCoarse", "Inshore coarse",molluscInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                       ),
-                                      splitLayout(
+                                      verticalLayout(
                                         numericInput("molluscOffRock", "Offshore rock",molluscOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                         numericInput("molluscOffFine", "Offshore fine",molluscOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                         numericInput("molluscOffMed", "Offshore medium",molluscOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                         numericInput("molluscOffCoarse", "Offshore coarse",molluscOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                       ),
-                                      splitLayout(
+                                      verticalLayout(
                                         useShinyjs(),
                                         extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                         uiOutput("totalMolluscGearPerHab")
                                       ),
-                                      splitLayout(actionButton("molluscGearPerHab_reset", "Reset"))
+                                      verticalLayout(actionButton("molluscGearPerHab_reset", "Reset"))
                                       
       )),
       "Whaler" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                              splitLayout(
+                              verticalLayout(
                                 numericInput("whalerInRock", "Inshore rock",whalerInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("whalerInFine", "Inshore fine",whalerInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("whalerInMed", "Inshore medium",whalerInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("whalerInCoarse", "Inshore coarse",whalerInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                               ),
-                              splitLayout(
+                              verticalLayout(
                                 numericInput("whalerOffRock", "Offshore rock",whalerOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("whalerOffFine", "Offshore fine",whalerOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("whalerOffMed", "Offshore medium",whalerOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                 numericInput("whalerOffCoarse", "Offshore coarse",whalerOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                               ),
-                              splitLayout(
+                              verticalLayout(
                                 useShinyjs(),
                                 extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                 uiOutput("totalWhalerGearPerHab")
                               ),
-                              splitLayout(actionButton("whalerGearPerHab_reset", "Reset"))
+                              verticalLayout(actionButton("whalerGearPerHab_reset", "Reset"))
                               
       )),
       "KelpHarvester" = fluidRow(box(width = 12, title = "Habitats", style = "font-size:9px;",
-                                     splitLayout(
+                                     verticalLayout(
                                        numericInput("kelpInRock", "Inshore rock",kelpInRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("kelpInFine", "Inshore fine",kelpInFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("kelpInMed", "Inshore medium",kelpInMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("kelpInCoarse", "Inshore coarse",kelpInCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                      ),
-                                     splitLayout(
+                                     verticalLayout(
                                        numericInput("kelpOffRock", "Offshore rock",kelpOffRockDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("kelpOffFine", "Offshore fine",kelpOffFineDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("kelpOffMed", "Offshore medium",kelpOffMedDefault,min = 0, max = 100,step = 1, width = '65%'),
                                        numericInput("kelpOffCoarse", "Offshore coarse",kelpOffCoarseDefault,min = 0, max = 100,step = 1, width = '65%')
                                      ),
-                                     splitLayout(
+                                     verticalLayout(
                                        useShinyjs(),
                                        extendShinyjs(text = jsCode,functions = c("backgroundCol")),
                                        uiOutput("totalKelpGearPerHab")
                                      ),
-                                     splitLayout(actionButton("kelpGearPerHab_reset", "Reset"))
+                                     verticalLayout(actionButton("kelpGearPerHab_reset", "Reset"))
       ))
     )
   })
