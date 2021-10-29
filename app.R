@@ -850,11 +850,22 @@ server <- function(input, output, session) {
       outputType = "DATA")
   })
   
+  observeEvent(input$inshorePercentage,{
+    updateNumericInput(session, "inshorePercentage", value = notGreatherThan100(input$inshorePercentage))
+    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "offshorePercentage", value = offShorePercent)
+  })
+  
+  observeEvent(input$offshorePercentage,{
+    updateNumericInput(session, "offshorePercentage", value = input$offshorePercentage)
+    disable("offshorePercentage")
+  })
+  
   output$totalPercentageInPel <- renderUI({ 
     totalIn <- round(sum(as.numeric(input$percentagePelInRock), as.numeric(input$percentagePelInFine) , as.numeric(input$percentagePelInMed) , as.numeric(input$percentagePelInCoarse)), digits =3)
-     numericInput("totalPelIn", "Total Inshore %",totalIn,width = '50%')
-    })
-  
+    numericInput("totalPelIn", "Total Inshore %",totalIn,width = '50%')
+  })
+
   output$totalPercentageOffPel <- renderUI({ 
     totalOff <- round(sum(as.numeric(input$percentagePelOffRock), as.numeric(input$percentagePelOffFine) , as.numeric(input$percentagePelOffMed) , as.numeric(input$percentagePelOffCoarse)), digits =3)
     numericInput("totalPelOff", "Total Offshore %",totalOff,width = '50%')
@@ -906,6 +917,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$pelGearPerHab_reset, {
+    #Note need check here to make sure selectedlocation and  selectedVariant are set
     model <- e2e_read(input$selectedlocation, input$selectedVariant)
     pelInRock <- model$data$fleet.model$gear_habitat_activity$s0[1] 
     pelInFine <- model$data$fleet.model$gear_habitat_activity$s1[1] 
@@ -3018,8 +3030,8 @@ server <- function(input, output, session) {
                                              wellPanel(
                                              h5("Inshore-Offshore Split"),
                                              splitLayout( cellWidths = c("50%", "50%"),
-                                               numericInput("inshorePercentage", "InShore %",percentageInPelDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                               numericInput("offShorePercentage", "Offshore %",percentageOutPelDefault,min = 0, max = 100, step = 0.01,width = '40%')
+                                              numericInput("inshorePercentage", "InShore %",percentageInPelDefault,min = 0, max = 100, step = 0.01, width = '40%'),
+                                              numericInput("offshorePercentage", "OffShore %",percentageOutPelDefault,min = 0, max = 100, step = 0.01, width = '40%')
                                              )),
                                              splitLayout(
                                              wellPanel(
@@ -7597,30 +7609,39 @@ server <- function(input, output, session) {
       input$whalerDiscard_kelp
     
     # Start of gear distribution per habitat
-    if (!is.null(input$pelInRock))
-      scenario_model$data$fleet.model$gear_habitat_activity$s0[1] <-
-      input$pelInRock/100
+   # if (!is.null(input$pelInRock)){
+      newPelInRockProp <- (input$inshorePercentage*input$percentagePelInRock)/10000
+      scenario_model$data$fleet.model$gear_habitat_activity$s0[1] <- scenario_model$data$fleet.model$gear_habitat_activity$s0[1]*newPelInRockProp
+   # }
     
-    if (!is.null(input$pelInFine))
-      scenario_model$data$fleet.model$gear_habitat_activity$s1[1] <- input$pelInFine/100
+  #  if (!is.null(input$pelInFine)){
+      newPelInFineProp <- (input$inshorePercentage*input$percentagePelInFine)/10000
+      scenario_model$data$fleet.model$gear_habitat_activity$s1[1] <- scenario_model$data$fleet.model$gear_habitat_activity$s1[1]*newPelInFineProp
+  #  }
     
-    if (!is.null(input$pelInMed))
-    scenario_model$data$fleet.model$gear_habitat_activity$s2[1] <- input$pelInMed/100
+   # if (!is.null(input$pelInMed))
+    newPelInMedProp <- (input$inshorePercentage*input$percentagePelInMed)/10000
+    scenario_model$data$fleet.model$gear_habitat_activity$s2[1] <- scenario_model$data$fleet.model$gear_habitat_activity$s2[1]*newPelInMedProp
     
-    if (!is.null(input$pelInCoarse))
-    scenario_model$data$fleet.model$gear_habitat_activity$s3[1] <- input$pelInCoarse/100
+   # if (!is.null(input$pelInCoarse))
+    newPelInCoarseProp <- (input$inshorePercentage*input$percentagePelInCoarse)/10000
+    scenario_model$data$fleet.model$gear_habitat_activity$s3[1] <- scenario_model$data$fleet.model$gear_habitat_activity$s3[1]*newPelInCoarseProp
     
-    if (!is.null(input$pelOffRock))
-    scenario_model$data$fleet.model$gear_habitat_activity$d0[1] <- input$pelOffRock/100
+  #  if (!is.null(input$pelOffRock))
+    newPelOffRockProp <- (input$offshorePercentage*input$percentagePelOffCoarse)/10000
+    scenario_model$data$fleet.model$gear_habitat_activity$d0[1] <- scenario_model$data$fleet.model$gear_habitat_activity$d0[1]*newPelOffRockProp
     
-    if (!is.null(input$pelOffFine))
-    scenario_model$data$fleet.model$gear_habitat_activity$d1[1] <- input$pelOffFine/100
+  #  if (!is.null(input$pelOffFine))
+    newPelOffFineProp <- (input$offshorePercentage*input$percentagePelOffFine)/10000
+    scenario_model$data$fleet.model$gear_habitat_activity$d1[1] <- scenario_model$data$fleet.model$gear_habitat_activity$d1[1]*newPelOffFineProp
     
-    if (!is.null(input$pelOffMed))
-    scenario_model$data$fleet.model$gear_habitat_activity$d2[1] <- input$pelOffMed/100
+ #   if (!is.null(input$pelOffMed))
+    newPelOffMedProp <- (input$offshorePercentage*input$percentagePelOffFine)/10000
+    scenario_model$data$fleet.model$gear_habitat_activity$d2[1] <- scenario_model$data$fleet.model$gear_habitat_activity$d2[1]*newPelOffMedProp
     
-    if (!is.null(input$pelOffCoarse))
-    scenario_model$data$fleet.model$gear_habitat_activity$d3[1] <- input$pelOffCoarse/100
+#    if (!is.null(input$pelOffCoarse))
+    newPelOffCoarseProp <- (input$offshorePercentage*input$percentagePelOffCoarse)/10000
+    scenario_model$data$fleet.model$gear_habitat_activity$d3[1] <- scenario_model$data$fleet.model$gear_habitat_activity$d3[1]*newPelOffCoarseProp
     
     if (!is.null(input$sandeelInRock))
     scenario_model$data$fleet.model$gear_habitat_activity$s0[2] <- input$sandeelInRock/100
