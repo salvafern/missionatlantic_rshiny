@@ -861,14 +861,16 @@ server <- function(input, output, session) {
     disable("offshorePercentage")
   })
   
-  output$totalPercentageInPel <- renderUI({ 
-    totalIn <- round(sum(as.numeric(input$percentagePelInRock), as.numeric(input$percentagePelInFine) , as.numeric(input$percentagePelInMed) , as.numeric(input$percentagePelInCoarse)), digits =3)
-    numericInput("totalPelIn", "Total Inshore %",totalIn,width = '50%')
+  output$percentagePelInCoarse <- renderUI({ 
+    totalForThreeOthers <- input$percentagePelInRock + input$percentagePelInFine + input$percentagePelInMed
+    pelInCoarse <- 100 - totalForThreeOthers
+    numericInput("percentagePelInCoarse", "Inshore coarse %",pelInCoarse,width = '50%')
   })
 
-  output$totalPercentageOffPel <- renderUI({ 
-    totalOff <- round(sum(as.numeric(input$percentagePelOffRock), as.numeric(input$percentagePelOffFine) , as.numeric(input$percentagePelOffMed) , as.numeric(input$percentagePelOffCoarse)), digits =3)
-    numericInput("totalPelOff", "Total Offshore %",totalOff,width = '50%')
+  output$percentagePelOffCoarse <- renderUI({ 
+    totalForThreeOthers <- input$percentagePelOffRock + input$percentagePelOffFine + input$percentagePelOffMed
+    pelOffCoarse <- 100 - totalForThreeOthers
+    numericInput("percentagePelOffCoarse", "Offshore coarse %",pelOffCoarse,width = '50%')
   })
   
   observeEvent(input$totalPelIn,{
@@ -901,7 +903,10 @@ server <- function(input, output, session) {
     updateNumericInput(session,"percentagePelInMed", value = notGreatherThan100(input$percentagePelInMed))
   })
   observeEvent(input$percentagePelInCoarse,{
-    updateNumericInput(session,"percentagePelInCoarse", value = notGreatherThan100(input$percentagePelInCoarse))
+    totalForThreeOthers <- input$percentagePelInRock + input$percentagePelInFine + input$percentagePelInMed
+    pelInCoarse <- 100 - totalForThreeOthers
+    updateNumericInput(session,"percentagePelInCoarse", value = pelInCoarse)
+    disable("percentagePelInCoarse")
   })
   observeEvent(input$percentagePelOffRock,{
     updateNumericInput(session,"percentagePelOffRock", value = notGreatherThan100(input$percentagePelOffRock))
@@ -913,7 +918,10 @@ server <- function(input, output, session) {
     updateNumericInput(session,"percentagePelOffMed", value = notGreatherThan100(input$percentagePelOffMed))
   })
   observeEvent(input$percentagePelOffCoarse,{
-    updateNumericInput(session,"percentagePelOffCoarse", value = notGreatherThan100(input$percentagePelOffCoarse))
+    totalForThreeOthers <- input$percentagePelOffRock + input$percentagePelOffFine + input$percentagePelOffMed
+    pelOffCoarse <- 100 - totalForThreeOthers
+    updateNumericInput(session,"percentagePelOffCoarse", value = pelOffCoarse)
+    disable("percentagePelOffCoarse")
   })
   
   observeEvent(input$pelGearPerHab_reset, {
@@ -2894,134 +2902,385 @@ server <- function(input, output, session) {
     percentagePelOffMedDefault <- pelOffMed/totalOffPel * 100
     percentagePelOffCoarseDefault <- pelOffCoarse/totalOffPel * 100
     totalPercentageOffPelDefault <- percentagePelOffRockDefault + percentagePelOffFineDefault + percentagePelOffMedDefault + percentagePelOffCoarseDefault
-
     
-    sandeelInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[2] * 100
-    sandeelInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[2] * 100
-    sandeelInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[2] * 100
-    sandeelInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[2] * 100
-    sandeelOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[2] * 100
-    sandeelOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[2] * 100
-    sandeelOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[2] * 100
-    sandeelOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[2] * 100
+    sandeelInRock <- model$data$fleet.model$gear_habitat_activity$s0[2]
+    sandeelInFine <- model$data$fleet.model$gear_habitat_activity$s1[2]
+    sandeelInMed <- model$data$fleet.model$gear_habitat_activity$s2[2]
+    sandeelInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[2]
+    sandeelOffRock <- model$data$fleet.model$gear_habitat_activity$d0[2]
+    sandeelOffFine <- model$data$fleet.model$gear_habitat_activity$d1[2]
+    sandeelOffMed <- model$data$fleet.model$gear_habitat_activity$d2[2] 
+    sandeelOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[2]
+    # Getting Total Inshore/Offshore here
+    totalInSandeel <- sandeelInRock + sandeelInFine + sandeelInMed + sandeelInCoarse
+    totalOffSandeel <- sandeelOffRock + sandeelOffFine + sandeelOffMed + sandeelOffCoarse
+    totalOverallSandeel <- totalInSandeel + totalOffSandeel
+    percentageInSandeelDefault <- totalInSandeel/totalOverallSandeel * 100
+    percentageOutSandeelDefault <- 100 - percentageInSandeelDefault
+    # Now getting percentages Inshore
+    percentageSandeelInRockDefault <- sandeelInRock/totalInSandeel * 100
+    percentageSandeelInFineDefault <- sandeelInFine/totalInSandeel * 100
+    percentageSandeelInMedDefault <- sandeelInMed/totalInSandeel * 100
+    percentageSandeelInCoarseDefault <- sandeelInCoarse/totalInSandeel * 100
+    totalPercentageInSandeelDefault <- percentageSandeelInRockDefault + percentageSandeelInFineDefault + percentageSandeelInMedDefault + percentageSandeelInCoarseDefault
+    # Now getting percentages Offshore
+    percentageSandeelOffRockDefault <- sandeelOffRock/totalOffSandeel * 100
+    percentageSandeelOffFineDefault <- sandeelOffFine/totalOffSandeel * 100
+    percentageSandeelOffMedDefault <- sandeelOffMed/totalOffSandeel * 100
+    percentageSandeelOffCoarseDefault <- sandeelOffCoarse/totalOffSandeel * 100
+    totalPercentageOffSandeelDefault <- percentageSandeelOffRockDefault + percentageSandeelOffFineDefault + percentageSandeelOffMedDefault + percentageSandeelOffCoarseDefault
     
-    otterInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[2] * 100
-    otterInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[2] * 100
-    otterInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[2] * 100
-    otterInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[2] * 100
-    otterOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[2] * 100
-    otterOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[2] * 100
-    otterOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[2] * 100
-    otterOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[2] * 100
+    otterInRock <- model$data$fleet.model$gear_habitat_activity$s0[2]
+    otterInFine <- model$data$fleet.model$gear_habitat_activity$s1[2]
+    otterInMed <- model$data$fleet.model$gear_habitat_activity$s2[2]
+    otterInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[2]
+    otterOffRock <- model$data$fleet.model$gear_habitat_activity$d0[2]
+    otterOffFine <- model$data$fleet.model$gear_habitat_activity$d1[2]
+    otterOffMed <- model$data$fleet.model$gear_habitat_activity$d2[2] 
+    otterOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[2]
+    # Getting Total Inshore/Offshore here
+    totalInOtter <- otterInRock + otterInFine + otterInMed + otterInCoarse
+    totalOffOtter <- otterOffRock + otterOffFine + otterOffMed + otterOffCoarse
+    totalOverallOtter <- totalInOtter + totalOffOtter
+    percentageInOtterDefault <- totalInOtter/totalOverallOtter * 100
+    percentageOutOtterDefault <- 100 - percentageInOtterDefault
+    # Now getting percentages Inshore
+    percentageOtterInRockDefault <- otterInRock/totalInOtter * 100
+    percentageOtterInFineDefault <- otterInFine/totalInOtter * 100
+    percentageOtterInMedDefault <- otterInMed/totalInOtter * 100
+    percentageOtterInCoarseDefault <- otterInCoarse/totalInOtter * 100
+    totalPercentageInOtterDefault <- percentageOtterInRockDefault + percentageOtterInFineDefault + percentageOtterInMedDefault + percentageOtterInCoarseDefault
+    # Now getting percentages Offshore
+    percentageOtterOffRockDefault <- otterOffRock/totalOffOtter * 100
+    percentageOtterOffFineDefault <- otterOffFine/totalOffOtter * 100
+    percentageOtterOffMedDefault <- otterOffMed/totalOffOtter * 100
+    percentageOtterOffCoarseDefault <- otterOffCoarse/totalOffOtter * 100
+    totalPercentageOffOtterDefault <- percentageOtterOffRockDefault + percentageOtterOffFineDefault + percentageOtterOffMedDefault + percentageOtterOffCoarseDefault
     
-    lonMackInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[3] * 100
-    lonMackInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[3] * 100
-    lonMackInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[3] * 100
-    lonMackInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[3] * 100
-    lonMackOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[3] * 100
-    lonMackOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[3] * 100
-    lonMackOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[3] * 100
-    lonMackOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[3] * 100
+    lonMackInRock <- model$data$fleet.model$gear_habitat_activity$s0[3]
+    lonMackInFine <- model$data$fleet.model$gear_habitat_activity$s1[3]
+    lonMackInMed <- model$data$fleet.model$gear_habitat_activity$s2[3]
+    lonMackInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[3]
+    lonMackOffRock <- model$data$fleet.model$gear_habitat_activity$d0[3]
+    lonMackOffFine <- model$data$fleet.model$gear_habitat_activity$d1[3]
+    lonMackOffMed <- model$data$fleet.model$gear_habitat_activity$d2[3] 
+    lonMackOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[3]
+    # Getting Total Inshore/Offshore here
+    totalInLonMack <- lonMackInRock + lonMackInFine + lonMackInMed + lonMackInCoarse
+    totalOffLonMack <- lonMackOffRock + lonMackOffFine + lonMackOffMed + lonMackOffCoarse
+    totalOverallLonMack <- totalInLonMack + totalOffLonMack
+    percentageInLonMackDefault <- totalInLonMack/totalOverallLonMack * 100
+    percentageOutLonMackDefault <- 100 - percentageInLonMackDefault
+    # Now getting percentages Inshore
+    percentageLonMackInRockDefault <- lonMackInRock/totalInLonMack * 100
+    percentageLonMackInFineDefault <- lonMackInFine/totalInLonMack * 100
+    percentageLonMackInMedDefault <- lonMackInMed/totalInLonMack * 100
+    percentageLonMackInCoarseDefault <- lonMackInCoarse/totalInLonMack * 100
+    totalPercentageInLonMackDefault <- percentageLonMackInRockDefault + percentageLonMackInFineDefault + percentageLonMackInMedDefault + percentageLonMackInCoarseDefault
+    # Now getting percentages Offshore
+    percentageLonMackOffRockDefault <- lonMackOffRock/totalOffLonMack * 100
+    percentageLonMackOffFineDefault <- lonMackOffFine/totalOffLonMack * 100
+    percentageLonMackOffMedDefault <- lonMackOffMed/totalOffLonMack * 100
+    percentageLonMackOffCoarseDefault <- lonMackOffCoarse/totalOffLonMack * 100
+    totalPercentageOffLonMackDefault <- percentageLonMackOffRockDefault + percentageLonMackOffFineDefault + percentageLonMackOffMedDefault + percentageLonMackOffCoarseDefault
     
-    beamTrawlInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[4] * 100
-    beamTrawlInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[4] * 100
-    beamTrawlInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[4] * 100
-    beamTrawlInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[4] * 100
-    beamTrawlOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[4] * 100
-    beamTrawlOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[4] * 100
-    beamTrawlOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[4] * 100
-    beamTrawlOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[4] * 100
+    beamTrawlInRock <- model$data$fleet.model$gear_habitat_activity$s0[4]
+    beamTrawlInFine <- model$data$fleet.model$gear_habitat_activity$s1[4]
+    beamTrawlInMed <- model$data$fleet.model$gear_habitat_activity$s2[4]
+    beamTrawlInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[4]
+    beamTrawlOffRock <- model$data$fleet.model$gear_habitat_activity$d0[4]
+    beamTrawlOffFine <- model$data$fleet.model$gear_habitat_activity$d1[4]
+    beamTrawlOffMed <- model$data$fleet.model$gear_habitat_activity$d2[4] 
+    beamTrawlOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[4]
+    # Getting Total Inshore/Offshore here
+    totalInBeamTrawl <- beamTrawlInRock + beamTrawlInFine + beamTrawlInMed + beamTrawlInCoarse
+    totalOffBeamTrawl <- beamTrawlOffRock + beamTrawlOffFine + beamTrawlOffMed + beamTrawlOffCoarse
+    totalOverallBeamTrawl <- totalInBeamTrawl + totalOffBeamTrawl
+    percentageInBeamTrawlDefault <- totalInBeamTrawl/totalOverallBeamTrawl * 100
+    percentageOutBeamTrawlDefault <- 100 - percentageInBeamTrawlDefault
+    # Now getting percentages Inshore
+    percentageBeamTrawlInRockDefault <- beamTrawlInRock/totalInBeamTrawl * 100
+    percentageBeamTrawlInFineDefault <- beamTrawlInFine/totalInBeamTrawl * 100
+    percentageBeamTrawlInMedDefault <- beamTrawlInMed/totalInBeamTrawl * 100
+    percentageBeamTrawlInCoarseDefault <- beamTrawlInCoarse/totalInBeamTrawl * 100
+    totalPercentageInBeamTrawlDefault <- percentageBeamTrawlInRockDefault + percentageBeamTrawlInFineDefault + percentageBeamTrawlInMedDefault + percentageBeamTrawlInCoarseDefault
+    # Now getting percentages Offshore
+    percentageBeamTrawlOffRockDefault <- beamTrawlOffRock/totalOffBeamTrawl * 100
+    percentageBeamTrawlOffFineDefault <- beamTrawlOffFine/totalOffBeamTrawl * 100
+    percentageBeamTrawlOffMedDefault <- beamTrawlOffMed/totalOffBeamTrawl * 100
+    percentageBeamTrawlOffCoarseDefault <- beamTrawlOffCoarse/totalOffBeamTrawl * 100
+    totalPercentageOffBeamTrawlDefault <- percentageBeamTrawlOffRockDefault + percentageBeamTrawlOffFineDefault + percentageBeamTrawlOffMedDefault + percentageBeamTrawlOffCoarseDefault
     
-    demSeineInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[5] * 100
-    demSeineInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[5] * 100
-    demSeineInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[5] * 100
-    demSeineInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[5] * 100
-    demSeineOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[5] * 100
-    demSeineOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[5] * 100
-    demSeineOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[5] * 100
-    demSeineOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[5] * 100
+    demSeineInRock <- model$data$fleet.model$gear_habitat_activity$s0[5]
+    demSeineInFine <- model$data$fleet.model$gear_habitat_activity$s1[5]
+    demSeineInMed <- model$data$fleet.model$gear_habitat_activity$s2[5]
+    demSeineInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[5]
+    demSeineOffRock <- model$data$fleet.model$gear_habitat_activity$d0[5]
+    demSeineOffFine <- model$data$fleet.model$gear_habitat_activity$d1[5]
+    demSeineOffMed <- model$data$fleet.model$gear_habitat_activity$d2[5] 
+    demSeineOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[5]
+    # Getting Total Inshore/Offshore here
+    totalInDemSeine <- demSeineInRock + demSeineInFine + demSeineInMed + demSeineInCoarse
+    totalOffDemSeine <- demSeineOffRock + demSeineOffFine + demSeineOffMed + demSeineOffCoarse
+    totalOverallDemSeine <- totalInDemSeine + totalOffDemSeine
+    percentageInDemSeineDefault <- totalInDemSeine/totalOverallDemSeine * 100
+    percentageOutDemSeineDefault <- 100 - percentageInDemSeineDefault
+    # Now getting percentages Inshore
+    percentageDemSeineInRockDefault <- demSeineInRock/totalInDemSeine * 100
+    percentageDemSeineInFineDefault <- demSeineInFine/totalInDemSeine * 100
+    percentageDemSeineInMedDefault <- demSeineInMed/totalInDemSeine * 100
+    percentageDemSeineInCoarseDefault <- demSeineInCoarse/totalInDemSeine * 100
+    totalPercentageInDemSeineDefault <- percentageDemSeineInRockDefault + percentageDemSeineInFineDefault + percentageDemSeineInMedDefault + percentageDemSeineInCoarseDefault
+    # Now getting percentages Offshore
+    percentageDemSeineOffRockDefault <- demSeineOffRock/totalOffDemSeine * 100
+    percentageDemSeineOffFineDefault <- demSeineOffFine/totalOffDemSeine * 100
+    percentageDemSeineOffMedDefault <- demSeineOffMed/totalOffDemSeine * 100
+    percentageDemSeineOffCoarseDefault <- demSeineOffCoarse/totalOffDemSeine * 100
+    totalPercentageOffDemSeineDefault <- percentageDemSeineOffRockDefault + percentageDemSeineOffFineDefault + percentageDemSeineOffMedDefault + percentageDemSeineOffCoarseDefault
     
-    demOtterInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[6] * 100
-    demOtterInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[6] * 100
-    demOtterInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[6] * 100
-    demOtterInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[6] * 100
-    demOtterOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[6] * 100
-    demOtterOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[6] * 100
-    demOtterOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[6] * 100
-    demOtterOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[6] * 100
+    demOtterInRock <- model$data$fleet.model$gear_habitat_activity$s0[6]
+    demOtterInFine <- model$data$fleet.model$gear_habitat_activity$s1[6]
+    demOtterInMed <- model$data$fleet.model$gear_habitat_activity$s2[6]
+    demOtterInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[6]
+    demOtterOffRock <- model$data$fleet.model$gear_habitat_activity$d0[6]
+    demOtterOffFine <- model$data$fleet.model$gear_habitat_activity$d1[6]
+    demOtterOffMed <- model$data$fleet.model$gear_habitat_activity$d2[6] 
+    demOtterOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[6]
+    # Getting Total Inshore/Offshore here
+    totalInDemOtter <- demOtterInRock + demOtterInFine + demOtterInMed + demOtterInCoarse
+    totalOffDemOtter <- demOtterOffRock + demOtterOffFine + demOtterOffMed + demOtterOffCoarse
+    totalOverallDemOtter <- totalInDemOtter + totalOffDemOtter
+    percentageInDemOtterDefault <- totalInDemOtter/totalOverallDemOtter * 100
+    percentageOutDemOtterDefault <- 100 - percentageInDemOtterDefault
+    # Now getting percentages Inshore
+    percentageDemOtterInRockDefault <- demOtterInRock/totalInDemOtter * 100
+    percentageDemOtterInFineDefault <- demOtterInFine/totalInDemOtter * 100
+    percentageDemOtterInMedDefault <- demOtterInMed/totalInDemOtter * 100
+    percentageDemOtterInCoarseDefault <- demOtterInCoarse/totalInDemOtter * 100
+    totalPercentageInDemOtterDefault <- percentageDemOtterInRockDefault + percentageDemOtterInFineDefault + percentageDemOtterInMedDefault + percentageDemOtterInCoarseDefault
+    # Now getting percentages Offshore
+    percentageDemOtterOffRockDefault <- demOtterOffRock/totalOffDemOtter * 100
+    percentageDemOtterOffFineDefault <- demOtterOffFine/totalOffDemOtter * 100
+    percentageDemOtterOffMedDefault <- demOtterOffMed/totalOffDemOtter * 100
+    percentageDemOtterOffCoarseDefault <- demOtterOffCoarse/totalOffDemOtter * 100
+    totalPercentageOffDemOtterDefault <- percentageDemOtterOffRockDefault + percentageDemOtterOffFineDefault + percentageDemOtterOffMedDefault + percentageDemOtterOffCoarseDefault
     
-    gillNetInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[7] * 100
-    gillNetInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[7] * 100
-    gillNetInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[7] * 100
-    gillNetInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[7] * 100
-    gillNetOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[7] * 100
-    gillNetOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[7] * 100
-    gillNetOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[7] * 100
-    gillNetOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[7] * 100
+    gillNetInRock <- model$data$fleet.model$gear_habitat_activity$s0[7]
+    gillNetInFine <- model$data$fleet.model$gear_habitat_activity$s1[7]
+    gillNetInMed <- model$data$fleet.model$gear_habitat_activity$s2[7]
+    gillNetInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[7]
+    gillNetOffRock <- model$data$fleet.model$gear_habitat_activity$d0[7]
+    gillNetOffFine <- model$data$fleet.model$gear_habitat_activity$d1[7]
+    gillNetOffMed <- model$data$fleet.model$gear_habitat_activity$d2[7] 
+    gillNetOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[7]
+    # Getting Total Inshore/Offshore here
+    totalInGillNet <- gillNetInRock + gillNetInFine + gillNetInMed + gillNetInCoarse
+    totalOffGillNet <- gillNetOffRock + gillNetOffFine + gillNetOffMed + gillNetOffCoarse
+    totalOverallGillNet <- totalInGillNet + totalOffGillNet
+    percentageInGillNetDefault <- totalInGillNet/totalOverallGillNet * 100
+    percentageOutGillNetDefault <- 100 - percentageInGillNetDefault
+    # Now getting percentages Inshore
+    percentageGillNetInRockDefault <- gillNetInRock/totalInGillNet * 100
+    percentageGillNetInFineDefault <- gillNetInFine/totalInGillNet * 100
+    percentageGillNetInMedDefault <- gillNetInMed/totalInGillNet * 100
+    percentageGillNetInCoarseDefault <- gillNetInCoarse/totalInGillNet * 100
+    totalPercentageInGillNetDefault <- percentageGillNetInRockDefault + percentageGillNetInFineDefault + percentageGillNetInMedDefault + percentageGillNetInCoarseDefault
+    # Now getting percentages Offshore
+    percentageGillNetOffRockDefault <- gillNetOffRock/totalOffGillNet * 100
+    percentageGillNetOffFineDefault <- gillNetOffFine/totalOffGillNet * 100
+    percentageGillNetOffMedDefault <- gillNetOffMed/totalOffGillNet * 100
+    percentageGillNetOffCoarseDefault <- gillNetOffCoarse/totalOffGillNet * 100
+    totalPercentageOffGillNetDefault <- percentageGillNetOffRockDefault + percentageGillNetOffFineDefault + percentageGillNetOffMedDefault + percentageGillNetOffCoarseDefault
+  
+    beamShrimpInRock <- model$data$fleet.model$gear_habitat_activity$s0[8]
+    beamShrimpInFine <- model$data$fleet.model$gear_habitat_activity$s1[8]
+    beamShrimpInMed <- model$data$fleet.model$gear_habitat_activity$s2[8]
+    beamShrimpInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[8]
+    beamShrimpOffRock <- model$data$fleet.model$gear_habitat_activity$d0[8]
+    beamShrimpOffFine <- model$data$fleet.model$gear_habitat_activity$d1[8]
+    beamShrimpOffMed <- model$data$fleet.model$gear_habitat_activity$d2[8] 
+    beamShrimpOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[8]
+    # Getting Total Inshore/Offshore here
+    totalInbeamShrimp <- beamShrimpInRock + beamShrimpInFine + beamShrimpInMed + beamShrimpInCoarse
+    totalOffbeamShrimp <- beamShrimpOffRock + beamShrimpOffFine + beamShrimpOffMed + beamShrimpOffCoarse
+    totalOverallbeamShrimp <- totalInbeamShrimp + totalOffbeamShrimp
+    percentageInbeamShrimpDefault <- totalInbeamShrimp/totalOverallbeamShrimp * 100
+    percentageOutbeamShrimpDefault <- 100 - percentageInbeamShrimpDefault
+    # Now getting percentages Inshore
+    percentagebeamShrimpInRockDefault <- beamShrimpInRock/totalInbeamShrimp * 100
+    percentagebeamShrimpInFineDefault <- beamShrimpInFine/totalInbeamShrimp * 100
+    percentagebeamShrimpInMedDefault <- beamShrimpInMed/totalInbeamShrimp * 100
+    percentagebeamShrimpInCoarseDefault <- beamShrimpInCoarse/totalInbeamShrimp * 100
+    totalPercentageInbeamShrimpDefault <- percentagebeamShrimpInRockDefault + percentagebeamShrimpInFineDefault + percentagebeamShrimpInMedDefault + percentagebeamShrimpInCoarseDefault
+    # Now getting percentages Offshore
+    percentagebeamShrimpOffRockDefault <- beamShrimpOffRock/totalOffbeamShrimp * 100
+    percentagebeamShrimpOffFineDefault <- beamShrimpOffFine/totalOffbeamShrimp * 100
+    percentagebeamShrimpOffMedDefault <- beamShrimpOffMed/totalOffbeamShrimp * 100
+    percentagebeamShrimpOffCoarseDefault <- beamShrimpOffCoarse/totalOffbeamShrimp * 100
+    totalPercentageOffbeamShrimpDefault <- percentagebeamShrimpOffRockDefault + percentagebeamShrimpOffFineDefault + percentagebeamShrimpOffMedDefault + percentagebeamShrimpOffCoarseDefault
     
-    beamShrimpInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[8] * 100
-    beamShrimpInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[8] * 100
-    beamShrimpInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[8] * 100
-    beamShrimpInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[8] * 100
-    beamShrimpOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[8] * 100
-    beamShrimpOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[8] * 100
-    beamShrimpOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[8] * 100
-    beamShrimpOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[8] * 100
+    nephropsTR2InRock <- model$data$fleet.model$gear_habitat_activity$s0[9]
+    nephropsTR2InFine <- model$data$fleet.model$gear_habitat_activity$s1[9]
+    nephropsTR2InMed <- model$data$fleet.model$gear_habitat_activity$s2[9]
+    nephropsTR2InCoarse <- model$data$fleet.model$gear_habitat_activity$s3[9]
+    nephropsTR2OffRock <- model$data$fleet.model$gear_habitat_activity$d0[9]
+    nephropsTR2OffFine <- model$data$fleet.model$gear_habitat_activity$d1[9]
+    nephropsTR2OffMed <- model$data$fleet.model$gear_habitat_activity$d2[9] 
+    nephropsTR2OffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[9]
+    # Getting Total Inshore/Offshore here
+    totalInNephropsTR2 <- nephropsTR2InRock + nephropsTR2InFine + nephropsTR2InMed + nephropsTR2InCoarse
+    totalOffNephropsTR2 <- nephropsTR2OffRock + nephropsTR2OffFine + nephropsTR2OffMed + nephropsTR2OffCoarse
+    totalOverallNephropsTR2 <- totalInNephropsTR2 + totalOffNephropsTR2
+    percentageInNephropsTR2Default <- totalInNephropsTR2/totalOverallNephropsTR2 * 100
+    percentageOutNephropsTR2Default <- 100 - percentageInNephropsTR2Default
+    # Now getting percentages Inshore
+    percentageNephropsTR2InRockDefault <- nephropsTR2InRock/totalInNephropsTR2 * 100
+    percentageNephropsTR2InFineDefault <- nephropsTR2InFine/totalInNephropsTR2 * 100
+    percentageNephropsTR2InMedDefault <- nephropsTR2InMed/totalInNephropsTR2 * 100
+    percentageNephropsTR2InCoarseDefault <- nephropsTR2InCoarse/totalInNephropsTR2 * 100
+    totalPercentageInNephropsTR2Default <- percentageNephropsTR2InRockDefault + percentageNephropsTR2InFineDefault + percentageNephropsTR2InMedDefault + percentageNephropsTR2InCoarseDefault
+    # Now getting percentages Offshore
+    percentageNephropsTR2OffRockDefault <- nephropsTR2OffRock/totalOffNephropsTR2 * 100
+    percentageNephropsTR2OffFineDefault <- nephropsTR2OffFine/totalOffNephropsTR2 * 100
+    percentageNephropsTR2OffMedDefault <- nephropsTR2OffMed/totalOffNephropsTR2 * 100
+    percentageNephropsTR2OffCoarseDefault <- nephropsTR2OffCoarse/totalOffNephropsTR2 * 100
+    totalPercentageOffNephropsTR2Default <- percentageNephropsTR2OffRockDefault + percentageNephropsTR2OffFineDefault + percentageNephropsTR2OffMedDefault + percentageNephropsTR2OffCoarseDefault
     
-    nephropsTR2InRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[9] * 100
-    nephropsTR2InFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[9] * 100
-    nephropsTR2InMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[9] * 100
-    nephropsTR2InCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[9] * 100
-    nephropsTR2OffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[9] * 100
-    nephropsTR2OffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[9] * 100
-    nephropsTR2OffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[9] * 100
-    nephropsTR2OffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[9] * 100
+    nephropsTR3InRock <- model$data$fleet.model$gear_habitat_activity$s0[9]
+    nephropsTR3InFine <- model$data$fleet.model$gear_habitat_activity$s1[9]
+    nephropsTR3InMed <- model$data$fleet.model$gear_habitat_activity$s2[9]
+    nephropsTR3InCoarse <- model$data$fleet.model$gear_habitat_activity$s3[9]
+    nephropsTR3OffRock <- model$data$fleet.model$gear_habitat_activity$d0[9]
+    nephropsTR3OffFine <- model$data$fleet.model$gear_habitat_activity$d1[9]
+    nephropsTR3OffMed <- model$data$fleet.model$gear_habitat_activity$d2[9] 
+    nephropsTR3OffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[9]
+    # Getting Total Inshore/Offshore here
+    totalInNephropsTR3 <- nephropsTR3InRock + nephropsTR3InFine + nephropsTR3InMed + nephropsTR3InCoarse
+    totalOffNephropsTR3 <- nephropsTR3OffRock + nephropsTR3OffFine + nephropsTR3OffMed + nephropsTR3OffCoarse
+    totalOverallNephropsTR3 <- totalInNephropsTR3 + totalOffNephropsTR3
+    percentageInNephropsTR3Default <- totalInNephropsTR3/totalOverallNephropsTR3 * 100
+    percentageOutNephropsTR3Default <- 100 - percentageInNephropsTR3Default
+    # Now getting percentages Inshore
+    percentageNephropsTR3InRockDefault <- nephropsTR3InRock/totalInNephropsTR3 * 100
+    percentageNephropsTR3InFineDefault <- nephropsTR3InFine/totalInNephropsTR3 * 100
+    percentageNephropsTR3InMedDefault <- nephropsTR3InMed/totalInNephropsTR3 * 100
+    percentageNephropsTR3InCoarseDefault <- nephropsTR3InCoarse/totalInNephropsTR3 * 100
+    totalPercentageInNephropsTR3Default <- percentageNephropsTR3InRockDefault + percentageNephropsTR3InFineDefault + percentageNephropsTR3InMedDefault + percentageNephropsTR3InCoarseDefault
+    # Now getting percentages Offshore
+    percentageNephropsTR3OffRockDefault <- nephropsTR3OffRock/totalOffNephropsTR3 * 100
+    percentageNephropsTR3OffFineDefault <- nephropsTR3OffFine/totalOffNephropsTR3 * 100
+    percentageNephropsTR3OffMedDefault <- nephropsTR3OffMed/totalOffNephropsTR3 * 100
+    percentageNephropsTR3OffCoarseDefault <- nephropsTR3OffCoarse/totalOffNephropsTR3 * 100
+    totalPercentageOffNephropsTR3Default <- percentageNephropsTR3OffRockDefault + percentageNephropsTR3OffFineDefault + percentageNephropsTR3OffMedDefault + percentageNephropsTR3OffCoarseDefault
     
-    nephropsTR3InRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[9] * 100
-    nephropsTR3InFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[9] * 100
-    nephropsTR3InMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[9] * 100
-    nephropsTR3InCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[9] * 100
-    nephropsTR3OffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[9] * 100
-    nephropsTR3OffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[9] * 100
-    nephropsTR3OffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[9] * 100
-    nephropsTR3OffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[9] * 100
+    creelsInRock <- model$data$fleet.model$gear_habitat_activity$s0[10]
+    creelsInFine <- model$data$fleet.model$gear_habitat_activity$s1[10]
+    creelsInMed <- model$data$fleet.model$gear_habitat_activity$s2[10]
+    creelsInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[10]
+    creelsOffRock <- model$data$fleet.model$gear_habitat_activity$d0[10]
+    creelsOffFine <- model$data$fleet.model$gear_habitat_activity$d1[10]
+    creelsOffMed <- model$data$fleet.model$gear_habitat_activity$d2[10] 
+    creelsOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[10]
+    # Getting Total Inshore/Offshore here
+    totalInCreels <- creelsInRock + creelsInFine + creelsInMed + creelsInCoarse
+    totalOffCreels <- creelsOffRock + creelsOffFine + creelsOffMed + creelsOffCoarse
+    totalOverallCreels <- totalInCreels + totalOffCreels
+    percentageInCreelsDefault <- totalInCreels/totalOverallCreels * 100
+    percentageOutCreelsDefault <- 100 - percentageInCreelsDefault
+    # Now getting percentages Inshore
+    percentageCreelsInRockDefault <- creelsInRock/totalInCreels * 100
+    percentageCreelsInFineDefault <- creelsInFine/totalInCreels * 100
+    percentageCreelsInMedDefault <- creelsInMed/totalInCreels * 100
+    percentageCreelsInCoarseDefault <- creelsInCoarse/totalInCreels * 100
+    totalPercentageInCreelsDefault <- percentageCreelsInRockDefault + percentageCreelsInFineDefault + percentageCreelsInMedDefault + percentageCreelsInCoarseDefault
+    # Now getting percentages Offshore
+    percentageCreelsOffRockDefault <- creelsOffRock/totalOffCreels * 100
+    percentageCreelsOffFineDefault <- creelsOffFine/totalOffCreels * 100
+    percentageCreelsOffMedDefault <- creelsOffMed/totalOffCreels * 100
+    percentageCreelsOffCoarseDefault <- creelsOffCoarse/totalOffCreels * 100
+    totalPercentageOffCreelsDefault <- percentageCreelsOffRockDefault + percentageCreelsOffFineDefault + percentageCreelsOffMedDefault + percentageCreelsOffCoarseDefault
     
-    creelsInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[10] * 100
-    creelsInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[10] * 100
-    creelsInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[10] * 100
-    creelsInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[10] * 100
-    creelsOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[10] * 100
-    creelsOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[10] * 100
-    creelsOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[10] * 100
-    creelsOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[10] * 100
+    molluscInRock <- model$data$fleet.model$gear_habitat_activity$s0[11]
+    molluscInFine <- model$data$fleet.model$gear_habitat_activity$s1[11]
+    molluscInMed <- model$data$fleet.model$gear_habitat_activity$s2[11]
+    molluscInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[11]
+    molluscOffRock <- model$data$fleet.model$gear_habitat_activity$d0[11]
+    molluscOffFine <- model$data$fleet.model$gear_habitat_activity$d1[11]
+    molluscOffMed <- model$data$fleet.model$gear_habitat_activity$d2[11] 
+    molluscOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[11]
+    # Getting Total Inshore/Offshore here
+    totalInMollusc <- molluscInRock + molluscInFine + molluscInMed + molluscInCoarse
+    totalOffMollusc <- molluscOffRock + molluscOffFine + molluscOffMed + molluscOffCoarse
+    totalOverallMollusc <- totalInMollusc + totalOffMollusc
+    percentageInMolluscDefault <- totalInMollusc/totalOverallMollusc * 100
+    percentageOutMolluscDefault <- 100 - percentageInMolluscDefault
+    # Now getting percentages Inshore
+    percentageMolluscInRockDefault <- molluscInRock/totalInMollusc * 100
+    percentageMolluscInFineDefault <- molluscInFine/totalInMollusc * 100
+    percentageMolluscInMedDefault <- molluscInMed/totalInMollusc * 100
+    percentageMolluscInCoarseDefault <- molluscInCoarse/totalInMollusc * 100
+    totalPercentageInMolluscDefault <- percentageMolluscInRockDefault + percentageMolluscInFineDefault + percentageMolluscInMedDefault + percentageMolluscInCoarseDefault
+    # Now getting percentages Offshore
+    percentageMolluscOffRockDefault <- molluscOffRock/totalOffMollusc * 100
+    percentageMolluscOffFineDefault <- molluscOffFine/totalOffMollusc * 100
+    percentageMolluscOffMedDefault <- molluscOffMed/totalOffMollusc * 100
+    percentageMolluscOffCoarseDefault <- molluscOffCoarse/totalOffMollusc * 100
+    totalPercentageOffMolluscDefault <- percentageMolluscOffRockDefault + percentageMolluscOffFineDefault + percentageMolluscOffMedDefault + percentageMolluscOffCoarseDefault
     
-    molluscInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[11] * 100
-    molluscInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[11] * 100
-    molluscInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[11] * 100
-    molluscInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[11] * 100
-    molluscOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[11] * 100
-    molluscOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[11] * 100
-    molluscOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[11] * 100
-    molluscOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[11] * 100
+    whalerInRock <- model$data$fleet.model$gear_habitat_activity$s0[12]
+    whalerInFine <- model$data$fleet.model$gear_habitat_activity$s1[12]
+    whalerInMed <- model$data$fleet.model$gear_habitat_activity$s2[12]
+    whalerInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[12]
+    whalerOffRock <- model$data$fleet.model$gear_habitat_activity$d0[12]
+    whalerOffFine <- model$data$fleet.model$gear_habitat_activity$d1[12]
+    whalerOffMed <- model$data$fleet.model$gear_habitat_activity$d2[12] 
+    whalerOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[12]
+    # Getting Total Inshore/Offshore here
+    totalInWhaler <- whalerInRock + whalerInFine + whalerInMed + whalerInCoarse
+    totalOffWhaler <- whalerOffRock + whalerOffFine + whalerOffMed + whalerOffCoarse
+    totalOverallWhaler <- totalInWhaler + totalOffWhaler
+    percentageInWhalerDefault <- totalInWhaler/totalOverallWhaler * 100
+    percentageOutWhalerDefault <- 100 - percentageInWhalerDefault
+    # Now getting percentages Inshore
+    percentageWhalerInRockDefault <- whalerInRock/totalInWhaler * 100
+    percentageWhalerInFineDefault <- whalerInFine/totalInWhaler * 100
+    percentageWhalerInMedDefault <- whalerInMed/totalInWhaler * 100
+    percentageWhalerInCoarseDefault <- whalerInCoarse/totalInWhaler * 100
+    totalPercentageInWhalerDefault <- percentageWhalerInRockDefault + percentageWhalerInFineDefault + percentageWhalerInMedDefault + percentageWhalerInCoarseDefault
+    # Now getting percentages Offshore
+    percentageWhalerOffRockDefault <- whalerOffRock/totalOffWhaler * 100
+    percentageWhalerOffFineDefault <- whalerOffFine/totalOffWhaler * 100
+    percentageWhalerOffMedDefault <- whalerOffMed/totalOffWhaler * 100
+    percentageWhalerOffCoarseDefault <- whalerOffCoarse/totalOffWhaler * 100
+    totalPercentageOffWhalerDefault <- percentageWhalerOffRockDefault + percentageWhalerOffFineDefault + percentageWhalerOffMedDefault + percentageWhalerOffCoarseDefault
     
-    whalerInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[12] * 100
-    whalerInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[12] * 100
-    whalerInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[12] * 100
-    whalerInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[12] * 100
-    whalerOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[12] * 100
-    whalerOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[12] * 100
-    whalerOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[12] * 100
-    whalerOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[12] * 100
+    kelpInRock <- model$data$fleet.model$gear_habitat_activity$s0[12]
+    kelpInFine <- model$data$fleet.model$gear_habitat_activity$s1[12]
+    kelpInMed <- model$data$fleet.model$gear_habitat_activity$s2[12]
+    kelpInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[12]
+    kelpOffRock <- model$data$fleet.model$gear_habitat_activity$d0[12]
+    kelpOffFine <- model$data$fleet.model$gear_habitat_activity$d1[12]
+    kelpOffMed <- model$data$fleet.model$gear_habitat_activity$d2[12] 
+    kelpOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[12]
+    # Getting Total Inshore/Offshore here
+    totalInKelp <- kelpInRock + kelpInFine + kelpInMed + kelpInCoarse
+    totalOffKelp <- kelpOffRock + kelpOffFine + kelpOffMed + kelpOffCoarse
+    totalOverallKelp <- totalInKelp + totalOffKelp
+    percentageInKelpDefault <- totalInKelp/totalOverallKelp * 100
+    percentageOutKelpDefault <- 100 - percentageInKelpDefault
+    # Now getting percentages Inshore
+    percentageKelpInRockDefault <- kelpInRock/totalInKelp * 100
+    percentageKelpInFineDefault <- kelpInFine/totalInKelp * 100
+    percentageKelpInMedDefault <- kelpInMed/totalInKelp * 100
+    percentageKelpInCoarseDefault <- kelpInCoarse/totalInKelp * 100
+    totalPercentageInKelpDefault <- percentageKelpInRockDefault + percentageKelpInFineDefault + percentageKelpInMedDefault + percentageKelpInCoarseDefault
+    # Now getting percentages Offshore
+    percentageKelpOffRockDefault <- kelpOffRock/totalOffKelp * 100
+    percentageKelpOffFineDefault <- kelpOffFine/totalOffKelp * 100
+    percentageKelpOffMedDefault <- kelpOffMed/totalOffKelp * 100
+    percentageKelpOffCoarseDefault <- kelpOffCoarse/totalOffKelp * 100
+    totalPercentageOffKelpDefault <- percentageKelpOffRockDefault + percentageKelpOffFineDefault + percentageKelpOffMedDefault + percentageKelpOffCoarseDefault
     
-    kelpInRockDefault <- model$data$fleet.model$gear_habitat_activity$s0[12] * 100
-    kelpInFineDefault <- model$data$fleet.model$gear_habitat_activity$s1[12] * 100
-    kelpInMedDefault <- model$data$fleet.model$gear_habitat_activity$s2[12] * 100
-    kelpInCoarseDefault <- model$data$fleet.model$gear_habitat_activity$s3[12] * 100
-    kelpOffRockDefault <- model$data$fleet.model$gear_habitat_activity$d0[12] * 100
-    kelpOffFineDefault <- model$data$fleet.model$gear_habitat_activity$d1[12] * 100
-    kelpOffMedDefault <- model$data$fleet.model$gear_habitat_activity$d2[12] * 100
-    kelpOffCoarseDefault <- model$data$fleet.model$gear_habitat_activity$d3[12] * 100
-
     switch(
       input$selectedGearForHabitatDist,
       "Pelagic_Trawl+Seine" = fluidRow(  box(width = 10, title = "", style = "font-size:9px;",
@@ -3041,11 +3300,10 @@ server <- function(input, output, session) {
                                                numericInput("percentagePelInRock", "Inshore rock %",percentagePelInRockDefault,min = 0, max = 100, step = 0.01, width = '65%'),
                                                numericInput("percentagePelInFine", "Inshore fine %",percentagePelInFineDefault,min = 0, max = 100, step = 0.01,width = '65%'),
                                                numericInput("percentagePelInMed", "Inshore medium %",percentagePelInMedDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                               numericInput("percentagePelInCoarse", "Inshore coarse %",percentagePelInCoarseDefault,min = 0, max = 100, step = 0.01,width = '65%'),
                                                verticalLayout(
                                                  useShinyjs(),
                                                  extendShinyjs(text = jsCode,functions = c("backgroundCol")),
-                                                 uiOutput("totalPercentageInPel")
+                                                 uiOutput("percentagePelInCoarse")
                                                )
                                              )),
                                              wellPanel(
@@ -3054,11 +3312,10 @@ server <- function(input, output, session) {
                                                numericInput("percentagePelOffRock", "Offshore rock %",percentagePelOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
                                                numericInput("percentagePelOffFine", "Offshore fine %",percentagePelOffFineDefault,min = 0, max = 100, step = 0.01,width = '65%'),
                                                numericInput("percentagePelOffMed", "Offshore medium %",percentagePelOffMedDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                               numericInput("percentagePelOffCoarse", "Offshore coarse %",percentagePelOffCoarseDefault,min = 0, max = 100, step = 0.01,width = '65%'),
                                                verticalLayout(
                                                  useShinyjs(),
                                                  extendShinyjs(text = jsCode,functions = c("backgroundCol")),
-                                                 uiOutput("totalPercentageOffPel")
+                                                 uiOutput("percentagePelOffCoarse")
                                                )
                                              )),
                                              actionButton("pelGearPerHab_reset", "Reset")
