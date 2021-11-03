@@ -864,28 +864,13 @@ server <- function(input, output, session) {
   output$percentagePelInCoarse <- renderUI({ 
     totalForThreeOthers <- input$percentagePelInRock + input$percentagePelInFine + input$percentagePelInMed
     pelInCoarse <- 100 - totalForThreeOthers
-    numericInput("percentagePelInCoarse", "Inshore coarse %",pelInCoarse,width = '50%')
+    numericInput("percentagePelInCoarseInput", "Inshore coarse %",pelInCoarse,width = '50%')
   })
 
   output$percentagePelOffCoarse <- renderUI({ 
     totalForThreeOthers <- input$percentagePelOffRock + input$percentagePelOffFine + input$percentagePelOffMed
     pelOffCoarse <- 100 - totalForThreeOthers
     numericInput("percentagePelOffCoarse", "Offshore coarse %",pelOffCoarse,width = '50%')
-  })
-  
-  observeEvent(input$totalPelIn,{
-    if ( is.na(input$totalPelIn) || input$totalPelIn != 100)  {
-      js$backgroundCol("totalPelIn","red")
-    } else {
-      js$backgroundCol("totalPelIn","white")
-    }
-    updateNumericInput(session, "totalPelIn", value = input$totalPelIn)
-    disable("totalPelIn")
-  })
-  
-  observeEvent(input$totalPelOff,{
-    updateNumericInput(session, "totalPelOff", value = input$totalPelOff)
-    disable("totalPelOff")
   })
   
   observeEvent(input$percentagePelInRock,{
@@ -897,16 +882,16 @@ server <- function(input, output, session) {
   observeEvent(input$percentagePelInMed,{
     updateNumericInput(session,"percentagePelInMed", value = notGreatherThan100(input$percentagePelInMed))
   })
-  observeEvent(input$percentagePelInCoarse,{
+  observeEvent(input$percentagePelInCoarseInput,{
     totalForThreeOthers <- input$percentagePelInRock + input$percentagePelInFine + input$percentagePelInMed
     pelInCoarse <- 100 - totalForThreeOthers
     if ( pelInCoarse < 0 || pelInCoarse > 100)  {
-      js$backgroundCol("percentagePelInCoarse","red")
+      js$backgroundCol("percentagePelInCoarseInput","red")
     } else {
-      js$backgroundCol("percentagePelInCoarse","white")
+      js$backgroundCol("percentagePelInCoarseInput","white")
     }
-    updateNumericInput(session,"percentagePelInCoarse", value = pelInCoarse)
-    disable("percentagePelInCoarse")
+    updateNumericInput(session,"percentagePelInCoarseInput", value = pelInCoarse)
+    disable("percentagePelInCoarseInput")
   })
   observeEvent(input$percentagePelOffRock,{
     updateNumericInput(session,"percentagePelOffRock", value = notGreatherThan100(input$percentagePelOffRock))
@@ -956,7 +941,7 @@ server <- function(input, output, session) {
     updateNumericInput(session, "percentagePelInRock", value = percentagePelInRockDefault)
     updateNumericInput(session, "percentagePelInFine", value = percentagePelInFineDefault)
     updateNumericInput(session, "percentagePelInMed", value = percentagePelInMedDefault)
-    updateNumericInput(session, "percentagePelInCoarse", value = percentagePelInCoarseDefault)
+    updateNumericInput(session, "percentagePelInCoarseInput", value = percentagePelInCoarseDefault)
     updateNumericInput(session, "percentagePelOffRock", value = percentagePelOffRockDefault)
     updateNumericInput(session, "percentagePelOffFine", value = percentagePelOffFineDefault)
     updateNumericInput(session, "percentagePelOffMed", value = percentagePelOffMedDefault)
@@ -7882,7 +7867,7 @@ server <- function(input, output, session) {
     scenario_model$data$fleet.model$gear_habitat_activity$s2[1] <- newPelInMedProp 
     
    # if (!is.null(input$pelInCoarse))
-    newPelInCoarseProp <- (input$inshorePercentage*input$percentagePelInCoarse)/10000
+    newPelInCoarseProp <- (input$inshorePercentage*input$percentagePelInCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s3[1] <- newPelInCoarseProp 
     
   #  if (!is.null(input$pelOffRock))
