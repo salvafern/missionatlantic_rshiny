@@ -884,11 +884,6 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$totalPelOff,{
-    if ( is.na(input$totalPelOff) || input$totalPelOff != 100)  {
-      js$backgroundCol("totalPelOff","red")
-    } else {
-      js$backgroundCol("totalPelOff","white")
-    }
     updateNumericInput(session, "totalPelOff", value = input$totalPelOff)
     disable("totalPelOff")
   })
@@ -905,6 +900,11 @@ server <- function(input, output, session) {
   observeEvent(input$percentagePelInCoarse,{
     totalForThreeOthers <- input$percentagePelInRock + input$percentagePelInFine + input$percentagePelInMed
     pelInCoarse <- 100 - totalForThreeOthers
+    if ( pelInCoarse < 0 || pelInCoarse > 100)  {
+      js$backgroundCol("percentagePelInCoarse","red")
+    } else {
+      js$backgroundCol("percentagePelInCoarse","white")
+    }
     updateNumericInput(session,"percentagePelInCoarse", value = pelInCoarse)
     disable("percentagePelInCoarse")
   })
