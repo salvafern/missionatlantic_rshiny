@@ -932,7 +932,7 @@ server <- function(input, output, session) {
     totalInPel <- pelInRock + pelInFine + pelInMed + pelInCoarse
     totalOffPel <- pelOffRock + pelOffFine + pelOffMed + pelOffCoarse
     totalOverallPel <- totalInPel + totalOffPel
-    percentageInPelDefault <- pelInRock/totalOverallPel * 100
+    percentageInPelDefault <- totalInPel/totalOverallPel * 100
     percentageOutPelDefault <- 100 - percentageInPelDefault
     # Now getting percentages Inshore
     percentagePelInRockDefault <- pelInRock/totalInPel * 100
@@ -1038,7 +1038,7 @@ server <- function(input, output, session) {
     totalInSandeel <- sandeelInRock + sandeelInFine + sandeelInMed + sandeelInCoarse
     totalOffSandeel <- sandeelOffRock + sandeelOffFine + sandeelOffMed + sandeelOffCoarse
     totalOverallSandeel <- totalInSandeel + totalOffSandeel
-    percentageInSandeelDefault <- sandeelInRock/totalOverallSandeel * 100
+    percentageInSandeelDefault <- totalInSandeel/totalOverallSandeel * 100
     percentageOutSandeelDefault <- 100 - percentageInSandeelDefault
     # Now getting percentages Inshore
     percentageSandeelInRockDefault <- sandeelInRock/totalInSandeel * 100
@@ -1144,7 +1144,7 @@ server <- function(input, output, session) {
     totalInOtter <- otterInRock + otterInFine + otterInMed + otterInCoarse
     totalOffOtter <- otterOffRock + otterOffFine + otterOffMed + otterOffCoarse
     totalOverallOtter <- totalInOtter + totalOffOtter
-    percentageInOtterDefault <- otterInRock/totalOverallOtter * 100
+    percentageInOtterDefault <- totalInOtter/totalOverallOtter * 100
     percentageOutOtterDefault <- 100 - percentageInOtterDefault
     # Now getting percentages Inshore
     percentageOtterInRockDefault <- otterInRock/totalInOtter * 100
@@ -1250,7 +1250,7 @@ server <- function(input, output, session) {
     totalInLonMack <- lonMackInRock + lonMackInFine + lonMackInMed + lonMackInCoarse
     totalOffLonMack <- lonMackOffRock + lonMackOffFine + lonMackOffMed + lonMackOffCoarse
     totalOverallLonMack <- totalInLonMack + totalOffLonMack
-    percentageInLonMackDefault <- lonMackInRock/totalOverallLonMack * 100
+    percentageInLonMackDefault <- totalInLonMack/totalOverallLonMack * 100
     percentageOutLonMackDefault <- 100 - percentageInLonMackDefault
     # Now getting percentages Inshore
     percentageLonMackInRockDefault <- lonMackInRock/totalInLonMack * 100
@@ -1357,7 +1357,7 @@ server <- function(input, output, session) {
     totalInBeamTrawl <- beamTrawlInRock + beamTrawlInFine + beamTrawlInMed + beamTrawlInCoarse
     totalOffBeamTrawl <- beamTrawlOffRock + beamTrawlOffFine + beamTrawlOffMed + beamTrawlOffCoarse
     totalOverallBeamTrawl <- totalInBeamTrawl + totalOffBeamTrawl
-    percentageInBeamTrawlDefault <- beamTrawlInRock/totalOverallBeamTrawl * 100
+    percentageInBeamTrawlDefault <- totalInBeamTrawl/totalOverallBeamTrawl * 100
     percentageOutBeamTrawlDefault <- 100 - percentageInBeamTrawlDefault
     # Now getting percentages Inshore
     percentageBeamTrawlInRockDefault <- beamTrawlInRock/totalInBeamTrawl * 100
@@ -1464,7 +1464,7 @@ server <- function(input, output, session) {
     totalInDemSeine <- demSeineInRock + demSeineInFine + demSeineInMed + demSeineInCoarse
     totalOffDemSeine <- demSeineOffRock + demSeineOffFine + demSeineOffMed + demSeineOffCoarse
     totalOverallDemSeine <- totalInDemSeine + totalOffDemSeine
-    percentageInDemSeineDefault <- demSeineInRock/totalOverallDemSeine * 100
+    percentageInDemSeineDefault <- totalInDemSeine/totalOverallDemSeine * 100
     percentageOutDemSeineDefault <- 100 - percentageInDemSeineDefault
     # Now getting percentages Inshore
     percentageDemSeineInRockDefault <- demSeineInRock/totalInDemSeine * 100
@@ -1571,7 +1571,7 @@ server <- function(input, output, session) {
     totalInDemOtter <- demOtterInRock + demOtterInFine + demOtterInMed + demOtterInCoarse
     totalOffDemOtter <- demOtterOffRock + demOtterOffFine + demOtterOffMed + demOtterOffCoarse
     totalOverallDemOtter <- totalInDemOtter + totalOffDemOtter
-    percentageInDemOtterDefault <- demOtterInRock/totalOverallDemOtter * 100
+    percentageInDemOtterDefault <- totalInDemOtter/totalOverallDemOtter * 100
     percentageOutDemOtterDefault <- 100 - percentageInDemOtterDefault
     # Now getting percentages Inshore
     percentageDemOtterInRockDefault <- demOtterInRock/totalInDemOtter * 100
@@ -1678,7 +1678,7 @@ server <- function(input, output, session) {
     totalInGillNet <- gillNetInRock + gillNetInFine + gillNetInMed + gillNetInCoarse
     totalOffGillNet <- gillNetOffRock + gillNetOffFine + gillNetOffMed + gillNetOffCoarse
     totalOverallGillNet <- totalInGillNet + totalOffGillNet
-    percentageInGillNetDefault <- gillNetInRock/totalOverallGillNet * 100
+    percentageInGillNetDefault <- totalInGillNet/totalOverallGillNet * 100
     percentageOutGillNetDefault <- 100 - percentageInGillNetDefault
     # Now getting percentages Inshore
     percentageGillNetInRockDefault <- gillNetInRock/totalInGillNet * 100
@@ -1784,7 +1784,7 @@ server <- function(input, output, session) {
     totalInBeamShrimp <- beamShrimpInRock + beamShrimpInFine + beamShrimpInMed + beamShrimpInCoarse
     totalOffBeamShrimp <- beamShrimpOffRock + beamShrimpOffFine + beamShrimpOffMed + beamShrimpOffCoarse
     totalOverallBeamShrimp <- totalInBeamShrimp + totalOffBeamShrimp
-    percentageInBeamShrimpDefault <- beamShrimpInRock/totalOverallBeamShrimp * 100
+    percentageInBeamShrimpDefault <- totalInBeamShrimp/totalOverallBeamShrimp * 100
     percentageOutBeamShrimpDefault <- 100 - percentageInBeamShrimpDefault
     # Now getting percentages Inshore
     percentageBeamShrimpInRockDefault <- beamShrimpInRock/totalInBeamShrimp * 100
@@ -1891,7 +1891,7 @@ server <- function(input, output, session) {
     totalInNephropsTR2 <- nephropsTR2InRock + nephropsTR2InFine + nephropsTR2InMed + nephropsTR2InCoarse
     totalOffNephropsTR2 <- nephropsTR2OffRock + nephropsTR2OffFine + nephropsTR2OffMed + nephropsTR2OffCoarse
     totalOverallNephropsTR2 <- totalInNephropsTR2 + totalOffNephropsTR2
-    percentageInNephropsTR2Default <- nephropsTR2InRock/totalOverallNephropsTR2 * 100
+    percentageInNephropsTR2Default <- totalInNephropsTR2/totalOverallNephropsTR2 * 100
     percentageOutNephropsTR2Default <- 100 - percentageInNephropsTR2Default
     # Now getting percentages Inshore
     percentageNephropsTR2InRockDefault <- nephropsTR2InRock/totalInNephropsTR2 * 100
@@ -1984,7 +1984,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$nephropsTR3GearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e3e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
     nephropsTR3InRock <- model$data$fleet.model$gear_habitat_activity$s0[9] 
     nephropsTR3InFine <- model$data$fleet.model$gear_habitat_activity$s1[9] 
     nephropsTR3InMed <- model$data$fleet.model$gear_habitat_activity$s2[9] 
@@ -1997,7 +1997,7 @@ server <- function(input, output, session) {
     totalInNephropsTR3 <- nephropsTR3InRock + nephropsTR3InFine + nephropsTR3InMed + nephropsTR3InCoarse
     totalOffNephropsTR3 <- nephropsTR3OffRock + nephropsTR3OffFine + nephropsTR3OffMed + nephropsTR3OffCoarse
     totalOverallNephropsTR3 <- totalInNephropsTR3 + totalOffNephropsTR3
-    percentageInNephropsTR3Default <- nephropsTR3InRock/totalOverallNephropsTR3 * 100
+    percentageInNephropsTR3Default <- totalInNephropsTR3/totalOverallNephropsTR3 * 100
     percentageOutNephropsTR3Default <- 100 - percentageInNephropsTR3Default
     # Now getting percentages Inshore
     percentageNephropsTR3InRockDefault <- nephropsTR3InRock/totalInNephropsTR3 * 100
@@ -2090,7 +2090,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$creelsGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e3e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
     creelsInRock <- model$data$fleet.model$gear_habitat_activity$s0[10] 
     creelsInFine <- model$data$fleet.model$gear_habitat_activity$s1[10] 
     creelsInMed <- model$data$fleet.model$gear_habitat_activity$s2[10] 
@@ -2103,7 +2103,7 @@ server <- function(input, output, session) {
     totalInCreels <- creelsInRock + creelsInFine + creelsInMed + creelsInCoarse
     totalOffCreels <- creelsOffRock + creelsOffFine + creelsOffMed + creelsOffCoarse
     totalOverallCreels <- totalInCreels + totalOffCreels
-    percentageInCreelsDefault <- creelsInRock/totalOverallCreels * 100
+    percentageInCreelsDefault <- totalInCreels/totalOverallCreels * 100
     percentageOutCreelsDefault <- 100 - percentageInCreelsDefault
     # Now getting percentages Inshore
     percentageCreelsInRockDefault <- creelsInRock/totalInCreels * 100
@@ -2196,7 +2196,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$molluscGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e3e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
     molluscInRock <- model$data$fleet.model$gear_habitat_activity$s0[11] 
     molluscInFine <- model$data$fleet.model$gear_habitat_activity$s1[11] 
     molluscInMed <- model$data$fleet.model$gear_habitat_activity$s2[11] 
@@ -2209,7 +2209,7 @@ server <- function(input, output, session) {
     totalInMollusc <- molluscInRock + molluscInFine + molluscInMed + molluscInCoarse
     totalOffMollusc <- molluscOffRock + molluscOffFine + molluscOffMed + molluscOffCoarse
     totalOverallMollusc <- totalInMollusc + totalOffMollusc
-    percentageInMolluscDefault <- molluscInRock/totalOverallMollusc * 100
+    percentageInMolluscDefault <- totalInMollusc/totalOverallMollusc * 100
     percentageOutMolluscDefault <- 100 - percentageInMolluscDefault
     # Now getting percentages Inshore
     percentageMolluscInRockDefault <- molluscInRock/totalInMollusc * 100
@@ -2302,7 +2302,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$whalerGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e3e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
     whalerInRock <- model$data$fleet.model$gear_habitat_activity$s0[12] 
     whalerInFine <- model$data$fleet.model$gear_habitat_activity$s1[12] 
     whalerInMed <- model$data$fleet.model$gear_habitat_activity$s2[12] 
@@ -2315,7 +2315,7 @@ server <- function(input, output, session) {
     totalInWhaler <- whalerInRock + whalerInFine + whalerInMed + whalerInCoarse
     totalOffWhaler <- whalerOffRock + whalerOffFine + whalerOffMed + whalerOffCoarse
     totalOverallWhaler <- totalInWhaler + totalOffWhaler
-    percentageInWhalerDefault <- whalerInRock/totalOverallWhaler * 100
+    percentageInWhalerDefault <- totalInWhaler/totalOverallWhaler * 100
     percentageOutWhalerDefault <- 100 - percentageInWhalerDefault
     # Now getting percentages Inshore
     percentageWhalerInRockDefault <- whalerInRock/totalInWhaler * 100
@@ -2408,7 +2408,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$kelpGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e3e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant)
     kelpInRock <- model$data$fleet.model$gear_habitat_activity$s0[12] 
     kelpInFine <- model$data$fleet.model$gear_habitat_activity$s1[12] 
     kelpInMed <- model$data$fleet.model$gear_habitat_activity$s2[12] 
@@ -2421,7 +2421,7 @@ server <- function(input, output, session) {
     totalInKelp <- kelpInRock + kelpInFine + kelpInMed + kelpInCoarse
     totalOffKelp <- kelpOffRock + kelpOffFine + kelpOffMed + kelpOffCoarse
     totalOverallKelp <- totalInKelp + totalOffKelp
-    percentageInKelpDefault <- kelpInRock/totalOverallKelp * 100
+    percentageInKelpDefault <- totalInKelp/totalOverallKelp * 100
     percentageOutKelpDefault <- 100 - percentageInKelpDefault
     # Now getting percentages Inshore
     percentageKelpInRockDefault <- kelpInRock/totalInKelp * 100
@@ -3842,7 +3842,7 @@ server <- function(input, output, session) {
     totalInbeamShrimp <- beamShrimpInRock + beamShrimpInFine + beamShrimpInMed + beamShrimpInCoarse
     totalOffbeamShrimp <- beamShrimpOffRock + beamShrimpOffFine + beamShrimpOffMed + beamShrimpOffCoarse
     totalOverallBeamShrimp <- totalInbeamShrimp + totalOffbeamShrimp
-    percentageInBeamShrimpDefault <- totalInbeamShrimp/totalOverallbeamShrimp * 100
+    percentageInBeamShrimpDefault <- totalInbeamShrimp/totalOverallBeamShrimp * 100
     percentageOutBeamShrimpDefault <- 100 - percentageInBeamShrimpDefault
     # Now getting percentages Inshore
     percentageBeamShrimpInRockDefault <- beamShrimpInRock/totalInbeamShrimp * 100
@@ -3855,7 +3855,7 @@ server <- function(input, output, session) {
     percentageBeamShrimpOffFineDefault <- beamShrimpOffFine/totalOffbeamShrimp * 100
     percentageBeamShrimpOffMedDefault <- beamShrimpOffMed/totalOffbeamShrimp * 100
     percentageBeamShrimpOffCoarseDefault <- beamShrimpOffCoarse/totalOffbeamShrimp * 100
-    totalPercentageOffbeamShrimpDefault <- percentageBeamShrimpOffRockDefault + percentageBeamShrimpOffFineDefault + percentageBeamShrimpOffMedDefault + percentageBeamShrimpOffCoarseDefault
+    totalPercentageOffBeamShrimpDefault <- percentageBeamShrimpOffRockDefault + percentageBeamShrimpOffFineDefault + percentageBeamShrimpOffMedDefault + percentageBeamShrimpOffCoarseDefault
     
     nephropsTR2InRock <- model$data$fleet.model$gear_habitat_activity$s0[9]
     nephropsTR2InFine <- model$data$fleet.model$gear_habitat_activity$s1[9]
