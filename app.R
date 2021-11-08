@@ -2311,35 +2311,37 @@ server <- function(input, output, session) {
     whalerOffFine <- model$data$fleet.model$gear_habitat_activity$d1[12] 
     whalerOffMed <- model$data$fleet.model$gear_habitat_activity$d2[12] 
     whalerOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[12] 
+    print("Got this far in whaler reset 1")
     # Getting Total Inshore/Offshore here
     totalInWhaler <- whalerInRock + whalerInFine + whalerInMed + whalerInCoarse
     totalOffWhaler <- whalerOffRock + whalerOffFine + whalerOffMed + whalerOffCoarse
     totalOverallWhaler <- totalInWhaler + totalOffWhaler
     percentageInWhalerDefault <- totalInWhaler/totalOverallWhaler * 100
     percentageOutWhalerDefault <- 100 - percentageInWhalerDefault
+    print("Got this far in whaler reset 2")
     # Now getting percentages Inshore
     percentageWhalerInRockDefault <- whalerInRock/totalInWhaler * 100
     percentageWhalerInFineDefault <- whalerInFine/totalInWhaler * 100
     percentageWhalerInMedDefault <- whalerInMed/totalInWhaler * 100
     percentageWhalerInCoarseDefault <- whalerInCoarse/totalInWhaler * 100
+    print("Got this far in whaler reset 3")
     # Now getting percentages Offshore
     percentageWhalerOffRockDefault <- whalerOffRock/totalOffWhaler * 100
     percentageWhalerOffFineDefault <- whalerOffFine/totalOffWhaler * 100
     percentageWhalerOffMedDefault <- whalerOffMed/totalOffWhaler * 100
     percentageWhalerOffCoarseDefault <- whalerOffCoarse/totalOffWhaler * 100
+    print("Got this far in whaler reset 4")
     updateNumericInput(session, "inshorePercentageWhaler", value = percentageInWhalerDefault)
     updateNumericInput(session, "offshorePercentageWhaler", value = percentageOutWhalerDefault)
-    disable("offshorePercentageWhaler")
     updateNumericInput(session, "percentageWhalerInRock", value = percentageWhalerInRockDefault)
     updateNumericInput(session, "percentageWhalerInFine", value = percentageWhalerInFineDefault)
     updateNumericInput(session, "percentageWhalerInMed", value = percentageWhalerInMedDefault)
     updateNumericInput(session, "percentageWhalerInCoarseInput", value = percentageWhalerInCoarseDefault)
-    disable("percentageWhalerInCoarseInput")
     updateNumericInput(session, "percentageWhalerOffRock", value = percentageWhalerOffRockDefault)
     updateNumericInput(session, "percentageWhalerOffFine", value = percentageWhalerOffFineDefault)
     updateNumericInput(session, "percentageWhalerOffMed", value = percentageWhalerOffMedDefault)
     updateNumericInput(session, "percentageWhalerOffCoarseInput", value = percentageWhalerOffCoarseDefault)
-    disable("percentageWhalerOffCoarseInput")
+    print("Got this far in whaler reset 5")
   })
     
   observeEvent(input$inshorePercentageKelp,{
@@ -8842,9 +8844,11 @@ server <- function(input, output, session) {
     
     newPelOffCoarseProp <- (input$offshorePercentage*input$percentagePelOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[1] <- newPelOffCoarseProp 
+    
+    total <- newPelInRockProp + newPelInFineProp + newPelInMedProp + newPelInCoarseProp + newPelOffRockProp + newPelOffFineProp + newPelOffMedProp + newPelOffCoarseProp
+    cat("Total for pel: ",total)
     }
     
-    print("Got this far pel")
     
     if (!is.null(input$percentageSandeelInRock)){
     newSandeelInRockProp <- (input$inshorePercentageSandeel*input$percentageSandeelInRock)/10000
@@ -8870,9 +8874,11 @@ server <- function(input, output, session) {
     
     newSandeelOffCoarseProp <- (input$offshorePercentageSandeel*input$percentageSandeelOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[2] <- newSandeelOffCoarseProp
-    }
-    print("Got this far sandeel")
     
+    #total <- newSandeelInRockProp + newSandeelInFineProp + newSandeelInMedProp + newSandeelInCoarseProp + newSandeelOffRockProp + newSandeelOffFineProp + newSandeelOffMedProp + newSandeelOffCoarseProp
+    #cat("Total for sandeel: ",total)
+    }
+
     if (!is.null(input$percentageOtterInRock)){
     newOtterInRockProp <- (input$inshorePercentageOtter*input$percentageOtterInRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[2] <- newOtterInRockProp
@@ -8897,9 +8903,11 @@ server <- function(input, output, session) {
     
     newOtterOffCoarseProp <- (input$offshorePercentageOtter*input$percentageOtterOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[2] <- newOtterOffCoarseProp
-    }
-    print("Got this far otter")
     
+    #total <- newOtterInRockProp + newOtterInFineProp + newOtterInMedProp + newOtterInCoarseProp + newOtterOffRockProp + newOtterOffFineProp + newOtterOffMedProp + newOtterOffCoarseProp
+    #cat("Total for otter: ",total)
+    }
+
     if (!is.null(input$percentageLonMackInRock)){
     newLonMackInRockProp <- (input$inshorePercentageLonMack*input$percentageLonMackInRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[3] <- newLonMackInRockProp
@@ -8924,9 +8932,11 @@ server <- function(input, output, session) {
     
     newLonMackOffCoarseProp <- (input$offshorePercentageLonMack*input$percentageLonMackOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[3] <- newLonMackOffCoarseProp
-    }
-    print("Got this far lonmack")
     
+    #total <- newLonMackInRockProp + newLonMackInFineProp + newLonMackInMedProp + newLonMackInCoarseProp + newLonMackOffRockProp + newLonMackOffFineProp + newLonMackOffMedProp + newLonMackOffCoarseProp
+    #cat("Total for lonmack: ",total)
+    }
+
     if (!is.null(input$percentageBeamTrawlInRock)){
     newBeamTrawlInRockProp <- (input$inshorePercentageBeamTrawl*input$percentageBeamTrawlInRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[4] <- newBeamTrawlInRockProp
@@ -8951,9 +8961,11 @@ server <- function(input, output, session) {
     
     newBeamTrawlOffCoarseProp <- (input$offshorePercentageBeamTrawl*input$percentageBeamTrawlOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[4] <- newBeamTrawlOffCoarseProp
-    }
-    print("Got this far beamtrawl")
     
+    #total <- newBeamTrawlInRockProp + newBeamTrawlInFineProp + newBeamTrawlInMedProp + newBeamTrawlInCoarseProp + newBeamTrawlOffRockProp + newBeamTrawlOffFineProp + newBeamTrawlOffMedProp + newBeamTrawlOffCoarseProp
+    #cat("Total for beam trawl: ",total)
+    }
+
     if (!is.null(input$percentageDemSeineInRock)){
     newDemSeineInRockProp <- (input$inshorePercentageDemSeine*input$percentageDemSeineInRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[5] <- newDemSeineInRockProp
@@ -8978,9 +8990,11 @@ server <- function(input, output, session) {
     
     newDemSeineOffCoarseProp <- (input$offshorePercentageDemSeine*input$percentageDemSeineOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[5] <- newDemSeineOffCoarseProp
-    }
-    print("Got this far demseine")
     
+    #total <- newDemSeineInRockProp + newDemSeineInFineProp + newDemSeineInMedProp + newDemSeineInCoarseProp + newDemSeineOffRockProp + newDemSeineOffFineProp + newDemSeineOffMedProp + newDemSeineOffCoarseProp
+    #cat("Total for dem seine: ",total)
+    }
+
     if (!is.null(input$percentageDemOtterInRock)){
     newDemOtterInRockProp <- (input$inshorePercentageDemOtter*input$percentageDemOtterInRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[6] <- newDemOtterInRockProp
@@ -9005,9 +9019,11 @@ server <- function(input, output, session) {
     
     newDemOtterOffCoarseProp <- (input$offshorePercentageDemOtter*input$percentageDemOtterOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[6] <- newDemOtterOffCoarseProp
-    }
-    print("Got this far demotter")
     
+    #total <- newDemOtterInRockProp + newDemOtterInFineProp + newDemOtterInMedProp + newDemOtterInCoarseProp + newDemOtterOffRockProp + newDemOtterOffFineProp + newDemOtterOffMedProp + newDemOtterOffCoarseProp
+    #cat("Total for dem otter: ",total)
+    }
+
     if (!is.null(input$percentageGillNetInRock)){
     newGillNetInRockProp <- (input$inshorePercentageGillNet*input$percentageGillNetInRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[7] <- newGillNetInRockProp
@@ -9032,8 +9048,11 @@ server <- function(input, output, session) {
     
     newGillNetOffCoarseProp <- (input$offshorePercentageGillNet*input$percentageGillNetOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[7] <- newGillNetOffCoarseProp
+    
+    #total <- newGillNetInRockProp + newGillNetInFineProp + newGillNetInMedProp + newGillNetInCoarseProp + newGillNetOffRockProp + newGillNetOffFineProp + newGillNetOffMedProp + newGillNetOffCoarseProp
+    #cat("Total for gill net: ",total)
     }
-    print("Got this far gill net")
+
     if (!is.null(input$percentageBeamShrimpInRock)){
     newBeamShrimpInRockProp <- (input$inshorePercentageBeamShrimp*input$percentageBeamShrimpInRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[8] <- newBeamShrimpInRockProp
@@ -9058,8 +9077,11 @@ server <- function(input, output, session) {
     
     newBeamShrimpOffCoarseProp <- (input$offshorePercentageBeamShrimp*input$percentageBeamShrimpOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[8] <- newBeamShrimpOffCoarseProp
+    
+    #total <- newBeamShrimpInRockProp + newBeamShrimpInFineProp + newBeamShrimpInMedProp + newBeamShrimpInCoarseProp + newBeamShrimpOffRockProp + newBeamShrimpOffFineProp + newBeamShrimpOffMedProp + newBeamShrimpOffCoarseProp
+    #cat("Total for beamshrimp: ",total)
     }
-    print("Got this far beam shrimp")
+
     if (!is.null(input$percentageNephropsTR2InRock)){
     newNephropsTR2InRockProp <- (input$inshorePercentageNephropsTR2*input$percentageNephropsTR2InRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[9] <- newNephropsTR2InRockProp
@@ -9084,9 +9106,11 @@ server <- function(input, output, session) {
     
     newNephropsTR2OffCoarseProp <- (input$offshorePercentageNephropsTR2*input$percentageNephropsTR2OffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[9] <- newNephropsTR2OffCoarseProp
-    }
-    print("Got this far nephrops2")
     
+    #total <- newNephropsTR2InRockProp + newNephropsTR2InFineProp + newNephropsTR2InMedProp + newNephropsTR2InCoarseProp + newNephropsTR2OffRockProp + newNephropsTR2OffFineProp + newNephropsTR2OffMedProp + newNephropsTR2OffCoarseProp
+    #cat("Total for nephrops2: ",total)
+    }
+
     if (!is.null(input$percentageNephropsTR3InRock)){
     newNephropsTR3InRockProp <- (input$inshorePercentageNephropsTR3*input$percentageNephropsTR3InRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[9] <- newNephropsTR3InRockProp
@@ -9111,8 +9135,11 @@ server <- function(input, output, session) {
     
     newNephropsTR3OffCoarseProp <- (input$offshorePercentageNephropsTR3*input$percentageNephropsTR3OffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[9] <- newephropsTR3OffCoarseProp
+    
+    #total <- newNephropsTR3InRockProp + newNephropsTR3InFineProp + newNephropsTR3InMedProp + newNephropsTR3InCoarseProp + newNephropsTR3OffRockProp + newNephropsTR3OffFineProp + newNephropsTR3OffMedProp + newNephropsTR3OffCoarseProp
+    #cat("Total for nephrops3: ",total)
     }
-    print("Got this far nephrops3")
+    
     if (!is.null(input$percentageCreelsInRock)){
     newCreelsInRockProp <- (input$inshorePercentageCreels*input$percentageCreelsInRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[10] <- newCreelsInRockProp
@@ -9137,8 +9164,11 @@ server <- function(input, output, session) {
     
     newCreelsOffCoarseProp <- (input$offshorePercentageCreels*input$percentageCreelsOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[10] <- newCreelsOffCoarseProp
+    
+    #total <- newCreelsInRockProp + newCreelsInFineProp + newCreelsInMedProp + newCreelsInCoarseProp + newCreelsOffRockProp + newCreelsOffFineProp + newCreelsOffMedProp + newCreelsOffCoarseProp
+    #cat("Total for creels: ",total)
     }
-    print("Got this far creels")
+    
     if (!is.null(input$percentageMolluscInRock)){
     newMolluscInRockProp <- (input$inshorePercentageMollusc*input$percentageMolluscInRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[11] <- newMolluscInRockProp
@@ -9152,20 +9182,25 @@ server <- function(input, output, session) {
     newMolluscInCoarseProp <- (input$inshorePercentageMollusc*input$percentageMolluscInCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s3[11] <- newMolluscInCoarseProp
     
-    newMolluscOffRockProp <- (input$offshorePercentageCreels*input$percentageCreelsOffRock)/10000
+    newMolluscOffRockProp <- (input$offshorePercentageMollusc*input$percentageMolluscOffRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d0[11] <- newMolluscOffRockProp
     
-    newMolluscOffFineProp <- (input$offshorePercentageCreels*input$percentageCreelsOffFine)/10000
+    newMolluscOffFineProp <- (input$offshorePercentageMollusc*input$percentageMolluscOffFine)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d1[11] <- newMolluscOffFineProp
     
-    newMolluscOffMedProp <- (input$offshorePercentageCreels*input$percentageCreelsOffMed)/10000
+    newMolluscOffMedProp <- (input$offshorePercentageMollusc*input$percentageMolluscOffMed)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d2[11] <- newMolluscOffMedProp
     
-    newMolluscOffCoarseProp <- (input$offshorePercentageCreels*input$percentageCreelsOffCoarseInput)/10000
+    newMolluscOffCoarseProp <- (input$offshorePercentageMollusc*input$percentageMolluscOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[11] <- newMolluscOffCoarseProp
+    
+    #total <- newMolluscInRockProp + newMolluscInFineProp + newMolluscInMedProp + newMolluscInCoarseProp + newMolluscOffRockProp + newMolluscOffFineProp + newMolluscOffMedProp + newMolluscOffCoarseProp
+    #cat("Total for Mollusc: ",total)
     }
-    print("Got this far mollusc")
+    
+    
     if (!is.null(input$percentageWhalerInRock)){
+
     newWhalerInRockProp <- (input$inshorePercentageWhaler*input$percentageWhalerInRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[12] <- newWhalerInRockProp
     
@@ -9189,9 +9224,12 @@ server <- function(input, output, session) {
     
     newWhalerOffCoarseProp <- (input$offshorePercentageWhaler*input$percentageWhalerOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[12] <- newWhalerOffCoarseProp
-    }
-    print("Got this far whaler")
     
+    #total <- newWhalerInRockProp + newWhalerInFineProp + newWhalerInMedProp + newWhalerInCoarseProp + newWhalerOffRockProp + newWhalerOffFineProp + newWhalerOffMedProp + newWhalerOffCoarseProp
+    #cat("Total for Whaler: ",total)
+    }
+    
+
     if (!is.null(input$percentageKelpInRock)){
     newWKelpInRockProp <- (input$inshorePercentageKelp*input$percentageKelpInRock)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[12] <- newWKelpInRockProp
@@ -9216,9 +9254,11 @@ server <- function(input, output, session) {
     
     newKelpOffCoarseProp <- (input$offshorePercentageKelp*input$percentageKelpOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[12] <- newKelpOffCoarseProp
-    }
-    print("Got this far kelp")
     
+    #total <- newKelpInRockProp + newKelpInFineProp + newKelpInMedProp + newKelpInCoarseProp + newKelpOffRockProp + newKelpOffFineProp + newKelpOffMedProp + newKelpOffCoarseProp
+    #cat("Total for Kelp: ",total)
+    }
+
     #print("Got this far 15")
     results_scenario <-
       e2e_run(scenario_model,
