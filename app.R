@@ -24,7 +24,7 @@ source("createEDriversPlots.R")
 source("e2e_compare_runs_bar_gg.R")
 source("compareTwoRunsAAM.R")
 source("compareTwoRunsCatch.R")
-
+#options(shiny.fullstacktrace = TRUE)
 jsCode <- '
 shinyjs.backgroundCol = function(params) {
 var defaultParams = {
@@ -918,8 +918,12 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$pelGearPerHab_reset, {
+    print("input$selectedlocation")
+    print(input$selectedlocation)   
+    print("input$selectedVariant")
+    print(input$selectedVariant)
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     pelInRock <- model$data$fleet.model$gear_habitat_activity$s0[1] 
     pelInFine <- model$data$fleet.model$gear_habitat_activity$s1[1] 
     pelInMed <- model$data$fleet.model$gear_habitat_activity$s2[1] 
@@ -1025,7 +1029,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$sandeelGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     sandeelInRock <- model$data$fleet.model$gear_habitat_activity$s0[2] 
     sandeelInFine <- model$data$fleet.model$gear_habitat_activity$s1[2] 
     sandeelInMed <- model$data$fleet.model$gear_habitat_activity$s2[2] 
@@ -1131,7 +1135,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$otterGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     otterInRock <- model$data$fleet.model$gear_habitat_activity$s0[2] 
     otterInFine <- model$data$fleet.model$gear_habitat_activity$s1[2] 
     otterInMed <- model$data$fleet.model$gear_habitat_activity$s2[2] 
@@ -1237,7 +1241,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$lonMackGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     lonMackInRock <- model$data$fleet.model$gear_habitat_activity$s0[3] 
     lonMackInFine <- model$data$fleet.model$gear_habitat_activity$s1[3] 
     lonMackInMed <- model$data$fleet.model$gear_habitat_activity$s2[3] 
@@ -1344,7 +1348,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$beamTrawlGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     beamTrawlInRock <- model$data$fleet.model$gear_habitat_activity$s0[4] 
     beamTrawlInFine <- model$data$fleet.model$gear_habitat_activity$s1[4] 
     beamTrawlInMed <- model$data$fleet.model$gear_habitat_activity$s2[4] 
@@ -1451,7 +1455,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$demSeineGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     demSeineInRock <- model$data$fleet.model$gear_habitat_activity$s0[5] 
     demSeineInFine <- model$data$fleet.model$gear_habitat_activity$s1[5] 
     demSeineInMed <- model$data$fleet.model$gear_habitat_activity$s2[5] 
@@ -1558,7 +1562,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$demOtterGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     demOtterInRock <- model$data$fleet.model$gear_habitat_activity$s0[6] 
     demOtterInFine <- model$data$fleet.model$gear_habitat_activity$s1[6] 
     demOtterInMed <- model$data$fleet.model$gear_habitat_activity$s2[6] 
@@ -1665,7 +1669,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$gillNetGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     gillNetInRock <- model$data$fleet.model$gear_habitat_activity$s0[7] 
     gillNetInFine <- model$data$fleet.model$gear_habitat_activity$s1[7] 
     gillNetInMed <- model$data$fleet.model$gear_habitat_activity$s2[7] 
@@ -1771,7 +1775,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$beamShrimpGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     beamShrimpInRock <- model$data$fleet.model$gear_habitat_activity$s0[8] 
     beamShrimpInFine <- model$data$fleet.model$gear_habitat_activity$s1[8] 
     beamShrimpInMed <- model$data$fleet.model$gear_habitat_activity$s2[8] 
@@ -1878,7 +1882,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$nephropsTR2GearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     nephropsTR2InRock <- model$data$fleet.model$gear_habitat_activity$s0[9] 
     nephropsTR2InFine <- model$data$fleet.model$gear_habitat_activity$s1[9] 
     nephropsTR2InMed <- model$data$fleet.model$gear_habitat_activity$s2[9] 
@@ -1984,7 +1988,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$nephropsTR3GearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     nephropsTR3InRock <- model$data$fleet.model$gear_habitat_activity$s0[9] 
     nephropsTR3InFine <- model$data$fleet.model$gear_habitat_activity$s1[9] 
     nephropsTR3InMed <- model$data$fleet.model$gear_habitat_activity$s2[9] 
@@ -2090,7 +2094,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$creelsGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     creelsInRock <- model$data$fleet.model$gear_habitat_activity$s0[10] 
     creelsInFine <- model$data$fleet.model$gear_habitat_activity$s1[10] 
     creelsInMed <- model$data$fleet.model$gear_habitat_activity$s2[10] 
@@ -2196,7 +2200,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$molluscGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     molluscInRock <- model$data$fleet.model$gear_habitat_activity$s0[11] 
     molluscInFine <- model$data$fleet.model$gear_habitat_activity$s1[11] 
     molluscInMed <- model$data$fleet.model$gear_habitat_activity$s2[11] 
@@ -2300,9 +2304,10 @@ server <- function(input, output, session) {
     updateNumericInput(session,"percentageWhalerOffMed", value = notGreatherThan100(input$percentageWhalerOffMed))
   })
   
+  
   observeEvent(input$whalerGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     whalerInRock <- model$data$fleet.model$gear_habitat_activity$s0[12] 
     whalerInFine <- model$data$fleet.model$gear_habitat_activity$s1[12] 
     whalerInMed <- model$data$fleet.model$gear_habitat_activity$s2[12] 
@@ -2311,26 +2316,56 @@ server <- function(input, output, session) {
     whalerOffFine <- model$data$fleet.model$gear_habitat_activity$d1[12] 
     whalerOffMed <- model$data$fleet.model$gear_habitat_activity$d2[12] 
     whalerOffCoarse <- model$data$fleet.model$gear_habitat_activity$d3[12] 
-    print("Got this far in whaler reset 1")
     # Getting Total Inshore/Offshore here
     totalInWhaler <- whalerInRock + whalerInFine + whalerInMed + whalerInCoarse
     totalOffWhaler <- whalerOffRock + whalerOffFine + whalerOffMed + whalerOffCoarse
     totalOverallWhaler <- totalInWhaler + totalOffWhaler
     percentageInWhalerDefault <- totalInWhaler/totalOverallWhaler * 100
     percentageOutWhalerDefault <- 100 - percentageInWhalerDefault
-    print("Got this far in whaler reset 2")
     # Now getting percentages Inshore
+    if(totalInWhaler>0){
     percentageWhalerInRockDefault <- whalerInRock/totalInWhaler * 100
+    } else {
+      percentageWhalerInRockDefault <- 0
+    }
+    if(totalInWhaler>0){
     percentageWhalerInFineDefault <- whalerInFine/totalInWhaler * 100
+    } else {
+      percentageWhalerInFineDefault <- 0
+    }
+    if(totalInWhaler>0){
     percentageWhalerInMedDefault <- whalerInMed/totalInWhaler * 100
+    } else {
+      percentageWhalerInMedDefault <- 0
+    }
+    if(totalInWhaler>0){
     percentageWhalerInCoarseDefault <- whalerInCoarse/totalInWhaler * 100
-    print("Got this far in whaler reset 3")
+    } else {
+      percentageWhalerInCoarseDefault <- 0
+    }
+    
     # Now getting percentages Offshore
+    if(totalOffWhaler>0){
     percentageWhalerOffRockDefault <- whalerOffRock/totalOffWhaler * 100
+    } else {
+      percentageWhalerOffRockDefault <- 0
+    }
+    if(totalOffWhaler>0){
     percentageWhalerOffFineDefault <- whalerOffFine/totalOffWhaler * 100
+    } else {
+      percentageWhalerOffFineDefault <- 0
+    }
+    if(totalOffWhaler>0){
     percentageWhalerOffMedDefault <- whalerOffMed/totalOffWhaler * 100
+    } else {
+      percentageWhalerOffMedDefault <- 0
+    }
+    if(totalOffWhaler>0){
     percentageWhalerOffCoarseDefault <- whalerOffCoarse/totalOffWhaler * 100
-    print("Got this far in whaler reset 4")
+    } else {
+      percentageWhalerOffCoarseDefault <- 0
+    }
+    
     updateNumericInput(session, "inshorePercentageWhaler", value = percentageInWhalerDefault)
     updateNumericInput(session, "offshorePercentageWhaler", value = percentageOutWhalerDefault)
     updateNumericInput(session, "percentageWhalerInRock", value = percentageWhalerInRockDefault)
@@ -2341,7 +2376,6 @@ server <- function(input, output, session) {
     updateNumericInput(session, "percentageWhalerOffFine", value = percentageWhalerOffFineDefault)
     updateNumericInput(session, "percentageWhalerOffMed", value = percentageWhalerOffMedDefault)
     updateNumericInput(session, "percentageWhalerOffCoarseInput", value = percentageWhalerOffCoarseDefault)
-    print("Got this far in whaler reset 5")
   })
     
   observeEvent(input$inshorePercentageKelp,{
@@ -2413,7 +2447,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$kelpGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     kelpInRock <- model$data$fleet.model$gear_habitat_activity$s0[12] 
     kelpInFine <- model$data$fleet.model$gear_habitat_activity$s1[12] 
     kelpInMed <- model$data$fleet.model$gear_habitat_activity$s2[12] 
@@ -2429,15 +2463,47 @@ server <- function(input, output, session) {
     percentageInKelpDefault <- totalInKelp/totalOverallKelp * 100
     percentageOutKelpDefault <- 100 - percentageInKelpDefault
     # Now getting percentages Inshore
+    if(totalInKelp>0){
     percentageKelpInRockDefault <- kelpInRock/totalInKelp * 100
+    } else {
+      percentageKelpInRockDefault <- 0
+    }
+    if(totalInKelp>0){
     percentageKelpInFineDefault <- kelpInFine/totalInKelp * 100
+    } else {
+      percentageKelpInFineDefault <- 0
+    }
+    if(totalInKelp>0){
     percentageKelpInMedDefault <- kelpInMed/totalInKelp * 100
+    } else {
+      percentageKelpInMedDefault <- 0
+    }
+    if(totalInKelp>0){
     percentageKelpInCoarseDefault <- kelpInCoarse/totalInKelp * 100
+    } else {
+      percentageKelpInCoarseDefault <- 0
+    }
     # Now getting percentages Offshore
+    if(totalOffKelp>0){
     percentageKelpOffRockDefault <- kelpOffRock/totalOffKelp * 100
+    } else {
+      percentageKelpOffRockDefault <- 0
+    }
+    if(totalOffKelp>0){
     percentageKelpOffFineDefault <- kelpOffFine/totalOffKelp * 100
+    } else {
+      percentageKelpOffFineDefault <- 0
+    }
+    if(totalOffKelp>0){
     percentageKelpOffMedDefault <- kelpOffMed/totalOffKelp * 100
+    } else {
+      percentageKelpOffMedDefault <- 0
+    }
+    if(totalOffKelp>0){
     percentageKelpOffCoarseDefault <- KelpOffCoarse/totalOffKelp * 100
+    } else {
+      percentageKelpOffCoarseDefault <- 0
+    }
     updateNumericInput(session, "inshorePercentageKelp", value = percentageInKelpDefault)
     updateNumericInput(session, "offshorePercentageKelp", value = percentageOutKelpDefault)
     disable("offshorePercentageKelp")
@@ -3619,8 +3685,16 @@ server <- function(input, output, session) {
   })
   
   output$uiGearHabDist <- renderUI({
+    if (is.null(input$selectedlocation) || is.null(input$selectedVariant)){
+      showModal(
+        modalDialog(
+          "Please choose a region and time period before changing gear activity distribution per habitat",
+          footer = NULL,
+          easyClose = TRUE
+        )
+      )
+    }
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    
     pelInRock <- model$data$fleet.model$gear_habitat_activity$s0[1] 
     pelInFine <- model$data$fleet.model$gear_habitat_activity$s1[1] 
     pelInMed <- model$data$fleet.model$gear_habitat_activity$s2[1] 
@@ -3988,16 +4062,48 @@ server <- function(input, output, session) {
     percentageInWhalerDefault <- totalInWhaler/totalOverallWhaler * 100
     percentageOutWhalerDefault <- 100 - percentageInWhalerDefault
     # Now getting percentages Inshore
-    percentageWhalerInRockDefault <- whalerInRock/totalInWhaler * 100
-    percentageWhalerInFineDefault <- whalerInFine/totalInWhaler * 100
-    percentageWhalerInMedDefault <- whalerInMed/totalInWhaler * 100
-    percentageWhalerInCoarseDefault <- whalerInCoarse/totalInWhaler * 100
+    if(totalInWhaler>0){
+      percentageWhalerInRockDefault <- whalerInRock/totalInWhaler * 100
+    } else {
+      percentageWhalerInRockDefault <- 0
+    }
+    if(totalInWhaler>0){
+      percentageWhalerInFineDefault <- whalerInFine/totalInWhaler * 100
+    } else {
+      percentageWhalerInFineDefault <- 0
+    }
+    if(totalInWhaler>0){
+      percentageWhalerInMedDefault <- whalerInMed/totalInWhaler * 100
+    } else {
+      percentageWhalerInMedDefault <- 0
+    }
+    if(totalInWhaler>0){
+      percentageWhalerInCoarseDefault <- whalerInCoarse/totalInWhaler * 100
+    } else {
+      percentageWhalerInCoarseDefault <- 0
+    }
     totalPercentageInWhalerDefault <- percentageWhalerInRockDefault + percentageWhalerInFineDefault + percentageWhalerInMedDefault + percentageWhalerInCoarseDefault
     # Now getting percentages Offshore
-    percentageWhalerOffRockDefault <- whalerOffRock/totalOffWhaler * 100
-    percentageWhalerOffFineDefault <- whalerOffFine/totalOffWhaler * 100
-    percentageWhalerOffMedDefault <- whalerOffMed/totalOffWhaler * 100
-    percentageWhalerOffCoarseDefault <- whalerOffCoarse/totalOffWhaler * 100
+    if(totalOffWhaler>0){
+      percentageWhalerOffRockDefault <- whalerOffRock/totalOffWhaler * 100
+    } else {
+      percentageWhalerOffRockDefault <- 0
+    }
+    if(totalOffWhaler>0){
+      percentageWhalerOffFineDefault <- whalerOffFine/totalOffWhaler * 100
+    } else {
+      percentageWhalerOffFineDefault <- 0
+    }
+    if(totalOffWhaler>0){
+      percentageWhalerOffMedDefault <- whalerOffMed/totalOffWhaler * 100
+    } else {
+      percentageWhalerOffMedDefault <- 0
+    }
+    if(totalOffWhaler>0){
+      percentageWhalerOffCoarseDefault <- whalerOffCoarse/totalOffWhaler * 100
+    } else {
+      percentageWhalerOffCoarseDefault <- 0
+    }
     totalPercentageOffWhalerDefault <- percentageWhalerOffRockDefault + percentageWhalerOffFineDefault + percentageWhalerOffMedDefault + percentageWhalerOffCoarseDefault
     
     kelpInRock <- model$data$fleet.model$gear_habitat_activity$s0[12]
@@ -4015,16 +4121,48 @@ server <- function(input, output, session) {
     percentageInKelpDefault <- totalInKelp/totalOverallKelp * 100
     percentageOutKelpDefault <- 100 - percentageInKelpDefault
     # Now getting percentages Inshore
-    percentageKelpInRockDefault <- kelpInRock/totalInKelp * 100
-    percentageKelpInFineDefault <- kelpInFine/totalInKelp * 100
-    percentageKelpInMedDefault <- kelpInMed/totalInKelp * 100
-    percentageKelpInCoarseDefault <- kelpInCoarse/totalInKelp * 100
+    if(totalInKelp>0){
+      percentageKelpInRockDefault <- kelpInRock/totalInKelp * 100
+    } else {
+      percentageKelpInRockDefault <- 0
+    }
+    if(totalInKelp>0){
+      percentageKelpInFineDefault <- kelpInFine/totalInKelp * 100
+    } else {
+      percentageKelpInFineDefault <- 0
+    }
+    if(totalInKelp>0){
+      percentageKelpInMedDefault <- kelpInMed/totalInKelp * 100
+    } else {
+      percentageKelpInMedDefault <- 0
+    }
+    if(totalInKelp>0){
+      percentageKelpInCoarseDefault <- kelpInCoarse/totalInKelp * 100
+    } else {
+      percentageKelpInCoarseDefault <- 0
+    }
     totalPercentageInKelpDefault <- percentageKelpInRockDefault + percentageKelpInFineDefault + percentageKelpInMedDefault + percentageKelpInCoarseDefault
     # Now getting percentages Offshore
-    percentageKelpOffRockDefault <- kelpOffRock/totalOffKelp * 100
-    percentageKelpOffFineDefault <- kelpOffFine/totalOffKelp * 100
-    percentageKelpOffMedDefault <- kelpOffMed/totalOffKelp * 100
-    percentageKelpOffCoarseDefault <- kelpOffCoarse/totalOffKelp * 100
+    if(totalOffKelp>0){
+      percentageKelpOffRockDefault <- kelpOffRock/totalOffKelp * 100
+    } else {
+      percentageKelpOffRockDefault <- 0
+    }
+    if(totalOffKelp>0){
+      percentageKelpOffFineDefault <- kelpOffFine/totalOffKelp * 100
+    } else {
+      percentageKelpOffFineDefault <- 0
+    }
+    if(totalOffKelp>0){
+      percentageKelpOffMedDefault <- kelpOffMed/totalOffKelp * 100
+    } else {
+      percentageKelpOffMedDefault <- 0
+    }
+    if(totalOffKelp>0){
+      percentageKelpOffCoarseDefault <- kelpOffCoarse/totalOffKelp * 100
+    } else {
+      percentageKelpOffCoarseDefault <- 0
+    }
     totalPercentageOffKelpDefault <- percentageKelpOffRockDefault + percentageKelpOffFineDefault + percentageKelpOffMedDefault + percentageKelpOffCoarseDefault
     
     switch(
@@ -6114,7 +6252,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$sanSpratTrawlDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "sanSpratTrawlDiscard_pel",
@@ -6123,7 +6261,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$llMackerelDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "llMackerelDiscard_pel",
@@ -6132,7 +6270,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlDiscard_pel",
@@ -6141,7 +6279,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalSeineDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalSeineDiscard_pel",
@@ -6150,7 +6288,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalOtterTrawlDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalOtterTrawlDiscard_pel",
@@ -6159,7 +6297,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$gillLongDemersalDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "gillLongDemersalDiscard_pel",
@@ -6168,7 +6306,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlShrimpDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlShrimpDiscard_pel",
@@ -6177,7 +6315,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$nephropsTrawlDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "nephropsTrawlDiscard_pel",
@@ -6186,7 +6324,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$creelsDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "creelsDiscard_pel",
@@ -6195,7 +6333,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$molluscDredgeDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "molluscDredgeDiscard_pel",
@@ -6204,7 +6342,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$whalerDiscard_pel_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "whalerDiscard_pel",
@@ -6215,7 +6353,7 @@ server <- function(input, output, session) {
   #Demersal discard reset
   
   observeEvent(input$pelagicTrawlDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "pelagicTrawlDiscard_dem",
@@ -6224,7 +6362,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$sanSpratTrawlDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "sanSpratTrawlDiscard_dem",
@@ -6233,7 +6371,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$llMackerelDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "llMackerelDiscard_dem",
@@ -6242,7 +6380,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlDiscard_dem",
@@ -6251,7 +6389,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalSeineDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalSeineDiscard_dem",
@@ -6260,7 +6398,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalOtterTrawlDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalOtterTrawlDiscard_dem",
@@ -6269,7 +6407,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$gillLongDemersalDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "gillLongDemersalDiscard_dem",
@@ -6278,7 +6416,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlShrimpDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlShrimpDiscard_dem",
@@ -6287,7 +6425,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$nephropsTrawlDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "nephropsTrawlDiscard_dem",
@@ -6296,7 +6434,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$creelsDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "creelsDiscard_dem",
@@ -6305,7 +6443,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$molluscDredgeDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "molluscDredgeDiscard_dem",
@@ -6314,7 +6452,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$whalerDiscard_dem_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "whalerDiscard_dem",
@@ -6325,7 +6463,7 @@ server <- function(input, output, session) {
   #Migratory discard reset
   
   observeEvent(input$pelagicTrawlDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "pelagicTrawlDiscard_mig",
@@ -6334,7 +6472,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$sanSpratTrawlDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "sanSpratTrawlDiscard_mig",
@@ -6343,7 +6481,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$llMackerelDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "llMackerelDiscard_mig",
@@ -6352,7 +6490,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlDiscard_mig",
@@ -6361,7 +6499,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalSeineDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalSeineDiscard_mig",
@@ -6370,7 +6508,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalOtterTrawlDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalOtterTrawlDiscard_mig",
@@ -6379,7 +6517,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$gillLongDemersalDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "gillLongDemersalDiscard_mig",
@@ -6388,7 +6526,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlShrimpDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlShrimpDiscard_mig",
@@ -6397,7 +6535,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$nephropsTrawlDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "nephropsTrawlDiscard_mig",
@@ -6406,7 +6544,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$creelsDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "creelsDiscard_mig",
@@ -6415,7 +6553,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$molluscDredgeDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "molluscDredgeDiscard_mig",
@@ -6424,7 +6562,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$whalerDiscard_mig_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "whalerDiscard_mig",
@@ -6435,7 +6573,7 @@ server <- function(input, output, session) {
   #Filtben discard reset
   
   observeEvent(input$pelagicTrawlDiscard_fb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "pelagicTrawlDiscard_fb",
@@ -6444,7 +6582,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$sanSpratTrawlDiscard_fb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "sanSpratTrawlDiscard_fb",
@@ -6453,7 +6591,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$llMackerelDiscard_fb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "llMackerelDiscard_fb",
@@ -6462,7 +6600,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlDiscard_fb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlDiscard_fb",
@@ -6471,7 +6609,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalSeineDiscard_fb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalSeineDiscard_fb",
@@ -6480,7 +6618,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalOtterTrawlDiscard_fb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalOtterTrawlDiscard_fb",
@@ -6489,7 +6627,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$gillLongDemersalDiscard_fb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "gillLongDemersalDiscard_fb",
@@ -6498,7 +6636,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlShrimpDiscard_fb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlShrimpDiscard_fb",
@@ -6507,7 +6645,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$nephropsTrawlDiscard_fb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "nephropsTrawlDiscard_fb",
@@ -6516,7 +6654,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$creelsDiscard_fb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "creelsDiscard_fb",
@@ -6525,7 +6663,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$molluscDredgeDiscard_fb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "molluscDredgeDiscard_fb",
@@ -6536,7 +6674,7 @@ server <- function(input, output, session) {
   #Carnben discard reset
   
   observeEvent(input$pelagicTrawlDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "pelagicTrawlDiscard_cb",
@@ -6545,7 +6683,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$sanSpratTrawlDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "sanSpratTrawlDiscard_cb",
@@ -6554,7 +6692,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$llMackerelDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "llMackerelDiscard_cb",
@@ -6563,7 +6701,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlDiscard_cb",
@@ -6572,7 +6710,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalSeineDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalSeineDiscard_cb",
@@ -6581,7 +6719,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalOtterTrawlDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalOtterTrawlDiscard_cb",
@@ -6590,7 +6728,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$gillLongDemersalDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "gillLongDemersalDiscard_cb",
@@ -6599,7 +6737,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlShrimpDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlShrimpDiscard_cb",
@@ -6608,7 +6746,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$nephropsTrawlDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "nephropsTrawlDiscard_cb",
@@ -6617,7 +6755,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$creelsDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "creelsDiscard_cb",
@@ -6626,7 +6764,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$molluscDredgeDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "molluscDredgeDiscard_cb",
@@ -6635,7 +6773,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$whalerDiscard_cb_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "whalerDiscard_cb",
@@ -6646,7 +6784,7 @@ server <- function(input, output, session) {
   #Carnzoo discard reset
   
   observeEvent(input$pelagicTrawlDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "pelagicTrawlDiscard_cz",
@@ -6655,7 +6793,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$sanSpratTrawlDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "sanSpratTrawlDiscard_cz",
@@ -6664,7 +6802,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$llMackerelDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "llMackerelDiscard_cz",
@@ -6673,7 +6811,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlDiscard_cz",
@@ -6682,7 +6820,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalSeineDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalSeineDiscard_cz",
@@ -6691,7 +6829,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalOtterTrawlDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalOtterTrawlDiscard_cz",
@@ -6700,7 +6838,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$gillLongDemersalDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "gillLongDemersalDiscard_cz",
@@ -6709,7 +6847,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlShrimpDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlShrimpDiscard_cz",
@@ -6718,7 +6856,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$nephropsTrawlDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "nephropsTrawlDiscard_cz",
@@ -6727,7 +6865,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$creelsDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "creelsDiscard_cz",
@@ -6736,7 +6874,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$molluscDredgeDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "molluscDredgeDiscard_cz",
@@ -6745,7 +6883,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$whalerDiscard_cz_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "whalerDiscard_cz",
@@ -6756,7 +6894,7 @@ server <- function(input, output, session) {
   #Bird discard reset
   
   observeEvent(input$pelagicTrawlDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "pelagicTrawlDiscard_b",
@@ -6765,7 +6903,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$sanSpratTrawlDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "sanSpratTrawlDiscard_b",
@@ -6774,7 +6912,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$llMackerelDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "llMackerelDiscard_b",
@@ -6783,7 +6921,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlDiscard_b",
@@ -6792,7 +6930,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalSeineDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalSeineDiscard_b",
@@ -6801,7 +6939,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalOtterTrawlDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalOtterTrawlDiscard_b",
@@ -6810,7 +6948,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$gillLongDemersalDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "gillLongDemersalDiscard_b",
@@ -6819,7 +6957,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlShrimpDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlShrimpDiscard_b",
@@ -6828,7 +6966,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$nephropsTrawlDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "nephropsTrawlDiscard_b",
@@ -6837,14 +6975,14 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$creelsDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(session,
                       "creelsDiscard_b",
                       value = model$data$fleet.model$gear_group_discard$bird[10])
   })
   
   observeEvent(input$molluscDredgeDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "molluscDredgeDiscard_b",
@@ -6853,7 +6991,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$whalerDiscard_b_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(session,
                       "whalerDiscard_b",
                       value = model$data$fleet.model$gear_group_discard$bird[12])
@@ -6862,7 +7000,7 @@ server <- function(input, output, session) {
   #Seal discard reset
   
   observeEvent(input$pelagicTrawlDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "pelagicTrawlDiscard_s",
@@ -6871,7 +7009,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$sanSpratTrawlDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "sanSpratTrawlDiscard_s",
@@ -6880,7 +7018,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$llMackerelDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "llMackerelDiscard_s",
@@ -6889,7 +7027,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlDiscard_s",
@@ -6898,7 +7036,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalSeineDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalSeineDiscard_s",
@@ -6907,7 +7045,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalOtterTrawlDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalOtterTrawlDiscard_s",
@@ -6916,7 +7054,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$gillLongDemersalDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "gillLongDemersalDiscard_s",
@@ -6925,7 +7063,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlShrimpDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlShrimpDiscard_s",
@@ -6934,7 +7072,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$nephropsTrawlDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "nephropsTrawlDiscard_s",
@@ -6943,14 +7081,14 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$creelsDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(session,
                       "creelsDiscard_s",
                       value = model$data$fleet.model$gear_group_discard$seal[10])
   })
   
   observeEvent(input$molluscDredgeDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "molluscDredgeDiscard_s",
@@ -6959,7 +7097,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$whalerDiscard_s_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(session,
                       "whalerDiscard_s",
                       value = model$data$fleet.model$gear_group_discard$seal[12])
@@ -6968,7 +7106,7 @@ server <- function(input, output, session) {
   #Ceta discard reset
   
   observeEvent(input$pelagicTrawlDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "pelagicTrawlDiscard_ceta",
@@ -6977,7 +7115,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$sanSpratTrawlDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "sanSpratTrawlDiscard_ceta",
@@ -6986,7 +7124,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$llMackerelDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "llMackerelDiscard_ceta",
@@ -6995,7 +7133,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlDiscard_ceta",
@@ -7004,7 +7142,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalSeineDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalSeineDiscard_ceta",
@@ -7013,7 +7151,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalOtterTrawlDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalOtterTrawlDiscard_ceta",
@@ -7022,7 +7160,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$gillLongDemersalDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "gillLongDemersalDiscard_ceta",
@@ -7031,7 +7169,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlShrimpDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlShrimpDiscard_ceta",
@@ -7040,7 +7178,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$nephropsTrawlDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "nephropsTrawlDiscard_ceta",
@@ -7049,7 +7187,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$creelsDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "creelsDiscard_ceta",
@@ -7058,7 +7196,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$molluscDredgeDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "molluscDredgeDiscard_ceta",
@@ -7067,7 +7205,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$whalerDiscard_ceta_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "whalerDiscard_ceta",
@@ -7078,7 +7216,7 @@ server <- function(input, output, session) {
   #Kelp discard reset
   
   observeEvent(input$pelagicTrawlDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "pelagicTrawlDiscard_kelp",
@@ -7087,7 +7225,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$sanSpratTrawlDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "sanSpratTrawlDiscard_kelp",
@@ -7096,7 +7234,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$llMackerelDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "llMackerelDiscard_kelp",
@@ -7105,7 +7243,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlDiscard_kelp",
@@ -7114,7 +7252,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalSeineDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalSeineDiscard_kelp",
@@ -7123,7 +7261,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$demersalOtterTrawlDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "demersalOtterTrawlDiscard_kelp",
@@ -7132,7 +7270,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$gillLongDemersalDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "gillLongDemersalDiscard_kelp",
@@ -7141,7 +7279,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$beamTrawlShrimpDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "beamTrawlShrimpDiscard_kelp",
@@ -7150,7 +7288,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$nephropsTrawlDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "nephropsTrawlDiscard_kelp",
@@ -7159,7 +7297,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$creelsDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "creelsDiscard_kelp",
@@ -7168,7 +7306,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$molluscDredgeDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "molluscDredgeDiscard_kelp",
@@ -7177,7 +7315,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$whalerDiscard_kelp_reset, {
-    model <- e2e_read(input$selectedlocation, input$selectedVariant)
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     updateSliderInput(
       session,
       "whalerDiscard_kelp",
