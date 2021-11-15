@@ -3202,7 +3202,12 @@ server <- function(input, output, session) {
   
   output$textCatchGear <- renderUI({fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Annual catches of each guild by the selected gear type, broken down by landings and discards. Units: 1 milli-Mole of nitrogen per m<sup>2</sup> per year (1 mMN.m<sup>-2</sup>.y<sup>-1</sup>) is approximately equivalent to 500 kg of live weight per km<sup>2</sup> of whole model region"))}) 
   
-  output$textCatchPerHabitatGear <- renderUI({fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Text to go here"))}) 
+  output$textCatchPerHabitatGear <- renderUI({fluidRow(HTML("<p style = \"font-family: 'calibri'; font-si16pt \">In this page you can change the proportional spatial distribution of activity by each fishing gear."),
+                                                       HTML("<p style = \"font-family: 'calibri'; font-si16pt \">First select a gear from the drop-down list above."),
+                                                       HTML("<p style = \"font-family: 'calibri'; font-si16pt \">The upper box on the right shows the percentage distribution of activity between inshore and offshore. Type a new value into the Inshore box – the offshore box will automatically adjust to ensure 100% overall."),
+                                                       HTML("<p style = \"font-family: 'calibri'; font-si16pt \">The lower box shows the percentage distribution of the inshore and offshore activity across each of the seabed habitats. Type a new value into any of the  rock, fine or medium boxes. The coarse box will adjust automatically to ensure 100% overall."),
+                                                       HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Press ‘Reset’ to restore the original values."),
+                                                       HTML("<p style = \"font-family: 'calibri'; font-si16pt \">Note that this page does not alter the overall activity level of any gear, only its spatial distribution. To change the overall activity use the ‘Fishing Activity’ page from the ‘Setup Scenario’ menu."))}) 
   
   
   output$textRunBaselineModel <- renderUI({fluidRow(wellPanel(HTML("<p style = \"font-family: 'calibri'; font-si16pt; padding:5px \">Each model is configured so that it outputs annual cycles of daily values of everything in the system,  averaged over the selected period of years. We do this by running the model over and over with repeating annual cycles of input data until the outputs are stable from one year to the next. We call this a \"steady state\" which represents the \"climatology\" of the system, and should match the average conditions in the sea for any given day of the year.")))})
@@ -4164,10 +4169,11 @@ server <- function(input, output, session) {
       percentageKelpOffCoarseDefault <- 0
     }
     totalPercentageOffKelpDefault <- percentageKelpOffRockDefault + percentageKelpOffFineDefault + percentageKelpOffMedDefault + percentageKelpOffCoarseDefault
-    
+    gearType <- input$selectedGearForHabitatDist
+    if (is.null(input$selectedGearForHabitatDist)) gearType <- c("Pelagic_Trawl+Seine")
     switch(
-      input$selectedGearForHabitatDist,
-      "Pelagic_Trawl+Seine" = fluidRow(  box(width = 10, title = "", style = "font-size:9px;",
+      gearType,
+      "Pelagic_Trawl+Seine" = fluidRow(  box(width = 10, title = "Habitats", style = "font-size:9px;",
                                              wellPanel(
                                              h5("Inshore-Offshore Split"),
                                              splitLayout( cellWidths = c("50%", "50%"),
@@ -4703,6 +4709,7 @@ server <- function(input, output, session) {
                                        actionButton("kelpGearPerHab_reset", "Reset")
                                      ),
       ))
+      
     )
   })
   
