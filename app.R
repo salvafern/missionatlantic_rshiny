@@ -790,52 +790,65 @@ getCoarseValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = 
   }
 }
 
-getMedValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA,medArea  = NA, fieldName  = NA) {
+getMedValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA,medArea  = NA, fieldName  = NA, defaultMedValue = NA) {
   if(!(is.numeric(input1) || is.numeric(input2) || is.numeric(input3))){return(0)}
   else if(!(is.null(input1) || is.null(input2) || is.null(input3) || is.na(input1) || is.na(input2) || is.na(input3))){
     if(as.numeric(medArea)==0){
       return(0)
-  } else if(as.numeric(coarseArea)==0){
+  } else if(as.numeric(coarseArea)==0 && as.numeric(medArea)>0){
     disable(fieldName)
-    totalForTwoOthers <- input1 + input2
+    totalForTwoOthers <- as.numeric(input1) + as.numeric(input2)
     medValue <- (100 - totalForTwoOthers)
     return(medValue)
   } else {
     return(input3)
   }} else {
-      return(0)
+    if(is.null(input3)){
+      return(defaultMedValue)
+    } else {
+      return(input3)
+    }
     }
 }
 
-getFineValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA,medArea  = NA, fineArea = NA, fieldName  = NA) {
+getFineValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA,medArea  = NA, fineArea = NA, fieldName  = NA, defaultFineValue= NA) {
   if(!(is.numeric(input1) || is.numeric(input2) || is.numeric(input3))){return(0)}
   else if(!(is.null(input1) || is.null(input2) || is.null(input3) || is.na(input1) || is.na(input2) || is.na(input3))){
     if(as.numeric(fineArea)==0){
       return(0)
-    } else if(as.numeric(medArea)==0){
+    } else if(as.numeric(medArea)==0 && as.numeric(coarseArea)==0 && as.numeric(fineArea)>0){
       disable(fieldName)
-      fineValue <- (100 - input1)
+      fineValue <- (100 - as.numeric(input1))
       return(fineValue)
     } else {
       return(input2)
     }} else {
-      return(0)
+      if(is.null(input2)){
+        return(defaultFineValue)
+      } else {
+      return(input2)
+      }
     }
 }
 
-getRockValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA, medArea  = NA, fineArea = NA, rockArea = NA, fieldName  = NA) {
+getRockValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA, medArea  = NA, fineArea = NA, rockArea = NA, fieldName  = NA, defaultRockValue = NA) {
   if(!(is.numeric(input1) || is.numeric(input2) || is.numeric(input3))){return(0)}
   else if(!(is.null(input1) || is.null(input2) || is.null(input3) || is.na(input1) || is.na(input2) || is.na(input3))){
     if(as.numeric(rockArea)==0){
       return(0)
-    } else if(as.numeric(fineArea)==0){
+    } else if(as.numeric(medArea)==0 && as.numeric(coarseArea)==0 && as.numeric(fineArea)==0 && as.numeric(rockArea)>0){
       disable(fieldName)
-      rockValue <- 100
-      return(rockValue)
+      print("returning 100")
+      return(100)
     } else {
       return(input1)
     }} else {
-      return(0)
+      if(is.null(input1)){
+        print("returning default")
+        return(defaultRockValue)
+      } else {
+        return(input1)
+      }
     }
 }
 
@@ -925,46 +938,83 @@ server <- function(input, output, session) {
     disable("offshorePercentage")
   })
   
-
+  
   output$percentagePelInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- 0 #model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentagePelInRock,input$percentagePelInFine,input$percentagePelInMed,coarseInArea)
+    coarseInArea <- model$data$physical.parameters$x_area_s3
+    coarseValueIn <- getCoarseValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMed,coarseInArea)
     numericInput("percentagePelInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')
   })
   
-  observeEvent(input$percentagePelInRock,{
+  output$percentagePelOffCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- 0 #model$data$physical.parameters$x_area_s3
+    coarseOffArea <- model$data$physical.parameters$x_area_d3
+    coarseValueOff <- getCoarseValue(input$percentagePelOffRock,input$percentagePelOffFine,input$percentagePelOffMed,coarseOffArea)
+    numericInput("percentagePelOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')
+  })
+  
+  output$percentagePelInMed <- renderUI({ 
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    pelInRock <- model$data$fleet.model$gear_habitat_activity$s0[1]
+    pelInFine <- model$data$fleet.model$gear_habitat_activity$s1[1]
+    pelInMed <- model$data$fleet.model$gear_habitat_activity$s2[1]
+    pelInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[1]
+    totalInPel <- pelInRock + pelInFine + pelInMed + pelInCoarse
+    percentagePelInMedDefault <- pelInMed / totalInPel * 100
+    coarseInArea <- model$data$physical.parameters$x_area_s3
+    medInArea <- model$data$physical.parameters$x_area_s2
+    pelInMed <- getMedValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea,medInArea,"percentagePelInMedInput",percentagePelInMedDefault)
+    numericInput("percentagePelInMedInput", "Inshore Medium %",pelInMed,width = '50%')
+  })
+  
+  
+  output$percentagePelInFine <- renderUI({
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    pelInRock <- model$data$fleet.model$gear_habitat_activity$s0[1]
+    pelInFine <- model$data$fleet.model$gear_habitat_activity$s1[1]
+    pelInMed <- model$data$fleet.model$gear_habitat_activity$s2[1]
+    pelInCoarse <- model$data$fleet.model$gear_habitat_activity$s3[1]
+    totalInPel <- pelInRock + pelInFine + pelInMed + pelInCoarse
+    percentagePelInFineDefault <- pelInFine / totalInPel * 100
+    coarseInArea <- model$data$physical.parameters$x_area_s3
+    medInArea <- model$data$physical.parameters$x_area_s2
+    fineInArea <- model$data$physical.parameters$x_area_s1
+    pelInFine <- getFineValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea,medInArea,fineInArea,"percentagePelInFineInput",percentagePelInFineDefault)
+    numericInput("percentagePelInFineInput", "Inshore fine %",pelInFine,width = '50%')
+  })
+
+  observeEvent(input$percentagePelInRockInput,{
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    coarseInArea <- model$data$physical.parameters$x_area_s3
     medInArea <- model$data$physical.parameters$x_area_s2
     fineInArea <- model$data$physical.parameters$x_area_s1
     rockInArea <- model$data$physical.parameters$x_area_s0
-    pelInRock <- getRockValue(input$percentagePelInRock,input$percentagePelInFine,input$percentagePelInMed,coarseInArea,medInArea,fineInArea,rockInArea,"percentagePelInRock")
-    updateNumericInput(session,"percentagePelInRock", value = notGreatherThan100(pelInRock))
+    pelInRock <- getRockValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentagePelInRockInput")
+    updateNumericInput(session,"percentagePelInRockInput", value = notGreatherThan100(pelInRock))
   })
-  
-  observeEvent(input$percentagePelInMed,{
+
+  observeEvent(input$percentagePelInFineInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- 0 #model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    pelInMed <- getMedValue(input$percentagePelInRock,input$percentagePelInFine,input$percentagePelInMed,coarseInArea,medInArea,"percentagePelInMed")
-    updateNumericInput(session,"percentagePelInMed",value = notGreatherThan100(pelInMed))
-  })
-  
-  observeEvent(input$percentagePelInFine,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- 0 #model$data$physical.parameters$x_area_s3
+    coarseInArea <- model$data$physical.parameters$x_area_s3
     medInArea <- model$data$physical.parameters$x_area_s2
     fineInArea <- model$data$physical.parameters$x_area_s1
-    pelInFine <- getFineValue(input$percentagePelInRock,input$percentagePelInFine,input$percentagePelInMed,coarseInArea,medInArea,fineInArea,"percentagePelInfine")
-    updateNumericInput(session,"percentagePelInfine", value = notGreatherThan100(pelInFine))
+    pelInFine <- getFineValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea,medInArea,fineInArea,"percentagePelInFineInput")
+    updateNumericInput(session,"percentagePelInFineInput", value = notGreatherThan100(pelInFine))
+  })
+  
+  observeEvent(input$percentagePelInMedInput,{
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    coarseInArea <- model$data$physical.parameters$x_area_s3
+    medInArea <- model$data$physical.parameters$x_area_s2
+    pelInMed <- getMedValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea,medInArea,"percentagePelInMedInput")
+    updateNumericInput(session,"percentagePelInMedInput",value = notGreatherThan100(pelInMed))
   })
   
   
   observeEvent(input$percentagePelInCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- 0 #model$data$physical.parameters$x_area_s3
-    pelInCoarse <- getCoarseValue(input$percentagePelInRock,input$percentagePelInFine,input$percentagePelInMed,coarseInArea)
+    coarseInArea <- model$data$physical.parameters$x_area_s3
+    pelInCoarse <- getCoarseValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea)
     if ( pelInCoarse < 0 || pelInCoarse > 100)  {
       js$backgroundCol("percentagePelInCoarseInput","red")
     } else {
@@ -978,6 +1028,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     pelOffCoarse <- getCoarseValue(input$percentagePelOffRock,input$percentagePelOffFine,input$percentagePelOffMed,coarseOffArea)
+    print(pelOffCoarse)
     if ( pelOffCoarse < 0 || pelOffCoarse > 100)  {
       js$backgroundCol("percentagePelOffCoarseInput","red")
     } else {
@@ -1020,14 +1071,16 @@ server <- function(input, output, session) {
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     medOffArea <- model$data$physical.parameters$x_area_d2
     fineOffArea <- model$data$physical.parameters$x_area_d1
-    pelOffFine <- getFineValue(input$percentagePelOffRock,input$percentagePelOffFine,input$percentagePelOffMed,coarseOffArea,medOffArea,fineOffArea,"percentagePelOfffine")
-    updateNumericInput(session,"percentagePelOfffine", value = notGreatherThan100(pelOffFine))
+    pelOffFine <- getFineValue(input$percentagePelOffRock,input$percentagePelOffFine,input$percentagePelOffMed,coarseOffArea,medOffArea,fineOffArea,"percentagePelOffFine")
+    updateNumericInput(session,"percentagePelOffFine", value = notGreatherThan100(pelOffFine))
   })
   
   output$percentagePelOffCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentagePelOffRock,input$percentagePelOffFine,input$percentagePelOffMed,coarseOffArea)
+    print("PelOffCoarse render ui")
+    print(coarseValueOff)
     numericInput("percentagePelOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')
   })
   
@@ -1070,9 +1123,9 @@ server <- function(input, output, session) {
     percentagePelOffCoarseDefault <- pelOffCoarse/totalOffPel * 100
     updateNumericInput(session, "inshorePercentage", value = percentageInPelDefault)
     updateNumericInput(session, "offshorePercentage", value = percentageOutPelDefault)
-    updateNumericInput(session, "percentagePelInRock", value = percentagePelInRockDefault)
-    updateNumericInput(session, "percentagePelInFine", value = percentagePelInFineDefault)
-    updateNumericInput(session, "percentagePelInMed", value = percentagePelInMedDefault)
+    updateNumericInput(session, "percentagePelInRockInput", value = percentagePelInRockDefault)
+    updateNumericInput(session, "percentagePelInFineInput", value = percentagePelInFineDefault)
+    updateNumericInput(session, "percentagePelInMedInput", value = percentagePelInMedDefault)
     updateNumericInput(session, "percentagePelInCoarseInput", value = percentagePelInCoarseDefault)
     updateNumericInput(session, "percentagePelOffRock", value = percentagePelOffRockDefault)
     updateNumericInput(session, "percentagePelOffFine", value = percentagePelOffFineDefault)
@@ -4318,9 +4371,9 @@ server <- function(input, output, session) {
                                              wellPanel(
                                              verticalLayout(
                                                h5("Inshore Habitat Split"),
-                                               numericInput("percentagePelInRock", "Inshore rock %",percentagePelInRockDefault,min = 0, max = 100, step = 0.01, width = '65%'),
-                                               numericInput("percentagePelInFine", "Inshore fine %",percentagePelInFineDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                               numericInput("percentagePelInMed", "Inshore med %",percentagePelInMedDefault,min = 0, max = 100, step = 0.01,width = '65%'),
+                                               numericInput("percentagePelInRockInput", "Inshore rock %",percentagePelInRockDefault,min = 0, max = 100, step = 0.01, width = '65%'),
+                                               uiOutput("percentagePelInFine"),
+                                               uiOutput("percentagePelInMed"),
                                                verticalLayout(
                                                  useShinyjs(),
                                                  extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -9099,14 +9152,14 @@ server <- function(input, output, session) {
       input$whalerDiscard_kelp
     
     # Start of gear distribution per habitat
-    if (!is.null(input$percentagePelInRock)){
-    newPelInRockProp <- (input$inshorePercentage*input$percentagePelInRock)/10000
+    if (!is.null(input$percentagePelInRockInput)){
+    newPelInRockProp <- (input$inshorePercentage*input$percentagePelInRockInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[1] <- newPelInRockProp 
     
-    newPelInFineProp <- (input$inshorePercentage*input$percentagePelInFine)/10000
+    newPelInFineProp <- (input$inshorePercentage*input$percentagePelInFineInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s1[1] <- newPelInFineProp 
 
-    newPelInMedProp <- (input$inshorePercentage*input$percentagePelInMed)/10000
+    newPelInMedProp <- (input$inshorePercentage*input$percentagePelInMedInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s2[1] <- newPelInMedProp 
     
     newPelInCoarseProp <- (input$inshorePercentage*input$percentagePelInCoarseInput)/10000
