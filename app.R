@@ -826,18 +826,15 @@ getFineValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA
     if(as.numeric(fineArea)==0){
       return(0)
     } else if(as.numeric(medArea)==0 && as.numeric(coarseArea)==0 && as.numeric(fineArea)>0){
-      print("Making fine remainder")
+      #print("Making fine remainder")
       fineValue <- (100 - as.numeric(input1))
       return(fineValue)
     } else {
-      print("In here 1")
       return(input2)
     }} else {
       if(is.null(input2)){
-        print("In here 2")
         return(defaultFineValue)
       } else {
-        print("In here 3")
       return(input2)
       }
     }
@@ -849,7 +846,6 @@ getRockValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA
     if(as.numeric(rockArea)==0){
       return(0)
     } else if(as.numeric(medArea)==0 && as.numeric(coarseArea)==0 && as.numeric(fineArea)==0 && as.numeric(rockArea)>0){
-      print("returning 100")
       return(100)
     } else {
       return(input1)
@@ -967,7 +963,6 @@ server <- function(input, output, session) {
   })
   
   output$percentagePelInMed <- renderUI({ 
-    print("Render UI percentagePelInMed")
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     pelInRock <- model$data$fleet.model$gear_habitat_activity$s0[1]
     pelInFine <- model$data$fleet.model$gear_habitat_activity$s1[1]
@@ -989,7 +984,6 @@ server <- function(input, output, session) {
   
 
   output$percentagePelInFine <- renderUI({
-    print("Render UI percentagePelInFine")
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     pelInRock <- model$data$fleet.model$gear_habitat_activity$s0[1]
     pelInFine <- model$data$fleet.model$gear_habitat_activity$s1[1]
@@ -1001,8 +995,6 @@ server <- function(input, output, session) {
     medInArea <- model$data$physical.parameters$x_area_s2
     fineInArea <-  model$data$physical.parameters$x_area_s1
     pelInFine <- getFineValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea,medInArea,fineInArea,"percentagePelInFineInput",percentagePelInFineDefault)
-    print("Fine remainder is: ")
-    print(pelInFine)
     if(fineInArea >0 && medInArea==0 && coarseInArea==0 ){
       disabled(numericInput("percentagePelInFineInput", "Inshore fine %",pelInFine,width = '50%'))
     } else if (fineInArea >0) {
@@ -1014,7 +1006,6 @@ server <- function(input, output, session) {
   
 
   observeEvent(input$percentagePelInRockInput,{
-    print("Observe event percentagePelInRockInput")
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
     medInArea <- model$data$physical.parameters$x_area_s2
@@ -1028,7 +1019,6 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$percentagePelInFineInput,{
-    print("Observe event percentagePelInFineInput")
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
     medInArea <- model$data$physical.parameters$x_area_s2
@@ -1038,9 +1028,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$percentagePelInMedInput,{
-    print("Observe event percentagePelInMedInput")
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
     coarseInArea <- model$data$physical.parameters$x_area_s3
     medInArea <- model$data$physical.parameters$x_area_s2
     pelInMed <- getMedValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea,medInArea,"percentagePelInMedInput")
@@ -1049,9 +1037,7 @@ server <- function(input, output, session) {
   
   
   observeEvent(input$percentagePelInCoarseInput,{
-    print("Observe event percentagePelInCoarseInput")
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
     coarseInArea <- model$data$physical.parameters$x_area_s3
     pelInCoarse <- getCoarseValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea)
     if ( pelInCoarse < 0 || pelInCoarse > 100)  {
@@ -1065,10 +1051,8 @@ server <- function(input, output, session) {
   
   observeEvent(input$percentagePelOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     pelOffCoarse <- getCoarseValue(input$percentagePelOffRock,input$percentagePelOffFine,input$percentagePelOffMed,coarseOffArea)
-    print(pelOffCoarse)
     if ( pelOffCoarse < 0 || pelOffCoarse > 100)  {
       js$backgroundCol("percentagePelOffCoarseInput","red")
     } else {
@@ -1120,11 +1104,8 @@ server <- function(input, output, session) {
   
   output$percentagePelOffCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentagePelOffRock,input$percentagePelOffFine,input$percentagePelOffMed,coarseOffArea)
-    print("PelOffCoarse render ui")
-    print(coarseValueOff)
     numericInput("percentagePelOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')
   })
   
@@ -3947,7 +3928,6 @@ server <- function(input, output, session) {
     if(rockInArea==0){
     percentagePelInRockDefault <- 0
     } else if(coarseInArea==0 && medInArea==0 && fineInArea==0){
-      print("Setting percentagePelInRockDefault to 100")
       percentagePelInRockDefault <- 100
     } else {
     percentagePelInRockDefault <- pelInRock/totalInPel * 100
@@ -7653,7 +7633,6 @@ server <- function(input, output, session) {
       },
       content = function(file) {
         plotsPath = file.path(model$setup$model.path,"Plots")
-        print(plotsPath)
         zip(zipfile=file, files=plotsPath)
       },
       contentType = "application/zip"
