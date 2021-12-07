@@ -781,8 +781,10 @@ getCoarseValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = 
   if(as.numeric(coarseArea)==0){
      0
   } else {
-    totalForThreeOthers <- as.numeric(input1) + as.numeric(input2) + as.numeric(input3)
+    totalForThreeOthers <- as.numeric(isolate(input1)) + as.numeric(isolate(input2)) + as.numeric(isolate(input3))
     coarseValue <- (100 - totalForThreeOthers)
+    print("About to return coarse value within function")
+    print(coarseValue)
     return(coarseValue)
   }}
   else {
@@ -810,7 +812,7 @@ getMedValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA,
     medValue <- (100 - totalForTwoOthers)
     return(medValue)
   } else {
-    return(input3)
+    return(isolate(input3))
   }} else {
     if(is.null(input3)){
       return(defaultMedValue)
@@ -830,9 +832,12 @@ getFineValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA
       fineValue <- (100 - as.numeric(input1))
       return(fineValue)
     } else {
-      return(input2)
+      print("About to return fine value within function")
+      print(input2)
+      return(isolate(input2))
     }} else {
       if(is.null(input2)){
+        print("About to return DEFAULT fine value within function")
         return(defaultFineValue)
       } else {
       return(input2)
@@ -848,7 +853,7 @@ getRockValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA
     } else if(as.numeric(medArea)==0 && as.numeric(coarseArea)==0 && as.numeric(fineArea)==0 && as.numeric(rockArea)>0){
       return(100)
     } else {
-      return(input1)
+      return(isolate(input1))
     }} else {
       if(is.null(input1)){
         return(defaultRockValue)
@@ -936,15 +941,15 @@ server <- function(input, output, session) {
       outputType = "DATA")
   })
   
-  observeEvent(input$inshorePercentage,{
-    updateNumericInput(session, "inshorePercentage", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
-    updateNumericInput(session, "offshorePercentage", value = offShorePercent)
+  observeEvent(input$inshorePercentagePel,{
+    updateNumericInput(session, "inshorePercentagePel", value = notGreatherThan100(input$inshorePercentagePel))
+    offShorePercent <- 100 - input$inshorePercentagePel
+    updateNumericInput(session, "offshorePercentagePel", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentage,{
-    updateNumericInput(session, "offshorePercentage", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentagePel", value = input$offshorePercentagePel)
+    disable("offshorePercentagePel")
   })
   
   output$percentagePelInCoarse <- renderUI({ 
@@ -1047,7 +1052,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentagePelOffRockInput,input$percentagePelOffFineInput,input$percentagePelOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentagePelOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentagePelOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentagePelOffMed <- renderUI({ 
@@ -1174,8 +1179,8 @@ server <- function(input, output, session) {
     percentagePelOffFineDefault <- pelOffFine/totalOffPel * 100
     percentagePelOffMedDefault <- pelOffMed/totalOffPel * 100
     percentagePelOffCoarseDefault <- pelOffCoarse/totalOffPel * 100
-    updateNumericInput(session, "inshorePercentage", value = percentageInPelDefault)
-    updateNumericInput(session, "offshorePercentage", value = percentageOutPelDefault)
+    updateNumericInput(session, "inshorePercentagePel", value = percentageInPelDefault)
+    updateNumericInput(session, "offshorePercentagePel", value = percentageOutPelDefault)
     updateNumericInput(session, "percentagePelInRockInput", value = percentagePelInRockDefault)
     updateNumericInput(session, "percentagePelInFineInput", value = percentagePelInFineDefault)
     updateNumericInput(session, "percentagePelInMedInput", value = percentagePelInMedDefault)
@@ -1187,14 +1192,14 @@ server <- function(input, output, session) {
   })
     
   observeEvent(input$inshorePercentageSandeel,{
-    updateNumericInput(session, "inshorePercentageSandeel", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageSandeel", value = notGreatherThan100(input$inshorePercentageSandeel))
+    offShorePercent <- 100 - input$inshorePercentageSandeel
     updateNumericInput(session, "offshorePercentageSandeel", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageSandeel,{
-    updateNumericInput(session, "offshorePercentageSandeel", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageSandeel", value = input$offshorePercentageSandeel)
+    disable("offshorePercentageSandeel")
   })
   
   output$percentageSandeelInCoarse <- renderUI({ 
@@ -1297,7 +1302,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageSandeelOffRockInput,input$percentageSandeelOffFineInput,input$percentageSandeelOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageSandeelOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageSandeelOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageSandeelOffMed <- renderUI({ 
@@ -1387,7 +1392,7 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$SandeelGearPerHab_reset, {
+  observeEvent(input$sandeelGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     #model <- model_reactive()
@@ -1437,14 +1442,14 @@ server <- function(input, output, session) {
   })
     
   observeEvent(input$inshorePercentageOtter,{
-    updateNumericInput(session, "inshorePercentageOtter", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageOtter", value = notGreatherThan100(input$inshorePercentageOtter))
+    offShorePercent <- 100 - input$inshorePercentageOtter
     updateNumericInput(session, "offshorePercentageOtter", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageOtter,{
-    updateNumericInput(session, "offshorePercentageOtter", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageOtter", value = input$offshorePercentageOtter)
+    disable("offshorePercentageOtter")
   })
   
   output$percentageOtterInCoarse <- renderUI({ 
@@ -1547,7 +1552,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageOtterOffRockInput,input$percentageOtterOffFineInput,input$percentageOtterOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageOtterOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageOtterOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageOtterOffMed <- renderUI({ 
@@ -1687,14 +1692,14 @@ server <- function(input, output, session) {
   
     
   observeEvent(input$inshorePercentageLonMack,{
-    updateNumericInput(session, "inshorePercentageLonMack", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageLonMack", value = notGreatherThan100(input$inshorePercentageLonMack))
+    offShorePercent <- 100 - input$inshorePercentageLonMack
     updateNumericInput(session, "offshorePercentageLonMack", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageLonMack,{
-    updateNumericInput(session, "offshorePercentageLonMack", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageLonMack", value = input$offshorePercentageLonMack)
+    disable("offshorePercentageLonMack")
   })
   
   output$percentageLonMackInCoarse <- renderUI({ 
@@ -1797,7 +1802,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageLonMackOffRockInput,input$percentageLonMackOffFineInput,input$percentageLonMackOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageLonMackOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageLonMackOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageLonMackOffMed <- renderUI({ 
@@ -1938,14 +1943,14 @@ server <- function(input, output, session) {
     
   
   observeEvent(input$inshorePercentageBeamTrawl,{
-    updateNumericInput(session, "inshorePercentageBeamTrawl", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageBeamTrawl", value = notGreatherThan100(input$inshorePercentageBeamTrawl))
+    offShorePercent <- 100 - input$inshorePercentageBeamTrawl
     updateNumericInput(session, "offshorePercentageBeamTrawl", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageBeamTrawl,{
-    updateNumericInput(session, "offshorePercentageBeamTrawl", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageBeamTrawl", value = input$offshorePercentageBeamTrawl)
+    disable("offshorePercentageBeamTrawl")
   })
   
   output$percentageBeamTrawlInCoarse <- renderUI({ 
@@ -2048,7 +2053,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageBeamTrawlOffRockInput,input$percentageBeamTrawlOffFineInput,input$percentageBeamTrawlOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageBeamTrawlOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageBeamTrawlOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageBeamTrawlOffMed <- renderUI({ 
@@ -2189,14 +2194,14 @@ server <- function(input, output, session) {
 
   
   observeEvent(input$inshorePercentageDemSeine,{
-    updateNumericInput(session, "inshorePercentageDemSeine", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageDemSeine", value = notGreatherThan100(input$inshorePercentageDemSeine))
+    offShorePercent <- 100 - input$inshorePercentageDemSeine
     updateNumericInput(session, "offshorePercentageDemSeine", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageDemSeine,{
-    updateNumericInput(session, "offshorePercentageDemSeine", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageDemSeine", value = input$offshorePercentageDemSeine)
+    disable("offshorePercentageDemSeine")
   })
   
   output$percentageDemSeineInCoarse <- renderUI({ 
@@ -2299,7 +2304,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageDemSeineOffRockInput,input$percentageDemSeineOffFineInput,input$percentageDemSeineOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageDemSeineOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageDemSeineOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageDemSeineOffMed <- renderUI({ 
@@ -2440,14 +2445,14 @@ server <- function(input, output, session) {
     
   
   observeEvent(input$inshorePercentageDemOtter,{
-    updateNumericInput(session, "inshorePercentageDemOtter", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageDemOtter", value = notGreatherThan100(input$inshorePercentageDemOtter))
+    offShorePercent <- 100 - input$inshorePercentageDemOtter
     updateNumericInput(session, "offshorePercentageDemOtter", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageDemOtter,{
-    updateNumericInput(session, "offshorePercentageDemOtter", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageDemOtter", value = input$offshorePercentageDemOtter)
+    disable("offshorePercentageDemOtter")
   })
   
   output$percentageDemOtterInCoarse <- renderUI({ 
@@ -2550,7 +2555,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageDemOtterOffRockInput,input$percentageDemOtterOffFineInput,input$percentageDemOtterOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageDemOtterOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageDemOtterOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageDemOtterOffMed <- renderUI({ 
@@ -2689,14 +2694,14 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$inshorePercentageGillNet,{
-    updateNumericInput(session, "inshorePercentageGillNet", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageGillNet", value = notGreatherThan100(input$inshorePercentageGillNet))
+    offShorePercent <- 100 - input$inshorePercentageGillNet
     updateNumericInput(session, "offshorePercentageGillNet", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageGillNet,{
-    updateNumericInput(session, "offshorePercentageGillNet", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageGillNet", value = input$offshorePercentageGillNet)
+    disable("offshorePercentageGillNet")
   })
   
   output$percentageGillNetInCoarse <- renderUI({ 
@@ -2799,7 +2804,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageGillNetOffRockInput,input$percentageGillNetOffFineInput,input$percentageGillNetOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageGillNetOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageGillNetOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageGillNetOffMed <- renderUI({ 
@@ -2937,14 +2942,14 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$inshorePercentageBeamShrimp,{
-    updateNumericInput(session, "inshorePercentageBeamShrimp", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageBeamShrimp", value = notGreatherThan100(input$inshorePercentageBeamShrimp))
+    offShorePercent <- 100 - input$inshorePercentageBeamShrimp
     updateNumericInput(session, "offshorePercentageBeamShrimp", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageBeamShrimp,{
-    updateNumericInput(session, "offshorePercentageBeamShrimp", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageBeamShrimp", value = input$offshorePercentageBeamShrimp)
+    disable("offshorePercentageBeamShrimp")
   })
   
   output$percentageBeamShrimpInCoarse <- renderUI({ 
@@ -3047,7 +3052,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageBeamShrimpOffRockInput,input$percentageBeamShrimpOffFineInput,input$percentageBeamShrimpOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageBeamShrimpOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageBeamShrimpOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageBeamShrimpOffMed <- renderUI({ 
@@ -3187,14 +3192,14 @@ server <- function(input, output, session) {
   
   
   observeEvent(input$inshorePercentageNephropsTR2,{
-    updateNumericInput(session, "inshorePercentageNephropsTR2", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageNephropsTR2", value = notGreatherThan100(input$inshorePercentageNephropsTR2))
+    offShorePercent <- 100 - input$inshorePercentageNephropsTR2
     updateNumericInput(session, "offshorePercentageNephropsTR2", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageNephropsTR2,{
-    updateNumericInput(session, "offshorePercentageNephropsTR2", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageNephropsTR2", value = input$offshorePercentageNephropsTR2)
+    disable("offshorePercentageNephropsTR2")
   })
   
   output$percentageNephropsTR2InCoarse <- renderUI({ 
@@ -3297,7 +3302,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageNephropsTR2OffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageNephropsTR2OffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageNephropsTR2OffMed <- renderUI({ 
@@ -3350,6 +3355,8 @@ server <- function(input, output, session) {
     fineOffArea <- model$data$physical.parameters$x_area_d1
     rockOffArea <- model$data$physical.parameters$x_area_d0
     NephropsTR2OffRock <- getRockValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageNephropsTR2OffRockInput")
+    print("NephropsTR2OffRock")
+    print(NephropsTR2OffRock)
     updateNumericInput(session,"percentageNephropsTR2OffRockInput", value = notGreatherThan100(NephropsTR2OffRock))
     if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
       disable("percentageNephropsTR2OffRockInput")
@@ -3362,6 +3369,8 @@ server <- function(input, output, session) {
     medOffArea <- model$data$physical.parameters$x_area_d2
     fineOffArea <- model$data$physical.parameters$x_area_d1
     NephropsTR2OffFine <- getFineValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageNephropsTR2OffFineInput")
+    print("NephropsTR2OffFine")
+    print(NephropsTR2OffFine)
     updateNumericInput(session,"percentageNephropsTR2OffFineInput", value = notGreatherThan100(NephropsTR2OffFine))
   })
   
@@ -3370,6 +3379,8 @@ server <- function(input, output, session) {
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     medOffArea <- model$data$physical.parameters$x_area_d2
     NephropsTR2OffMed <- getMedValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea,medOffArea,"percentageNephropsTR2OffMedInput")
+    print("NephropsTR2OffMed")
+    print(NephropsTR2OffMed)
     updateNumericInput(session,"percentageNephropsTR2OffMedInput",value = notGreatherThan100(NephropsTR2OffMed))
   })
   
@@ -3377,6 +3388,8 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     NephropsTR2OffCoarse <- getCoarseValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea)
+    print("NephropsTR2OffCoarse")
+    print(NephropsTR2OffCoarse)
     if ( NephropsTR2OffCoarse < 0 || NephropsTR2OffCoarse > 100)  {
       js$backgroundCol("percentageNephropsTR2OffCoarseInput","red")
     } else {
@@ -3438,14 +3451,14 @@ server <- function(input, output, session) {
 
   
   observeEvent(input$inshorePercentageNephropsTR3,{
-    updateNumericInput(session, "inshorePercentageNephropsTR3", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageNephropsTR3", value = notGreatherThan100(input$inshorePercentageNephropsTR3))
+    offShorePercent <- 100 - input$inshorePercentageNephropsTR3
     updateNumericInput(session, "offshorePercentageNephropsTR3", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageNephropsTR3,{
-    updateNumericInput(session, "offshorePercentageNephropsTR3", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageNephropsTR3", value = input$offshorePercentageNephropsTR3)
+    disable("offshorePercentageNephropsTR3")
   })
   
   output$percentageNephropsTR3InCoarse <- renderUI({ 
@@ -3548,7 +3561,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageNephropsTR3OffRockInput,input$percentageNephropsTR3OffFineInput,input$percentageNephropsTR3OffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageNephropsTR3OffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageNephropsTR3OffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageNephropsTR3OffMed <- renderUI({ 
@@ -3688,14 +3701,14 @@ server <- function(input, output, session) {
     
   
   observeEvent(input$inshorePercentageCreels,{
-    updateNumericInput(session, "inshorePercentageCreels", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageCreels", value = notGreatherThan100(input$inshorePercentageCreels))
+    offShorePercent <- 100 - input$inshorePercentageCreels
     updateNumericInput(session, "offshorePercentageCreels", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageCreels,{
-    updateNumericInput(session, "offshorePercentageCreels", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageCreels", value = input$offshorePercentageCreels)
+    disable("offshorePercentageCreels")
   })
   
   output$percentageCreelsInCoarse <- renderUI({ 
@@ -3798,7 +3811,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageCreelsOffRockInput,input$percentageCreelsOffFineInput,input$percentageCreelsOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageCreelsOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageCreelsOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageCreelsOffMed <- renderUI({ 
@@ -3938,14 +3951,14 @@ server <- function(input, output, session) {
   
   
   observeEvent(input$inshorePercentageMollusc,{
-    updateNumericInput(session, "inshorePercentageMollusc", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageMollusc", value = notGreatherThan100(input$inshorePercentageMollusc))
+    offShorePercent <- 100 - input$inshorePercentageMollusc
     updateNumericInput(session, "offshorePercentageMollusc", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageMollusc,{
-    updateNumericInput(session, "offshorePercentageMollusc", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageMollusc", value = input$offshorePercentageMollusc)
+    disable("offshorePercentageMollusc")
   })
   
   output$percentageMolluscInCoarse <- renderUI({ 
@@ -4048,7 +4061,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageMolluscOffRockInput,input$percentageMolluscOffFineInput,input$percentageMolluscOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageMolluscOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageMolluscOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageMolluscOffMed <- renderUI({ 
@@ -4188,14 +4201,14 @@ server <- function(input, output, session) {
   
 
   observeEvent(input$inshorePercentageWhaler,{
-    updateNumericInput(session, "inshorePercentageWhaler", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageWhaler", value = notGreatherThan100(input$inshorePercentageWhaler))
+    offShorePercent <- 100 - input$inshorePercentageWhaler
     updateNumericInput(session, "offshorePercentageWhaler", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageWhaler,{
-    updateNumericInput(session, "offshorePercentageWhaler", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageWhaler", value = input$offshorePercentageWhaler)
+    disable("offshorePercentageWhaler")
   })
   
   output$percentageWhalerInCoarse <- renderUI({ 
@@ -4298,7 +4311,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageWhalerOffRockInput,input$percentageWhalerOffFineInput,input$percentageWhalerOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageWhalerOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageWhalerOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageWhalerOffMed <- renderUI({ 
@@ -4416,44 +4429,44 @@ server <- function(input, output, session) {
     percentageOutWhalerDefault <- 100 - percentageInWhalerDefault
     # Now getting percentages Inshore
     if(totalInWhaler>0){
-      percentageWhalerInRockDefault <- whalerInRock/totalInWhaler * 100
+      percentageWhalerInRockDefault <- WhalerInRock/totalInWhaler * 100
     } else {
       percentageWhalerInRockDefault <- 0
     }
     if(totalInWhaler>0){
-      percentageWhalerInFineDefault <- whalerInFine/totalInWhaler * 100
+      percentageWhalerInFineDefault <- WhalerInFine/totalInWhaler * 100
     } else {
       percentageWhalerInFineDefault <- 0
     }
     if(totalInWhaler>0){
-      percentageWhalerInMedDefault <- whalerInMed/totalInWhaler * 100
+      percentageWhalerInMedDefault <- WhalerInMed/totalInWhaler * 100
     } else {
       percentageWhalerInMedDefault <- 0
     }
     if(totalInWhaler>0){
-      percentageWhalerInCoarseDefault <- whalerInCoarse/totalInWhaler * 100
+      percentageWhalerInCoarseDefault <- WhalerInCoarse/totalInWhaler * 100
     } else {
       percentageWhalerInCoarseDefault <- 0
     }
     
     # Now getting percentages Offshore
     if(totalOffWhaler>0){
-      percentageWhalerOffRockDefault <- whalerOffRock/totalOffWhaler * 100
+      percentageWhalerOffRockDefault <- WhalerOffRock/totalOffWhaler * 100
     } else {
       percentageWhalerOffRockDefault <- 0
     }
     if(totalOffWhaler>0){
-      percentageWhalerOffFineDefault <- whalerOffFine/totalOffWhaler * 100
+      percentageWhalerOffFineDefault <- WhalerOffFine/totalOffWhaler * 100
     } else {
       percentageWhalerOffFineDefault <- 0
     }
     if(totalOffWhaler>0){
-      percentageWhalerOffMedDefault <- whalerOffMed/totalOffWhaler * 100
+      percentageWhalerOffMedDefault <- WhalerOffMed/totalOffWhaler * 100
     } else {
       percentageWhalerOffMedDefault <- 0
     }
     if(totalOffWhaler>0){
-      percentageWhalerOffCoarseDefault <- whalerOffCoarse/totalOffWhaler * 100
+      percentageWhalerOffCoarseDefault <- WhalerOffCoarse/totalOffWhaler * 100
     } else {
       percentageWhalerOffCoarseDefault <- 0
     }
@@ -4471,14 +4484,14 @@ server <- function(input, output, session) {
   
   
   observeEvent(input$inshorePercentageKelp,{
-    updateNumericInput(session, "inshorePercentageKelp", value = notGreatherThan100(input$inshorePercentage))
-    offShorePercent <- 100 - input$inshorePercentage
+    updateNumericInput(session, "inshorePercentageKelp", value = notGreatherThan100(input$inshorePercentageKelp))
+    offShorePercent <- 100 - input$inshorePercentageKelp
     updateNumericInput(session, "offshorePercentageKelp", value = offShorePercent)
   })
   
   observeEvent(input$offshorePercentageKelp,{
-    updateNumericInput(session, "offshorePercentageKelp", value = input$offshorePercentage)
-    disable("offshorePercentage")
+    updateNumericInput(session, "offshorePercentageKelp", value = input$offshorePercentageKelp)
+    disable("offshorePercentageKelp")
   })
   
   output$percentageKelpInCoarse <- renderUI({ 
@@ -4581,7 +4594,7 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     coarseValueOff <- getCoarseValue(input$percentageKelpOffRockInput,input$percentageKelpOffFineInput,input$percentageKelpOffMedInput,coarseOffArea)
-    if(coarseValueOff>0) {numericInput("percentageKelpOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
+    if(coarseOffArea>0) {numericInput("percentageKelpOffCoarseInput", "Offshore coarse %",coarseValueOff,width = '50%')}
   })
   
   output$percentageKelpOffMed <- renderUI({ 
@@ -6425,8 +6438,8 @@ server <- function(input, output, session) {
                                              wellPanel(
                                              h5("Inshore-Offshore Split"),
                                              splitLayout( cellWidths = c("50%", "50%"),
-                                              numericInput("inshorePercentage", "InShore %",percentageInPelDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                              numericInput("offshorePercentage", "OffShore %",percentageOutPelDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                              numericInput("inshorePercentagePel", "InShore %",percentageInPelDefault,min = 0, max = 100, step = 0.01, width = '40%'),
+                                              numericInput("offshorePercentagePel", "OffShore %",percentageOutPelDefault,min = 0, max = 100, step = 0.01, width = '40%')
                                              )),
                                              splitLayout(
                                              wellPanel(
@@ -11252,28 +11265,28 @@ server <- function(input, output, session) {
         percentagePelOffCoarseInput <- input$percentagePelOffCoarseInput
       }
     
-    newPelInRockProp <- (input$inshorePercentage*input$percentagePelInRockInput)/10000
+    newPelInRockProp <- (input$inshorePercentagePel*input$percentagePelInRockInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[1] <- newPelInRockProp 
     
-    newPelInFineProp <- (input$inshorePercentage*percentagePelInFineInput)/10000
+    newPelInFineProp <- (input$inshorePercentagePel*percentagePelInFineInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s1[1] <- newPelInFineProp 
 
-    newPelInMedProp <- (input$inshorePercentage*percentagePelInMedInput)/10000
+    newPelInMedProp <- (input$inshorePercentagePel*percentagePelInMedInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s2[1] <- newPelInMedProp 
     
-    newPelInCoarseProp <- (input$inshorePercentage*percentagePelInCoarseInput)/10000
+    newPelInCoarseProp <- (input$inshorePercentagePel*percentagePelInCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s3[1] <- newPelInCoarseProp 
     
-    newPelOffRockProp <- (input$offshorePercentage*input$percentagePelOffRockInput)/10000
+    newPelOffRockProp <- (input$offshorePercentagePel*input$percentagePelOffRockInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d0[1] <- newPelOffRockProp 
     
-    newPelOffFineProp <- (input$offshorePercentage*percentagePelOffFineInput)/10000
+    newPelOffFineProp <- (input$offshorePercentagePel*percentagePelOffFineInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d1[1] <- newPelOffFineProp 
     
-    newPelOffMedProp <- (input$offshorePercentage*percentagePelOffMedInput)/10000
+    newPelOffMedProp <- (input$offshorePercentagePel*percentagePelOffMedInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d2[1] <- newPelOffMedProp 
     
-    newPelOffCoarseProp <- (input$offshorePercentage*percentagePelOffCoarseInput)/10000
+    newPelOffCoarseProp <- (input$offshorePercentagePel*percentagePelOffCoarseInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$d3[1] <- newPelOffCoarseProp 
     
     total <- newPelInRockProp + newPelInFineProp + newPelInMedProp + newPelInCoarseProp + newPelOffRockProp + newPelOffFineProp + newPelOffMedProp + newPelOffCoarseProp
