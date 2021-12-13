@@ -777,11 +777,13 @@ notGreatherThan100 <- function(input) {
 }
 
 getCoarseValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA) {
+  print("Entering getCoarseValue")
   if(!(is.numeric(input1) || is.numeric(input2) || is.numeric(input3))){0}
   else if(!(is.null(input1) || is.null(input2) || is.null(input3) || is.na(input1) || is.na(input2) || is.na(input3))){
   if(as.numeric(coarseArea)==0){
      0
   } else {
+    print("Getting remainder calculated in getCoarseValue")
     totalForThreeOthers <- as.numeric(isolate(input1)) + as.numeric(isolate(input2)) + as.numeric(isolate(input3))
     coarseValue <- (100 - totalForThreeOthers)
     return(coarseValue)
@@ -951,7 +953,7 @@ server <- function(input, output, session) {
   output$percentagePelInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentagePelInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -1032,6 +1034,7 @@ server <- function(input, output, session) {
   observeEvent(input$percentagePelInCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
+    print("In observeEvent percentagePelInCoarseInput")
     pelInCoarse <- getCoarseValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea)
     if ( pelInCoarse < 0 || pelInCoarse > 100)  {
       js$backgroundCol("percentagePelInCoarseInput","red")
@@ -1136,6 +1139,7 @@ server <- function(input, output, session) {
     disable("percentagePelOffCoarseInput")
   })
   
+  
   observeEvent(input$pelGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -1202,7 +1206,7 @@ server <- function(input, output, session) {
   output$percentageSandeelInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageSandeelInRockInput,input$percentageSandeelInFineInput,input$percentageSandeelInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageSandeelInRockInput,input$percentageSandeelInFineInput,input$percentageSandeelInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageSandeelInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -1455,7 +1459,7 @@ server <- function(input, output, session) {
   output$percentageOtterInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageOtterInRockInput,input$percentageOtterInFineInput,input$percentageOtterInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageOtterInRockInput,input$percentageOtterInFineInput,input$percentageOtterInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageOtterInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -1705,7 +1709,7 @@ server <- function(input, output, session) {
   output$percentageLonMackInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageLonMackInRockInput,input$percentageLonMackInFineInput,input$percentageLonMackInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageLonMackInRockInput,input$percentageLonMackInFineInput,input$percentageLonMackInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageLonMackInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -1956,7 +1960,7 @@ server <- function(input, output, session) {
   output$percentageBeamTrawlInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageBeamTrawlInRockInput,input$percentageBeamTrawlInFineInput,input$percentageBeamTrawlInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageBeamTrawlInRockInput,input$percentageBeamTrawlInFineInput,input$percentageBeamTrawlInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageBeamTrawlInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -2207,7 +2211,7 @@ server <- function(input, output, session) {
   output$percentageDemSeineInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageDemSeineInRockInput,input$percentageDemSeineInFineInput,input$percentageDemSeineInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageDemSeineInRockInput,input$percentageDemSeineInFineInput,input$percentageDemSeineInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageDemSeineInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -2458,7 +2462,7 @@ server <- function(input, output, session) {
   output$percentageDemOtterInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageDemOtterInRockInput,input$percentageDemOtterInFineInput,input$percentageDemOtterInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageDemOtterInRockInput,input$percentageDemOtterInFineInput,input$percentageDemOtterInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageDemOtterInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -2707,7 +2711,7 @@ server <- function(input, output, session) {
   output$percentageGillNetInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageGillNetInRockInput,input$percentageGillNetInFineInput,input$percentageGillNetInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageGillNetInRockInput,input$percentageGillNetInFineInput,input$percentageGillNetInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageGillNetInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -2955,7 +2959,7 @@ server <- function(input, output, session) {
   output$percentageBeamShrimpInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageBeamShrimpInRockInput,input$percentageBeamShrimpInFineInput,input$percentageBeamShrimpInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageBeamShrimpInRockInput,input$percentageBeamShrimpInFineInput,input$percentageBeamShrimpInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageBeamShrimpInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -3205,7 +3209,7 @@ server <- function(input, output, session) {
   output$percentageNephropsTR2InCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageNephropsTR2InRockInput,input$percentageNephropsTR2InFineInput,input$percentageNephropsTR2InMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageNephropsTR2InRockInput,input$percentageNephropsTR2InFineInput,input$percentageNephropsTR2InMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageNephropsTR2InCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -3456,7 +3460,7 @@ server <- function(input, output, session) {
   output$percentageNephropsTR3InCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageNephropsTR3InRockInput,input$percentageNephropsTR3InFineInput,input$percentageNephropsTR3InMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageNephropsTR3InRockInput,input$percentageNephropsTR3InFineInput,input$percentageNephropsTR3InMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageNephropsTR3InCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -3706,7 +3710,7 @@ server <- function(input, output, session) {
   output$percentageCreelsInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageCreelsInRockInput,input$percentageCreelsInFineInput,input$percentageCreelsInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageCreelsInRockInput,input$percentageCreelsInFineInput,input$percentageCreelsInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageCreelsInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -3956,7 +3960,7 @@ server <- function(input, output, session) {
   output$percentageMolluscInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageMolluscInRockInput,input$percentageMolluscInFineInput,input$percentageMolluscInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageMolluscInRockInput,input$percentageMolluscInFineInput,input$percentageMolluscInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageMolluscInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -4206,7 +4210,7 @@ server <- function(input, output, session) {
   output$percentageWhalerInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageWhalerInRockInput,input$percentageWhalerInFineInput,input$percentageWhalerInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageWhalerInRockInput,input$percentageWhalerInFineInput,input$percentageWhalerInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageWhalerInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -4489,7 +4493,7 @@ server <- function(input, output, session) {
   output$percentageKelpInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseInArea <- model$data$physical.parameters$x_area_s3
-    coarseValueIn <- getCoarseValue(input$percentageKelpInRockInput,input$percentageKelpInFineInput,input$percentageKelpInMed,coarseInArea)
+    coarseValueIn <- getCoarseValue(input$percentageKelpInRockInput,input$percentageKelpInFineInput,input$percentageKelpInMedInput,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentageKelpInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
   })
   
@@ -4704,38 +4708,38 @@ server <- function(input, output, session) {
     percentageOutKelpDefault <- 100 - percentageInKelpDefault
     # Now getting percentages Inshore
     if(totalInKelp>0){
-      percentageKelpInRockDefault <- kelpInRock/totalInKelp * 100
+      percentageKelpInRockDefault <- KelpInRock/totalInKelp * 100
     } else {
       percentageKelpInRockDefault <- 0
     }
     if(totalInKelp>0){
-      percentageKelpInFineDefault <- kelpInFine/totalInKelp * 100
+      percentageKelpInFineDefault <- KelpInFine/totalInKelp * 100
     } else {
       percentageKelpInFineDefault <- 0
     }
     if(totalInKelp>0){
-      percentageKelpInMedDefault <- kelpInMed/totalInKelp * 100
+      percentageKelpInMedDefault <- KelpInMed/totalInKelp * 100
     } else {
       percentageKelpInMedDefault <- 0
     }
     if(totalInKelp>0){
-      percentageKelpInCoarseDefault <- kelpInCoarse/totalInKelp * 100
+      percentageKelpInCoarseDefault <- KelpInCoarse/totalInKelp * 100
     } else {
       percentageKelpInCoarseDefault <- 0
     }
     # Now getting percentages Offshore
     if(totalOffKelp>0){
-      percentageKelpOffRockDefault <- kelpOffRock/totalOffKelp * 100
+      percentageKelpOffRockDefault <- KelpOffRock/totalOffKelp * 100
     } else {
       percentageKelpOffRockDefault <- 0
     }
     if(totalOffKelp>0){
-      percentageKelpOffFineDefault <- kelpOffFine/totalOffKelp * 100
+      percentageKelpOffFineDefault <- KelpOffFine/totalOffKelp * 100
     } else {
       percentageKelpOffFineDefault <- 0
     }
     if(totalOffKelp>0){
-      percentageKelpOffMedDefault <- kelpOffMed/totalOffKelp * 100
+      percentageKelpOffMedDefault <- KelpOffMed/totalOffKelp * 100
     } else {
       percentageKelpOffMedDefault <- 0
     }
