@@ -80,8 +80,8 @@ createGearDistributionPerHabitat	<- function(
                                                                 h5("Offshore Habitat Split"),
                                                                 verticalLayout(
                                                                   numericInput("percentageSandeelOffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                                                  numericInput("percentageSandeelOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                                                  numericInput("percentageSandeelOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                                                  numericInput("percentageSandeelOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                                                  numericInput("percentageSandeelOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                                                   verticalLayout(
                                                                     useShinyjs(),
                                                                     extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -115,8 +115,8 @@ createGearDistributionPerHabitat	<- function(
                                                           h5("Offshore Habitat Split"),
                                                           verticalLayout(
                                                             numericInput("percentageOtterOffRockInput", "Offshore rock %",percentageerOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                                            numericInput("percentageOtterOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                                            numericInput("percentageOtterOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                                            numericInput("percentageOtterOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                                            numericInput("percentageOtterOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                                             verticalLayout(
                                                               useShinyjs(),
                                                               extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -153,8 +153,8 @@ createGearDistributionPerHabitat	<- function(
                                            h5("Offshore Habitat Split"),
                                            verticalLayout(
                                              numericInput("percentageLonMackOffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                             numericInput("percentageLonMackOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                             numericInput("percentageLonMackOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                             numericInput("percentageLonMackOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                             numericInput("percentageLonMackOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                              verticalLayout(
                                                useShinyjs(),
                                                extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -188,8 +188,8 @@ createGearDistributionPerHabitat	<- function(
                                             h5("Offshore Habitat Split"),
                                             verticalLayout(
                                               numericInput("percentageBeamTrawlOffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                              numericInput("percentageBeamTrawlOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                              numericInput("percentageBeamTrawlOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                              numericInput("percentageBeamTrawlOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                              numericInput("percentageBeamTrawlOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                               verticalLayout(
                                                 useShinyjs(),
                                                 extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -223,8 +223,8 @@ createGearDistributionPerHabitat	<- function(
                                         h5("Offshore Habitat Split"),
                                         verticalLayout(
                                           numericInput("percentageDemSeineOffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                          numericInput("percentageDemSeineOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                          numericInput("percentageDemSeineOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                          numericInput("percentageDemSeineOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                          numericInput("percentageDemSeineOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                           verticalLayout(
                                             useShinyjs(),
                                             extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -259,8 +259,8 @@ createGearDistributionPerHabitat	<- function(
                                                   h5("Offshore Habitat Split"),
                                                   verticalLayout(
                                                     numericInput("percentageDemOtterOffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                                    numericInput("percentageDemOtterOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                                    numericInput("percentageDemOttereOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                                    numericInput("percentageDemOtterOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                                    numericInput("percentageDemOttereOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                                     verticalLayout(
                                                       useShinyjs(),
                                                       extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -295,8 +295,8 @@ createGearDistributionPerHabitat	<- function(
                                                      h5("Offshore Habitat Split"),
                                                      verticalLayout(
                                                        numericInput("percentageGillNetOffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                                       numericInput("percentageGillNetOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                                       numericInput("percentageGillNeteOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                                       numericInput("percentageGillNetOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                                       numericInput("percentageGillNeteOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                                        verticalLayout(
                                                          useShinyjs(),
                                                          extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -330,8 +330,8 @@ createGearDistributionPerHabitat	<- function(
                                            h5("Offshore Habitat Split"),
                                            verticalLayout(
                                              numericInput("percentageBeamShrimpOffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                             numericInput("percentageBeamShrimpOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                             numericInput("percentageBeamShrimpOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                             numericInput("percentageBeamShrimpOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                             numericInput("percentageBeamShrimpOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                              verticalLayout(
                                                useShinyjs(),
                                                extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -366,8 +366,8 @@ createGearDistributionPerHabitat	<- function(
                                             h5("Offshore Habitat Split"),
                                             verticalLayout(
                                               numericInput("percentageNephropsTR2OffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                              numericInput("percentageNephropsTR2OffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                              numericInput("percentageNephropsTR2OffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                              numericInput("percentageNephropsTR2OffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                              numericInput("percentageNephropsTR2OffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                               verticalLayout(
                                                 useShinyjs(),
                                                 extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -402,8 +402,8 @@ createGearDistributionPerHabitat	<- function(
                                             h5("Offshore Habitat Split"),
                                             verticalLayout(
                                               numericInput("percentageNephropsTR3OffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                              numericInput("percentageNephropsTR3OffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                              numericInput("percentageNephropsTR3OffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                              numericInput("percentageNephropsTR3OffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                              numericInput("percentageNephropsTR3OffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                               verticalLayout(
                                                 useShinyjs(),
                                                 extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -438,8 +438,8 @@ createGearDistributionPerHabitat	<- function(
                                 h5("Offshore Habitat Split"),
                                 verticalLayout(
                                   numericInput("percentageCreelsOffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                  numericInput("percentageCreelsOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                  numericInput("percentageCreelsOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                  numericInput("percentageCreelsOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                  numericInput("percentageCreelsOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                   verticalLayout(
                                     useShinyjs(),
                                     extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -474,8 +474,8 @@ createGearDistributionPerHabitat	<- function(
                                         h5("Offshore Habitat Split"),
                                         verticalLayout(
                                           numericInput("percentageMolluscOffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                          numericInput("percentageMolluscOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                          numericInput("percentageMolluscOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                          numericInput("percentageMolluscOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                          numericInput("percentageMolluscOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                           verticalLayout(
                                             useShinyjs(),
                                             extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -510,8 +510,8 @@ createGearDistributionPerHabitat	<- function(
                                 h5("Offshore Habitat Split"),
                                 verticalLayout(
                                   numericInput("percentageWhalerOffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                  numericInput("percentageWhalerOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                  numericInput("percentageWhalerOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                  numericInput("percentageWhalerOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                  numericInput("percentageWhalerOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                   verticalLayout(
                                     useShinyjs(),
                                     extendShinyjs(text = jsCode,functions = c("backgroundCol")),
@@ -546,8 +546,8 @@ createGearDistributionPerHabitat	<- function(
                                        h5("Offshore Habitat Split"),
                                        verticalLayout(
                                          numericInput("percentageKelpOffRockInput", "Offshore rock %",percentageOffRockDefault,min = 0, max = 100, step = 0.01,width = '65%'),
-                                         numericInput("percentageKelpOffFineInput", "Offshore fine %",percentageInFineDefault,width = '50%'),
-                                         numericInput("percentageKelpOffMedInput", "Offshore Medium %",percentageInMedDefault,width = '50%'),
+                                         numericInput("percentageKelpOffFineInput", "Offshore fine %",percentageOffFineDefault,width = '50%'),
+                                         numericInput("percentageKelpOffMedInput", "Offshore Medium %",percentageOffMedDefault,width = '50%'),
                                          verticalLayout(
                                            useShinyjs(),
                                            extendShinyjs(text = jsCode,functions = c("backgroundCol")),
