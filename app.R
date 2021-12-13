@@ -784,8 +784,6 @@ getCoarseValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = 
   } else {
     totalForThreeOthers <- as.numeric(isolate(input1)) + as.numeric(isolate(input2)) + as.numeric(isolate(input3))
     coarseValue <- (100 - totalForThreeOthers)
-    print("About to return coarse value within function")
-    print(coarseValue)
     return(coarseValue)
   }}
   else {
@@ -829,16 +827,12 @@ getFineValue <- function(input1 = NA , input2 = NA, input3 = NA, coarseArea = NA
     if(as.numeric(fineArea)==0){
       return(0)
     } else if(as.numeric(medArea)==0 && as.numeric(coarseArea)==0 && as.numeric(fineArea)>0){
-      #print("Making fine remainder")
       fineValue <- (100 - as.numeric(input1))
       return(fineValue)
     } else {
-      print("About to return fine value within function")
-      print(input2)
       return(isolate(input2))
     }} else {
       if(is.null(input2)){
-        print("About to return DEFAULT fine value within function")
         return(defaultFineValue)
       } else {
       return(input2)
@@ -946,6 +940,7 @@ server <- function(input, output, session) {
     updateNumericInput(session, "inshorePercentagePel", value = notGreatherThan100(input$inshorePercentagePel))
     offShorePercent <- 100 - input$inshorePercentagePel
     updateNumericInput(session, "offshorePercentagePel", value = offShorePercent)
+    disable("offshorePercentagePel")
   })
   
   observeEvent(input$offshorePercentage,{
@@ -955,7 +950,6 @@ server <- function(input, output, session) {
   
   output$percentagePelInCoarse <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    print("In percentagePelInmed coarse ui")
     coarseInArea <- model$data$physical.parameters$x_area_s3
     coarseValueIn <- getCoarseValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMed,coarseInArea)
     if(coarseInArea >0 ){numericInput("percentagePelInCoarseInput", "Inshore coarse %",coarseValueIn,width = '50%')}
@@ -963,7 +957,6 @@ server <- function(input, output, session) {
   
   output$percentagePelInMed <- renderUI({ 
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    print("In percentagePelInmed render ui")
     pelInRock <- model$data$fleet.model$gear_habitat_activity$s0[1]
     pelInFine <- model$data$fleet.model$gear_habitat_activity$s1[1]
     pelInMed <- model$data$fleet.model$gear_habitat_activity$s2[1]
@@ -985,7 +978,6 @@ server <- function(input, output, session) {
 
   output$percentagePelInFine <- renderUI({
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    print("In percentagePelInFine render ui")
     pelInRock <- model$data$fleet.model$gear_habitat_activity$s0[1]
     pelInFine <- model$data$fleet.model$gear_habitat_activity$s1[1]
     pelInMed <- model$data$fleet.model$gear_habitat_activity$s2[1]
@@ -1037,18 +1029,18 @@ server <- function(input, output, session) {
 #   })
 #   
 #   
-#   observeEvent(input$percentagePelInCoarseInput,{
-#     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-#     coarseInArea <- model$data$physical.parameters$x_area_s3
-#     pelInCoarse <- getCoarseValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea)
-#     if ( pelInCoarse < 0 || pelInCoarse > 100)  {
-#       js$backgroundCol("percentagePelInCoarseInput","red")
-#     } else {
-#       js$backgroundCol("percentagePelInCoarseInput","light grey")
-#     }
-#     updateNumericInput(session,"percentagePelInCoarseInput", value = notGreatherThan100(pelInCoarse))
-#     disable("percentagePelInCoarseInput")
-#   })
+  observeEvent(input$percentagePelInCoarseInput,{
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    coarseInArea <- model$data$physical.parameters$x_area_s3
+    pelInCoarse <- getCoarseValue(input$percentagePelInRockInput,input$percentagePelInFineInput,input$percentagePelInMedInput,coarseInArea)
+    if ( pelInCoarse < 0 || pelInCoarse > 100)  {
+      js$backgroundCol("percentagePelInCoarseInput","red")
+    } else {
+      js$backgroundCol("percentagePelInCoarseInput","light grey")
+    }
+    updateNumericInput(session,"percentagePelInCoarseInput", value = notGreatherThan100(pelInCoarse))
+    disable("percentagePelInCoarseInput")
+  })
   
   ##### Off Starts here
   
@@ -1144,57 +1136,6 @@ server <- function(input, output, session) {
     disable("percentagePelOffCoarseInput")
   })
   
-  observeEvent(input$pelGearPerHab_recalculate,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    pelInRock <- getRockValue(isolate(input$percentagePelInRockInput),isolate(input$percentagePelInFineInput),isolate(input$percentagePelInMedInput),coarseInArea,medInArea,fineInArea,rockInArea,"percentagePelInRockInput",percentagePelInRockDefault)
-    shinyjs::delay(1000, updateNumericInput(session,"percentagePelInRockInput", value = notGreatherThan100(pelInRock)))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentagePelInRockInput")
-    }
-    pelInFine <- getFineValue(isolate(input$percentagePelInRockInput),isolate(input$percentagePelInFineInput),isolate(input$percentagePelInMedInput),coarseInArea,medInArea,fineInArea,"percentagePelInFineInput")
-    shinyjs::delay(1000, updateNumericInput(session,"percentagePelInFineInput", value = notGreatherThan100(pelInFine)))
-    pelInMed <- getMedValue(isolate(input$percentagePelInRockInput),isolate(input$percentagePelInFineInput),isolate(input$percentagePelInMedInput),coarseInArea,medInArea,"percentagePelInMedInput")
-    shinyjs::delay(1000, updateNumericInput(session,"percentagePelInMedInput",value = notGreatherThan100(pelInMed)))
-    pelInCoarse <- getCoarseValue(isolate(input$percentagePelInRockInput),isolate(input$percentagePelInFineInput),isolate(input$percentagePelInMedInput),coarseInArea)
-    if ( pelInCoarse < 0 || pelInCoarse > 100)  {
-      js$backgroundCol("percentagePelInCoarseInput","red")
-    } else {
-      js$backgroundCol("percentagePelInCoarseInput","light grey")
-    }
-    shinyjs::delay(1000, updateNumericInput(session,"percentagePelInCoarseInput", value = notGreatherThan100(pelInCoarse)))
-    disable("percentagePelInCoarseInput")
-    
-    ## Update Offshore Rock
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    pelOffRock <- getRockValue(isolate(input$percentagePelOffRockInput),isolate(input$percentagePelOffFineInput),isolate(input$percentagePelOffMedInput),coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentagePelOffRockInput")
-    updateNumericInput(session,"percentagePelOffRockInput", value = notGreatherThan100(pelOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentagePelOffRockInput")
-    }
-    ## Update Offshore Fine
-    pelOffFine <- getFineValue(isolate(input$percentagePelOffRockInput),isolate(input$percentagePelOffFineInput),isolate(input$percentagePelOffMedInput),coarseOffArea,medOffArea,fineOffArea,"percentagePelOffFineInput")
-    updateNumericInput(session,"percentagePelOffFineInput", value = notGreatherThan100(pelOffFine))
-    ## Update Offshore Medium
-    pelOffMed <- getMedValue(isolate(input$percentagePelOffRockInput),isolate(input$percentagePelOffFineInput),isolate(input$percentagePelOffMedInput),coarseOffArea,medOffArea,"percentagePelOffMedInput")
-    updateNumericInput(session,"percentagePelOffMedInput",value = notGreatherThan100(pelOffMed))
-    ## Update Offshore Coarse
-    pelOffCoarse <- getCoarseValue(isolate(input$percentagePelOffRockInput),isolate(input$percentagePelOffFineInput),isolate(input$percentagePelOffMedInput),coarseOffArea)
-    if ( pelOffCoarse < 0 || pelOffCoarse > 100)  {
-      js$backgroundCol("percentagePelOffCoarseInput","red")
-    } else {
-      js$backgroundCol("percentagePelOffCoarseInput","light grey")
-    }
-    updateNumericInput(session,"percentagePelOffCoarseInput", value = notGreatherThan100(pelOffCoarse))
-    disable("percentagePelOffCoarseInput")
-  })
-
   observeEvent(input$pelGearPerHab_reset, {
     #Note need check here to make sure selectedlocation and  selectedVariant are set
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -1234,14 +1175,17 @@ server <- function(input, output, session) {
     percentagePelOffCoarseDefault <- pelOffCoarse/totalOffPel * 100
     updateNumericInput(session, "inshorePercentagePel", value = percentageInPelDefault)
     updateNumericInput(session, "offshorePercentagePel", value = percentageOutPelDefault)
+    disable("offshorePercentagePel")
     updateNumericInput(session, "percentagePelInRockInput", value = percentagePelInRockDefault)
     updateNumericInput(session, "percentagePelInFineInput", value = percentagePelInFineDefault)
     updateNumericInput(session, "percentagePelInMedInput", value = percentagePelInMedDefault)
     updateNumericInput(session, "percentagePelInCoarseInput", value = percentagePelInCoarseDefault)
+    disable("percentagePelInCoarseInput")
     updateNumericInput(session, "percentagePelOffRockInput", value = percentagePelOffRockDefault)
     updateNumericInput(session, "percentagePelOffFineInput", value = percentagePelOffFineDefault)
     updateNumericInput(session, "percentagePelOffMedInput", value = percentagePelOffMedDefault)
     updateNumericInput(session, "percentagePelOffCoarseInput", value = percentagePelOffCoarseDefault)
+    disable("percentagePelOffCoarseInput")
   })
     
   observeEvent(input$inshorePercentageSandeel,{
@@ -1305,36 +1249,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageSandeelInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    SandeelInRock <- getRockValue(input$percentageSandeelInRockInput,input$percentageSandeelInFineInput,input$percentageSandeelInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageSandeelInRockInput",percentageSandeelInRockDefault)
-    updateNumericInput(session,"percentageSandeelInRockInput", value = notGreatherThan100(SandeelInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageSandeelInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageSandeelInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    SandeelInFine <- getFineValue(input$percentageSandeelInRockInput,input$percentageSandeelInFineInput,input$percentageSandeelInMedInput,coarseInArea,medInArea,fineInArea,"percentageSandeelInFineInput")
-    updateNumericInput(session,"percentageSandeelInFineInput", value = notGreatherThan100(SandeelInFine))
-  })
-  
-  observeEvent(input$percentageSandeelInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    SandeelInMed <- getMedValue(input$percentageSandeelInRockInput,input$percentageSandeelInFineInput,input$percentageSandeelInMedInput,coarseInArea,medInArea,"percentageSandeelInMedInput")
-    updateNumericInput(session,"percentageSandeelInMedInput",value = notGreatherThan100(SandeelInMed))
-  })
-  
+  # observeEvent(input$percentageSandeelInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   SandeelInRock <- getRockValue(input$percentageSandeelInRockInput,input$percentageSandeelInFineInput,input$percentageSandeelInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageSandeelInRockInput",percentageSandeelInRockDefault)
+  #   updateNumericInput(session,"percentageSandeelInRockInput", value = notGreatherThan100(SandeelInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageSandeelInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageSandeelInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   SandeelInFine <- getFineValue(input$percentageSandeelInRockInput,input$percentageSandeelInFineInput,input$percentageSandeelInMedInput,coarseInArea,medInArea,fineInArea,"percentageSandeelInFineInput")
+  #   updateNumericInput(session,"percentageSandeelInFineInput", value = notGreatherThan100(SandeelInFine))
+  # })
+  # 
+  # observeEvent(input$percentageSandeelInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   SandeelInMed <- getMedValue(input$percentageSandeelInRockInput,input$percentageSandeelInFineInput,input$percentageSandeelInMedInput,coarseInArea,medInArea,"percentageSandeelInMedInput")
+  #   updateNumericInput(session,"percentageSandeelInMedInput",value = notGreatherThan100(SandeelInMed))
+  # })
+  # 
   
   observeEvent(input$percentageSandeelInCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -1400,37 +1344,37 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageSandeelOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    SandeelOffRock <- getRockValue(input$percentageSandeelOffRockInput,input$percentageSandeelOffFineInput,input$percentageSandeelOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageSandeelOffRockInput")
-    updateNumericInput(session,"percentageSandeelOffRockInput", value = notGreatherThan100(SandeelOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageSandeelOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageSandeelOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    SandeelOffFine <- getFineValue(input$percentageSandeelOffRockInput,input$percentageSandeelOffFineInput,input$percentageSandeelOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageSandeelOffFineInput")
-    updateNumericInput(session,"percentageSandeelOffFineInput", value = notGreatherThan100(SandeelOffFine))
-  })
-  
-  observeEvent(input$percentageSandeelOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    SandeelOffMed <- getMedValue(input$percentageSandeelOffRockInput,input$percentageSandeelOffFineInput,input$percentageSandeelOffMedInput,coarseOffArea,medOffArea,"percentageSandeelOffMedInput")
-    updateNumericInput(session,"percentageSandeelOffMedInput",value = notGreatherThan100(SandeelOffMed))
-  })
-  
+  # observeEvent(input$percentageSandeelOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   SandeelOffRock <- getRockValue(input$percentageSandeelOffRockInput,input$percentageSandeelOffFineInput,input$percentageSandeelOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageSandeelOffRockInput")
+  #   updateNumericInput(session,"percentageSandeelOffRockInput", value = notGreatherThan100(SandeelOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageSandeelOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageSandeelOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   SandeelOffFine <- getFineValue(input$percentageSandeelOffRockInput,input$percentageSandeelOffFineInput,input$percentageSandeelOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageSandeelOffFineInput")
+  #   updateNumericInput(session,"percentageSandeelOffFineInput", value = notGreatherThan100(SandeelOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageSandeelOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   SandeelOffMed <- getMedValue(input$percentageSandeelOffRockInput,input$percentageSandeelOffFineInput,input$percentageSandeelOffMedInput,coarseOffArea,medOffArea,"percentageSandeelOffMedInput")
+  #   updateNumericInput(session,"percentageSandeelOffMedInput",value = notGreatherThan100(SandeelOffMed))
+  # })
+  # 
   observeEvent(input$percentageSandeelOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
@@ -1484,14 +1428,17 @@ server <- function(input, output, session) {
     percentageSandeelOffCoarseDefault <- SandeelOffCoarse/totalOffSandeel * 100
     updateNumericInput(session, "inshorePercentageSandeel", value = percentageInSandeelDefault)
     updateNumericInput(session, "offshorePercentageSandeel", value = percentageOutSandeelDefault)
+    disable("offshorePercentageSandeel")
     updateNumericInput(session, "percentageSandeelInRockInput", value = percentageSandeelInRockDefault)
     updateNumericInput(session, "percentageSandeelInFineInput", value = percentageSandeelInFineDefault)
     updateNumericInput(session, "percentageSandeelInMedInput", value = percentageSandeelInMedDefault)
     updateNumericInput(session, "percentageSandeelInCoarseInput", value = percentageSandeelInCoarseDefault)
+    disable("percentageSandeelInCoarseInput")
     updateNumericInput(session, "percentageSandeelOffRockInput", value = percentageSandeelOffRockDefault)
     updateNumericInput(session, "percentageSandeelOffFineInput", value = percentageSandeelOffFineDefault)
     updateNumericInput(session, "percentageSandeelOffMedInput", value = percentageSandeelOffMedDefault)
     updateNumericInput(session, "percentageSandeelOffCoarseInput", value = percentageSandeelOffCoarseDefault)
+    disable("percentageSandeelOffCoarseInput")
   })
     
   observeEvent(input$inshorePercentageOtter,{
@@ -1555,35 +1502,35 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageOtterInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    OtterInRock <- getRockValue(input$percentageOtterInRockInput,input$percentageOtterInFineInput,input$percentageOtterInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageOtterInRockInput",percentageOtterInRockDefault)
-    updateNumericInput(session,"percentageOtterInRockInput", value = notGreatherThan100(OtterInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageOtterInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageOtterInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    OtterInFine <- getFineValue(input$percentageOtterInRockInput,input$percentageOtterInFineInput,input$percentageOtterInMedInput,coarseInArea,medInArea,fineInArea,"percentageOtterInFineInput")
-    updateNumericInput(session,"percentageOtterInFineInput", value = notGreatherThan100(OtterInFine))
-  })
-  
-  observeEvent(input$percentageOtterInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    OtterInMed <- getMedValue(input$percentageOtterInRockInput,input$percentageOtterInFineInput,input$percentageOtterInMedInput,coarseInArea,medInArea,"percentageOtterInMedInput")
-    updateNumericInput(session,"percentageOtterInMedInput",value = notGreatherThan100(OtterInMed))
-  })
+  # observeEvent(input$percentageOtterInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   OtterInRock <- getRockValue(input$percentageOtterInRockInput,input$percentageOtterInFineInput,input$percentageOtterInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageOtterInRockInput",percentageOtterInRockDefault)
+  #   updateNumericInput(session,"percentageOtterInRockInput", value = notGreatherThan100(OtterInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageOtterInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageOtterInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   OtterInFine <- getFineValue(input$percentageOtterInRockInput,input$percentageOtterInFineInput,input$percentageOtterInMedInput,coarseInArea,medInArea,fineInArea,"percentageOtterInFineInput")
+  #   updateNumericInput(session,"percentageOtterInFineInput", value = notGreatherThan100(OtterInFine))
+  # })
+  # 
+  # observeEvent(input$percentageOtterInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   OtterInMed <- getMedValue(input$percentageOtterInRockInput,input$percentageOtterInFineInput,input$percentageOtterInMedInput,coarseInArea,medInArea,"percentageOtterInMedInput")
+  #   updateNumericInput(session,"percentageOtterInMedInput",value = notGreatherThan100(OtterInMed))
+  # })
   
   
   observeEvent(input$percentageOtterInCoarseInput,{
@@ -1650,36 +1597,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageOtterOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    OtterOffRock <- getRockValue(input$percentageOtterOffRockInput,input$percentageOtterOffFineInput,input$percentageOtterOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageOtterOffRockInput")
-    updateNumericInput(session,"percentageOtterOffRockInput", value = notGreatherThan100(OtterOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageOtterOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageOtterOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    OtterOffFine <- getFineValue(input$percentageOtterOffRockInput,input$percentageOtterOffFineInput,input$percentageOtterOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageOtterOffFineInput")
-    updateNumericInput(session,"percentageOtterOffFineInput", value = notGreatherThan100(OtterOffFine))
-  })
-  
-  observeEvent(input$percentageOtterOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    OtterOffMed <- getMedValue(input$percentageOtterOffRockInput,input$percentageOtterOffFineInput,input$percentageOtterOffMedInput,coarseOffArea,medOffArea,"percentageOtterOffMedInput")
-    updateNumericInput(session,"percentageOtterOffMedInput",value = notGreatherThan100(OtterOffMed))
-  })
+  # observeEvent(input$percentageOtterOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   OtterOffRock <- getRockValue(input$percentageOtterOffRockInput,input$percentageOtterOffFineInput,input$percentageOtterOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageOtterOffRockInput")
+  #   updateNumericInput(session,"percentageOtterOffRockInput", value = notGreatherThan100(OtterOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageOtterOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageOtterOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   OtterOffFine <- getFineValue(input$percentageOtterOffRockInput,input$percentageOtterOffFineInput,input$percentageOtterOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageOtterOffFineInput")
+  #   updateNumericInput(session,"percentageOtterOffFineInput", value = notGreatherThan100(OtterOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageOtterOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   OtterOffMed <- getMedValue(input$percentageOtterOffRockInput,input$percentageOtterOffFineInput,input$percentageOtterOffMedInput,coarseOffArea,medOffArea,"percentageOtterOffMedInput")
+  #   updateNumericInput(session,"percentageOtterOffMedInput",value = notGreatherThan100(OtterOffMed))
+  # })
   
   observeEvent(input$percentageOtterOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -1805,35 +1752,35 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageLonMackInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    LonMackInRock <- getRockValue(input$percentageLonMackInRockInput,input$percentageLonMackInFineInput,input$percentageLonMackInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageLonMackInRockInput",percentageLonMackInRockDefault)
-    updateNumericInput(session,"percentageLonMackInRockInput", value = notGreatherThan100(LonMackInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageLonMackInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageLonMackInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    LonMackInFine <- getFineValue(input$percentageLonMackInRockInput,input$percentageLonMackInFineInput,input$percentageLonMackInMedInput,coarseInArea,medInArea,fineInArea,"percentageLonMackInFineInput")
-    updateNumericInput(session,"percentageLonMackInFineInput", value = notGreatherThan100(LonMackInFine))
-  })
-  
-  observeEvent(input$percentageLonMackInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    LonMackInMed <- getMedValue(input$percentageLonMackInRockInput,input$percentageLonMackInFineInput,input$percentageLonMackInMedInput,coarseInArea,medInArea,"percentageLonMackInMedInput")
-    updateNumericInput(session,"percentageLonMackInMedInput",value = notGreatherThan100(LonMackInMed))
-  })
+  # observeEvent(input$percentageLonMackInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   LonMackInRock <- getRockValue(input$percentageLonMackInRockInput,input$percentageLonMackInFineInput,input$percentageLonMackInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageLonMackInRockInput",percentageLonMackInRockDefault)
+  #   updateNumericInput(session,"percentageLonMackInRockInput", value = notGreatherThan100(LonMackInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageLonMackInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageLonMackInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   LonMackInFine <- getFineValue(input$percentageLonMackInRockInput,input$percentageLonMackInFineInput,input$percentageLonMackInMedInput,coarseInArea,medInArea,fineInArea,"percentageLonMackInFineInput")
+  #   updateNumericInput(session,"percentageLonMackInFineInput", value = notGreatherThan100(LonMackInFine))
+  # })
+  # 
+  # observeEvent(input$percentageLonMackInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   LonMackInMed <- getMedValue(input$percentageLonMackInRockInput,input$percentageLonMackInFineInput,input$percentageLonMackInMedInput,coarseInArea,medInArea,"percentageLonMackInMedInput")
+  #   updateNumericInput(session,"percentageLonMackInMedInput",value = notGreatherThan100(LonMackInMed))
+  # })
   
   
   observeEvent(input$percentageLonMackInCoarseInput,{
@@ -1900,36 +1847,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageLonMackOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    LonMackOffRock <- getRockValue(input$percentageLonMackOffRockInput,input$percentageLonMackOffFineInput,input$percentageLonMackOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageLonMackOffRockInput")
-    updateNumericInput(session,"percentageLonMackOffRockInput", value = notGreatherThan100(LonMackOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageLonMackOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageLonMackOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    LonMackOffFine <- getFineValue(input$percentageLonMackOffRockInput,input$percentageLonMackOffFineInput,input$percentageLonMackOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageLonMackOffFineInput")
-    updateNumericInput(session,"percentageLonMackOffFineInput", value = notGreatherThan100(LonMackOffFine))
-  })
-  
-  observeEvent(input$percentageLonMackOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    LonMackOffMed <- getMedValue(input$percentageLonMackOffRockInput,input$percentageLonMackOffFineInput,input$percentageLonMackOffMedInput,coarseOffArea,medOffArea,"percentageLonMackOffMedInput")
-    updateNumericInput(session,"percentageLonMackOffMedInput",value = notGreatherThan100(LonMackOffMed))
-  })
+  # observeEvent(input$percentageLonMackOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   LonMackOffRock <- getRockValue(input$percentageLonMackOffRockInput,input$percentageLonMackOffFineInput,input$percentageLonMackOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageLonMackOffRockInput")
+  #   updateNumericInput(session,"percentageLonMackOffRockInput", value = notGreatherThan100(LonMackOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageLonMackOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageLonMackOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   LonMackOffFine <- getFineValue(input$percentageLonMackOffRockInput,input$percentageLonMackOffFineInput,input$percentageLonMackOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageLonMackOffFineInput")
+  #   updateNumericInput(session,"percentageLonMackOffFineInput", value = notGreatherThan100(LonMackOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageLonMackOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   LonMackOffMed <- getMedValue(input$percentageLonMackOffRockInput,input$percentageLonMackOffFineInput,input$percentageLonMackOffMedInput,coarseOffArea,medOffArea,"percentageLonMackOffMedInput")
+  #   updateNumericInput(session,"percentageLonMackOffMedInput",value = notGreatherThan100(LonMackOffMed))
+  # })
   
   observeEvent(input$percentageLonMackOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -2056,35 +2003,35 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageBeamTrawlInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    BeamTrawlInRock <- getRockValue(input$percentageBeamTrawlInRockInput,input$percentageBeamTrawlInFineInput,input$percentageBeamTrawlInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageBeamTrawlInRockInput",percentageBeamTrawlInRockDefault)
-    updateNumericInput(session,"percentageBeamTrawlInRockInput", value = notGreatherThan100(BeamTrawlInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageBeamTrawlInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageBeamTrawlInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    BeamTrawlInFine <- getFineValue(input$percentageBeamTrawlInRockInput,input$percentageBeamTrawlInFineInput,input$percentageBeamTrawlInMedInput,coarseInArea,medInArea,fineInArea,"percentageBeamTrawlInFineInput")
-    updateNumericInput(session,"percentageBeamTrawlInFineInput", value = notGreatherThan100(BeamTrawlInFine))
-  })
-  
-  observeEvent(input$percentageBeamTrawlInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    BeamTrawlInMed <- getMedValue(input$percentageBeamTrawlInRockInput,input$percentageBeamTrawlInFineInput,input$percentageBeamTrawlInMedInput,coarseInArea,medInArea,"percentageBeamTrawlInMedInput")
-    updateNumericInput(session,"percentageBeamTrawlInMedInput",value = notGreatherThan100(BeamTrawlInMed))
-  })
+  # observeEvent(input$percentageBeamTrawlInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   BeamTrawlInRock <- getRockValue(input$percentageBeamTrawlInRockInput,input$percentageBeamTrawlInFineInput,input$percentageBeamTrawlInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageBeamTrawlInRockInput",percentageBeamTrawlInRockDefault)
+  #   updateNumericInput(session,"percentageBeamTrawlInRockInput", value = notGreatherThan100(BeamTrawlInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageBeamTrawlInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageBeamTrawlInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   BeamTrawlInFine <- getFineValue(input$percentageBeamTrawlInRockInput,input$percentageBeamTrawlInFineInput,input$percentageBeamTrawlInMedInput,coarseInArea,medInArea,fineInArea,"percentageBeamTrawlInFineInput")
+  #   updateNumericInput(session,"percentageBeamTrawlInFineInput", value = notGreatherThan100(BeamTrawlInFine))
+  # })
+  # 
+  # observeEvent(input$percentageBeamTrawlInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   BeamTrawlInMed <- getMedValue(input$percentageBeamTrawlInRockInput,input$percentageBeamTrawlInFineInput,input$percentageBeamTrawlInMedInput,coarseInArea,medInArea,"percentageBeamTrawlInMedInput")
+  #   updateNumericInput(session,"percentageBeamTrawlInMedInput",value = notGreatherThan100(BeamTrawlInMed))
+  # })
   
   
   observeEvent(input$percentageBeamTrawlInCoarseInput,{
@@ -2151,36 +2098,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageBeamTrawlOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    BeamTrawlOffRock <- getRockValue(input$percentageBeamTrawlOffRockInput,input$percentageBeamTrawlOffFineInput,input$percentageBeamTrawlOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageBeamTrawlOffRockInput")
-    updateNumericInput(session,"percentageBeamTrawlOffRockInput", value = notGreatherThan100(BeamTrawlOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageBeamTrawlOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageBeamTrawlOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    BeamTrawlOffFine <- getFineValue(input$percentageBeamTrawlOffRockInput,input$percentageBeamTrawlOffFineInput,input$percentageBeamTrawlOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageBeamTrawlOffFineInput")
-    updateNumericInput(session,"percentageBeamTrawlOffFineInput", value = notGreatherThan100(BeamTrawlOffFine))
-  })
-  
-  observeEvent(input$percentageBeamTrawlOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    BeamTrawlOffMed <- getMedValue(input$percentageBeamTrawlOffRockInput,input$percentageBeamTrawlOffFineInput,input$percentageBeamTrawlOffMedInput,coarseOffArea,medOffArea,"percentageBeamTrawlOffMedInput")
-    updateNumericInput(session,"percentageBeamTrawlOffMedInput",value = notGreatherThan100(BeamTrawlOffMed))
-  })
+  # observeEvent(input$percentageBeamTrawlOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   BeamTrawlOffRock <- getRockValue(input$percentageBeamTrawlOffRockInput,input$percentageBeamTrawlOffFineInput,input$percentageBeamTrawlOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageBeamTrawlOffRockInput")
+  #   updateNumericInput(session,"percentageBeamTrawlOffRockInput", value = notGreatherThan100(BeamTrawlOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageBeamTrawlOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageBeamTrawlOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   BeamTrawlOffFine <- getFineValue(input$percentageBeamTrawlOffRockInput,input$percentageBeamTrawlOffFineInput,input$percentageBeamTrawlOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageBeamTrawlOffFineInput")
+  #   updateNumericInput(session,"percentageBeamTrawlOffFineInput", value = notGreatherThan100(BeamTrawlOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageBeamTrawlOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   BeamTrawlOffMed <- getMedValue(input$percentageBeamTrawlOffRockInput,input$percentageBeamTrawlOffFineInput,input$percentageBeamTrawlOffMedInput,coarseOffArea,medOffArea,"percentageBeamTrawlOffMedInput")
+  #   updateNumericInput(session,"percentageBeamTrawlOffMedInput",value = notGreatherThan100(BeamTrawlOffMed))
+  # })
   
   observeEvent(input$percentageBeamTrawlOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -2307,35 +2254,35 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageDemSeineInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    DemSeineInRock <- getRockValue(input$percentageDemSeineInRockInput,input$percentageDemSeineInFineInput,input$percentageDemSeineInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageDemSeineInRockInput",percentageDemSeineInRockDefault)
-    updateNumericInput(session,"percentageDemSeineInRockInput", value = notGreatherThan100(DemSeineInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageDemSeineInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageDemSeineInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    DemSeineInFine <- getFineValue(input$percentageDemSeineInRockInput,input$percentageDemSeineInFineInput,input$percentageDemSeineInMedInput,coarseInArea,medInArea,fineInArea,"percentageDemSeineInFineInput")
-    updateNumericInput(session,"percentageDemSeineInFineInput", value = notGreatherThan100(DemSeineInFine))
-  })
-  
-  observeEvent(input$percentageDemSeineInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    DemSeineInMed <- getMedValue(input$percentageDemSeineInRockInput,input$percentageDemSeineInFineInput,input$percentageDemSeineInMedInput,coarseInArea,medInArea,"percentageDemSeineInMedInput")
-    updateNumericInput(session,"percentageDemSeineInMedInput",value = notGreatherThan100(DemSeineInMed))
-  })
+  # observeEvent(input$percentageDemSeineInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   DemSeineInRock <- getRockValue(input$percentageDemSeineInRockInput,input$percentageDemSeineInFineInput,input$percentageDemSeineInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageDemSeineInRockInput",percentageDemSeineInRockDefault)
+  #   updateNumericInput(session,"percentageDemSeineInRockInput", value = notGreatherThan100(DemSeineInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageDemSeineInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageDemSeineInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   DemSeineInFine <- getFineValue(input$percentageDemSeineInRockInput,input$percentageDemSeineInFineInput,input$percentageDemSeineInMedInput,coarseInArea,medInArea,fineInArea,"percentageDemSeineInFineInput")
+  #   updateNumericInput(session,"percentageDemSeineInFineInput", value = notGreatherThan100(DemSeineInFine))
+  # })
+  # 
+  # observeEvent(input$percentageDemSeineInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   DemSeineInMed <- getMedValue(input$percentageDemSeineInRockInput,input$percentageDemSeineInFineInput,input$percentageDemSeineInMedInput,coarseInArea,medInArea,"percentageDemSeineInMedInput")
+  #   updateNumericInput(session,"percentageDemSeineInMedInput",value = notGreatherThan100(DemSeineInMed))
+  # })
   
   
   observeEvent(input$percentageDemSeineInCoarseInput,{
@@ -2402,36 +2349,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageDemSeineOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    DemSeineOffRock <- getRockValue(input$percentageDemSeineOffRockInput,input$percentageDemSeineOffFineInput,input$percentageDemSeineOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageDemSeineOffRockInput")
-    updateNumericInput(session,"percentageDemSeineOffRockInput", value = notGreatherThan100(DemSeineOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageDemSeineOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageDemSeineOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    DemSeineOffFine <- getFineValue(input$percentageDemSeineOffRockInput,input$percentageDemSeineOffFineInput,input$percentageDemSeineOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageDemSeineOffFineInput")
-    updateNumericInput(session,"percentageDemSeineOffFineInput", value = notGreatherThan100(DemSeineOffFine))
-  })
-  
-  observeEvent(input$percentageDemSeineOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    DemSeineOffMed <- getMedValue(input$percentageDemSeineOffRockInput,input$percentageDemSeineOffFineInput,input$percentageDemSeineOffMedInput,coarseOffArea,medOffArea,"percentageDemSeineOffMedInput")
-    updateNumericInput(session,"percentageDemSeineOffMedInput",value = notGreatherThan100(DemSeineOffMed))
-  })
+  # observeEvent(input$percentageDemSeineOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   DemSeineOffRock <- getRockValue(input$percentageDemSeineOffRockInput,input$percentageDemSeineOffFineInput,input$percentageDemSeineOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageDemSeineOffRockInput")
+  #   updateNumericInput(session,"percentageDemSeineOffRockInput", value = notGreatherThan100(DemSeineOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageDemSeineOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageDemSeineOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   DemSeineOffFine <- getFineValue(input$percentageDemSeineOffRockInput,input$percentageDemSeineOffFineInput,input$percentageDemSeineOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageDemSeineOffFineInput")
+  #   updateNumericInput(session,"percentageDemSeineOffFineInput", value = notGreatherThan100(DemSeineOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageDemSeineOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   DemSeineOffMed <- getMedValue(input$percentageDemSeineOffRockInput,input$percentageDemSeineOffFineInput,input$percentageDemSeineOffMedInput,coarseOffArea,medOffArea,"percentageDemSeineOffMedInput")
+  #   updateNumericInput(session,"percentageDemSeineOffMedInput",value = notGreatherThan100(DemSeineOffMed))
+  # })
   
   observeEvent(input$percentageDemSeineOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -2557,37 +2504,37 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  observeEvent(input$percentageDemOtterInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    DemOtterInRock <- getRockValue(input$percentageDemOtterInRockInput,input$percentageDemOtterInFineInput,input$percentageDemOtterInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageDemOtterInRockInput",percentageDemOtterInRockDefault)
-    updateNumericInput(session,"percentageDemOtterInRockInput", value = notGreatherThan100(DemOtterInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageDemOtterInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageDemOtterInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    DemOtterInFine <- getFineValue(input$percentageDemOtterInRockInput,input$percentageDemOtterInFineInput,input$percentageDemOtterInMedInput,coarseInArea,medInArea,fineInArea,"percentageDemOtterInFineInput")
-    updateNumericInput(session,"percentageDemOtterInFineInput", value = notGreatherThan100(DemOtterInFine))
-  })
-  
-  observeEvent(input$percentageDemOtterInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    DemOtterInMed <- getMedValue(input$percentageDemOtterInRockInput,input$percentageDemOtterInFineInput,input$percentageDemOtterInMedInput,coarseInArea,medInArea,"percentageDemOtterInMedInput")
-    updateNumericInput(session,"percentageDemOtterInMedInput",value = notGreatherThan100(DemOtterInMed))
-  })
-  
+  # 
+  # observeEvent(input$percentageDemOtterInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   DemOtterInRock <- getRockValue(input$percentageDemOtterInRockInput,input$percentageDemOtterInFineInput,input$percentageDemOtterInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageDemOtterInRockInput",percentageDemOtterInRockDefault)
+  #   updateNumericInput(session,"percentageDemOtterInRockInput", value = notGreatherThan100(DemOtterInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageDemOtterInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageDemOtterInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   DemOtterInFine <- getFineValue(input$percentageDemOtterInRockInput,input$percentageDemOtterInFineInput,input$percentageDemOtterInMedInput,coarseInArea,medInArea,fineInArea,"percentageDemOtterInFineInput")
+  #   updateNumericInput(session,"percentageDemOtterInFineInput", value = notGreatherThan100(DemOtterInFine))
+  # })
+  # 
+  # observeEvent(input$percentageDemOtterInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   DemOtterInMed <- getMedValue(input$percentageDemOtterInRockInput,input$percentageDemOtterInFineInput,input$percentageDemOtterInMedInput,coarseInArea,medInArea,"percentageDemOtterInMedInput")
+  #   updateNumericInput(session,"percentageDemOtterInMedInput",value = notGreatherThan100(DemOtterInMed))
+  # })
+  # 
   
   observeEvent(input$percentageDemOtterInCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -2653,36 +2600,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageDemOtterOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    DemOtterOffRock <- getRockValue(input$percentageDemOtterOffRockInput,input$percentageDemOtterOffFineInput,input$percentageDemOtterOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageDemOtterOffRockInput")
-    updateNumericInput(session,"percentageDemOtterOffRockInput", value = notGreatherThan100(DemOtterOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageDemOtterOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageDemOtterOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    DemOtterOffFine <- getFineValue(input$percentageDemOtterOffRockInput,input$percentageDemOtterOffFineInput,input$percentageDemOtterOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageDemOtterOffFineInput")
-    updateNumericInput(session,"percentageDemOtterOffFineInput", value = notGreatherThan100(DemOtterOffFine))
-  })
-  
-  observeEvent(input$percentageDemOtterOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    DemOtterOffMed <- getMedValue(input$percentageDemOtterOffRockInput,input$percentageDemOtterOffFineInput,input$percentageDemOtterOffMedInput,coarseOffArea,medOffArea,"percentageDemOtterOffMedInput")
-    updateNumericInput(session,"percentageDemOtterOffMedInput",value = notGreatherThan100(DemOtterOffMed))
-  })
+  # observeEvent(input$percentageDemOtterOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   DemOtterOffRock <- getRockValue(input$percentageDemOtterOffRockInput,input$percentageDemOtterOffFineInput,input$percentageDemOtterOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageDemOtterOffRockInput")
+  #   updateNumericInput(session,"percentageDemOtterOffRockInput", value = notGreatherThan100(DemOtterOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageDemOtterOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageDemOtterOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   DemOtterOffFine <- getFineValue(input$percentageDemOtterOffRockInput,input$percentageDemOtterOffFineInput,input$percentageDemOtterOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageDemOtterOffFineInput")
+  #   updateNumericInput(session,"percentageDemOtterOffFineInput", value = notGreatherThan100(DemOtterOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageDemOtterOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   DemOtterOffMed <- getMedValue(input$percentageDemOtterOffRockInput,input$percentageDemOtterOffFineInput,input$percentageDemOtterOffMedInput,coarseOffArea,medOffArea,"percentageDemOtterOffMedInput")
+  #   updateNumericInput(session,"percentageDemOtterOffMedInput",value = notGreatherThan100(DemOtterOffMed))
+  # })
   
   observeEvent(input$percentageDemOtterOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -2807,36 +2754,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageGillNetInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    GillNetInRock <- getRockValue(input$percentageGillNetInRockInput,input$percentageGillNetInFineInput,input$percentageGillNetInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageGillNetInRockInput",percentageGillNetInRockDefault)
-    updateNumericInput(session,"percentageGillNetInRockInput", value = notGreatherThan100(GillNetInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageGillNetInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageGillNetInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    GillNetInFine <- getFineValue(input$percentageGillNetInRockInput,input$percentageGillNetInFineInput,input$percentageGillNetInMedInput,coarseInArea,medInArea,fineInArea,"percentageGillNetInFineInput")
-    updateNumericInput(session,"percentageGillNetInFineInput", value = notGreatherThan100(GillNetInFine))
-  })
-  
-  observeEvent(input$percentageGillNetInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    GillNetInMed <- getMedValue(input$percentageGillNetInRockInput,input$percentageGillNetInFineInput,input$percentageGillNetInMedInput,coarseInArea,medInArea,"percentageGillNetInMedInput")
-    updateNumericInput(session,"percentageGillNetInMedInput",value = notGreatherThan100(GillNetInMed))
-  })
-  
+  # observeEvent(input$percentageGillNetInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   GillNetInRock <- getRockValue(input$percentageGillNetInRockInput,input$percentageGillNetInFineInput,input$percentageGillNetInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageGillNetInRockInput",percentageGillNetInRockDefault)
+  #   updateNumericInput(session,"percentageGillNetInRockInput", value = notGreatherThan100(GillNetInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageGillNetInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageGillNetInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   GillNetInFine <- getFineValue(input$percentageGillNetInRockInput,input$percentageGillNetInFineInput,input$percentageGillNetInMedInput,coarseInArea,medInArea,fineInArea,"percentageGillNetInFineInput")
+  #   updateNumericInput(session,"percentageGillNetInFineInput", value = notGreatherThan100(GillNetInFine))
+  # })
+  # 
+  # observeEvent(input$percentageGillNetInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   GillNetInMed <- getMedValue(input$percentageGillNetInRockInput,input$percentageGillNetInFineInput,input$percentageGillNetInMedInput,coarseInArea,medInArea,"percentageGillNetInMedInput")
+  #   updateNumericInput(session,"percentageGillNetInMedInput",value = notGreatherThan100(GillNetInMed))
+  # })
+  # 
   
   observeEvent(input$percentageGillNetInCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -2902,36 +2849,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageGillNetOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    GillNetOffRock <- getRockValue(input$percentageGillNetOffRockInput,input$percentageGillNetOffFineInput,input$percentageGillNetOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageGillNetOffRockInput")
-    updateNumericInput(session,"percentageGillNetOffRockInput", value = notGreatherThan100(GillNetOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageGillNetOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageGillNetOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    GillNetOffFine <- getFineValue(input$percentageGillNetOffRockInput,input$percentageGillNetOffFineInput,input$percentageGillNetOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageGillNetOffFineInput")
-    updateNumericInput(session,"percentageGillNetOffFineInput", value = notGreatherThan100(GillNetOffFine))
-  })
-  
-  observeEvent(input$percentageGillNetOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    GillNetOffMed <- getMedValue(input$percentageGillNetOffRockInput,input$percentageGillNetOffFineInput,input$percentageGillNetOffMedInput,coarseOffArea,medOffArea,"percentageGillNetOffMedInput")
-    updateNumericInput(session,"percentageGillNetOffMedInput",value = notGreatherThan100(GillNetOffMed))
-  })
+  # observeEvent(input$percentageGillNetOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   GillNetOffRock <- getRockValue(input$percentageGillNetOffRockInput,input$percentageGillNetOffFineInput,input$percentageGillNetOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageGillNetOffRockInput")
+  #   updateNumericInput(session,"percentageGillNetOffRockInput", value = notGreatherThan100(GillNetOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageGillNetOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageGillNetOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   GillNetOffFine <- getFineValue(input$percentageGillNetOffRockInput,input$percentageGillNetOffFineInput,input$percentageGillNetOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageGillNetOffFineInput")
+  #   updateNumericInput(session,"percentageGillNetOffFineInput", value = notGreatherThan100(GillNetOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageGillNetOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   GillNetOffMed <- getMedValue(input$percentageGillNetOffRockInput,input$percentageGillNetOffFineInput,input$percentageGillNetOffMedInput,coarseOffArea,medOffArea,"percentageGillNetOffMedInput")
+  #   updateNumericInput(session,"percentageGillNetOffMedInput",value = notGreatherThan100(GillNetOffMed))
+  # })
   
   observeEvent(input$percentageGillNetOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -3055,36 +3002,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageBeamShrimpInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    BeamShrimpInRock <- getRockValue(input$percentageBeamShrimpInRockInput,input$percentageBeamShrimpInFineInput,input$percentageBeamShrimpInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageBeamShrimpInRockInput",percentageBeamShrimpInRockDefault)
-    updateNumericInput(session,"percentageBeamShrimpInRockInput", value = notGreatherThan100(BeamShrimpInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageBeamShrimpInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageBeamShrimpInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    BeamShrimpInFine <- getFineValue(input$percentageBeamShrimpInRockInput,input$percentageBeamShrimpInFineInput,input$percentageBeamShrimpInMedInput,coarseInArea,medInArea,fineInArea,"percentageBeamShrimpInFineInput")
-    updateNumericInput(session,"percentageBeamShrimpInFineInput", value = notGreatherThan100(BeamShrimpInFine))
-  })
-  
-  observeEvent(input$percentageBeamShrimpInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    BeamShrimpInMed <- getMedValue(input$percentageBeamShrimpInRockInput,input$percentageBeamShrimpInFineInput,input$percentageBeamShrimpInMedInput,coarseInArea,medInArea,"percentageBeamShrimpInMedInput")
-    updateNumericInput(session,"percentageBeamShrimpInMedInput",value = notGreatherThan100(BeamShrimpInMed))
-  })
-  
+  # observeEvent(input$percentageBeamShrimpInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   BeamShrimpInRock <- getRockValue(input$percentageBeamShrimpInRockInput,input$percentageBeamShrimpInFineInput,input$percentageBeamShrimpInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageBeamShrimpInRockInput",percentageBeamShrimpInRockDefault)
+  #   updateNumericInput(session,"percentageBeamShrimpInRockInput", value = notGreatherThan100(BeamShrimpInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageBeamShrimpInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageBeamShrimpInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   BeamShrimpInFine <- getFineValue(input$percentageBeamShrimpInRockInput,input$percentageBeamShrimpInFineInput,input$percentageBeamShrimpInMedInput,coarseInArea,medInArea,fineInArea,"percentageBeamShrimpInFineInput")
+  #   updateNumericInput(session,"percentageBeamShrimpInFineInput", value = notGreatherThan100(BeamShrimpInFine))
+  # })
+  # 
+  # observeEvent(input$percentageBeamShrimpInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   BeamShrimpInMed <- getMedValue(input$percentageBeamShrimpInRockInput,input$percentageBeamShrimpInFineInput,input$percentageBeamShrimpInMedInput,coarseInArea,medInArea,"percentageBeamShrimpInMedInput")
+  #   updateNumericInput(session,"percentageBeamShrimpInMedInput",value = notGreatherThan100(BeamShrimpInMed))
+  # })
+  # 
   
   observeEvent(input$percentageBeamShrimpInCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -3150,36 +3097,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageBeamShrimpOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    BeamShrimpOffRock <- getRockValue(input$percentageBeamShrimpOffRockInput,input$percentageBeamShrimpOffFineInput,input$percentageBeamShrimpOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageBeamShrimpOffRockInput")
-    updateNumericInput(session,"percentageBeamShrimpOffRockInput", value = notGreatherThan100(BeamShrimpOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageBeamShrimpOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageBeamShrimpOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    BeamShrimpOffFine <- getFineValue(input$percentageBeamShrimpOffRockInput,input$percentageBeamShrimpOffFineInput,input$percentageBeamShrimpOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageBeamShrimpOffFineInput")
-    updateNumericInput(session,"percentageBeamShrimpOffFineInput", value = notGreatherThan100(BeamShrimpOffFine))
-  })
-  
-  observeEvent(input$percentageBeamShrimpOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    BeamShrimpOffMed <- getMedValue(input$percentageBeamShrimpOffRockInput,input$percentageBeamShrimpOffFineInput,input$percentageBeamShrimpOffMedInput,coarseOffArea,medOffArea,"percentageBeamShrimpOffMedInput")
-    updateNumericInput(session,"percentageBeamShrimpOffMedInput",value = notGreatherThan100(BeamShrimpOffMed))
-  })
+  # observeEvent(input$percentageBeamShrimpOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   BeamShrimpOffRock <- getRockValue(input$percentageBeamShrimpOffRockInput,input$percentageBeamShrimpOffFineInput,input$percentageBeamShrimpOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageBeamShrimpOffRockInput")
+  #   updateNumericInput(session,"percentageBeamShrimpOffRockInput", value = notGreatherThan100(BeamShrimpOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageBeamShrimpOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageBeamShrimpOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   BeamShrimpOffFine <- getFineValue(input$percentageBeamShrimpOffRockInput,input$percentageBeamShrimpOffFineInput,input$percentageBeamShrimpOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageBeamShrimpOffFineInput")
+  #   updateNumericInput(session,"percentageBeamShrimpOffFineInput", value = notGreatherThan100(BeamShrimpOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageBeamShrimpOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   BeamShrimpOffMed <- getMedValue(input$percentageBeamShrimpOffRockInput,input$percentageBeamShrimpOffFineInput,input$percentageBeamShrimpOffMedInput,coarseOffArea,medOffArea,"percentageBeamShrimpOffMedInput")
+  #   updateNumericInput(session,"percentageBeamShrimpOffMedInput",value = notGreatherThan100(BeamShrimpOffMed))
+  # })
   
   observeEvent(input$percentageBeamShrimpOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -3305,35 +3252,35 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageNephropsTR2InRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    NephropsTR2InRock <- getRockValue(input$percentageNephropsTR2InRockInput,input$percentageNephropsTR2InFineInput,input$percentageNephropsTR2InMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageNephropsTR2InRockInput",percentageNephropsTR2InRockDefault)
-    updateNumericInput(session,"percentageNephropsTR2InRockInput", value = notGreatherThan100(NephropsTR2InRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageNephropsTR2InRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageNephropsTR2InFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    NephropsTR2InFine <- getFineValue(input$percentageNephropsTR2InRockInput,input$percentageNephropsTR2InFineInput,input$percentageNephropsTR2InMedInput,coarseInArea,medInArea,fineInArea,"percentageNephropsTR2InFineInput")
-    updateNumericInput(session,"percentageNephropsTR2InFineInput", value = notGreatherThan100(NephropsTR2InFine))
-  })
-  
-  observeEvent(input$percentageNephropsTR2InMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    NephropsTR2InMed <- getMedValue(input$percentageNephropsTR2InRockInput,input$percentageNephropsTR2InFineInput,input$percentageNephropsTR2InMedInput,coarseInArea,medInArea,"percentageNephropsTR2InMedInput")
-    updateNumericInput(session,"percentageNephropsTR2InMedInput",value = notGreatherThan100(NephropsTR2InMed))
-  })
+  # observeEvent(input$percentageNephropsTR2InRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   NephropsTR2InRock <- getRockValue(input$percentageNephropsTR2InRockInput,input$percentageNephropsTR2InFineInput,input$percentageNephropsTR2InMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageNephropsTR2InRockInput",percentageNephropsTR2InRockDefault)
+  #   updateNumericInput(session,"percentageNephropsTR2InRockInput", value = notGreatherThan100(NephropsTR2InRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageNephropsTR2InRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageNephropsTR2InFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   NephropsTR2InFine <- getFineValue(input$percentageNephropsTR2InRockInput,input$percentageNephropsTR2InFineInput,input$percentageNephropsTR2InMedInput,coarseInArea,medInArea,fineInArea,"percentageNephropsTR2InFineInput")
+  #   updateNumericInput(session,"percentageNephropsTR2InFineInput", value = notGreatherThan100(NephropsTR2InFine))
+  # })
+  # 
+  # observeEvent(input$percentageNephropsTR2InMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   NephropsTR2InMed <- getMedValue(input$percentageNephropsTR2InRockInput,input$percentageNephropsTR2InFineInput,input$percentageNephropsTR2InMedInput,coarseInArea,medInArea,"percentageNephropsTR2InMedInput")
+  #   updateNumericInput(session,"percentageNephropsTR2InMedInput",value = notGreatherThan100(NephropsTR2InMed))
+  # })
   
   
   observeEvent(input$percentageNephropsTR2InCoarseInput,{
@@ -3400,49 +3347,41 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageNephropsTR2OffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    NephropsTR2OffRock <- getRockValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageNephropsTR2OffRockInput")
-    print("NephropsTR2OffRock")
-    print(NephropsTR2OffRock)
-    updateNumericInput(session,"percentageNephropsTR2OffRockInput", value = notGreatherThan100(NephropsTR2OffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageNephropsTR2OffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageNephropsTR2OffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    NephropsTR2OffFine <- getFineValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageNephropsTR2OffFineInput")
-    print("NephropsTR2OffFine")
-    print(NephropsTR2OffFine)
-    updateNumericInput(session,"percentageNephropsTR2OffFineInput", value = notGreatherThan100(NephropsTR2OffFine))
-  })
-  
-  observeEvent(input$percentageNephropsTR2OffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    NephropsTR2OffMed <- getMedValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea,medOffArea,"percentageNephropsTR2OffMedInput")
-    print("NephropsTR2OffMed")
-    print(NephropsTR2OffMed)
-    updateNumericInput(session,"percentageNephropsTR2OffMedInput",value = notGreatherThan100(NephropsTR2OffMed))
-  })
-  
+  # observeEvent(input$percentageNephropsTR2OffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   NephropsTR2OffRock <- getRockValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageNephropsTR2OffRockInput")
+  #   updateNumericInput(session,"percentageNephropsTR2OffRockInput", value = notGreatherThan100(NephropsTR2OffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageNephropsTR2OffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageNephropsTR2OffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   NephropsTR2OffFine <- getFineValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageNephropsTR2OffFineInput")
+  #   updateNumericInput(session,"percentageNephropsTR2OffFineInput", value = notGreatherThan100(NephropsTR2OffFine))
+  # })
+  # 
+  # observeEvent(input$percentageNephropsTR2OffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   NephropsTR2OffMed <- getMedValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea,medOffArea,"percentageNephropsTR2OffMedInput")
+  #   updateNumericInput(session,"percentageNephropsTR2OffMedInput",value = notGreatherThan100(NephropsTR2OffMed))
+  # })
+  # 
   observeEvent(input$percentageNephropsTR2OffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
     NephropsTR2OffCoarse <- getCoarseValue(input$percentageNephropsTR2OffRockInput,input$percentageNephropsTR2OffFineInput,input$percentageNephropsTR2OffMedInput,coarseOffArea)
-    print("NephropsTR2OffCoarse")
-    print(NephropsTR2OffCoarse)
     if ( NephropsTR2OffCoarse < 0 || NephropsTR2OffCoarse > 100)  {
       js$backgroundCol("percentageNephropsTR2OffCoarseInput","red")
     } else {
@@ -3564,35 +3503,35 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageNephropsTR3InRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    NephropsTR3InRock <- getRockValue(input$percentageNephropsTR3InRockInput,input$percentageNephropsTR3InFineInput,input$percentageNephropsTR3InMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageNephropsTR3InRockInput",percentageNephropsTR3InRockDefault)
-    updateNumericInput(session,"percentageNephropsTR3InRockInput", value = notGreatherThan100(NephropsTR3InRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageNephropsTR3InRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageNephropsTR3InFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    NephropsTR3InFine <- getFineValue(input$percentageNephropsTR3InRockInput,input$percentageNephropsTR3InFineInput,input$percentageNephropsTR3InMedInput,coarseInArea,medInArea,fineInArea,"percentageNephropsTR3InFineInput")
-    updateNumericInput(session,"percentageNephropsTR3InFineInput", value = notGreatherThan100(NephropsTR3InFine))
-  })
-  
-  observeEvent(input$percentageNephropsTR3InMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    NephropsTR3InMed <- getMedValue(input$percentageNephropsTR3InRockInput,input$percentageNephropsTR3InFineInput,input$percentageNephropsTR3InMedInput,coarseInArea,medInArea,"percentageNephropsTR3InMedInput")
-    updateNumericInput(session,"percentageNephropsTR3InMedInput",value = notGreatherThan100(NephropsTR3InMed))
-  })
+  # observeEvent(input$percentageNephropsTR3InRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   NephropsTR3InRock <- getRockValue(input$percentageNephropsTR3InRockInput,input$percentageNephropsTR3InFineInput,input$percentageNephropsTR3InMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageNephropsTR3InRockInput",percentageNephropsTR3InRockDefault)
+  #   updateNumericInput(session,"percentageNephropsTR3InRockInput", value = notGreatherThan100(NephropsTR3InRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageNephropsTR3InRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageNephropsTR3InFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   NephropsTR3InFine <- getFineValue(input$percentageNephropsTR3InRockInput,input$percentageNephropsTR3InFineInput,input$percentageNephropsTR3InMedInput,coarseInArea,medInArea,fineInArea,"percentageNephropsTR3InFineInput")
+  #   updateNumericInput(session,"percentageNephropsTR3InFineInput", value = notGreatherThan100(NephropsTR3InFine))
+  # })
+  # 
+  # observeEvent(input$percentageNephropsTR3InMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   NephropsTR3InMed <- getMedValue(input$percentageNephropsTR3InRockInput,input$percentageNephropsTR3InFineInput,input$percentageNephropsTR3InMedInput,coarseInArea,medInArea,"percentageNephropsTR3InMedInput")
+  #   updateNumericInput(session,"percentageNephropsTR3InMedInput",value = notGreatherThan100(NephropsTR3InMed))
+  # })
   
   
   observeEvent(input$percentageNephropsTR3InCoarseInput,{
@@ -3659,36 +3598,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageNephropsTR3OffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    NephropsTR3OffRock <- getRockValue(input$percentageNephropsTR3OffRockInput,input$percentageNephropsTR3OffFineInput,input$percentageNephropsTR3OffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageNephropsTR3OffRockInput")
-    updateNumericInput(session,"percentageNephropsTR3OffRockInput", value = notGreatherThan100(NephropsTR3OffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageNephropsTR3OffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageNephropsTR3OffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    NephropsTR3OffFine <- getFineValue(input$percentageNephropsTR3OffRockInput,input$percentageNephropsTR3OffFineInput,input$percentageNephropsTR3OffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageNephropsTR3OffFineInput")
-    updateNumericInput(session,"percentageNephropsTR3OffFineInput", value = notGreatherThan100(NephropsTR3OffFine))
-  })
-  
-  observeEvent(input$percentageNephropsTR3OffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    NephropsTR3OffMed <- getMedValue(input$percentageNephropsTR3OffRockInput,input$percentageNephropsTR3OffFineInput,input$percentageNephropsTR3OffMedInput,coarseOffArea,medOffArea,"percentageNephropsTR3OffMedInput")
-    updateNumericInput(session,"percentageNephropsTR3OffMedInput",value = notGreatherThan100(NephropsTR3OffMed))
-  })
+  # observeEvent(input$percentageNephropsTR3OffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   NephropsTR3OffRock <- getRockValue(input$percentageNephropsTR3OffRockInput,input$percentageNephropsTR3OffFineInput,input$percentageNephropsTR3OffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageNephropsTR3OffRockInput")
+  #   updateNumericInput(session,"percentageNephropsTR3OffRockInput", value = notGreatherThan100(NephropsTR3OffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageNephropsTR3OffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageNephropsTR3OffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   NephropsTR3OffFine <- getFineValue(input$percentageNephropsTR3OffRockInput,input$percentageNephropsTR3OffFineInput,input$percentageNephropsTR3OffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageNephropsTR3OffFineInput")
+  #   updateNumericInput(session,"percentageNephropsTR3OffFineInput", value = notGreatherThan100(NephropsTR3OffFine))
+  # })
+  # 
+  # observeEvent(input$percentageNephropsTR3OffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   NephropsTR3OffMed <- getMedValue(input$percentageNephropsTR3OffRockInput,input$percentageNephropsTR3OffFineInput,input$percentageNephropsTR3OffMedInput,coarseOffArea,medOffArea,"percentageNephropsTR3OffMedInput")
+  #   updateNumericInput(session,"percentageNephropsTR3OffMedInput",value = notGreatherThan100(NephropsTR3OffMed))
+  # })
   
   observeEvent(input$percentageNephropsTR3OffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -3814,35 +3753,35 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageCreelsInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    CreelsInRock <- getRockValue(input$percentageCreelsInRockInput,input$percentageCreelsInFineInput,input$percentageCreelsInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageCreelsInRockInput",percentageCreelsInRockDefault)
-    updateNumericInput(session,"percentageCreelsInRockInput", value = notGreatherThan100(CreelsInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageCreelsInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageCreelsInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    CreelsInFine <- getFineValue(input$percentageCreelsInRockInput,input$percentageCreelsInFineInput,input$percentageCreelsInMedInput,coarseInArea,medInArea,fineInArea,"percentageCreelsInFineInput")
-    updateNumericInput(session,"percentageCreelsInFineInput", value = notGreatherThan100(CreelsInFine))
-  })
-  
-  observeEvent(input$percentageCreelsInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    CreelsInMed <- getMedValue(input$percentageCreelsInRockInput,input$percentageCreelsInFineInput,input$percentageCreelsInMedInput,coarseInArea,medInArea,"percentageCreelsInMedInput")
-    updateNumericInput(session,"percentageCreelsInMedInput",value = notGreatherThan100(CreelsInMed))
-  })
+  # observeEvent(input$percentageCreelsInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   CreelsInRock <- getRockValue(input$percentageCreelsInRockInput,input$percentageCreelsInFineInput,input$percentageCreelsInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageCreelsInRockInput",percentageCreelsInRockDefault)
+  #   updateNumericInput(session,"percentageCreelsInRockInput", value = notGreatherThan100(CreelsInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageCreelsInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageCreelsInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   CreelsInFine <- getFineValue(input$percentageCreelsInRockInput,input$percentageCreelsInFineInput,input$percentageCreelsInMedInput,coarseInArea,medInArea,fineInArea,"percentageCreelsInFineInput")
+  #   updateNumericInput(session,"percentageCreelsInFineInput", value = notGreatherThan100(CreelsInFine))
+  # })
+  # 
+  # observeEvent(input$percentageCreelsInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   CreelsInMed <- getMedValue(input$percentageCreelsInRockInput,input$percentageCreelsInFineInput,input$percentageCreelsInMedInput,coarseInArea,medInArea,"percentageCreelsInMedInput")
+  #   updateNumericInput(session,"percentageCreelsInMedInput",value = notGreatherThan100(CreelsInMed))
+  # })
   
   
   observeEvent(input$percentageCreelsInCoarseInput,{
@@ -3909,36 +3848,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageCreelsOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    CreelsOffRock <- getRockValue(input$percentageCreelsOffRockInput,input$percentageCreelsOffFineInput,input$percentageCreelsOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageCreelsOffRockInput")
-    updateNumericInput(session,"percentageCreelsOffRockInput", value = notGreatherThan100(CreelsOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageCreelsOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageCreelsOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    CreelsOffFine <- getFineValue(input$percentageCreelsOffRockInput,input$percentageCreelsOffFineInput,input$percentageCreelsOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageCreelsOffFineInput")
-    updateNumericInput(session,"percentageCreelsOffFineInput", value = notGreatherThan100(CreelsOffFine))
-  })
-  
-  observeEvent(input$percentageCreelsOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    CreelsOffMed <- getMedValue(input$percentageCreelsOffRockInput,input$percentageCreelsOffFineInput,input$percentageCreelsOffMedInput,coarseOffArea,medOffArea,"percentageCreelsOffMedInput")
-    updateNumericInput(session,"percentageCreelsOffMedInput",value = notGreatherThan100(CreelsOffMed))
-  })
+  # observeEvent(input$percentageCreelsOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   CreelsOffRock <- getRockValue(input$percentageCreelsOffRockInput,input$percentageCreelsOffFineInput,input$percentageCreelsOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageCreelsOffRockInput")
+  #   updateNumericInput(session,"percentageCreelsOffRockInput", value = notGreatherThan100(CreelsOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageCreelsOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageCreelsOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   CreelsOffFine <- getFineValue(input$percentageCreelsOffRockInput,input$percentageCreelsOffFineInput,input$percentageCreelsOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageCreelsOffFineInput")
+  #   updateNumericInput(session,"percentageCreelsOffFineInput", value = notGreatherThan100(CreelsOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageCreelsOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   CreelsOffMed <- getMedValue(input$percentageCreelsOffRockInput,input$percentageCreelsOffFineInput,input$percentageCreelsOffMedInput,coarseOffArea,medOffArea,"percentageCreelsOffMedInput")
+  #   updateNumericInput(session,"percentageCreelsOffMedInput",value = notGreatherThan100(CreelsOffMed))
+  # })
   
   observeEvent(input$percentageCreelsOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -4064,35 +4003,35 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageMolluscInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    MolluscInRock <- getRockValue(input$percentageMolluscInRockInput,input$percentageMolluscInFineInput,input$percentageMolluscInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageMolluscInRockInput",percentageMolluscInRockDefault)
-    updateNumericInput(session,"percentageMolluscInRockInput", value = notGreatherThan100(MolluscInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageMolluscInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageMolluscInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    MolluscInFine <- getFineValue(input$percentageMolluscInRockInput,input$percentageMolluscInFineInput,input$percentageMolluscInMedInput,coarseInArea,medInArea,fineInArea,"percentageMolluscInFineInput")
-    updateNumericInput(session,"percentageMolluscInFineInput", value = notGreatherThan100(MolluscInFine))
-  })
-  
-  observeEvent(input$percentageMolluscInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    MolluscInMed <- getMedValue(input$percentageMolluscInRockInput,input$percentageMolluscInFineInput,input$percentageMolluscInMedInput,coarseInArea,medInArea,"percentageMolluscInMedInput")
-    updateNumericInput(session,"percentageMolluscInMedInput",value = notGreatherThan100(MolluscInMed))
-  })
+  # observeEvent(input$percentageMolluscInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   MolluscInRock <- getRockValue(input$percentageMolluscInRockInput,input$percentageMolluscInFineInput,input$percentageMolluscInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageMolluscInRockInput",percentageMolluscInRockDefault)
+  #   updateNumericInput(session,"percentageMolluscInRockInput", value = notGreatherThan100(MolluscInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageMolluscInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageMolluscInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   MolluscInFine <- getFineValue(input$percentageMolluscInRockInput,input$percentageMolluscInFineInput,input$percentageMolluscInMedInput,coarseInArea,medInArea,fineInArea,"percentageMolluscInFineInput")
+  #   updateNumericInput(session,"percentageMolluscInFineInput", value = notGreatherThan100(MolluscInFine))
+  # })
+  # 
+  # observeEvent(input$percentageMolluscInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   MolluscInMed <- getMedValue(input$percentageMolluscInRockInput,input$percentageMolluscInFineInput,input$percentageMolluscInMedInput,coarseInArea,medInArea,"percentageMolluscInMedInput")
+  #   updateNumericInput(session,"percentageMolluscInMedInput",value = notGreatherThan100(MolluscInMed))
+  # })
   
   
   observeEvent(input$percentageMolluscInCoarseInput,{
@@ -4159,36 +4098,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageMolluscOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    MolluscOffRock <- getRockValue(input$percentageMolluscOffRockInput,input$percentageMolluscOffFineInput,input$percentageMolluscOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageMolluscOffRockInput")
-    updateNumericInput(session,"percentageMolluscOffRockInput", value = notGreatherThan100(MolluscOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageMolluscOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageMolluscOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    MolluscOffFine <- getFineValue(input$percentageMolluscOffRockInput,input$percentageMolluscOffFineInput,input$percentageMolluscOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageMolluscOffFineInput")
-    updateNumericInput(session,"percentageMolluscOffFineInput", value = notGreatherThan100(MolluscOffFine))
-  })
-  
-  observeEvent(input$percentageMolluscOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    MolluscOffMed <- getMedValue(input$percentageMolluscOffRockInput,input$percentageMolluscOffFineInput,input$percentageMolluscOffMedInput,coarseOffArea,medOffArea,"percentageMolluscOffMedInput")
-    updateNumericInput(session,"percentageMolluscOffMedInput",value = notGreatherThan100(MolluscOffMed))
-  })
+  # observeEvent(input$percentageMolluscOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   MolluscOffRock <- getRockValue(input$percentageMolluscOffRockInput,input$percentageMolluscOffFineInput,input$percentageMolluscOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageMolluscOffRockInput")
+  #   updateNumericInput(session,"percentageMolluscOffRockInput", value = notGreatherThan100(MolluscOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageMolluscOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageMolluscOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   MolluscOffFine <- getFineValue(input$percentageMolluscOffRockInput,input$percentageMolluscOffFineInput,input$percentageMolluscOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageMolluscOffFineInput")
+  #   updateNumericInput(session,"percentageMolluscOffFineInput", value = notGreatherThan100(MolluscOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageMolluscOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   MolluscOffMed <- getMedValue(input$percentageMolluscOffRockInput,input$percentageMolluscOffFineInput,input$percentageMolluscOffMedInput,coarseOffArea,medOffArea,"percentageMolluscOffMedInput")
+  #   updateNumericInput(session,"percentageMolluscOffMedInput",value = notGreatherThan100(MolluscOffMed))
+  # })
   
   observeEvent(input$percentageMolluscOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -4314,35 +4253,35 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageWhalerInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    WhalerInRock <- getRockValue(input$percentageWhalerInRockInput,input$percentageWhalerInFineInput,input$percentageWhalerInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageWhalerInRockInput",percentageWhalerInRockDefault)
-    updateNumericInput(session,"percentageWhalerInRockInput", value = notGreatherThan100(WhalerInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageWhalerInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageWhalerInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    WhalerInFine <- getFineValue(input$percentageWhalerInRockInput,input$percentageWhalerInFineInput,input$percentageWhalerInMedInput,coarseInArea,medInArea,fineInArea,"percentageWhalerInFineInput")
-    updateNumericInput(session,"percentageWhalerInFineInput", value = notGreatherThan100(WhalerInFine))
-  })
-  
-  observeEvent(input$percentageWhalerInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    WhalerInMed <- getMedValue(input$percentageWhalerInRockInput,input$percentageWhalerInFineInput,input$percentageWhalerInMedInput,coarseInArea,medInArea,"percentageWhalerInMedInput")
-    updateNumericInput(session,"percentageWhalerInMedInput",value = notGreatherThan100(WhalerInMed))
-  })
+  # observeEvent(input$percentageWhalerInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   WhalerInRock <- getRockValue(input$percentageWhalerInRockInput,input$percentageWhalerInFineInput,input$percentageWhalerInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageWhalerInRockInput",percentageWhalerInRockDefault)
+  #   updateNumericInput(session,"percentageWhalerInRockInput", value = notGreatherThan100(WhalerInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageWhalerInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageWhalerInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   WhalerInFine <- getFineValue(input$percentageWhalerInRockInput,input$percentageWhalerInFineInput,input$percentageWhalerInMedInput,coarseInArea,medInArea,fineInArea,"percentageWhalerInFineInput")
+  #   updateNumericInput(session,"percentageWhalerInFineInput", value = notGreatherThan100(WhalerInFine))
+  # })
+  # 
+  # observeEvent(input$percentageWhalerInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   WhalerInMed <- getMedValue(input$percentageWhalerInRockInput,input$percentageWhalerInFineInput,input$percentageWhalerInMedInput,coarseInArea,medInArea,"percentageWhalerInMedInput")
+  #   updateNumericInput(session,"percentageWhalerInMedInput",value = notGreatherThan100(WhalerInMed))
+  # })
   
   
   observeEvent(input$percentageWhalerInCoarseInput,{
@@ -4409,36 +4348,36 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageWhalerOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    WhalerOffRock <- getRockValue(input$percentageWhalerOffRockInput,input$percentageWhalerOffFineInput,input$percentageWhalerOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageWhalerOffRockInput")
-    updateNumericInput(session,"percentageWhalerOffRockInput", value = notGreatherThan100(WhalerOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageWhalerOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageWhalerOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    WhalerOffFine <- getFineValue(input$percentageWhalerOffRockInput,input$percentageWhalerOffFineInput,input$percentageWhalerOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageWhalerOffFineInput")
-    updateNumericInput(session,"percentageWhalerOffFineInput", value = notGreatherThan100(WhalerOffFine))
-  })
-  
-  observeEvent(input$percentageWhalerOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    WhalerOffMed <- getMedValue(input$percentageWhalerOffRockInput,input$percentageWhalerOffFineInput,input$percentageWhalerOffMedInput,coarseOffArea,medOffArea,"percentageWhalerOffMedInput")
-    updateNumericInput(session,"percentageWhalerOffMedInput",value = notGreatherThan100(WhalerOffMed))
-  })
+  # observeEvent(input$percentageWhalerOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   WhalerOffRock <- getRockValue(input$percentageWhalerOffRockInput,input$percentageWhalerOffFineInput,input$percentageWhalerOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageWhalerOffRockInput")
+  #   updateNumericInput(session,"percentageWhalerOffRockInput", value = notGreatherThan100(WhalerOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageWhalerOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageWhalerOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   WhalerOffFine <- getFineValue(input$percentageWhalerOffRockInput,input$percentageWhalerOffFineInput,input$percentageWhalerOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageWhalerOffFineInput")
+  #   updateNumericInput(session,"percentageWhalerOffFineInput", value = notGreatherThan100(WhalerOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageWhalerOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   WhalerOffMed <- getMedValue(input$percentageWhalerOffRockInput,input$percentageWhalerOffFineInput,input$percentageWhalerOffMedInput,coarseOffArea,medOffArea,"percentageWhalerOffMedInput")
+  #   updateNumericInput(session,"percentageWhalerOffMedInput",value = notGreatherThan100(WhalerOffMed))
+  # })
   
   observeEvent(input$percentageWhalerOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
@@ -4596,36 +4535,36 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  observeEvent(input$percentageKelpInRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    rockInArea <- model$data$physical.parameters$x_area_s0
-    KelpInRock <- getRockValue(input$percentageKelpInRockInput,input$percentageKelpInFineInput,input$percentageKelpInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageKelpInRockInput",percentageKelpInRockDefault)
-    updateNumericInput(session,"percentageKelpInRockInput", value = notGreatherThan100(KelpInRock))
-    if(medInArea==0 && fineInArea==0 && coarseInArea==0){
-      disable("percentageKelpInRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageKelpInFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    fineInArea <- model$data$physical.parameters$x_area_s1
-    KelpInFine <- getFineValue(input$percentageKelpInRockInput,input$percentageKelpInFineInput,input$percentageKelpInMedInput,coarseInArea,medInArea,fineInArea,"percentageKelpInFineInput")
-    updateNumericInput(session,"percentageKelpInFineInput", value = notGreatherThan100(KelpInFine))
-  })
-  
-  observeEvent(input$percentageKelpInMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseInArea <- model$data$physical.parameters$x_area_s3
-    medInArea <- model$data$physical.parameters$x_area_s2
-    KelpInMed <- getMedValue(input$percentageKelpInRockInput,input$percentageKelpInFineInput,input$percentageKelpInMedInput,coarseInArea,medInArea,"percentageKelpInMedInput")
-    updateNumericInput(session,"percentageKelpInMedInput",value = notGreatherThan100(KelpInMed))
-  })
+  # 
+  # observeEvent(input$percentageKelpInRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   rockInArea <- model$data$physical.parameters$x_area_s0
+  #   KelpInRock <- getRockValue(input$percentageKelpInRockInput,input$percentageKelpInFineInput,input$percentageKelpInMedInput,coarseInArea,medInArea,fineInArea,rockInArea,"percentageKelpInRockInput",percentageKelpInRockDefault)
+  #   updateNumericInput(session,"percentageKelpInRockInput", value = notGreatherThan100(KelpInRock))
+  #   if(medInArea==0 && fineInArea==0 && coarseInArea==0){
+  #     disable("percentageKelpInRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageKelpInFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   fineInArea <- model$data$physical.parameters$x_area_s1
+  #   KelpInFine <- getFineValue(input$percentageKelpInRockInput,input$percentageKelpInFineInput,input$percentageKelpInMedInput,coarseInArea,medInArea,fineInArea,"percentageKelpInFineInput")
+  #   updateNumericInput(session,"percentageKelpInFineInput", value = notGreatherThan100(KelpInFine))
+  # })
+  # 
+  # observeEvent(input$percentageKelpInMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseInArea <- model$data$physical.parameters$x_area_s3
+  #   medInArea <- model$data$physical.parameters$x_area_s2
+  #   KelpInMed <- getMedValue(input$percentageKelpInRockInput,input$percentageKelpInFineInput,input$percentageKelpInMedInput,coarseInArea,medInArea,"percentageKelpInMedInput")
+  #   updateNumericInput(session,"percentageKelpInMedInput",value = notGreatherThan100(KelpInMed))
+  # })
   
   
   observeEvent(input$percentageKelpInCoarseInput,{
@@ -4692,37 +4631,37 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$percentageKelpOffRockInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    #model <- model_reactive()
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    rockOffArea <- model$data$physical.parameters$x_area_d0
-    KelpOffRock <- getRockValue(input$percentageKelpOffRockInput,input$percentageKelpOffFineInput,input$percentageKelpOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageKelpOffRockInput")
-    updateNumericInput(session,"percentageKelpOffRockInput", value = notGreatherThan100(KelpOffRock))
-    if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
-      disable("percentageKelpOffRockInput")
-    }
-  })
-  
-  observeEvent(input$percentageKelpOffFineInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    fineOffArea <- model$data$physical.parameters$x_area_d1
-    KelpOffFine <- getFineValue(input$percentageKelpOffRockInput,input$percentageKelpOffFineInput,input$percentageKelpOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageKelpOffFineInput")
-    updateNumericInput(session,"percentageKelpOffFineInput", value = notGreatherThan100(KelpOffFine))
-  })
-  
-  observeEvent(input$percentageKelpOffMedInput,{
-    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
-    coarseOffArea <- model$data$physical.parameters$x_area_d3
-    medOffArea <- model$data$physical.parameters$x_area_d2
-    KelpOffMed <- getMedValue(input$percentageKelpOffRockInput,input$percentageKelpOffFineInput,input$percentageKelpOffMedInput,coarseOffArea,medOffArea,"percentageKelpOffMedInput")
-    updateNumericInput(session,"percentageKelpOffMedInput",value = notGreatherThan100(KelpOffMed))
-  })
-  
+  # observeEvent(input$percentageKelpOffRockInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   #model <- model_reactive()
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   rockOffArea <- model$data$physical.parameters$x_area_d0
+  #   KelpOffRock <- getRockValue(input$percentageKelpOffRockInput,input$percentageKelpOffFineInput,input$percentageKelpOffMedInput,coarseOffArea,medOffArea,fineOffArea,rockOffArea,"percentageKelpOffRockInput")
+  #   updateNumericInput(session,"percentageKelpOffRockInput", value = notGreatherThan100(KelpOffRock))
+  #   if(medOffArea==0 && fineOffArea==0 && coarseOffArea==0){
+  #     disable("percentageKelpOffRockInput")
+  #   }
+  # })
+  # 
+  # observeEvent(input$percentageKelpOffFineInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   fineOffArea <- model$data$physical.parameters$x_area_d1
+  #   KelpOffFine <- getFineValue(input$percentageKelpOffRockInput,input$percentageKelpOffFineInput,input$percentageKelpOffMedInput,coarseOffArea,medOffArea,fineOffArea,"percentageKelpOffFineInput")
+  #   updateNumericInput(session,"percentageKelpOffFineInput", value = notGreatherThan100(KelpOffFine))
+  # })
+  # 
+  # observeEvent(input$percentageKelpOffMedInput,{
+  #   model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+  #   coarseOffArea <- model$data$physical.parameters$x_area_d3
+  #   medOffArea <- model$data$physical.parameters$x_area_d2
+  #   KelpOffMed <- getMedValue(input$percentageKelpOffRockInput,input$percentageKelpOffFineInput,input$percentageKelpOffMedInput,coarseOffArea,medOffArea,"percentageKelpOffMedInput")
+  #   updateNumericInput(session,"percentageKelpOffMedInput",value = notGreatherThan100(KelpOffMed))
+  # })
+  # 
   observeEvent(input$percentageKelpOffCoarseInput,{
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     coarseOffArea <- model$data$physical.parameters$x_area_d3
