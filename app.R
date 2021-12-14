@@ -10985,7 +10985,7 @@ server <- function(input, output, session) {
         percentageBeamTrawlOffCoarseInput <- input$percentageBeamTrawlOffCoarseInput
       }
       
-    newBeamTrawlInRockProp <- (input$inshorePercentageBeamTrawl*input$percentageBeamTrawlInRock)/10000
+    newBeamTrawlInRockProp <- (input$inshorePercentageBeamTrawl*input$percentageBeamTrawlInRockInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[4] <- newBeamTrawlInRockProp
     
     newBeamTrawlInFineProp <- (input$inshorePercentageBeamTrawl*percentageBeamTrawlInFineInput)/10000
@@ -11050,7 +11050,7 @@ server <- function(input, output, session) {
       }
       
       
-    newDemSeineInRockProp <- (input$inshorePercentageDemSeine*input$percentageDemSeineInRock)/10000
+    newDemSeineInRockProp <- (input$inshorePercentageDemSeine*input$percentageDemSeineInRockInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[5] <- newDemSeineInRockProp
     
     newDemSeineInFineProp <- (input$inshorePercentageDemSeine*percentageDemSeineInFineInput)/10000
@@ -11115,7 +11115,7 @@ server <- function(input, output, session) {
       }
       
       
-    newDemOtterInRockProp <- (input$inshorePercentageDemOtter*input$percentageDemOtterInRock)/10000
+    newDemOtterInRockProp <- (input$inshorePercentageDemOtter*input$percentageDemOtterInRockInput)/10000
     scenario_model$data$fleet.model$gear_habitat_activity$s0[6] <- newDemOtterInRockProp
     
     newDemOtterInFineProp <- (input$inshorePercentageDemOtter*percentageDemOtterInFineInput)/10000
