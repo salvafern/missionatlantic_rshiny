@@ -22,7 +22,7 @@ createGearDistributionPerHabitat	<- function(
                                              h5("Inshore-Offshore Split"),
                                              splitLayout( cellWidths = c("50%", "50%"),
                                                           numericInput("inshorePercentagePel", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                          numericInput("offshorePercentagePel", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                          disabled(numericInput("offshorePercentagePel", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                              )),
                                            splitLayout(
                                              wellPanel(
@@ -61,7 +61,7 @@ createGearDistributionPerHabitat	<- function(
                                                               h5("Inshore-Offshore Split"),
                                                               splitLayout( cellWidths = c("50%", "50%"),
                                                                            numericInput("inshorePercentageSandeel", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                                           numericInput("offshorePercentageSandeel", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                                           disabled(numericInput("offshorePercentageSandeel", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                                               )),
                                                             splitLayout(
                                                               wellPanel(
@@ -96,7 +96,7 @@ createGearDistributionPerHabitat	<- function(
                                                         h5("Inshore-Offshore Split"),
                                                         splitLayout( cellWidths = c("50%", "50%"),
                                                                      numericInput("inshorePercentageOtter", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                                     numericInput("offshorePercentageOtter", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                                     disabled(numericInput("offshorePercentageOtter", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                                         )),
                                                       splitLayout(
                                                         wellPanel(
@@ -134,7 +134,7 @@ createGearDistributionPerHabitat	<- function(
                                          h5("Inshore-Offshore Split"),
                                          splitLayout( cellWidths = c("50%", "50%"),
                                                       numericInput("inshorePercentageLonMack", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                      numericInput("offshorePercentageLonMack", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                      disabled(numericInput("offshorePercentageLonMack", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                          )),
                                        splitLayout(
                                          wellPanel(
@@ -169,7 +169,7 @@ createGearDistributionPerHabitat	<- function(
                                           h5("Inshore-Offshore Split"),
                                           splitLayout( cellWidths = c("50%", "50%"),
                                                        numericInput("inshorePercentageBeamTrawl", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                       numericInput("offshorePercentageBeamTrawl", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                       disabled(numericInput("offshorePercentageBeamTrawl", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                           )),
                                         splitLayout(
                                           wellPanel(
@@ -204,7 +204,7 @@ createGearDistributionPerHabitat	<- function(
                                       h5("Inshore-Offshore Split"),
                                       splitLayout( cellWidths = c("50%", "50%"),
                                                    numericInput("inshorePercentageDemSeine", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                   numericInput("offshorePercentageDemSeine", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                   disabled(numericInput("offshorePercentageDemSeine", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                       )),
                                     splitLayout(
                                       wellPanel(
@@ -240,7 +240,7 @@ createGearDistributionPerHabitat	<- function(
                                                 h5("Inshore-Offshore Split"),
                                                 splitLayout( cellWidths = c("50%", "50%"),
                                                              numericInput("inshorePercentageDemOtter", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                             numericInput("offshorePercentageDemOtter", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                             disabled(numericInput("offshorePercentageDemOtter", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                                 )),
                                               splitLayout(
                                                 wellPanel(
@@ -276,7 +276,7 @@ createGearDistributionPerHabitat	<- function(
                                                    h5("Inshore-Offshore Split"),
                                                    splitLayout( cellWidths = c("50%", "50%"),
                                                                 numericInput("inshorePercentageGillNet", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                                numericInput("offshorePercentageGillNet", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                                disabled(numericInput("offshorePercentageGillNet", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                                    )),
                                                  splitLayout(
                                                    wellPanel(
@@ -311,7 +311,7 @@ createGearDistributionPerHabitat	<- function(
                                          h5("Inshore-Offshore Split"),
                                          splitLayout( cellWidths = c("50%", "50%"),
                                                       numericInput("inshorePercentageBeamShrimp", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                      numericInput("offshorePercentageBeamShrimp", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                      disabled(numericInput("offshorePercentageBeamShrimp", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                          )),
                                        splitLayout(
                                          wellPanel(
@@ -347,7 +347,7 @@ createGearDistributionPerHabitat	<- function(
                                           h5("Inshore-Offshore Split"),
                                           splitLayout( cellWidths = c("50%", "50%"),
                                                        numericInput("inshorePercentageNephropsTR2", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                       numericInput("offshorePercentageNephropsTR2", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                       disabled(numericInput("offshorePercentageNephropsTR2", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                           )),
                                         splitLayout(
                                           wellPanel(
@@ -383,7 +383,7 @@ createGearDistributionPerHabitat	<- function(
                                           h5("Inshore-Offshore Split"),
                                           splitLayout( cellWidths = c("50%", "50%"),
                                                        numericInput("inshorePercentageNephropsTR3", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                       numericInput("offshorePercentageNephropsTR3", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                       disabled(numericInput("offshorePercentageNephropsTR3", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                           )),
                                         splitLayout(
                                           wellPanel(
@@ -419,7 +419,7 @@ createGearDistributionPerHabitat	<- function(
                               h5("Inshore-Offshore Split"),
                               splitLayout( cellWidths = c("50%", "50%"),
                                            numericInput("inshorePercentageCreels", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                           numericInput("offshorePercentageCreels", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                           disabled(numericInput("offshorePercentageCreels", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                               )),
                             splitLayout(
                               wellPanel(
@@ -455,7 +455,7 @@ createGearDistributionPerHabitat	<- function(
                                       h5("Inshore-Offshore Split"),
                                       splitLayout( cellWidths = c("50%", "50%"),
                                                    numericInput("inshorePercentageMollusc", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                   numericInput("offshorePercentageMollusc", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                   disabled(numericInput("offshorePercentageMollusc", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                       )),
                                     splitLayout(
                                       wellPanel(
@@ -491,7 +491,7 @@ createGearDistributionPerHabitat	<- function(
                               h5("Inshore-Offshore Split"),
                               splitLayout( cellWidths = c("50%", "50%"),
                                            numericInput("inshorePercentageWhaler", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                           numericInput("offshorePercentageWhaler", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                           disabled(numericInput("offshorePercentageWhaler", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                               )),
                             splitLayout(
                               wellPanel(
@@ -527,7 +527,7 @@ createGearDistributionPerHabitat	<- function(
                                      h5("Inshore-Offshore Split"),
                                      splitLayout( cellWidths = c("50%", "50%"),
                                                   numericInput("inshorePercentageKelp", "InShore %",percentageInDefault,min = 0, max = 100, step = 0.01, width = '40%'),
-                                                  numericInput("offshorePercentageKelp", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%')
+                                                  disabled(numericInput("offshorePercentageKelp", "OffShore %",percentageOutDefault,min = 0, max = 100, step = 0.01, width = '40%'))
                                      )),
                                    splitLayout(
                                      wellPanel(
