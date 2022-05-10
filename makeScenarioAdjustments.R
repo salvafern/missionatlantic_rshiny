@@ -113,6 +113,9 @@ makeScenarioAdjustments <- function(scenario_model, input) {
     scenario_model$data$physics.drivers$si_temp[12] <-
       scenario_model$data$physics.drivers$si_temp[12] + input$temperature
   #print("Got this far 2")
+  # if (!is.null(input$uptrate))
+  #   scenario_model$data$chemistry.drivers$si_atmnitrate[1] <-
+  #     scenario_model$data$chemistry.drivers$si_atmnitrate[1] * input$atmnitrate  
   # Nutrients
   if (!is.null(input$atmnitrate))
     scenario_model$data$chemistry.drivers$si_atmnitrate[1] <-
@@ -412,6 +415,130 @@ makeScenarioAdjustments <- function(scenario_model, input) {
     scenario_model$data$fleet.model$gear_ploughing_rate[12] <-
       scenario_model$data$fleet.model$gear_ploughing_rate[12] * input$whalerPlough
   #print("Got this far 5")
+  # Mortality rate per guild
+  # if (!is.null(input$plank_mort_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$plank_mort_inshore
+  # if (!is.null(input$plank_mort_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$plank_mort_offshore
+  # if (!is.null(input$dem_mort_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$dem_mort_inshore
+  # if (!is.null(input$dem_mort_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$dem_mort_offshore
+  # if (!is.null(input$mig_mort_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$mig_mort_inshore
+  # if (!is.null(input$mig_mort_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$mig_mort_offshore
+  # if (!is.null(input$sus_mort_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$sus_mort_inshore
+  # if (!is.null(input$sus_mort_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$sus_mort_offshore
+  # if (!is.null(input$cb_mort_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$cb_mort_inshore
+  # if (!is.null(input$cb_mort_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$cb_mort_offshore
+  # if (!is.null(input$cz_mort_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$cz_mort_inshore
+  # if (!is.null(input$cz_mort_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$cz_mort_offshore
+  # if (!is.null(input$sb_mort_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$sb_mort_inshore
+  # if (!is.null(input$sb_mort_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$sb_mort_offshore
+  # if (!is.null(input$seal_mort_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$seal_mort_inshore
+  # if (!is.null(input$seal_mort_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$seal_mort_offshore
+  # if (!is.null(input$ceta_mort_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$ceta_mort_inshore
+  # if (!is.null(input$ceta_mort_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$ceta_mort_offshore
+  # if (!is.null(input$kelp_mort_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$kelp_mort_inshore
+  # if (!is.null(input$kelp_mort_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$kelp_mort_offshore
+  
+  # Uptake rate per guild
+  # if (!is.null(input$plank_uptake_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$plank_uptake_inshore
+  # if (!is.null(input$plank_uptake_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$plank_uptake_offshore
+  # if (!is.null(input$dem_uptake_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$dem_uptake_inshore
+  # if (!is.null(input$dem_uptake_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$dem_uptake_offshore
+  # if (!is.null(input$mig_uptake_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$mig_uptake_inshore
+  # if (!is.null(input$mig_uptake_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$mig_uptake_offshore
+  # if (!is.null(input$sus_uptake_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$sus_uptake_inshore
+  # if (!is.null(input$sus_uptake_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$sus_uptake_offshore
+  # if (!is.null(input$cb_uptake_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$cb_uptake_inshore
+  # if (!is.null(input$cb_uptake_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$cb_uptake_offshore
+  # if (!is.null(input$cz_uptake_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$cz_uptake_inshore
+  # if (!is.null(input$cz_uptake_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$cz_uptake_offshore
+  # if (!is.null(input$sb_uptake_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$sb_uptake_inshore
+  # if (!is.null(input$sb_uptake_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$sb_uptake_offshore
+  # if (!is.null(input$seal_uptake_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$seal_uptake_inshore
+  # if (!is.null(input$seal_uptake_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$seal_uptake_offshore
+  # if (!is.null(input$ceta_uptake_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$ceta_uptake_inshore
+  # if (!is.null(input$ceta_uptake_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$ceta_uptake_offshore
+  # if (!is.null(input$kelp_uptake_inshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$kelp_uptake_inshore
+  # if (!is.null(input$kelp_uptake_offshore))
+  #   scenario_model$data$DONTKNOWTHEREST <-
+  #     input$kelp_uptake_offshore
+  
   # Discard per gear
   if (!is.null(input$pelagicTrawlDiscard_pel))
     scenario_model$data$fleet.model$gear_group_discard$pelagic[1] <-

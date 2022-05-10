@@ -14,7 +14,12 @@ createGearDistributionPerHabitat	<- function(
   percentageOffMedDefault,
   percentageOffCoarseDefault) {
   
-  if(region=='North_Sea' || region=='Celtic_Sea'){
+  if(region=='North_Sea' 
+	|| region=='Celtic_Sea'
+      || region=='Mauritania-Senegal'
+      || region=='Norwegian_Shelf'
+      || region=='South_Africa'
+      || region=='Western_Sahara'){
     switch(
     gearType,
     "Pelagic_Trawl+Seine" = fluidRow(  box(width = 10, title = "Habitats", style = "font-size:9px;",

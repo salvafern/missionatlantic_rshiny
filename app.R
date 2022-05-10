@@ -30,6 +30,8 @@ source("seabedAbrasian.R")
 source("discardPerGear.R")
 source("makeScenarioAdjustments.R")
 source("gearHabitatDist.R")
+source("mortalityRate.R")
+source("uptakeRate.R")
 options(shiny.fullstacktrace = TRUE)
 jsCode <- '
 shinyjs.backgroundCol = function(params) {
@@ -230,7 +232,7 @@ ui <- navbarPage(
             "selectedlocation",
             h4("Select Region and Time Period"),
             choices
-            = list("North_Sea","Celtic_Sea"),
+            = list("North_Sea","Celtic_Sea","Mauritania-Senegal", "Norwegian_Shelf", "South_Africa","Western_Sahara"),
             selected = "North_Sea"
           ),
           uiOutput("variant_dropdown"),
@@ -515,6 +517,56 @@ ui <- navbarPage(
     tabPanel(
       title = "Fishing Activity",
       uiOutput("uiFishingActivity")
+    ),
+    tabPanel(
+      title = "Guild uptake rate",
+      sidebarLayout(sidebarPanel(
+        selectInput(
+          "selectedUptakeGuild",
+          h4("Guilds"),
+          choices
+          = list(
+            "Planktivorous fish",
+            "Demersal fish",
+            "Migratory fish",
+            "Suspension/deposit feeding benthos",
+            "Carnivore/scavenge feeding benthos",
+            "Carnivorous zooplankton (e.g. squids)",
+            "Seabirds",
+            "Pinnipeds (seals)",
+            "Cetaceans",
+            "Macrophytes (kelp)"
+          ),
+          selected = "Planktivorous fish"
+        ), uiOutput("textUptakeGuild"),
+        width = 3
+      ), 
+      mainPanel (uiOutput("uiUptakeRate")))
+    ),
+    tabPanel(
+      title = "Guild mortality rate",
+      sidebarLayout(sidebarPanel(
+        selectInput(
+          "selectedMortGuild",
+          h4("Guilds"),
+          choices
+          = list(
+            "Planktivorous fish",
+            "Demersal fish",
+            "Migratory fish",
+            "Suspension/deposit feeding benthos",
+            "Carnivore/scavenge feeding benthos",
+            "Carnivorous zooplankton (e.g. squids)",
+            "Seabirds",
+            "Pinnipeds (seals)",
+            "Cetaceans",
+            "Macrophytes (kelp)"
+          ),
+          selected = "Planktivorous fish"
+        ), uiOutput("textMortalityGuild"),
+        width = 3
+      ), 
+      mainPanel (uiOutput("uiMortRate")))
     ),
     tabPanel(title = "Seabed abrasion rate per gear",
       uiOutput("uiSeabedAbrasian")),
@@ -4768,6 +4820,12 @@ server <- function(input, output, session) {
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     createFishingActivityUI(model)
   })
+  output$uiMortalityRate <- renderUI({
+    # current chosen model on dropdown lists
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    createFishingActivityUI(model)
+  })
+  
     
   
   output$uiSeabedAbrasian <- renderUI({
@@ -4796,7 +4854,11 @@ server <- function(input, output, session) {
         "Mollusc_Dredge",
         "Whaler"
       )
-    } else if (selectedModel == "Celtic_Sea"){
+    } else if (selectedModel == "Celtic_Sea" 
+               || selectedModel == "Mauritania-Senegal"
+               || selectedModel == "Norwegian_Shelf"
+               || selectedModel == "South_Africa"
+               || selectedModel == "Western_Sahara"){
       gears = list(
         "Pelagic_Trawl+Seine",
         "Otter30-70mm+TR3(sandeel+sprat)",
@@ -4911,6 +4973,14 @@ server <- function(input, output, session) {
                                             fluidRow(HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">Full documentation of the configuration and inputs for the North Sea model is provided <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/3.3.0/StrathE2E2_North_Sea_model.pdf'>here</a> The model has been extensively validated against independent observational data"))}
                                           else if(input$selectedlocation == "Celtic_Sea"){
                                             fluidRow(HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">Sources of data for inputs to the Celtic Sea model were the same as for the North Sea, which is documented <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/3.3.0/StrathE2E2_North_Sea_model.pdf'>here</a>"))}
+                                          else if(input$selectedlocation == "Mauritania-Senegal"){
+                                            fluidRow(HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">Sources of data for inputs to the Mauritania-Senegal model were the same as for the North Sea, which is documented <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/3.3.0/StrathE2E2_North_Sea_model.pdf'>here</a>"))}
+                                        else if(input$selectedlocation == "Norwegian_Shelf"){
+                                            fluidRow(HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">Sources of data for inputs to the Norwegian Shelf model were the same as for the North Sea, which is documented <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/3.3.0/StrathE2E2_North_Sea_model.pdf'>here</a>"))}
+                                        else if(input$selectedlocation == "South_Africa"){
+                                          fluidRow(HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">Sources of data for inputs to the South Africa model were the same as for the North Sea, which is documented <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/3.3.0/StrathE2E2_North_Sea_model.pdf'>here</a>"))}
+                                        else if(input$selectedlocation == "Western_Sahara"){
+                                          fluidRow(HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">Sources of data for inputs to the Western Sahara model were the same as for the North Sea, which is documented <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/3.3.0/StrathE2E2_North_Sea_model.pdf'>here</a>"))}
                                           else {
                                             fluidRow(HTML("<br><p style = \"font-family: 'calibri'; font-si16pt \">Full documentation of the configuration and inputs for the North Sea model is provided <a href='https://marineresourcemodelling.gitlab.io/resources/StrathE2E2/documents/3.3.0/StrathE2E2_North_Sea_model.pdf'>here</a> The model has been extensively validated against independent observational data"))}
                                         )
@@ -5208,7 +5278,11 @@ server <- function(input, output, session) {
     switch(
       input$selectedlocation,
     "North_Sea" = div(img(src = "North.png", width = '80%') , style="text-align: center;"),
-    "Celtic_Sea" = div(img(src = "Celtic.png", width = '80%') , style="text-align: center;")
+    "Celtic_Sea" = div(img(src = "Celtic.png", width = '80%') , style="text-align: center;"),
+    "Mauritania-Senegal" = div(img(src = "Mauritania-Senegal.png", width = '80%', height = '800') , style="text-align: center;"),
+    "Norwegian_Shelf" = div(img(src = "Norewgian_Shelf.png", width = '80%', height = '800') , style="text-align: center;"),
+    "South_Africa" = div(img(src = "South_Africa.png", width = '80%', height = '800') , style="text-align: center;"),
+    "Western_Sahara" = div(img(src = "Western_Sahara.png", width = '80%', height = '800') , style="text-align: center;")
     )
   })
   
@@ -5594,6 +5668,379 @@ server <- function(input, output, session) {
   output$ui <- renderUI({
     model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
     createDiscardPerGearUI(model,input)
+  })
+  
+  output$uiMortRate <- renderUI({
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    createMortalityRateUI(model,input)
+  })
+  
+  output$uiUptakeRate <- renderUI({
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    createUptakeRateUI(model,input)
+  })
+  
+  
+  # Mortality rates reset
+  observeEvent(input$plank_mort_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "plank_mort_inshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$plank_mort_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "plank_mort_offshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$dem_mort_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "dem_mort_inshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$dem_mort_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "dem_mort_offshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$mig_mort_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "mig_mort_inshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$mig_mort_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "mig_mort_offshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$sus_mort_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "sus_mort_inshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$sus_mort_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "sus_mort_offshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$cb_mort_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "cb_mort_inshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$cb_mort_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "cb_mort_offshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$cz_mort_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "cz_mort_inshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$cz_mort_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "cz_mort_offshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$sb_mort_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "sb_mort_inshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$sb_mort_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "sb_mort_offshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$seal_mort_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "seal_mort_inshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$seal_mort_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "seal_mort_offshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$ceta_mort_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "ceta_mort_inshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$ceta_mort_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "ceta_mort_offshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$kelp_mort_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "kelp_mort_inshore",
+      value = 0
+    )
+  })
+  
+  observeEvent(input$kelp_mort_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "kelp_mort_offshore",
+      value = 0
+    )
+  })
+  
+  # Uptake rates reset
+  observeEvent(input$plank_uptake_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "plank_uptake_inshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$plank_uptake_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "plank_uptake_offshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$dem_uptake_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "dem_uptake_inshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$dem_uptake_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "dem_uptake_offshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$mig_uptake_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "mig_uptake_inshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$mig_uptake_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "mig_uptake_offshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$sus_uptake_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "sus_uptake_inshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$sus_uptake_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "sus_uptake_offshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$cb_uptake_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "cb_uptake_inshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$cb_uptake_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "cb_uptake_offshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$cz_uptake_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "cz_uptake_inshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$cz_uptake_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "cz_uptake_offshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$sb_uptake_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "sb_uptake_inshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$sb_uptake_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "sb_uptake_offshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$seal_uptake_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "seal_uptake_inshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$seal_uptake_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "seal_uptake_offshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$ceta_uptake_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "ceta_uptake_inshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$ceta_uptake_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "ceta_uptake_offshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$kelp_uptake_inshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "kelp_uptake_inshore",
+      value = 1
+    )
+  })
+  
+  observeEvent(input$kelp_uptake_offshore_reset, {
+    model <- e2e_read(input$selectedlocation, input$selectedVariant, models.path="Models")
+    updateSliderInput(
+      session,
+      "kelp_uptake_offshore",
+      value = 1
+    )
   })
   
   #Pelagic discard reset
